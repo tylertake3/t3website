@@ -1,0 +1,49 @@
+name: Check the site
+
+# Builds the site and checks it on every change, so a broken page can't reach
+# take3agency.com without someone being told first.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build and check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build the site
+        run: npx astro build
+
+      - name: Check pages, links, images and file sizes
+        run: node scripts/check-build.mjs
+
+  smoke:
+    name: Check the published site
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Wait for the new version to go live
+        run: sleep 90
+
+      - name: Check every page loads
+        run: node scripts/smoke.mjs "${{ vars.SITE_URL || 'https://t3website-take-3.vercel.app' }}"
