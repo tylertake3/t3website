@@ -21,6 +21,21 @@ npm run dev     # preview at http://localhost:4321
 npm run build   # produce the files that get published
 ```
 
+## Automatic checks
+
+Every change pushed to GitHub is built and checked before it can reach the live
+site, and the live site is checked again straight after it publishes:
+
+```bash
+node scripts/check-build.mjs                      # after a build: pages, links,
+                                                  # photos, alt text, file sizes
+node scripts/smoke.mjs https://www.take3agency.com # is the published site up?
+```
+
+If either finds a problem the run goes red and GitHub emails whoever pushed.
+The published-site check reads its address from a repository variable called
+`SITE_URL` — set that once the domain is pointed at Vercel.
+
 ## Editing the site without touching code
 
 Once the site is live, go to `take3agency.com/admin` and sign in with GitHub.
