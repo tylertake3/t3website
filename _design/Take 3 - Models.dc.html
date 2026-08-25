@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Anton&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#161618; --ink:#f4f2ee; --sub:#c2beb6; --hair:#35353a; --tileBg:#232327; --accent:#c65b40; --logoFilter:invert(1); }
+[data-theme="light"] { --bg:#f4f2ee; --ink:#1a1a1c; --sub:#3a3632; --hair:#d9d6d1; --tileBg:#e2e0dc; --accent:#5d1f16; --logoFilter:none; }
+html,body { margin:0; background:#f4f2ee; font-family:'Jost',sans-serif; -webkit-font-smoothing:antialiased; }
+a { color:var(--ink); text-decoration:none; } a:hover { color:#96928c; }
+::view-transition-old(root), ::view-transition-new(root) { animation:none; mix-blend-mode:normal; }
+::view-transition-old(root) { z-index:1; } ::view-transition-new(root) { z-index:2; }
+</style>
+<script src="./image-slot.js"></script>
+</helmet>
+<template id="__bundler_thumbnail" data-bg-color="#f4f2ee">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#f4f2ee"></rect>
+    <text x="600" y="400" text-anchor="middle" font-family="Jost, sans-serif" font-size="110" font-weight="300" letter-spacing="14" fill="#1a1a1c">MODELS</text>
+    <text x="600" y="470" text-anchor="middle" font-family="Jost, sans-serif" font-size="26" letter-spacing="8" fill="#96928c">TAKE 3 AGENCY</text>
+  </svg>
+</template>
+<div data-theme="{{ theme }}" style="background:var(--bg); color:var(--ink); min-height:100vh; transition:background 0.5s ease, color 0.5s ease;">
+
+  <!-- nav -->
+  <div style="display:flex; justify-content:space-between; align-items:center; padding:24px 40px;">
+    <a href="Take 3 Home - Cinematic.dc.html"><img src="assets/take3-logo.svg" alt="Take 3 Agency" style="height:56px; width:auto; filter:var(--logoFilter);"></a>
+    <div style="display:flex; align-items:center; gap:28px; font-size:12px; letter-spacing:2px; white-space:nowrap;">
+      <a href="Take 3 Home - Cinematic.dc.html">HOME</a>
+      <a href="#supply">WHAT WE SUPPLY</a>
+      <a href="#brands">BRANDS</a>
+      <a href="#film">FILM &amp; TV</a>
+      <div onClick="{{ toggleTheme }}" title="Switch light / dark" style="cursor:pointer; width:36px; height:36px; border:1px solid var(--hair); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--ink);" style-hover="border-color:var(--ink);">
+        <sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 1.8v2.7M12 19.5v2.7M1.8 12h2.7M19.5 12h2.7M4.6 4.6l1.9 1.9M17.5 17.5l1.9 1.9M19.4 4.6l-1.9 1.9M6.5 17.5l-1.9 1.9"></path></svg>
+        </sc-if>
+        <sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.4 13.2A8.4 8.4 0 1 1 10.8 3.6a6.6 6.6 0 0 0 9.6 9.6z"></path></svg>
+        </sc-if>
+      </div>
+      <a href="#contact" style="border:1px solid var(--hair); padding:9px 18px; letter-spacing:2px;" style-hover="border-color:var(--ink);">SUPPLY REQUEST</a>
+    </div>
+  </div>
+
+  <!-- editorial hero -->
+  <div data-screen-label="Hero" style="max-width:1360px; margin:0 auto; padding:48px 40px 0; display:grid; grid-template-columns:1.15fr 0.85fr; gap:56px; align-items:end;">
+    <div style="padding-bottom:56px;">
+      <div style="font-size:12px; letter-spacing:6px; color:#96928c;">TAKE 3 AGENCY · No. 06</div>
+      <div style="font-family:'Anton',sans-serif; font-size:clamp(72px, 11vw, 190px); line-height:0.92; letter-spacing:2px; margin-top:24px; text-transform:uppercase;">Models</div>
+      <div style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(24px,2.4vw,36px); font-weight:400; line-height:1.3; margin-top:28px; max-width:480px; color:var(--sub); text-wrap:pretty;">Faces for campaigns, character and camera — cast from a working roster, not a lookbook.</div>
+      <div style="display:flex; gap:36px; margin-top:44px; border-top:1px solid var(--hair); padding-top:20px; font-size:12px; letter-spacing:2px; color:#96928c;">
+        <span>COMMERCIAL</span><span>CHARACTER</span><span>FITTING</span><span>PROMOTIONAL</span>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr; gap:0;">
+      <div style="position:relative; aspect-ratio:2/3; background:var(--tileBg); overflow:hidden;"><div style="position:absolute; inset:0;"><image-slot id="models-hero" shape="rect" placeholder="Hero portrait — 2:3"></image-slot></div></div>
+      <div style="display:flex; justify-content:space-between; font-size:11px; letter-spacing:2px; color:#96928c; padding-top:10px; padding-bottom:24px;"><span>FIG. 01</span><span>SHOT ON SET, NOT IN STUDIO</span></div>
+    </div>
+  </div>
+
+  <!-- what we supply -->
+  <div id="supply" data-screen-label="What we supply" style="border-top:1px solid var(--hair);">
+    <div style="max-width:1360px; margin:0 auto; padding:88px 40px 96px;">
+      <div style="font-size:11px; letter-spacing:3px; color:var(--accent);">WHAT WE SUPPLY</div>
+      <div style="display:grid; grid-template-columns:1fr; margin-top:36px; border-bottom:1px solid var(--hair);">
+        <div style="border-top:1px solid var(--hair); padding:30px 0; display:grid; grid-template-columns:60px 1fr 1.1fr; gap:32px; align-items:baseline;">
+          <span style="font-size:12px; letter-spacing:2px; color:#96928c;">01</span>
+          <span style="text-transform:uppercase; font-size:clamp(19px,2vw,28px); font-weight:300; letter-spacing:3px;">Commercial &amp; campaign</span>
+          <span style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); text-wrap:pretty;">Campaign, stills and moving image — models who take direction and hold up across a full shoot day.</span>
+        </div>
+        <div style="border-top:1px solid var(--hair); padding:30px 0; display:grid; grid-template-columns:60px 1fr 1.1fr; gap:32px; align-items:baseline;">
+          <span style="font-size:12px; letter-spacing:2px; color:#96928c;">02</span>
+          <span style="text-transform:uppercase; font-size:clamp(19px,2vw,28px); font-weight:300; letter-spacing:3px;">Real people &amp; character faces</span>
+          <span style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); text-wrap:pretty;">Faces with something behind them — real-people casting for productions and brands that want believable, not polished.</span>
+        </div>
+        <div style="border-top:1px solid var(--hair); padding:30px 0; display:grid; grid-template-columns:60px 1fr 1.1fr; gap:32px; align-items:baseline;">
+          <span style="font-size:12px; letter-spacing:2px; color:#96928c;">03</span>
+          <span style="text-transform:uppercase; font-size:clamp(19px,2vw,28px); font-weight:300; letter-spacing:3px;">Fitting models</span>
+          <span style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); text-wrap:pretty;">Measured, consistent and reliable — sample sizes and specific measurements for costume and fashion fittings.</span>
+        </div>
+        <div style="border-top:1px solid var(--hair); padding:30px 0; display:grid; grid-template-columns:60px 1fr 1.1fr; gap:32px; align-items:baseline;">
+          <span style="font-size:12px; letter-spacing:2px; color:#96928c;">04</span>
+          <span style="text-transform:uppercase; font-size:clamp(19px,2vw,28px); font-weight:300; letter-spacing:3px;">Promotional &amp; event</span>
+          <span style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); text-wrap:pretty;">Launches, activations and front-of-house — presentable, personable people who represent a brand in the room.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- for brands and commercial -->
+  <div id="brands" data-screen-label="For brands" style="border-top:1px solid var(--hair);">
+    <div style="max-width:1360px; margin:0 auto; padding:96px 40px; display:grid; grid-template-columns:0.9fr 1.1fr; gap:72px; align-items:start;">
+      <div>
+        <div style="position:relative; aspect-ratio:4/5; background:var(--tileBg); overflow:hidden;"><div style="position:absolute; inset:0;"><image-slot id="models-brands" shape="rect" placeholder="Campaign still — lifestyle"></image-slot></div></div>
+        <div style="display:flex; justify-content:space-between; font-size:11px; letter-spacing:2px; color:#96928c; padding-top:10px;"><span>FIG. 02</span><span>CAMPAIGN, STILLS, PRODUCT</span></div>
+      </div>
+      <div style="padding-top:12px;">
+        <div style="font-size:11px; letter-spacing:3px; color:var(--accent);">FOR BRANDS &amp; COMMERCIAL</div>
+        <div style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3.2vw,46px); font-weight:400; letter-spacing:1px; line-height:1.15; margin-top:16px; max-width:520px;">Campaigns, stills, product and lifestyle.</div>
+        <div style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(20px,1.8vw,26px); line-height:1.5; color:var(--sub); margin-top:28px; max-width:520px; text-wrap:pretty;">"The difference between a model and the right model is a shoot day that runs on schedule."</div>
+        <div style="font-size:16px; font-weight:300; line-height:1.75; color:var(--sub); margin-top:28px; max-width:520px; text-wrap:pretty;">Our models come from working sets — comfortable with direction, continuity and long days. Send the brief and the boards; we shortlist from measured, photographed artists with current availability, for stills, moving image, product and lifestyle.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- for film and television -->
+  <div id="film" data-screen-label="For film and TV" style="border-top:1px solid var(--hair); background:#1a1a1c; color:#f4f2ee;">
+    <div style="max-width:1360px; margin:0 auto; padding:96px 40px; display:grid; grid-template-columns:1.1fr 0.9fr; gap:72px; align-items:start;">
+      <div style="padding-top:12px;">
+        <div style="font-size:11px; letter-spacing:3px; color:#96928c;">FOR FILM &amp; TELEVISION</div>
+        <div style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3.2vw,46px); font-weight:400; letter-spacing:1px; line-height:1.15; margin-top:16px; max-width:520px;">Character faces and real-people casting.</div>
+        <div style="font-size:16px; font-weight:300; line-height:1.75; color:#c7c3bd; margin-top:28px; max-width:520px; text-wrap:pretty;">When a production needs a face — a juror who reads lived-in, a featured role with no lines, a period look that holds in close-up — model-polished doesn't cut it. We cast character faces and real people from the same roster that supplies our SAs and doubles, so they already know how a set works.</div>
+        <div style="display:grid; row-gap:0; font-size:15px; font-weight:300; line-height:1.7; color:#c7c3bd; margin-top:36px; max-width:520px;">
+          <div style="border-top:1px solid #35353a; padding:16px 0; display:grid; grid-template-columns:150px 1fr; gap:24px;"><span style="font-size:12px; letter-spacing:2px; color:#96928c; padding-top:3px;">FEATURED ROLES</span><span>Faces that carry a frame without a line of dialogue.</span></div>
+          <div style="border-top:1px solid #35353a; padding:16px 0; display:grid; grid-template-columns:150px 1fr; gap:24px;"><span style="font-size:12px; letter-spacing:2px; color:#96928c; padding-top:3px;">PERIOD &amp; SPECIFIC</span><span>Looks cast to era, region and world — checked against your references.</span></div>
+          <div style="border-top:1px solid #35353a; border-bottom:1px solid #35353a; padding:16px 0; display:grid; grid-template-columns:150px 1fr; gap:24px;"><span style="font-size:12px; letter-spacing:2px; color:#96928c; padding-top:3px;">REAL PEOPLE</span><span>Believable, unpolished faces for documentary-style and testimonial work.</span></div>
+        </div>
+      </div>
+      <div>
+        <div style="position:relative; aspect-ratio:2/3; background:#101012; overflow:hidden;"><div style="position:absolute; inset:0;"><image-slot id="models-film" shape="rect" placeholder="Character portrait — in costume"></image-slot></div></div>
+        <div style="display:flex; justify-content:space-between; font-size:11px; letter-spacing:2px; color:#96928c; padding-top:10px;"><span>FIG. 03</span><span>IN COSTUME, ON CAMERA</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- why book through take 3 -->
+  <div data-screen-label="Why Take 3" style="border-top:1px solid var(--hair);">
+    <div style="max-width:1360px; margin:0 auto; padding:88px 40px 96px;">
+      <div style="font-size:11px; letter-spacing:3px; color:var(--accent);">WHY BOOK THROUGH TAKE 3</div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:48px; margin-top:40px;">
+        <div style="border-top:1px solid var(--hair); padding-top:24px;">
+          <div style="font-size:19px; letter-spacing:1px;">Set-experienced</div>
+          <div style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:10px; text-wrap:pretty;">Models who have worked productions, not just studios — direction, continuity and etiquette come built in.</div>
+        </div>
+        <div style="border-top:1px solid var(--hair); padding-top:24px;">
+          <div style="font-size:19px; letter-spacing:1px;">Measured &amp; current</div>
+          <div style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:10px; text-wrap:pretty;">Real measurements and recent photography on every artist — what arrives on the day matches the shortlist.</div>
+        </div>
+        <div style="border-top:1px solid var(--hair); padding-top:24px;">
+          <div style="font-size:19px; letter-spacing:1px;">Admin handled</div>
+          <div style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:10px; text-wrap:pretty;">Contracts, usage, fees and coordination through one point of contact — one roster, every format.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- the book / footer -->
+  <div id="contact" data-screen-label="Footer" style="border-top:1px solid var(--hair);">
+    <div style="max-width:1360px; margin:0 auto; padding:72px 40px; display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:40px;">
+      <div>
+        <div style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3.6vw,52px); font-weight:400; letter-spacing:1px; line-height:1;">Book models for your production</div>
+        <div style="font-size:16px; margin-top:18px;"><a href="mailto:hello@take3agency.com">hello@take3agency.com</a> &nbsp;·&nbsp; 020 8088 2833</div>
+      </div>
+      <div style="display:flex; gap:12px;">
+        <a href="Take 3 - Stand-ins.dc.html" style="border:1px solid var(--hair); padding:12px 22px; font-size:12px; letter-spacing:2px;" style-hover="border-color:var(--ink);">STAND-INS →</a>
+        <a href="Take 3 - Dancers.dc.html" style="border:1px solid var(--hair); padding:12px 22px; font-size:12px; letter-spacing:2px;" style-hover="border-color:var(--ink);">DANCERS →</a>
+        <a href="mailto:hello@take3agency.com" style="background:#5d1f16; color:#f4f2ee; padding:12px 22px; font-size:12px; letter-spacing:2px;" style-hover="background:#7a2f20;">SUPPLY REQUEST</a>
+      </div>
+    </div>
+    <div style="max-width:1360px; margin:0 auto; padding:0 40px 48px; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--hair); padding-top:24px;">
+      <img src="assets/take3-logo.svg" alt="Take 3 Agency" style="height:34px; width:auto; filter:var(--logoFilter);">
+      <div style="font-size:11px; letter-spacing:2px; color:#96928c;">© 2026 TAKE 3 AGENCY · @TAKE3AGENCY</div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;defaultTheme&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;dark&quot;, &quot;light&quot;], &quot;default&quot;: &quot;light&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Theme&quot; }
+}">
+class Component extends DCLogic {
+  state = { theme: null };
+  componentDidMount() {
+    try { const t = localStorage.getItem('t3-theme'); if (t === 'dark' || t === 'light') this.setState({ theme: t }); } catch (e) {}
+  }
+  theme() { return this.state.theme ?? this.props.defaultTheme ?? 'light'; }
+  renderVals() {
+    const theme = this.theme();
+    return {
+      theme, isDark: theme === 'dark', isLight: theme === 'light',
+      toggleTheme: (e) => {
+        const t = theme === 'dark' ? 'light' : 'dark';
+        const x = e ? e.clientX : window.innerWidth - 80, y = e ? e.clientY : 40;
+        const apply = () => { this.setState({ theme: t }); return new Promise((r) => setTimeout(r, 50)); };
+        try { localStorage.setItem('t3-theme', t); } catch (err) {}
+        if (this._vt) { try { this._vt.skipTransition(); } catch (err) {} }
+        if (document.startViewTransition) {
+          const vt = this._vt = document.startViewTransition(apply);
+          vt.finished.then(() => { if (this._vt === vt) this._vt = null; }).catch(() => {});
+          vt.ready.then(() => {
+            const r = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+            document.documentElement.animate(
+              { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${r}px at ${x}px ${y}px)`] },
+              { duration: 800, easing: 'cubic-bezier(0.3, 0, 0.2, 1)', pseudoElement: '::view-transition-new(root)' }
+            );
+          }).catch(() => {});
+        } else { apply(); }
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Anton&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#161618; --ink:#f4f2ee; --sub:#c2beb6; --hair:#35353a; --tileBg:#232327; --accent:#c65b40; --logoFilter:invert(1); }
+[data-theme="light"] { --bg:#f4f2ee; --ink:#1a1a1c; --sub:#3a3632; --hair:#d9d6d1; --tileBg:#e2e0dc; --accent:#5d1f16; --logoFilter:none; }
+html,body { margin:0; background:#161618; font-family:'Jost',sans-serif; -webkit-font-smoothing:antialiased; }
+a { color:var(--ink); text-decoration:none; } a:hover { color:#b8b4ae; }
+::view-transition-old(root), ::view-transition-new(root) { animation:none; mix-blend-mode:normal; }
+::view-transition-old(root) { z-index:1; } ::view-transition-new(root) { z-index:2; }
+</style>
+<script src="./image-slot.js"></script>
+</helmet>
+<template id="__bundler_thumbnail" data-bg-color="#1a1a1c">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#1a1a1c"></rect>
+    <text x="600" y="380" text-anchor="middle" font-family="Jost, sans-serif" font-size="72" font-weight="300" letter-spacing="10" fill="#f4f2ee">STAND-INS</text>
+    <text x="600" y="460" text-anchor="middle" font-family="Jost, sans-serif" font-size="26" letter-spacing="8" fill="#96928c">TAKE 3 AGENCY</text>
+  </svg>
+</template>
+<div data-theme="{{ theme }}" style="background:var(--bg); color:var(--ink); min-height:100vh; transition:background 0.5s ease, color 0.5s ease;">
+
+  <!-- full-bleed hero -->
+  <div data-screen-label="Hero" style="position:relative; min-height:78vh; background:#101012; overflow:hidden; display:flex; flex-direction:column;">
+    <div style="position:absolute; inset:0;"><image-slot id="standins-hero" shape="rect" placeholder="Hero still — stand-in beside camera"></image-slot></div>
+    <div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.15) 30%, rgba(20,20,22,0.15) 55%, rgba(20,20,22,0.8) 100%);"></div>
+    <div style="position:relative; z-index:2; display:flex; justify-content:space-between; align-items:center; padding:24px 40px;">
+      <a href="Take 3 Home - Cinematic.dc.html"><img src="assets/take3-logo.svg" alt="Take 3 Agency" style="height:56px; width:auto; filter:invert(1);"></a>
+      <div style="display:flex; align-items:center; gap:28px; font-size:12px; letter-spacing:2px; white-space:nowrap;">
+        <a href="Take 3 Home - Cinematic.dc.html" style="color:#f4f2ee;">HOME</a>
+        <a href="#difference" style="color:#f4f2ee;">THE DIFFERENCE</a>
+        <a href="#matching" style="color:#f4f2ee;">MATCHING</a>
+        <a href="#why" style="color:#f4f2ee;">WHY TAKE 3</a>
+        <div onClick="{{ toggleTheme }}" title="Switch light / dark" style="cursor:pointer; width:36px; height:36px; border:1px solid rgba(244,242,238,0.5); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#f4f2ee;" style-hover="border-color:#f4f2ee;">
+          <sc-if value="{{ isDark }}" hint-placeholder-val="{{ true }}">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 1.8v2.7M12 19.5v2.7M1.8 12h2.7M19.5 12h2.7M4.6 4.6l1.9 1.9M17.5 17.5l1.9 1.9M19.4 4.6l-1.9 1.9M6.5 17.5l-1.9 1.9"></path></svg>
+          </sc-if>
+          <sc-if value="{{ isLight }}" hint-placeholder-val="{{ false }}">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.4 13.2A8.4 8.4 0 1 1 10.8 3.6a6.6 6.6 0 0 0 9.6 9.6z"></path></svg>
+          </sc-if>
+        </div>
+        <a href="#contact" style="border:1px solid rgba(244,242,238,0.5); padding:9px 18px; letter-spacing:2px; color:#f4f2ee;" style-hover="border-color:#f4f2ee;">SUPPLY REQUEST</a>
+      </div>
+    </div>
+    <div style="position:relative; z-index:2; margin-top:auto; padding:0 40px 64px; color:#f4f2ee; pointer-events:none;">
+      <div style="font-size:12px; letter-spacing:6px; color:rgba(244,242,238,0.7);">TAKE 3 AGENCY · CONTINUITY PERFORMERS</div>
+      <div style="font-family:'Anton',sans-serif; font-size:clamp(38px, 4.8vw, 84px); letter-spacing:3px; line-height:1.05; margin-top:18px; text-transform:uppercase;">Stand-ins &amp; picture doubles</div>
+      <div style="font-size:clamp(17px,1.6vw,22px); font-weight:300; letter-spacing:1px; margin-top:18px; max-width:680px; color:rgba(244,242,238,0.9); text-wrap:pretty;">Accurate matches to your leads, experienced on set — so lighting holds, cameras keep turning and your actors' hours go where they matter.</div>
+    </div>
+  </div>
+
+  <!-- the difference -->
+  <div id="difference" data-screen-label="The difference" style="max-width:1280px; margin:0 auto; padding:96px 40px;">
+    <div style="font-size:11px; letter-spacing:3px; color:var(--accent);">THE DIFFERENCE</div>
+    <div style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin-top:16px; max-width:720px;">Six jobs, often confused. Here's what each one does.</div>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:48px; margin-top:56px;">
+      <div style="border-top:1px solid var(--hair); padding-top:24px;">
+        <div style="font-size:12px; letter-spacing:2px; color:#96928c;">01</div>
+        <div style="font-size:clamp(22px,2vw,30px); font-weight:300; letter-spacing:2px; margin-top:12px;">Stand-in</div>
+        <div style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:14px; text-wrap:pretty;">Takes the actor's place while shots are lit and blocked. Matched on height, build and colouring so every setup translates exactly when the actor steps in. Rarely on camera.</div>
+      </div>
+      <div style="border-top:1px solid var(--hair); padding-top:24px;">
+        <div style="font-size:12px; letter-spacing:2px; color:#96928c;">02</div>
+        <div style="font-size:clamp(22px,2vw,30px); font-weight:300; letter-spacing:2px; margin-top:12px;">Picture double</div>
+        <div style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:14px; text-wrap:pretty;">Appears on camera in place of the actor — over-the-shoulder angles, hands, driving shots and distance work. The match has to hold in the frame, not just under the lights.</div>
+      </div>
+      <div style="border-top:1px solid var(--hair); padding-top:24px;">
+        <div style="font-size:12px; letter-spacing:2px; color:#96928c;">03</div>
+        <div style="font-size:clamp(22px,2vw,30px); font-weight:300; letter-spacing:2px; margin-top:12px;">Body double</div>
+        <div style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:14px; text-wrap:pretty;">Steps in for specific physical work — physique shots, movement, anything the schedule or the script keeps the actor from doing. Cast to match in close quarters.</div>
+      </div>
+      <div style="border-top:1px solid var(--hair); padding-top:24px;">
+        <div style="font-size:12px; letter-spacing:2px; color:#96928c;">04</div>
+        <div style="font-size:clamp(22px,2vw,30px); font-weight:300; letter-spacing:2px; margin-top:12px;">Intimacy double</div>
+        <div style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:14px; text-wrap:pretty;">Performs intimate scenes in the actor's place, working to the intimacy coordinator's choreography — cast with consent, closed-set experience and a match that holds in frame.</div>
+      </div>
+      <div style="border-top:1px solid var(--hair); padding-top:24px;">
+        <div style="font-size:12px; letter-spacing:2px; color:#96928c;">05</div>
+        <div style="font-size:clamp(22px,2vw,30px); font-weight:300; letter-spacing:2px; margin-top:12px;">Hand double</div>
+        <div style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:14px; text-wrap:pretty;">Close-up insert work — writing, driving, product handling, instruments. Matched on skin tone, size and detail, steady under a macro lens.</div>
+      </div>
+      <div style="border-top:1px solid var(--hair); padding-top:24px;">
+        <div style="font-size:12px; letter-spacing:2px; color:#96928c;">06</div>
+        <div style="font-size:clamp(22px,2vw,30px); font-weight:300; letter-spacing:2px; margin-top:12px;">Stunt double</div>
+        <div style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:14px; text-wrap:pretty;">Takes the action the actor can't — falls, fights, vehicle work — under the stunt coordinator, matched closely enough to cut seamlessly with the performance.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- why it matters: dark band -->
+  <div data-screen-label="Why it matters" style="border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); background:#1a1a1c; color:#f4f2ee;">
+    <div style="max-width:1280px; margin:0 auto; padding:0 40px; display:grid; grid-template-columns:1fr 1.3fr; gap:72px; align-items:stretch;">
+      <div style="position:relative; background:#101012; min-height:560px; overflow:hidden;"><div style="position:absolute; inset:0;"><image-slot id="standins-why" shape="rect" placeholder="On-set still — lighting setup"></image-slot></div></div>
+      <div style="padding:88px 0;">
+        <div style="font-size:11px; letter-spacing:3px; color:#96928c;">WHY IT MATTERS</div>
+        <div style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin-top:16px; max-width:520px;">A good match keeps the whole unit moving.</div>
+        <div style="display:grid; row-gap:0; font-size:16px; font-weight:300; line-height:1.7; color:#c7c3bd; margin-top:36px;">
+          <div style="border-top:1px solid #35353a; padding:20px 0; display:grid; grid-template-columns:170px 1fr; gap:24px;"><span style="font-size:12px; letter-spacing:2px; color:#96928c; padding-top:4px;">LIGHTING &amp; CAMERA</span><span>Setups are lit and blocked on a true match — nothing shifts when the actor steps onto their mark.</span></div>
+          <div style="border-top:1px solid #35353a; padding:20px 0; display:grid; grid-template-columns:170px 1fr; gap:24px;"><span style="font-size:12px; letter-spacing:2px; color:#96928c; padding-top:4px;">A MOVING SET</span><span>Your leads rest, rehearse or shoot on another unit while setups continue without them.</span></div>
+          <div style="border-top:1px solid #35353a; border-bottom:1px solid #35353a; padding:20px 0; display:grid; grid-template-columns:170px 1fr; gap:24px;"><span style="font-size:12px; letter-spacing:2px; color:#96928c; padding-top:4px;">SCHEDULE &amp; COST</span><span>Fewer resets and less actor downtime — the saving compounds across every shoot day.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- matching -->
+  <div id="matching" data-screen-label="Matching" style="max-width:1280px; margin:0 auto; padding:96px 40px; display:grid; grid-template-columns:1.25fr 1fr; gap:72px; align-items:stretch;">
+    <div style="display:flex; flex-direction:column;">
+      <div style="font-size:11px; letter-spacing:3px; color:var(--accent);">MATCHING</div>
+      <div style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin-top:16px; max-width:520px;">Matched to your leads, not close enough.</div>
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center; margin-top:24px; border-bottom:1px solid var(--hair);">
+        <div style="border-top:1px solid var(--hair); padding:18px 0; display:flex; align-items:baseline; gap:28px;"><span style="font-size:12px; letter-spacing:2px; color:#96928c; width:28px;">01</span><span style="text-transform:uppercase; font-size:clamp(17px,1.8vw,24px); font-weight:300; letter-spacing:3px;">Height</span></div>
+        <div style="border-top:1px solid var(--hair); padding:18px 0; display:flex; align-items:baseline; gap:28px;"><span style="font-size:12px; letter-spacing:2px; color:#96928c; width:28px;">02</span><span style="text-transform:uppercase; font-size:clamp(17px,1.8vw,24px); font-weight:300; letter-spacing:3px;">Build</span></div>
+        <div style="border-top:1px solid var(--hair); padding:18px 0; display:flex; align-items:baseline; gap:28px;"><span style="font-size:12px; letter-spacing:2px; color:#96928c; width:28px;">03</span><span style="text-transform:uppercase; font-size:clamp(17px,1.8vw,24px); font-weight:300; letter-spacing:3px;">Colouring</span></div>
+        <div style="border-top:1px solid var(--hair); padding:18px 0; display:flex; align-items:baseline; gap:28px;"><span style="font-size:12px; letter-spacing:2px; color:#96928c; width:28px;">04</span><span style="text-transform:uppercase; font-size:clamp(17px,1.8vw,24px); font-weight:300; letter-spacing:3px;">Skin tone</span></div>
+        <div style="border-top:1px solid var(--hair); padding:18px 0; display:flex; align-items:baseline; gap:28px;"><span style="font-size:12px; letter-spacing:2px; color:#96928c; width:28px;">05</span><span style="text-transform:uppercase; font-size:clamp(17px,1.8vw,24px); font-weight:300; letter-spacing:3px;">Hair</span></div>
+      </div>
+      <div style="font-size:14px; font-weight:300; color:#96928c; line-height:1.6; margin-top:28px; max-width:520px; text-wrap:pretty;">Send your leads' details or casting references — we shortlist from measured, photographed artists on our books, not self-reported stats.</div>
+    </div>
+    <div style="position:relative; background:var(--tileBg); min-height:560px; overflow:hidden;"><div style="position:absolute; inset:0;"><image-slot id="standins-matching" shape="rect" placeholder="Side-by-side — lead and double"></image-slot></div></div>
+  </div>
+
+  <!-- commercial & brand -->
+  <div data-screen-label="Commercial and brand" style="border-top:1px solid var(--hair);">
+    <div style="max-width:1280px; margin:0 auto; padding:88px 40px 96px; display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start;">
+      <div>
+        <div style="font-size:11px; letter-spacing:3px; color:var(--accent);">FOR COMMERCIAL &amp; BRAND</div>
+        <div style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin-top:16px;">Not just for features.</div>
+      </div>
+      <div style="display:grid; row-gap:0; font-size:16px; font-weight:300; line-height:1.7; color:var(--sub);">
+        <div style="border-top:1px solid var(--hair); padding:20px 0; display:grid; grid-template-columns:170px 1fr; gap:24px;"><span style="font-size:12px; letter-spacing:2px; color:#96928c; padding-top:4px;">CAMPAIGN SHOOTS</span><span>Lighting doubles for principal talent on limited hours — setups ready the moment they arrive.</span></div>
+        <div style="border-top:1px solid var(--hair); padding:20px 0; display:grid; grid-template-columns:170px 1fr; gap:24px;"><span style="font-size:12px; letter-spacing:2px; color:#96928c; padding-top:4px;">STILLS &amp; CONTENT</span><span>Hands, product interaction and distance work shot on a double while your talent covers the hero frames.</span></div>
+        <div style="border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); padding:20px 0; display:grid; grid-template-columns:170px 1fr; gap:24px;"><span style="font-size:12px; letter-spacing:2px; color:#96928c; padding-top:4px;">TIGHT SCHEDULES</span><span>One shoot day instead of two — a match on set is often the cheapest hour a smaller production can buy.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- why book through take 3 -->
+  <div id="why" data-screen-label="Why Take 3" style="border-top:1px solid var(--hair);">
+    <div style="max-width:1280px; margin:0 auto; padding:88px 40px 96px;">
+      <div style="font-size:11px; letter-spacing:3px; color:var(--accent);">WHY BOOK THROUGH TAKE 3</div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:48px; margin-top:40px;">
+        <div style="border-top:1px solid var(--hair); padding-top:24px;">
+          <div style="font-size:19px; letter-spacing:1px;">Set-ready people</div>
+          <div style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:10px; text-wrap:pretty;">Experienced stand-ins who know set etiquette — where to be, when to be silent, how to hold a mark and take direction from the camera department.</div>
+        </div>
+        <div style="border-top:1px solid var(--hair); padding-top:24px;">
+          <div style="font-size:19px; letter-spacing:1px;">Admin handled</div>
+          <div style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:10px; text-wrap:pretty;">Contracts, fees, overtime and on-the-day coordination dealt with by us — one invoice, no chasing.</div>
+        </div>
+        <div style="border-top:1px solid var(--hair); padding-top:24px;">
+          <div style="font-size:19px; letter-spacing:1px;">One relationship</div>
+          <div style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:10px; text-wrap:pretty;">Doubles, dancers, fighters and specialists through a single point of contact — one roster, every format.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- the book / footer -->
+  <div id="contact" data-screen-label="Footer" style="border-top:1px solid var(--hair);">
+    <div style="max-width:1280px; margin:0 auto; padding:72px 40px; display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:40px;">
+      <div>
+        <div style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3.6vw,52px); font-weight:400; letter-spacing:1px; line-height:1;">Book doubles for your production</div>
+        <div style="font-size:16px; margin-top:18px;"><a href="mailto:hello@take3agency.com">hello@take3agency.com</a> &nbsp;·&nbsp; 020 8088 2833</div>
+      </div>
+      <div style="display:flex; gap:12px;">
+        <a href="Take 3 - Dancers.dc.html" style="border:1px solid var(--hair); padding:12px 22px; font-size:12px; letter-spacing:2px;" style-hover="border-color:var(--ink);">DANCERS →</a>
+        <a href="Take 3 - SPACTs.dc.html" style="border:1px solid var(--hair); padding:12px 22px; font-size:12px; letter-spacing:2px;" style-hover="border-color:var(--ink);">SPACTS →</a>
+        <a href="mailto:hello@take3agency.com" style="background:#5d1f16; color:#f4f2ee; padding:12px 22px; font-size:12px; letter-spacing:2px;" style-hover="background:#7a2f20;">SUPPLY REQUEST</a>
+      </div>
+    </div>
+    <div style="max-width:1280px; margin:0 auto; padding:0 40px 48px; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--hair); padding-top:24px;">
+      <img src="assets/take3-logo.svg" alt="Take 3 Agency" style="height:34px; width:auto; filter:var(--logoFilter);">
+      <div style="font-size:11px; letter-spacing:2px; color:#96928c;">© 2026 TAKE 3 AGENCY · @TAKE3AGENCY</div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;defaultTheme&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;dark&quot;, &quot;light&quot;], &quot;default&quot;: &quot;dark&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Theme&quot; }
+}">
+class Component extends DCLogic {
+  state = { theme: null };
+  componentDidMount() {
+    try { const t = localStorage.getItem('t3-theme'); if (t === 'dark' || t === 'light') this.setState({ theme: t }); } catch (e) {}
+  }
+  theme() { return this.state.theme ?? this.props.defaultTheme ?? 'dark'; }
+  renderVals() {
+    const theme = this.theme();
+    return {
+      theme, isDark: theme === 'dark', isLight: theme === 'light',
+      toggleTheme: (e) => {
+        const t = theme === 'dark' ? 'light' : 'dark';
+        const x = e ? e.clientX : window.innerWidth - 80, y = e ? e.clientY : 40;
+        const apply = () => { this.setState({ theme: t }); return new Promise((r) => setTimeout(r, 50)); };
+        try { localStorage.setItem('t3-theme', t); } catch (err) {}
+        if (this._vt) { try { this._vt.skipTransition(); } catch (err) {} }
+        if (document.startViewTransition) {
+          const vt = this._vt = document.startViewTransition(apply);
+          vt.finished.then(() => { if (this._vt === vt) this._vt = null; }).catch(() => {});
+          vt.ready.then(() => {
+            const r = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+            document.documentElement.animate(
+              { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${r}px at ${x}px ${y}px)`] },
+              { duration: 800, easing: 'cubic-bezier(0.3, 0, 0.2, 1)', pseudoElement: '::view-transition-new(root)' }
+            );
+          }).catch(() => {});
+        } else { apply(); }
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>

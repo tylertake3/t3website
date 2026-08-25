@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Anton&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#161618; --ink:#f4f2ee; --sub:#c2beb6; --hair:#35353a; --tileBg:#232327; --accent:#c65b40; --heroBg:#101012; --heroInk:#f4f2ee; --heroInkSoft:rgba(244,242,238,0.7); --heroLine:rgba(244,242,238,0.25); --heroBtnBorder:rgba(244,242,238,0.5); --heroScrim:linear-gradient(180deg, rgba(20,20,22,0.55) 0%, rgba(20,20,22,0) 30%, rgba(20,20,22,0) 55%, rgba(20,20,22,0.75) 100%); --logoFilter:invert(1); }
+[data-theme="light"] { --bg:#f4f2ee; --ink:#1a1a1c; --sub:#3a3632; --hair:#d9d6d1; --tileBg:#e2e0dc; --accent:#5d1f16; --heroBg:#e9e7e2; --heroInk:#f4f2ee; --heroInkSoft:rgba(244,242,238,0.7); --heroLine:rgba(244,242,238,0.25); --heroBtnBorder:rgba(244,242,238,0.5); --heroScrim:linear-gradient(180deg, rgba(20,20,22,0.55) 0%, rgba(20,20,22,0) 30%, rgba(20,20,22,0) 55%, rgba(20,20,22,0.75) 100%); --logoFilter:none; }
+html,body { margin:0; background:#161618; font-family:'Jost',sans-serif; -webkit-font-smoothing:antialiased; }
+a { color:var(--ink); text-decoration:none; } a:hover { color:#b8b4ae; }
+::view-transition-old(root), ::view-transition-new(root) { animation:none; mix-blend-mode:normal; }
+::view-transition-old(root) { z-index:1; } ::view-transition-new(root) { z-index:2; }
+</style>
+</helmet>
+<template id="__bundler_thumbnail" data-bg-color="#1a1a1c">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#1a1a1c"></rect>
+    <text x="600" y="400" text-anchor="middle" font-family="Jost, sans-serif" font-size="110" font-weight="300" letter-spacing="14" fill="#f4f2ee">SPACTS</text>
+    <text x="600" y="470" text-anchor="middle" font-family="Jost, sans-serif" font-size="26" letter-spacing="8" fill="#96928c">TAKE 3 AGENCY</text>
+  </svg>
+</template>
+<div data-theme="{{ theme }}" style="background:var(--bg); color:var(--ink); min-height:100vh; transition:background 0.5s ease, color 0.5s ease;">
+
+  <!-- full-bleed hero: production stills fade -->
+  <div style="position:relative; min-height:78vh; background:#101012; overflow:hidden;">
+    <sc-for list="{{ heroLayers }}" as="l" hint-placeholder-count="0">
+      <div style="position:absolute; inset:0; opacity:{{ l.op }}; transition:opacity 1.8s ease; background-image:{{ l.bg }}; background-size:cover; background-position:center;"></div>
+    </sc-for>
+    <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.15) 30%, rgba(20,20,22,0.15) 55%, rgba(20,20,22,0.8) 100%);"></div>
+    <div style="position:relative; z-index:2; display:flex; justify-content:space-between; align-items:center; padding:24px 40px;">
+      <a href="Take 3 Home - Cinematic.dc.html"><img src="assets/take3-logo.svg" alt="Take 3 Agency" style="height:56px; width:auto; filter:invert(1);"></a>
+      <div style="display:flex; align-items:center; gap:28px; font-size:12px; letter-spacing:2px; white-space:nowrap;">
+        <a href="Take 3 Home - Cinematic.dc.html" style="color:#f4f2ee;">HOME</a>
+        <a href="#what" style="color:#f4f2ee;">WHAT IS A SPACT</a>
+        <a href="#disciplines" style="color:#f4f2ee;">DISCIPLINES</a>
+        <a href="#why" style="color:#f4f2ee;">WHY TAKE 3</a>
+        <div onClick="{{ toggleTheme }}" title="Switch light / dark" style="cursor:pointer; width:36px; height:36px; border:1px solid rgba(244,242,238,0.5); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#f4f2ee;" style-hover="border-color:#f4f2ee;">
+          <sc-if value="{{ isDark }}" hint-placeholder-val="{{ true }}">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 1.8v2.7M12 19.5v2.7M1.8 12h2.7M19.5 12h2.7M4.6 4.6l1.9 1.9M17.5 17.5l1.9 1.9M19.4 4.6l-1.9 1.9M6.5 17.5l-1.9 1.9"></path></svg>
+          </sc-if>
+          <sc-if value="{{ isLight }}" hint-placeholder-val="{{ false }}">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.4 13.2A8.4 8.4 0 1 1 10.8 3.6a6.6 6.6 0 0 0 9.6 9.6z"></path></svg>
+          </sc-if>
+        </div>
+        <a href="#contact" style="border:1px solid rgba(244,242,238,0.5); padding:9px 18px; letter-spacing:2px; color:#f4f2ee;" style-hover="border-color:#f4f2ee;">SUPPLY REQUEST</a>
+      </div>
+    </div>
+    <div style="position:absolute; left:40px; right:40px; bottom:64px; z-index:2; color:#f4f2ee;">
+      <div style="font-size:12px; letter-spacing:6px; color:rgba(244,242,238,0.7);">TAKE 3 AGENCY · SPECIAL ACTION PERFORMERS</div>
+      <div style="font-family:'Anton','Jost',sans-serif; font-size:clamp(48px, 6vw, 104px); font-weight:400; letter-spacing:4px; line-height:1.02; margin-top:18px; text-transform:uppercase;">SPACTs</div>
+      <div style="font-size:clamp(17px,1.6vw,22px); font-weight:300; letter-spacing:1px; margin-top:18px; max-width:640px; color:rgba(244,242,238,0.9); text-wrap:pretty;">Real skills, delivered safely on camera.</div>
+    </div>
+    <div style="position:absolute; right:40px; bottom:40px; z-index:2; text-align:right; color:rgba(244,242,238,0.75); font-size:11px; letter-spacing:3px;">
+      AS SEEN ON<br><span style="font-size:20px; letter-spacing:5px; font-weight:300; color:#f4f2ee;">{{ heroTitle }}</span>
+    </div>
+  </div>
+
+  <!-- what is a spact -->
+  <div id="what" style="max-width:1280px; margin:0 auto; padding:96px 40px; display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start;">
+    <div>
+      <div style="font-size:11px; letter-spacing:3px; color:var(--accent);">WHAT IS A SPACT</div>
+      <div style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin-top:16px;">A performer, not just a face in the crowd.</div>
+    </div>
+    <div style="font-size:17px; font-weight:300; line-height:1.75; color:var(--sub); text-wrap:pretty;">
+      <p style="margin:0;">A SPACT — Special Action Extra — is a background artist with a real, proven skill: a fighter, driver, dancer, gymnast or rider who can perform that skill safely, repeatably, on camera. Productions book them where a scene needs genuine ability in the background, not a mime of it.</p>
+      <a href="#" style="display:inline-block; margin-top:24px; font-size:12px; letter-spacing:2px; color:var(--accent);">READ THE FULL EXPLAINER →</a>
+    </div>
+  </div>
+
+  <!-- disciplines grid -->
+  <div id="disciplines" style="max-width:1280px; margin:0 auto; padding:0 40px 96px;">
+    <div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid var(--hair); padding-bottom:18px; margin-bottom:8px;">
+      <div style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(26px,3vw,40px); font-weight:400; letter-spacing:1px;">Disciplines</div>
+      <div style="font-size:11px; letter-spacing:3px; color:var(--accent);">NINE CORE AREAS</div>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); column-gap:48px;">
+      <div style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:#96928c;">01</span><span style="font-size:17px; letter-spacing:2px;">Screen fighting &amp; combat</span></div>
+      <div style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:#96928c;">02</span><span style="font-size:17px; letter-spacing:2px;">Precision &amp; stunt driving</span></div>
+      <div style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:#96928c;">03</span><span style="font-size:17px; letter-spacing:2px;">Dance</span></div>
+      <div style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:#96928c;">04</span><span style="font-size:17px; letter-spacing:2px;">Martial arts</span></div>
+      <div style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:#96928c;">05</span><span style="font-size:17px; letter-spacing:2px;">Gymnastics &amp; acrobatics</span></div>
+      <div style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:#96928c;">06</span><span style="font-size:17px; letter-spacing:2px;">Parkour &amp; free-running</span></div>
+      <div style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:#96928c;">07</span><span style="font-size:17px; letter-spacing:2px;">Skateboarding &amp; BMX</span></div>
+      <div style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:#96928c;">08</span><span style="font-size:17px; letter-spacing:2px;">Circus &amp; aerial</span></div>
+      <div style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:#96928c;">09</span><span style="font-size:17px; letter-spacing:2px;">Military &amp; armed police</span></div>
+    </div>
+    <div style="font-size:14px; font-weight:300; color:#96928c; line-height:1.6; margin-top:24px; max-width:720px; text-wrap:pretty;">There's a fine line between SPACT and stunt work — our team will advise on the right booking for the action you need.</div>
+  </div>
+
+  <!-- for film and television -->
+  <div style="border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); background:#1a1a1c; color:#f4f2ee;">
+    <div style="max-width:1280px; margin:0 auto; padding:88px 40px;">
+      <div style="display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start;">
+        <div>
+          <div style="font-size:11px; letter-spacing:3px; color:#96928c;">FOR FILM &amp; TELEVISION</div>
+          <div style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin-top:16px;">Booked under crowd. Delivering more.</div>
+        </div>
+        <div style="font-size:16px; font-weight:300; line-height:1.75; color:#c7c3bd; text-wrap:pretty;">SPACTs come through the crowd budget but bring featured-level action — fights that land, riders who ride, soldiers who move like soldiers. Recent productions we've supplied:</div>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:48px;">
+        <div>
+          <div style="aspect-ratio:16/9; overflow:hidden; background:#101012;"><img src="uploads/w1280.jpg" alt="Andor" style="width:100%; height:100%; object-fit:cover; display:block;"></div>
+          <div style="font-size:14px; letter-spacing:4px; margin-top:12px;">ANDOR</div>
+        </div>
+        <div>
+          <div style="aspect-ratio:16/9; overflow:hidden; background:#101012;"><img src="uploads/_dfa3c099-9b6c-45ce-8c99-e24d9e51a891.jpg" alt="Odyssey" style="width:100%; height:100%; object-fit:cover; display:block;"></div>
+          <div style="font-size:14px; letter-spacing:4px; margin-top:12px;">ODYSSEY</div>
+        </div>
+        <div>
+          <div style="aspect-ratio:16/9; overflow:hidden; background:#101012;"><img src="uploads/lotr-s2-ut-230403-00131-r2-jpg-66f4b25127687.avif" alt="Rings of Power" style="width:100%; height:100%; object-fit:cover; display:block;"></div>
+          <div style="font-size:14px; letter-spacing:4px; margin-top:12px;">RINGS OF POWER</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- for commercial and brand -->
+  <div style="max-width:1280px; margin:0 auto; padding:88px 40px;">
+    <div style="display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start;">
+      <div>
+        <div style="font-size:11px; letter-spacing:3px; color:var(--accent);">FOR COMMERCIAL &amp; BRAND</div>
+        <div style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin-top:16px;">When the campaign needs it done for real.</div>
+      </div>
+      <div style="display:grid; row-gap:0; font-size:16px; font-weight:300; line-height:1.7; color:var(--sub);">
+        <div style="border-bottom:1px solid var(--hair); padding:18px 0;">Car campaigns that need a driver who can perform, not just pose.</div>
+        <div style="border-bottom:1px solid var(--hair); padding:18px 0;">Sportswear films that want genuine free-runners and gymnasts.</div>
+        <div style="border-bottom:1px solid var(--hair); padding:18px 0;">Cinematic spots calling for fight or aerial work.</div>
+        <div style="padding:18px 0;">Live events that need circus and movement artists.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- why book through take 3 -->
+  <div id="why" style="max-width:1280px; margin:0 auto; padding:0 40px 96px;">
+    <div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid var(--hair); padding-bottom:18px; margin-bottom:40px;">
+      <div style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(26px,3vw,40px); font-weight:400; letter-spacing:1px;">Why book through Take 3</div>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:48px;">
+      <div>
+        <div style="font-size:12px; letter-spacing:2px; color:#96928c;">01</div>
+        <div style="font-size:19px; letter-spacing:1px; margin-top:12px;">A vetted roster</div>
+        <div style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:10px; text-wrap:pretty;">Every artist assessed and interviewed by our team before they join. They are exactly who we say they are.</div>
+      </div>
+      <div>
+        <div style="font-size:12px; letter-spacing:2px; color:#96928c;">02</div>
+        <div style="font-size:19px; letter-spacing:1px; margin-top:12px;">We handle the paperwork</div>
+        <div style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:10px; text-wrap:pretty;">Contracts, fees, overtime, buyouts and on-the-day coordination — dealt with by us, not your team.</div>
+      </div>
+      <div>
+        <div style="font-size:12px; letter-spacing:2px; color:#96928c;">03</div>
+        <div style="font-size:19px; letter-spacing:1px; margin-top:12px;">One relationship</div>
+        <div style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:10px; text-wrap:pretty;">Every discipline through a single point of contact — from a lone precision driver to a full crowd of fighters.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- the book / footer -->
+  <div id="contact" style="border-top:1px solid var(--hair);">
+    <div style="max-width:1280px; margin:0 auto; padding:72px 40px; display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:40px;">
+      <div>
+        <div style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3.6vw,52px); font-weight:400; letter-spacing:1px; line-height:1;">Book SPACTs for your production</div>
+        <div style="font-size:16px; margin-top:18px;"><a href="mailto:hello@take3agency.com">hello@take3agency.com</a> &nbsp;·&nbsp; 020 8088 2833</div>
+      </div>
+      <div style="display:flex; gap:12px;">
+        <a href="Take 3 - Dancers.dc.html" style="border:1px solid var(--hair); padding:12px 22px; font-size:12px; letter-spacing:2px;" style-hover="border-color:var(--ink);">DANCERS →</a>
+        <a href="Take 3 Home - Cinematic.dc.html" style="border:1px solid var(--hair); padding:12px 22px; font-size:12px; letter-spacing:2px;" style-hover="border-color:var(--ink);">SPECIALISTS →</a>
+        <a href="mailto:hello@take3agency.com" style="background:#5d1f16; color:#f4f2ee; padding:12px 22px; font-size:12px; letter-spacing:2px;" style-hover="background:#7a2f20;">SUPPLY REQUEST</a>
+      </div>
+    </div>
+    <div style="max-width:1280px; margin:0 auto; padding:0 40px 48px; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--hair); padding-top:24px;">
+      <img src="assets/take3-logo.svg" alt="Take 3 Agency" style="height:34px; width:auto; filter:var(--logoFilter);">
+      <div style="font-size:11px; letter-spacing:2px; color:#96928c;">© 2026 TAKE 3 AGENCY · @TAKE3AGENCY</div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;defaultTheme&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;dark&quot;, &quot;light&quot;], &quot;default&quot;: &quot;dark&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Theme&quot; },
+  &quot;title1&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;ANDOR&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Hero stills&quot; },
+  &quot;title2&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;ODYSSEY&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Hero stills&quot; },
+  &quot;title3&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;RINGS OF POWER&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Hero stills&quot; }
+}">
+class Component extends DCLogic {
+  state = { idx: 0, theme: null };
+  componentDidMount() {
+    try { const t = localStorage.getItem('t3-theme'); if (t === 'dark' || t === 'light') this.setState({ theme: t }); } catch (e) {}
+    this.timer = setInterval(() => {
+      const n = this.stills().length;
+      if (n > 1) this.setState(s => ({ idx: (s.idx + 1) % n }));
+    }, 5000);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+  theme() { return this.state.theme ?? this.props.defaultTheme ?? 'dark'; }
+  stills() {
+    return [
+      { src: "uploads/w1280.jpg", title: this.props.title1 ?? "ANDOR" },
+      { src: "uploads/_dfa3c099-9b6c-45ce-8c99-e24d9e51a891.jpg", title: this.props.title2 ?? "ODYSSEY" },
+      { src: "uploads/lotr-s2-ut-230403-00131-r2-jpg-66f4b25127687.avif", title: this.props.title3 ?? "RINGS OF POWER" },
+    ];
+  }
+  renderVals() {
+    const theme = this.theme();
+    const st = this.stills();
+    const i = this.state.idx % st.length;
+    return {
+      theme, isDark: theme === 'dark', isLight: theme === 'light',
+      toggleTheme: (e) => {
+        const t = theme === 'dark' ? 'light' : 'dark';
+        const x = e ? e.clientX : window.innerWidth - 80, y = e ? e.clientY : 40;
+        const apply = () => { this.setState({ theme: t }); return new Promise((r) => setTimeout(r, 50)); };
+        try { localStorage.setItem('t3-theme', t); } catch (err) {}
+        if (this._vt) { try { this._vt.skipTransition(); } catch (err) {} }
+        if (document.startViewTransition) {
+          const vt = this._vt = document.startViewTransition(apply);
+          vt.finished.then(() => { if (this._vt === vt) this._vt = null; }).catch(() => {});
+          vt.ready.then(() => {
+            const r = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+            document.documentElement.animate(
+              { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${r}px at ${x}px ${y}px)`] },
+              { duration: 800, easing: 'cubic-bezier(0.3, 0, 0.2, 1)', pseudoElement: '::view-transition-new(root)' }
+            );
+          }).catch(() => {});
+        } else { apply(); }
+      },
+      heroLayers: st.map((s, k) => ({ bg: `url("${s.src}")`, op: k === i ? 1 : 0 })),
+      heroTitle: st[i].title,
+    };
+  }
+}
+</script>
+</body>
+</html>

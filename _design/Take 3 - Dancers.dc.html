@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Anton&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#161618; --ink:#f4f2ee; --sub:#c2beb6; --hair:#35353a; --tileBg:#232327; --accent:#c65b40; --logoFilter:invert(1); }
+[data-theme="light"] { --bg:#f4f2ee; --ink:#1a1a1c; --sub:#3a3632; --hair:#d9d6d1; --tileBg:#e2e0dc; --accent:#5d1f16; --logoFilter:none; }
+html,body { margin:0; background:#161618; font-family:'Jost',sans-serif; -webkit-font-smoothing:antialiased; }
+a { color:var(--ink); text-decoration:none; } a:hover { color:#b8b4ae; }
+::view-transition-old(root), ::view-transition-new(root) { animation:none; mix-blend-mode:normal; }
+::view-transition-old(root) { z-index:1; } ::view-transition-new(root) { z-index:2; }
+</style>
+<script src="./image-slot.js"></script>
+</helmet>
+<template id="__bundler_thumbnail" data-bg-color="#1a1a1c">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#1a1a1c"></rect>
+    <text x="600" y="400" text-anchor="middle" font-family="Jost, sans-serif" font-size="110" font-weight="300" letter-spacing="14" fill="#f4f2ee">DANCERS</text>
+    <text x="600" y="470" text-anchor="middle" font-family="Jost, sans-serif" font-size="26" letter-spacing="8" fill="#96928c">TAKE 3 AGENCY</text>
+  </svg>
+</template>
+<div data-theme="{{ theme }}" style="background:var(--bg); color:var(--ink); min-height:100vh; transition:background 0.5s ease, color 0.5s ease;">
+
+  <!-- full-bleed hero: dancer stills fade -->
+  <div style="position:relative; min-height:78vh; background:#101012; overflow:hidden;">
+    <sc-for list="{{ heroLayers }}" as="l" hint-placeholder-count="0">
+      <div style="position:absolute; inset:0; opacity:{{ l.op }}; transition:opacity 1.8s ease; background-image:{{ l.bg }}; background-size:cover; background-position:center;"></div>
+    </sc-for>
+    <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.15) 30%, rgba(20,20,22,0.15) 55%, rgba(20,20,22,0.8) 100%);"></div>
+    <div style="position:relative; z-index:2; display:flex; justify-content:space-between; align-items:center; padding:24px 40px;">
+      <a href="Take 3 Home - Cinematic.dc.html"><img src="assets/take3-logo.svg" alt="Take 3 Agency" style="height:56px; width:auto; filter:invert(1);"></a>
+      <div style="display:flex; align-items:center; gap:28px; font-size:12px; letter-spacing:2px; white-space:nowrap;">
+        <a href="Take 3 Home - Cinematic.dc.html" style="color:#f4f2ee;">HOME</a>
+        <a href="#supply" style="color:#f4f2ee;">WHAT WE SUPPLY</a>
+        <a href="#choreographers" style="color:#f4f2ee;">CHOREOGRAPHERS</a>
+        <div onClick="{{ toggleTheme }}" title="Switch light / dark" style="cursor:pointer; width:36px; height:36px; border:1px solid rgba(244,242,238,0.5); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#f4f2ee;" style-hover="border-color:#f4f2ee;">
+          <sc-if value="{{ isDark }}" hint-placeholder-val="{{ true }}">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 1.8v2.7M12 19.5v2.7M1.8 12h2.7M19.5 12h2.7M4.6 4.6l1.9 1.9M17.5 17.5l1.9 1.9M19.4 4.6l-1.9 1.9M6.5 17.5l-1.9 1.9"></path></svg>
+          </sc-if>
+          <sc-if value="{{ isLight }}" hint-placeholder-val="{{ false }}">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.4 13.2A8.4 8.4 0 1 1 10.8 3.6a6.6 6.6 0 0 0 9.6 9.6z"></path></svg>
+          </sc-if>
+        </div>
+        <a href="#contact" style="border:1px solid rgba(244,242,238,0.5); padding:9px 18px; letter-spacing:2px; color:#f4f2ee;" style-hover="border-color:#f4f2ee;">SUPPLY REQUEST</a>
+      </div>
+    </div>
+    <div style="position:absolute; left:40px; right:40px; bottom:64px; z-index:2; color:#f4f2ee;">
+      <div style="font-size:12px; letter-spacing:6px; color:rgba(244,242,238,0.7);">TAKE 3 AGENCY · DANCE</div>
+      <div style="font-family:'Anton',sans-serif; font-size:clamp(48px, 6vw, 104px); letter-spacing:4px; line-height:1.02; margin-top:18px;">DANCERS</div>
+      <div style="font-size:clamp(17px,1.6vw,22px); font-weight:300; letter-spacing:1px; margin-top:18px; max-width:640px; color:rgba(244,242,238,0.9); text-wrap:pretty;">Trained dancers for film, television, commercial and live — every style, screen-ready.</div>
+    </div>
+  </div>
+
+  <!-- what we supply: index list + tall still -->
+  <div id="supply" style="max-width:1280px; margin:0 auto; padding:96px 40px; display:grid; grid-template-columns:1.25fr 1fr; gap:72px; align-items:stretch;">
+    <div style="display:flex; flex-direction:column;">
+      <div style="font-size:11px; letter-spacing:3px; color:var(--accent);">WHAT WE SUPPLY</div>
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center; margin-top:24px; border-bottom:1px solid var(--hair);">
+        <sc-for list="{{ supplyItems }}" as="g" hint-placeholder-count="6">
+          <div onClick="{{ g.toggle }}" style="border-top:1px solid var(--hair); padding:20px 0; cursor:pointer;">
+            <div style="display:flex; align-items:baseline; gap:28px;">
+              <span style="font-size:12px; letter-spacing:2px; color:#96928c; width:28px;">{{ g.num }}</span>
+              <span style="text-transform:uppercase; font-size:clamp(18px,1.9vw,26px); font-weight:300; letter-spacing:3px; flex:1;">{{ g.name }}</span>
+              <span style="font-size:18px; font-weight:300; color:#96928c;">{{ g.mark }}</span>
+            </div>
+            <sc-if value="{{ g.open }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:14px; padding-left:56px; max-width:520px; text-wrap:pretty;">{{ g.blurb }}</div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+      <div style="font-size:14px; font-weight:300; color:#96928c; line-height:1.6; margin-top:28px; max-width:520px; text-wrap:pretty;">Solo artists to full ensembles, matched to the brief — style, look, height and partnering experience.</div>
+    </div>
+    <div style="align-self:center; position:relative;">
+      <img src="uploads/3W8A3054.jpg" alt="Breaker in a one-arm freeze" style="width:100%; height:auto; display:block;">
+      <div style="position:absolute; left:20px; bottom:16px; font-size:11px; letter-spacing:3px; color:rgba(244,242,238,0.8);">TAKE 3 ROSTER · BREAKING</div>
+    </div>
+  </div>
+
+  <!-- for film and television: still + rows -->
+  <div style="border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); background:#1a1a1c; color:#f4f2ee;">
+    <div style="max-width:1280px; margin:0 auto; padding:0 40px; display:grid; grid-template-columns:1fr 1.3fr; gap:72px; align-items:stretch;">
+      <div style="align-self:center; padding:56px 0;">
+        <img src="uploads/DSC01767.jpg" alt="Dancer spinning in leather coat" style="width:100%; height:auto; display:block;">
+      </div>
+      <div style="padding:88px 0;">
+        <div style="font-size:11px; letter-spacing:3px; color:#96928c;">FOR FILM &amp; TELEVISION</div>
+        <div style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin-top:16px; max-width:520px;">Movement that holds the frame.</div>
+        <div style="display:grid; row-gap:0; font-size:16px; font-weight:300; line-height:1.7; color:#c7c3bd; margin-top:36px;">
+          <div style="border-top:1px solid #35353a; padding:20px 0; display:grid; grid-template-columns:170px 1fr; gap:24px;"><span style="font-size:12px; letter-spacing:2px; color:#96928c; padding-top:4px;">PERIOD SEQUENCES</span><span>Court dances, balls and social dance, drilled to the era.</span></div>
+          <div style="border-top:1px solid #35353a; padding:20px 0; display:grid; grid-template-columns:170px 1fr; gap:24px;"><span style="font-size:12px; letter-spacing:2px; color:#96928c; padding-top:4px;">MUSICAL NUMBERS</span><span>Featured and ensemble dancers who take choreography fast.</span></div>
+          <div style="border-top:1px solid #35353a; border-bottom:1px solid #35353a; padding:20px 0; display:grid; grid-template-columns:170px 1fr; gap:24px;"><span style="font-size:12px; letter-spacing:2px; color:#96928c; padding-top:4px;">BACKGROUND</span><span>Dancers in crowd who move with intent, not filler.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- for commercial and brand: rows + still, mirrored -->
+  <div style="max-width:1280px; margin:0 auto; padding:0 40px; display:grid; grid-template-columns:1.3fr 1fr; gap:72px; align-items:stretch;">
+    <div style="padding:88px 0;">
+      <div style="font-size:11px; letter-spacing:3px; color:var(--accent);">FOR COMMERCIAL &amp; BRAND</div>
+      <div style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin-top:16px; max-width:520px;">From treatment to wrap.</div>
+      <div style="display:grid; row-gap:0; font-size:16px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:36px;">
+        <div style="border-top:1px solid var(--hair); padding:20px 0; display:grid; grid-template-columns:170px 1fr; gap:24px;"><span style="font-size:12px; letter-spacing:2px; color:#96928c; padding-top:4px;">CAMPAIGN FILMS</span><span>Real movement quality on camera, cast to the brief.</span></div>
+        <div style="border-top:1px solid var(--hair); padding:20px 0; display:grid; grid-template-columns:170px 1fr; gap:24px;"><span style="font-size:12px; letter-spacing:2px; color:#96928c; padding-top:4px;">MUSIC PROMOS</span><span>Commercial, street and contemporary artists.</span></div>
+        <div style="border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); padding:20px 0; display:grid; grid-template-columns:170px 1fr; gap:24px;"><span style="font-size:12px; letter-spacing:2px; color:#96928c; padding-top:4px;">LIVE &amp; EVENTS</span><span>Activations from a single featured dancer to a cast.</span></div>
+      </div>
+    </div>
+    <div style="align-self:center; padding:56px 0;">
+      <img src="uploads/DSC09954(1)-dc08728a.jpg" alt="Dancer in heels, hair in motion" style="width:100%; height:auto; display:block;">
+    </div>
+  </div>
+
+  <!-- working with choreographers -->
+  <div id="choreographers" style="border-top:1px solid var(--hair);">
+    <div style="max-width:1280px; margin:0 auto; padding:88px 40px; display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start;">
+      <div>
+        <div style="font-size:11px; letter-spacing:3px; color:var(--accent);">WORKING WITH CHOREOGRAPHERS</div>
+        <div style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin-top:16px;">We supply the talent. You keep the room.</div>
+      </div>
+      <div style="font-size:17px; font-weight:300; line-height:1.75; color:var(--sub); text-wrap:pretty;">
+        <p style="margin:0;">Send us the brief — style, numbers, dates and look — and we shortlist from the roster, hold availability and handle contracts, fees and on-the-day coordination. You audition and direct as you always would; we take the admin off your desk.</p>
+        <p style="margin:18px 0 0;">Our commission comes from the artist's fee, not from the client or the choreographer. Booking through Take 3 costs your production nothing extra.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- choreographer quotes -->
+  <div id="quotes" style="background:#1a1a1c; color:#f4f2ee; border-top:1px solid var(--hair); border-bottom:1px solid var(--hair);">
+    <div style="max-width:1280px; width:100%; box-sizing:border-box; margin:0 auto; padding:56px 40px;">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid #3a3a3e; padding-bottom:18px;">
+        <div style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(26px,3vw,40px); font-weight:400; letter-spacing:1px;">Reviews</div>
+        <div style="font-size:12px; letter-spacing:3px; color:#96928c;">WHAT CHOREOGRAPHERS SAY</div>
+      </div>
+      <div style="overflow:hidden; margin-top:40px;">
+        <div style="display:flex; transform:{{ revX }}; transition:transform 0.65s cubic-bezier(0.3, 0, 0.2, 1);">
+          <sc-for list="{{ revPages }}" as="pg" hint-placeholder-count="0">
+            <div style="flex:0 0 100%; min-width:0; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:56px; align-items:start;">
+              <sc-for list="{{ pg.items }}" as="r" hint-placeholder-count="0">
+                <div>
+                  <div style="white-space:pre-line; font-family:'Bebas Neue','Jost',sans-serif; font-size:clamp(32px,3vw,48px); letter-spacing:2px; line-height:1.02;">{{ r.nameStacked }}</div>
+                  <div style="font-size:13px; letter-spacing:2px; font-weight:500; margin-top:14px; text-transform:uppercase;">{{ r.role }}</div>
+                  <div style="min-height:2.8em; font-size:16px; font-weight:400; color:#f4f2ee; margin-top:6px;">{{ r.credits }}</div>
+                  <div style="font-size:17px; font-weight:300; line-height:1.8; color:#c7c3bd; margin-top:22px; text-wrap:pretty;">{{ r.quote }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:36px; border-top:1px solid #3a3a3e; padding-top:20px;">
+        <div style="font-size:13px; letter-spacing:3px; color:#96928c;">{{ revCount }}</div>
+        <div style="display:flex; align-items:center; gap:14px;">
+          <sc-for list="{{ revDots }}" as="d" hint-placeholder-count="0">
+            <div onClick="{{ revGo }}" data-i="{{ d.i }}" style="width:9px; height:9px; border-radius:50%; cursor:pointer; background:{{ d.bg }};"></div>
+          </sc-for>
+        </div>
+        <div style="display:flex; gap:12px;">
+          <div onClick="{{ revPrev }}" style="width:44px; height:44px; border:1px solid rgba(244,242,238,0.4); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#f4f2ee;" style-hover="border-color:#f4f2ee;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 4l-8 8 8 8"></path></svg>
+          </div>
+          <div onClick="{{ revNext }}" style="width:44px; height:44px; border:1px solid rgba(244,242,238,0.4); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#f4f2ee;" style-hover="border-color:#f4f2ee;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 4l8 8-8 8"></path></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- roster stills -->
+  <div style="max-width:1280px; margin:0 auto; padding:0 40px 96px;">
+    <div style="position:relative; aspect-ratio:3/2; background:var(--tileBg); overflow:hidden;"><img src="uploads/3W8A9961.jpg" alt="Two dancers crouching in profile" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"></div>
+  </div>
+
+  <!-- supplied dancers for -->
+  <div id="credits" style="border-top:1px solid var(--hair);">
+    <div style="max-width:1280px; margin:0 auto; padding:88px 40px 96px;">
+      <div style="font-size:11px; letter-spacing:3px; color:var(--accent);">CREDITS</div>
+      <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:16px; margin-top:16px;">
+        <div style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(26px,3vw,40px); font-weight:400; letter-spacing:1px;">We have supplied dancers for</div>
+        <div style="font-size:14px; font-weight:300; color:var(--sub); letter-spacing:1px;">Film · Television · Commercial · Music</div>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:36px 24px; margin-top:44px;">
+        <div style="display:grid; gap:10px;"><div style="aspect-ratio:16/9; background:var(--tileBg); position:relative; overflow:hidden;"><img src="uploads/upload_fba01478540cf4034ae0e81967110fe9_8190d99b-f0e0-4c79-b9ee-f47f42b6aeda.avif" alt="Spider-Man" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"></div><div style="font-size:12px; letter-spacing:2px; color:var(--sub);">SPIDER-MAN</div></div>
+        <div style="display:grid; gap:10px;"><div style="aspect-ratio:16/9; background:var(--tileBg); position:relative; overflow:hidden;"><img src="uploads/witcher_season_3_conclave_ball.avif" alt="The Witcher" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"></div><div style="font-size:12px; letter-spacing:2px; color:var(--sub);">THE WITCHER</div></div>
+        <div style="display:grid; gap:10px;"><div style="aspect-ratio:16/9; background:var(--tileBg); position:relative; overflow:hidden;"><img src="uploads/587814346_18330318445213259_7568090946314122385_n.jpg" alt="10 Dance" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"></div><div style="font-size:12px; letter-spacing:2px; color:var(--sub);">10 DANCE</div></div>
+        <div style="display:grid; gap:10px;"><div style="aspect-ratio:16/9; background:var(--tileBg); position:relative; overflow:hidden;"><img src="uploads/10-dance-takeuchi-ryoma-new-ig-caption-in-the-blackpool-an-v0-s6hgudm85x8g1.jpg" alt="10 Dance — Blackpool" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"></div><div style="font-size:12px; letter-spacing:2px; color:var(--sub);">10 DANCE</div></div>
+        <div style="display:grid; gap:10px;"><div style="aspect-ratio:16/9; background:var(--tileBg); position:relative; overflow:hidden;"><img src="uploads/planetdance1.png" alt="The Marvels" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"></div><div style="font-size:12px; letter-spacing:2px; color:var(--sub);">THE MARVELS</div></div>
+        <div style="display:grid; gap:10px;"><div style="aspect-ratio:16/9; background:var(--tileBg); position:relative; overflow:hidden;"><img src="uploads/one-character-hangs-from-a-ladder-while-the-others-dance-in-the-tornado-wheel-in-wicked-s-dancing-through-life-musical-number.avif" alt="Wicked" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"></div><div style="font-size:12px; letter-spacing:2px; color:var(--sub);">WICKED</div></div>
+        <div style="display:grid; gap:10px;"><div style="aspect-ratio:16/9; background:var(--tileBg); position:relative; overflow:hidden;"><img src="uploads/barbie-film-040623-1-bfbbf50d182642318a6285aef36e1552.jpg" alt="Barbie" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"></div><div style="font-size:12px; letter-spacing:2px; color:var(--sub);">BARBIE</div></div>
+        <div style="display:grid; gap:10px;"><div style="aspect-ratio:16/9; background:var(--tileBg); position:relative; overflow:hidden;"><img src="uploads/The-Six-Triple-Eight-Soundtrack-Netflix-Every-Song-One.jpg" alt="The Six Triple Eight" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"></div><div style="font-size:12px; letter-spacing:2px; color:var(--sub);">THE SIX TRIPLE EIGHT</div></div>
+      </div>
+      <div style="font-size:12px; letter-spacing:2px; color:#96928c; margin-top:20px;">A SELECTION OF PRODUCTIONS SUPPLIED SINCE 2019</div>
+    </div>
+  </div>
+
+  <!-- the book / footer -->
+  <div id="contact" style="border-top:1px solid var(--hair);">
+    <div style="max-width:1280px; margin:0 auto; padding:72px 40px; display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:40px;">
+      <div>
+        <div style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3.6vw,52px); font-weight:400; letter-spacing:1px; line-height:1;">Book dancers for your production</div>
+        <div style="font-size:16px; margin-top:18px;"><a href="mailto:hello@take3agency.com">hello@take3agency.com</a> &nbsp;·&nbsp; 020 8088 2833</div>
+      </div>
+      <div style="display:flex; gap:12px;">
+        <a href="Take 3 - SPACTs.dc.html" style="border:1px solid var(--hair); padding:12px 22px; font-size:12px; letter-spacing:2px;" style-hover="border-color:var(--ink);">SPACTS →</a>
+        <a href="Take 3 Home - Cinematic.dc.html" style="border:1px solid var(--hair); padding:12px 22px; font-size:12px; letter-spacing:2px;" style-hover="border-color:var(--ink);">SPECIALISTS →</a>
+        <a href="mailto:hello@take3agency.com" style="background:#5d1f16; color:#f4f2ee; padding:12px 22px; font-size:12px; letter-spacing:2px;" style-hover="background:#7a2f20;">SUPPLY REQUEST</a>
+      </div>
+    </div>
+    <div style="max-width:1280px; margin:0 auto; padding:0 40px 48px; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--hair); padding-top:24px;">
+      <img src="assets/take3-logo.svg" alt="Take 3 Agency" style="height:34px; width:auto; filter:var(--logoFilter);">
+      <div style="font-size:11px; letter-spacing:2px; color:#96928c;">© 2026 TAKE 3 AGENCY · @TAKE3AGENCY</div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;defaultTheme&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;dark&quot;, &quot;light&quot;], &quot;default&quot;: &quot;dark&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Theme&quot; },
+  &quot;heroImage1&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;uploads/Codex Image 21 Aug 2026, 14_26_52-52b0f5dc.png&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Hero stills&quot; },
+  &quot;heroImage2&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;uploads/Codex Image 21 Aug 2026, 14_20_03-91201516.png&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Hero stills&quot; },
+  &quot;heroImage3&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;uploads/Codex Image 21 Aug 2026, 14_24_58-1a219029.png&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Hero stills&quot; },
+  &quot;heroImage4&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;uploads/Codex Image 21 Aug 2026, 14_20_10-8028981e.png&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Hero stills&quot; },
+  &quot;heroImage5&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;uploads/Codex Image 21 Aug 2026, 14_33_18-06641d88.png&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Hero stills&quot; }
+}">
+class Component extends DCLogic {
+  state = { idx: 0, theme: null, openGenre: -1, revIdx: 0 };
+  reviews() {
+    return [
+      { name: "Jason Gilkinson", role: "Creative Director & Choreographer", credits: "Strictly Come Dancing & Burn The Floor", quote: "Take 3 Agency have turned out to be the creative connection I have long been looking for. Tyler and Chanel understand instantly not only the type of talent I'm looking for but always connect me to artists who really enhance the creative process. This type of instinct doesn't come along very often in our industry." },
+      { name: "James Cousins", role: "Choreographer", credits: "James Cousins Company", quote: "Working with Take3 makes the process of casting and hiring artists extremely smooth and efficient. Tyler and the team really understand what's needed for my work and I was thrilled." },
+      { name: "Shelley Maxwell", role: "Movement Director & Choreographer", credits: "", quote: "Every brief I've sent has come back with dancers who were right on the first look. The shortlists are considered, the admin is invisible and the artists arrive prepared." },
+      { name: "Adam Murray", role: "Choreographer", credits: "", quote: "On tight commercial turnarounds I need availability confirmed fast and no surprises on set. Take 3 deliver both, every time." },
+      { name: "Corey Baker", role: "Choreographer", credits: "Corey Baker Dance", quote: "They understand dancers as artists, not numbers. The people they've put in my rooms have lifted the work — that's the only measure that matters." },
+      { name: "Sammy Murray", role: "Choreographer", credits: "", quote: "From first call to wrap, the communication is clear and the talent is exceptional. Take 3 have become my first call on every production." },
+      { name: "Nathan Kim", role: "Choreographer", credits: "", quote: "The roster runs deep — whatever style the job calls for, they have artists who can do it properly, and the process is effortless." },
+    ];
+  }
+  genres() {
+    return [
+      { name: 'Contemporary', blurb: 'Technically trained contemporary artists for narrative and abstract movement — floor work, partnering and release-based styles, comfortable improvising to direction on set.' },
+      { name: 'Commercial', blurb: 'Sharp, camera-ready commercial dancers for promos, campaigns and live performance — fast with choreography and consistent take to take.' },
+      { name: 'Period & historical', blurb: 'Dancers drilled in court, regency, ragtime, swing and other era-specific social dance, styled and rehearsed to the production’s period.' },
+      { name: 'Ballroom', blurb: 'Competition-level ballroom and Latin couples — waltz, foxtrot, tango, quickstep and more — able to perform full routines or background social dancing.' },
+      { name: 'Street', blurb: 'Breakers, hip hop, popping, locking and krump artists from the UK battle scene, with the power moves and freestyle depth to hold a featured frame.' },
+      { name: 'Choreographed ensemble work', blurb: 'Full ensembles cast to move as one — musical numbers, ceremonies and crowd choreography, matched for height, look and partnering experience.' },
+    ];
+  }
+  componentDidMount() {
+    try { const t = localStorage.getItem('t3-theme'); if (t === 'dark' || t === 'light') this.setState({ theme: t }); } catch (e) {}
+    this.timer = setInterval(() => {
+      const n = this.stills().length;
+      if (n > 1) this.setState(s => ({ idx: (s.idx + 1) % n }));
+    }, 5000);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+  theme() { return this.state.theme ?? this.props.defaultTheme ?? 'dark'; }
+  stills() {
+    return [
+      this.props.heroImage1 ?? "uploads/Codex Image 21 Aug 2026, 14_26_52-52b0f5dc.png",
+      this.props.heroImage2 ?? "uploads/Codex Image 21 Aug 2026, 14_20_03-91201516.png",
+      this.props.heroImage3 ?? "uploads/Codex Image 21 Aug 2026, 14_24_58-1a219029.png",
+      this.props.heroImage4 ?? "uploads/Codex Image 21 Aug 2026, 14_20_10-8028981e.png",
+      this.props.heroImage5 ?? "uploads/Codex Image 21 Aug 2026, 14_33_18-06641d88.png",
+    ];
+  }
+  reviewVals() {
+    const rev = this.reviews();
+    rev.forEach(r => { const i = r.name.lastIndexOf(" "); r.nameStacked = i > 0 ? r.name.slice(0, i) + "\n" + r.name.slice(i + 1) : r.name; });
+    const pages = [];
+    for (let i = 0; i < rev.length; i += 3) pages.push({ items: rev.slice(i, i + 3) });
+    const n = pages.length, p = this.state.revIdx % n;
+    return {
+      revPages: pages,
+      revX: `translateX(-${p * 100}%)`,
+      revCount: `${String(p + 1).padStart(2, '0')} / ${String(n).padStart(2, '0')}`,
+      revDots: pages.map((_, i) => ({ i, bg: i === p ? '#f4f2ee' : 'rgba(244,242,238,0.3)' })),
+      revGo: (e) => this.setState({ revIdx: Number(e.currentTarget.dataset.i) }),
+      revPrev: () => this.setState(s => ({ revIdx: (s.revIdx - 1 + n) % n })),
+      revNext: () => this.setState(s => ({ revIdx: (s.revIdx + 1) % n })),
+    };
+  }
+  renderVals() {
+    const theme = this.theme();
+    const st = this.stills();
+    const i = this.state.idx % st.length;
+    return {
+      theme, isDark: theme === 'dark', isLight: theme === 'light',
+      toggleTheme: (e) => {
+        const t = theme === 'dark' ? 'light' : 'dark';
+        const x = e ? e.clientX : window.innerWidth - 80, y = e ? e.clientY : 40;
+        const apply = () => { this.setState({ theme: t }); return new Promise((r) => setTimeout(r, 50)); };
+        try { localStorage.setItem('t3-theme', t); } catch (err) {}
+        if (this._vt) { try { this._vt.skipTransition(); } catch (err) {} }
+        if (document.startViewTransition) {
+          const vt = this._vt = document.startViewTransition(apply);
+          vt.finished.then(() => { if (this._vt === vt) this._vt = null; }).catch(() => {});
+          vt.ready.then(() => {
+            const r = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+            document.documentElement.animate(
+              { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${r}px at ${x}px ${y}px)`] },
+              { duration: 800, easing: 'cubic-bezier(0.3, 0, 0.2, 1)', pseudoElement: '::view-transition-new(root)' }
+            );
+          }).catch(() => {});
+        } else { apply(); }
+      },
+      heroLayers: st.map((s, k) => ({ bg: `url("${s}")`, op: k === i ? 1 : 0 })),
+      ...this.reviewVals(),
+      supplyItems: this.genres().map((g, k) => ({
+        ...g,
+        num: String(k + 1).padStart(2, '0'),
+        open: this.state.openGenre === k,
+        mark: this.state.openGenre === k ? '−' : '+',
+        toggle: () => this.setState(s => ({ openGenre: s.openGenre === k ? -1 : k })),
+      })),
+
+    };
+  }
+}
+</script>
+</body>
+</html>
