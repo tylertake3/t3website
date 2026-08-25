@@ -1,0 +1,34 @@
+---
+import { site, contactHref } from '../data/site';
+
+interface Props {
+  title?: string;
+  /** Optional standfirst under the footer heading. */
+  intro?: string;
+  /** Optional cross-links to sibling pages, shown before the Instagram button. */
+  links?: { label: string; href: string }[];
+}
+const { title = 'Tell us what you need', intro, links = [] } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="footer" id="contact">
+  <div class="footerTop">
+    <div>
+      <h2 class="footerTitle">{title}</h2>
+      {intro && <p class="footerIntro">{intro}</p>}
+      <p class="footerContact">
+        <a href={contactHref}>{site.email}</a> &nbsp;&middot;&nbsp; <a href={`tel:${site.phoneHref}`}>{site.phone}</a>
+      </p>
+    </div>
+    <div class="footerBtns">
+      {links.map((l) => <a class="btnGhost" href={l.href}>{l.label}</a>)}
+      <a class="btnGhost" href={site.instagram} target="_blank" rel="noopener">INSTAGRAM</a>
+      <a class="btnSolid" href={contactHref}>{site.ctaLabel}</a>
+    </div>
+  </div>
+  <div class="footerBottom">
+    <img class="footerLogo" src="/assets/take3-logo.svg" alt="Take 3 Agency" width="68" height="34" loading="lazy" decoding="async" />
+    <p class="footerFine">&copy; {year} TAKE 3 AGENCY &middot; @TAKE3AGENCY</p>
+  </div>
+</footer>

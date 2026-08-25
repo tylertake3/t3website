@@ -1,0 +1,364 @@
+{
+  "clients": [
+    {
+      "height": 50,
+      "light": "/assets/logos/s3-r4c5.png",
+      "dark": "/assets/logos/s3-r4c5-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s3-r1c2.png",
+      "dark": "/assets/logos/s3-r1c2-c.png"
+    },
+    {
+      "height": 34,
+      "light": "/assets/logos/s3-r2c4.png",
+      "dark": "/assets/logos/s3-r2c4-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s3-r2c2.png",
+      "dark": "/assets/logos/s3-r2c2-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s2-r1c5.png",
+      "dark": "/assets/logos/s2-r1c5-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s2-r4c1.png",
+      "dark": "/assets/logos/s2-r4c1-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s2-r4c3.png",
+      "dark": "/assets/logos/s2-r4c3-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s3-r4c3.png",
+      "dark": "/assets/logos/s3-r4c3-c.png"
+    },
+    {
+      "height": 31,
+      "light": "/assets/logos/s1-r1c2.png",
+      "dark": "/assets/logos/s1-r1c2-c.png"
+    },
+    {
+      "height": 37,
+      "light": "/assets/logos/s1-r1c3.png",
+      "dark": "/assets/logos/s1-r1c3-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s3-r2c1.png",
+      "dark": "/assets/logos/s3-r2c1-c.png"
+    },
+    {
+      "height": 62,
+      "light": "/assets/logos/s1-r2c2.png",
+      "dark": "/assets/logos/s1-r2c2-c.png"
+    },
+    {
+      "height": 53,
+      "light": "/assets/logos/s1-r2c3.png",
+      "dark": "/assets/logos/s1-r2c3-c.png"
+    },
+    {
+      "height": 53,
+      "light": "/assets/logos/s2-r5c2.png",
+      "dark": "/assets/logos/s2-r5c2-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s2-r4c2.png",
+      "dark": "/assets/logos/s2-r4c2-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s3-r1c3.png",
+      "dark": "/assets/logos/s3-r1c3-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s2-r4c4.png",
+      "dark": "/assets/logos/s2-r4c4-c.png"
+    },
+    {
+      "height": 37,
+      "light": "/assets/logos/s2-r5c5.png",
+      "dark": "/assets/logos/s2-r5c5-c.png"
+    },
+    {
+      "height": 43,
+      "light": "/assets/logos/s1-r5c4.png",
+      "dark": "/assets/logos/s1-r5c4-c.png"
+    },
+    {
+      "height": 28,
+      "light": "/assets/logos/s3-r1c4.png",
+      "dark": "/assets/logos/s3-r1c4-c.png"
+    },
+    {
+      "height": 31,
+      "light": "/assets/logos/s2-r2c1.png",
+      "dark": "/assets/logos/s2-r2c1-c.png"
+    },
+    {
+      "height": 43,
+      "light": "/assets/logos/s2-r3c3.png",
+      "dark": "/assets/logos/s2-r3c3-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s2-r1c3.png",
+      "dark": "/assets/logos/s2-r1c3-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s3-r1c1.png",
+      "dark": "/assets/logos/s3-r1c1-c.png"
+    },
+    {
+      "height": 37,
+      "light": "/assets/logos/s1-r4c5.png",
+      "dark": "/assets/logos/s1-r4c5-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s3-r2c3.png",
+      "dark": "/assets/logos/s3-r2c3-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s1-r4c3.png",
+      "dark": "/assets/logos/s1-r4c3-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s3-r3c4.png",
+      "dark": "/assets/logos/s3-r3c4-c.png"
+    },
+    {
+      "height": 43,
+      "light": "/assets/logos/s2-r1c1.png",
+      "dark": "/assets/logos/s2-r1c1-c.png"
+    },
+    {
+      "height": 40,
+      "light": "/assets/logos/s1-r1c5.png",
+      "dark": "/assets/logos/s1-r1c5-c.png"
+    },
+    {
+      "height": 31,
+      "light": "/assets/logos/s2-r2c5.png",
+      "dark": "/assets/logos/s2-r2c5-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s1-r3c4.png",
+      "dark": "/assets/logos/s1-r3c4-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s1-r5c3.png",
+      "dark": "/assets/logos/s1-r5c3-c.png"
+    },
+    {
+      "height": 37,
+      "light": "/assets/logos/s1-r3c2.png",
+      "dark": "/assets/logos/s1-r3c2-c.png"
+    },
+    {
+      "height": 59,
+      "light": "/assets/logos/s3-r5c5.png",
+      "dark": "/assets/logos/s3-r5c5-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s2-r3c5.png",
+      "dark": "/assets/logos/s2-r3c5-c.png"
+    },
+    {
+      "height": 34,
+      "light": "/assets/logos/s1-r3c3.png",
+      "dark": "/assets/logos/s1-r3c3-c.png"
+    },
+    {
+      "height": 34,
+      "light": "/assets/logos/s1-r5c5.png",
+      "dark": "/assets/logos/s1-r5c5-c.png"
+    },
+    {
+      "height": 40,
+      "light": "/assets/logos/s3-r3c5.png",
+      "dark": "/assets/logos/s3-r3c5-c.png"
+    },
+    {
+      "height": 53,
+      "light": "/assets/logos/s2-r3c1.png",
+      "dark": "/assets/logos/s2-r3c1-c.png"
+    },
+    {
+      "height": 40,
+      "light": "/assets/logos/s1-r5c2.png",
+      "dark": "/assets/logos/s1-r5c2-c.png"
+    },
+    {
+      "height": 40,
+      "light": "/assets/logos/s2-r1c4.png",
+      "dark": "/assets/logos/s2-r1c4-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s2-r4c5.png",
+      "dark": "/assets/logos/s2-r4c5-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s2-r5c1.png",
+      "dark": "/assets/logos/s2-r5c1-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s3-r2c5.png",
+      "dark": "/assets/logos/s3-r2c5-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s3-r5c2.png",
+      "dark": "/assets/logos/s3-r5c2-c.png"
+    },
+    {
+      "height": 68,
+      "light": "/assets/logos/s2-r2c2.png",
+      "dark": "/assets/logos/s2-r2c2-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s2-r1c2.png",
+      "dark": "/assets/logos/s2-r1c2-c.png"
+    },
+    {
+      "height": 53,
+      "light": "/assets/logos/s1-r1c4.png",
+      "dark": "/assets/logos/s1-r1c4-c.png"
+    },
+    {
+      "height": 47,
+      "light": "/assets/logos/s1-r4c4.png",
+      "dark": "/assets/logos/s1-r4c4-c.png"
+    },
+    {
+      "height": 47,
+      "light": "/assets/logos/s2-r5c3.png",
+      "dark": "/assets/logos/s2-r5c3-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s2-r2c3.png",
+      "dark": "/assets/logos/s2-r2c3-c.png"
+    },
+    {
+      "height": 28,
+      "light": "/assets/logos/s1-r2c4.png",
+      "dark": "/assets/logos/s1-r2c4-c.png"
+    },
+    {
+      "height": 47,
+      "light": "/assets/logos/s2-r3c4.png",
+      "dark": "/assets/logos/s2-r3c4-c.png"
+    },
+    {
+      "height": 34,
+      "light": "/assets/logos/s1-r3c5.png",
+      "dark": "/assets/logos/s1-r3c5-c.png"
+    },
+    {
+      "height": 37,
+      "light": "/assets/logos/s1-r4c1.png",
+      "dark": "/assets/logos/s1-r4c1-c.png"
+    },
+    {
+      "height": 53,
+      "light": "/assets/logos/s2-r5c4.png",
+      "dark": "/assets/logos/s2-r5c4-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s3-r4c4.png",
+      "dark": "/assets/logos/s3-r4c4-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s3-r4c2.png",
+      "dark": "/assets/logos/s3-r4c2-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s3-r4c1.png",
+      "dark": "/assets/logos/s3-r4c1-c.png"
+    },
+    {
+      "height": 37,
+      "light": "/assets/logos/s1-r2c5.png",
+      "dark": "/assets/logos/s1-r2c5-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s1-r4c2.png",
+      "dark": "/assets/logos/s1-r4c2-c.png"
+    },
+    {
+      "height": 25,
+      "light": "/assets/logos/s3-r3c3.png",
+      "dark": "/assets/logos/s3-r3c3-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s3-r3c1.png",
+      "dark": "/assets/logos/s3-r3c1-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s2-r2c4.png",
+      "dark": "/assets/logos/s2-r2c4-c.png"
+    },
+    {
+      "height": 53,
+      "light": "/assets/logos/s1-r2c1.png",
+      "dark": "/assets/logos/s1-r2c1-c.png"
+    },
+    {
+      "height": 31,
+      "light": "/assets/logos/s3-r1c5.png",
+      "dark": "/assets/logos/s3-r1c5-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s2-r3c2.png",
+      "dark": "/assets/logos/s2-r3c2-c.png"
+    },
+    {
+      "height": 40,
+      "light": "/assets/logos/s1-r5c1.png",
+      "dark": "/assets/logos/s1-r5c1-c.png"
+    },
+    {
+      "height": 25,
+      "light": "/assets/logos/s1-r3c1.png",
+      "dark": "/assets/logos/s1-r3c1-c.png"
+    },
+    {
+      "height": 50,
+      "light": "/assets/logos/s3-r3c2.png",
+      "dark": "/assets/logos/s3-r3c2-c.png"
+    },
+    {
+      "height": 62,
+      "light": "/assets/logos/s1-r1c1.png",
+      "dark": "/assets/logos/s1-r1c1-c.png"
+    }
+  ]
+}

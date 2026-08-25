@@ -1,0 +1,83 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  footerTitle?: string;
+  footerIntro?: string;
+  footerLinks?: { label: string; href: string }[];
+  /** Which colour scheme this page opens in for a first-time visitor. */
+  theme?: 'dark' | 'light';
+  /** false when the page has no dark hero photo behind the header. */
+  navOverDark?: boolean;
+}
+
+const {
+  title,
+  description,
+  ogTitle = title,
+  ogDescription = description,
+  ogImage = '/uploads/the-odyssey-beach-horse.jpeg',
+  footerTitle,
+  footerIntro,
+  footerLinks,
+  theme = 'dark',
+  navOverDark = true,
+} = Astro.props;
+
+const ogImageUrl = new URL(ogImage, Astro.site ?? Astro.url).toString();
+---
+
+<!doctype html>
+<html lang="en" data-theme={theme}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content={theme === "light" ? "#f4f2ee" : "#161618"} />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={ogDescription} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:description" content={ogDescription} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString()} />
+    <link rel="icon" href="/assets/take3-logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Anton&family=Bebas+Neue&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline>
+      /* theme before first paint — avoids a flash of the wrong theme */
+      (function () {
+        try {
+          var t = localStorage.getItem('t3-theme');
+          if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+      })();
+    </script>
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <div class="page">
+      <Nav overDark={navOverDark} />
+      <main id="main">
+        <slot />
+      </main>
+      <Footer title={footerTitle} intro={footerIntro} links={footerLinks} />
+    </div>
+    <script src="../scripts/site.js"></script>
+    <slot name="scripts" />
+  </body>
+</html>

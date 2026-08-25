@@ -1,0 +1,74 @@
+# Take 3 Agency — content settings for the website editor.
+# Repo and branch are filled in once the site is on GitHub.
+
+backend:
+  name: github
+  repo: tylertake3/t3website
+  branch: main
+
+media_folder: public/uploads
+public_folder: /uploads
+
+site_url: https://take3agency.com
+display_url: https://take3agency.com
+logo_url: /assets/take3-logo.svg
+
+collections:
+  - name: reviews
+    label: Reviews
+    label_singular: Review
+    folder: src/content/reviews
+    create: true
+    identifier_field: name
+    format: frontmatter
+    summary: '{{name}} — {{role}}'
+    sortable_fields: [order, name]
+    fields:
+      - { name: name, label: Name, widget: string, hint: 'Use a line break to split the name across two lines.' }
+      - { name: role, label: Job title, widget: string }
+      - { name: credits, label: Productions, widget: string, required: false }
+      - { name: order, label: Position in the slider, widget: number, value_type: int, default: 99 }
+      - { name: body, label: What they said, widget: text }
+
+  - name: homepage
+    label: Homepage
+    files:
+      - name: hero
+        label: Hero slideshow
+        file: src/data/hero.json
+        description: The full-screen photos that rotate at the top of the homepage.
+        fields:
+          - name: slides
+            label: Slides
+            widget: list
+            fields:
+              - { name: title, label: Production name, widget: string }
+              - { name: image, label: Photo, widget: image }
+              - { name: alt, label: Photo description, widget: string, hint: 'Read aloud to visitors who cannot see the photo.' }
+
+      - name: categories
+        label: What we supply
+        file: src/data/categories.json
+        description: The scrolling row of talent categories on the homepage.
+        fields:
+          - name: categories
+            label: Categories
+            widget: list
+            fields:
+              - { name: name, label: Name, widget: string }
+              - { name: label, label: Placeholder caption, widget: string }
+              - { name: image, label: Photo, widget: image, required: false }
+              - { name: href, label: Links to, widget: string }
+
+      - name: clients
+        label: Client logos
+        file: src/data/clients.json
+        description: The logo wall. Each logo needs a version for the dark site and one for the light site.
+        fields:
+          - name: clients
+            label: Logos
+            widget: list
+            fields:
+              - { name: dark, label: Logo for dark background, widget: image }
+              - { name: light, label: Logo for light background, widget: image }
+              - { name: height, label: Height on screen (pixels), widget: number, value_type: int, default: 50 }

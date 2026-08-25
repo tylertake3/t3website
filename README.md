@@ -1,40 +1,69 @@
 # Take 3 Agency — website
 
-Built from the Claude Design project "Take 3 Agency Website".
+The live site for take3agency.com.
 
-## How to look at it
+## Pages
 
-Open `public/index.html` in your browser (double-click it). Everything works
-straight from the folder — no setup, no server, no build step.
-
-## What's here
-
-| File | Page |
+| Address | Page |
 | --- | --- |
-| `public/index.html` | Homepage (the "Productions" design) |
-| `public/dancers.html` | Dancers |
-| `public/models.html` | Models |
-| `public/spacts.html` | SPACTs |
-| `public/stand-ins.html` | Stand-ins & picture doubles |
-| `public/what-is-a-spact.html` | "What is a SPACT?" explainer |
+| `/` | Homepage |
+| `/dancers` | Dancers |
+| `/models` | Models |
+| `/spacts` | SPACTs |
+| `/stand-ins` | Stand-ins & picture doubles |
+| `/what-is-a-spact` | "What is a SPACT?" explainer |
 
-Photos live in `public/uploads/`, the logo in `public/assets/`.
+## Working on it locally
 
-`_design/` holds the original design files this was built from. It is reference
-only — nothing on the live site depends on it, and it doesn't need publishing.
+```bash
+npm install     # once
+npm run dev     # preview at http://localhost:4321
+npm run build   # produce the files that get published
+```
+
+## Editing the site without touching code
+
+Once the site is live, go to `take3agency.com/admin` and sign in with GitHub.
+You get a simple editor for:
+
+- **Reviews** — add, edit, reorder or remove what productions have said.
+- **Hero slideshow** — the rotating full-screen photos on the homepage.
+- **What we supply** — the scrolling row of talent categories.
+- **Client logos** — the logo wall, with a light and a dark version of each logo.
+
+Saving in the editor commits the change to GitHub, and the site rebuilds and
+republishes itself within a minute or two.
+
+Before that works, one line in `public/admin/config.yml` needs the real GitHub
+account and repository name filled in (`repo: OWNER/take3-website`).
+
+## Publishing
+
+The site is a set of plain files — no server, no database. It is set up to be
+hosted on Vercel: connect the GitHub repository and Vercel builds and publishes
+every change automatically. The domain then points at Vercel from GoDaddy.
+
+## How it's put together
+
+- `src/pages/` — one file per page.
+- `src/layouts/Base.astro` — the shell every page shares: head tags, header,
+  footer, dark/light toggle.
+- `src/components/` — the header and footer.
+- `src/styles/global.css` — the shared look: colours, type, nav, footer.
+- `src/content/reviews/` and `src/data/` — the editable content.
+- `public/uploads/` — photographs. `public/assets/` — the logo and client logos.
+- `_design/` — the original design exports, kept for reference only. Nothing on
+  the live site depends on them.
 
 ## Still to supply
 
-- **Client logos** — the "Who we've supplied" grid on the homepage expects the
-  logo images in `public/assets/logos/`. Until they're added, the grid shows as
-  empty cells.
-- **Roster photography** — the category tiles and credit posters on the
-  homepage, the three Models photos, and the three Stand-ins photos are showing
-  labelled placeholders. Drop real images in and they'll fill.
+- **Client logos** — the homepage logo wall expects images in
+  `public/assets/logos/`. Until they're added the grid shows empty cells.
+- **Roster photography** — the homepage category tiles and credit posters, and
+  the Stand-ins hero, are showing labelled placeholders.
 
 ## Notes
 
-- Every page carries the dark/light toggle, and the choice is remembered.
+- Every page carries the dark/light toggle and remembers the choice.
 - Pages work on phones and tablets as well as desktop.
-- Nothing loads from anywhere except Google Fonts, so the site is fast and
-  will keep working with no maintenance.
+- Nothing loads from anywhere except Google Fonts, so the site stays fast.

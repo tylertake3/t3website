@@ -1,0 +1,376 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { contactHref } from '../data/site';
+import heroData from '../data/hero.json';
+import categoryData from '../data/categories.json';
+import clientData from '../data/clients.json';
+
+const heroSlides = heroData.slides;
+const categories = categoryData.categories;
+const clients = clientData.clients;
+
+const reviews = (await getCollection('reviews')).sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+
+/* the marquee needs the roster twice so it can loop seamlessly */
+const marquee = [...categories, ...categories];
+
+/* client logos cross-fade between two half-grids */
+const half = Math.ceil(clients.length / 2);
+const logoPages = [clients.slice(0, half), clients.slice(half)];
+
+const posterCount = 15;
+---
+
+<Base
+  title="Take 3 Agency — Specialist Talent & SPACT Agency"
+  description="Take 3 is the UK's largest specialist talent agency. We supply dancers, fighters, SPACTs, models and specialist performers to film, television and commercial productions — 500+ productions since 2019."
+  ogTitle="Take 3 Agency — Specialist Talent & SPACT Agency"
+  ogDescription="The artists behind the action. Dancers, fighters, SPACTs, models and specialist performers for film, television and commercial productions."
+  ogImage="/uploads/the-odyssey-beach-horse.jpeg"
+>
+  <!-- full-bleed hero -->
+  <section class="hero" id="hero" aria-label="Introduction">
+    {
+      heroSlides.map((slide, i) => (
+        <div
+          class="heroLayer"
+          data-title={slide.title}
+          role="img"
+          aria-label={slide.alt}
+          style={`background-image:url("${slide.image}"); opacity:${i === 0 ? 1 : 0};`}
+        />
+      ))
+    }
+    <div class="heroScrim"></div>
+    <div class="heroCopy">
+      <p class="heroKicker">SPECIALIST TALENT &amp; SPACT AGENCY</p>
+      <h1 class="heroTitle">{'The artists\nbehind the\naction.'}</h1>
+    </div>
+    <p class="heroProd">AS SEEN ON<span class="heroProdName" id="heroProd">{heroSlides[0]?.title}</span></p>
+    <div class="heroStrip">
+      <div>
+        <span>DANCERS</span><span class="sep">/</span>
+        <span>FIGHTERS</span><span class="sep">/</span>
+        <span class="nw">STUNT PERFORMERS</span><span class="sep">/</span>
+        <span>SPACTS</span><span class="sep">/</span>
+        <span>MODELS</span><span class="sep">/</span>
+        <span class="nw">CIRCUS ARTISTS</span><span class="sep">/</span>
+        <span>MILITARY</span><span class="sep">/</span>
+        <span>GYMNASTS</span><span class="sep">/</span>
+        <span>ATHLETES</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- who we are + what we supply -->
+  <div class="aboutWrap">
+    <section class="about" id="about" aria-labelledby="aboutTitle">
+      <div>
+        <p class="kicker">WHO WE ARE</p>
+        <h2 class="aboutTitle" id="aboutTitle">The UK's largest specialist talent agency.</h2>
+      </div>
+      <div>
+        <div class="aboutBody">
+          <p>
+            We supply dancers, fighters, <a href="/what-is-a-spact">SPACTs</a>, models and specialist performers to
+            film, television and commercial productions.
+          </p>
+          <p>
+            Every artist on our books has been assessed and interviewed by the Take 3 team before joining. When we send
+            talent to set, they are exactly who we say they are &mdash; the best of the best.
+          </p>
+        </div>
+        <div class="stats">
+          <div>
+            <div class="statNum">500+</div>
+            <div class="statLabel">PRODUCTIONS SUPPLIED</div>
+          </div>
+          <div>
+            <div class="statNum">1,500+</div>
+            <div class="statLabel">ARTISTS</div>
+          </div>
+          <div>
+            <div class="statNum">2019</div>
+            <div class="statLabel">TRUSTED SINCE</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- what we supply -->
+    <section class="supply" id="supply" aria-labelledby="supplyTitle">
+      <div class="sectionHead">
+        <h2 class="sectionTitle" id="supplyTitle">What we supply</h2>
+        <p class="kicker">THE CORE ROSTER</p>
+      </div>
+      <div class="supplyScroll" id="supplyScroll">
+        {
+          marquee.map((cat, i) => (
+            <div class="supplyTile" aria-hidden={i >= categories.length ? 'true' : undefined}>
+              {cat.image ? (
+                <img class="supplyImg" src={cat.image} alt={cat.label} loading="lazy" decoding="async" />
+              ) : (
+                <div class="slot" style="aspect-ratio:3/4;">
+                  <span class="slotLabel">{cat.label}</span>
+                </div>
+              )}
+              <div class="supplyMeta">
+                <h3 class="supplyName">{cat.name}</h3>
+                <a class="supplyView" href={cat.href} tabindex={i >= categories.length ? -1 : undefined}>
+                  VIEW <span aria-hidden="true">&rarr;</span>
+                </a>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+
+  <!-- reviews slider -->
+  <section class="reviews" id="reviews" aria-labelledby="reviewsTitle">
+    <div class="reviewsInner">
+      <div class="reviewsHead">
+        <h2 class="sectionTitle" id="reviewsTitle">Reviews</h2>
+        <p class="sub">WHAT PRODUCTIONS SAY</p>
+      </div>
+      <div class="revViewport" id="revViewport">
+        <div class="revTrack" id="revTrack">
+          {
+            reviews.map((r) => (
+              <article class="revCard">
+                <h3 class="revName">{r.data.name}</h3>
+                <p class="revRole">{r.data.role}</p>
+                <p class="revCredits">{r.data.credits}</p>
+                <blockquote class="revQuote">{r.body?.trim()}</blockquote>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+      <div class="revFoot">
+        <p class="revCount" id="revCount" aria-live="polite">1 / 6</p>
+        <div class="revDots" id="revDots" role="group" aria-label="Review pages"></div>
+        <div class="revNav">
+          <button class="revBtn" id="revPrev" type="button" aria-label="Previous reviews">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+          </button>
+          <button class="revBtn" id="revNext" type="button" aria-label="Next reviews">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- who we've supplied: client logos -->
+  <section class="clients" id="clients" aria-labelledby="clientsTitle">
+    <div class="sectionHead">
+      <h2 class="sectionTitle" id="clientsTitle">Who we've supplied</h2>
+      <p class="kicker">FILM &middot; TV &middot; ADVERTISING</p>
+    </div>
+    <p class="clientsBody">
+      The companies we've supplied artists for &mdash; seventy-five of the world's biggest names across film, TV and
+      advertising.
+    </p>
+    <div class="logoStack" id="logoStack">
+      {
+        logoPages.map((page, pi) => (
+          <div
+            class={pi === 0 ? 'logoPage is-on' : 'logoPage'}
+            style={pi === 0 ? 'position:relative;' : 'position:absolute;'}
+            aria-hidden="true"
+          >
+            {page.map((cell) => (
+              <div
+                class="logoCell"
+                style={`height:${cell.height}px; background-image:url("${cell.dark}");`}
+                data-light={cell.light}
+                data-dark={cell.dark}
+              />
+            ))}
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- our credits: poster grid -->
+  <section class="credits" aria-labelledby="creditsTitle">
+    <div class="sectionHead">
+      <h2 class="sectionTitle" id="creditsTitle">Our credits</h2>
+      <div class="creditsCount">
+        <div class="creditsCountNum">500+</div>
+        <div class="creditsCountLabel">PRODUCTIONS SUPPLIED SINCE 2019</div>
+      </div>
+    </div>
+    <div class="posterGrid">
+      {
+        Array.from({ length: posterCount }).map(() => (
+          <div class="slot posterSlot" style="aspect-ratio:2/3;">
+            <span class="slotLabel">Poster</span>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <style is:global>
+    .supplyImg { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; }
+  </style>
+
+  <script slot="scripts" is:inline>
+    (function () {
+      'use strict';
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+      var lessMotion = function () { return reduce.matches; };
+
+      /* ---------------- hero cross-fade rotator ---------------- */
+      var layers = Array.prototype.slice.call(document.querySelectorAll('.heroLayer'));
+      var heroProd = document.getElementById('heroProd');
+      var heroIdx = 0, heroTimer = null;
+      function heroShow(i) {
+        heroIdx = i;
+        for (var k = 0; k < layers.length; k++) layers[k].style.opacity = k === i ? '1' : '0';
+        if (heroProd) heroProd.textContent = layers[i].getAttribute('data-title');
+      }
+      function heroStart() {
+        clearInterval(heroTimer);
+        if (lessMotion() || layers.length < 2) return;
+        heroTimer = setInterval(function () { heroShow((heroIdx + 1) % layers.length); }, 5000);
+      }
+      heroShow(0);
+      heroStart();
+      /* the theme swap repaints the hero, so restart the rotation with it */
+      document.addEventListener('t3:themechange', function () { heroShow(0); heroStart(); });
+
+      /* ---------------- supply marquee: auto-scroll + drag ---------------- */
+      (function () {
+        var el = document.getElementById('supplyScroll');
+        if (!el) return;
+        var dragging = false, hover = false, moved = false, startX = 0, startScroll = 0, raf = null;
+        el.addEventListener('mouseenter', function () { hover = true; });
+        el.addEventListener('mouseleave', function () { hover = false; });
+        el.addEventListener('pointerdown', function (e) {
+          dragging = true; moved = false; startX = e.clientX; startScroll = el.scrollLeft;
+        });
+        window.addEventListener('pointermove', function (e) {
+          if (!dragging) return;
+          var dx = e.clientX - startX;
+          if (Math.abs(dx) > 6) {
+            moved = true;
+            var half = el.scrollWidth / 2;
+            var target = startScroll - dx;
+            if (half > el.clientWidth) {
+              if (target < 0) { target += half; startX = e.clientX; startScroll = target; }
+              else if (target > half) { target -= half; startX = e.clientX; startScroll = target; }
+            }
+            el.scrollLeft = target;
+          }
+        }, { passive: true });
+        window.addEventListener('pointerup', function () { dragging = false; });
+        window.addEventListener('pointercancel', function () { dragging = false; });
+        /* suppress the click that ends a drag */
+        el.addEventListener('click', function (e) {
+          if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; }
+        }, true);
+        function step() {
+          if (!hover && !dragging && el.scrollWidth > el.clientWidth) el.scrollLeft += 0.4;
+          var half = el.scrollWidth / 2;
+          if (half > el.clientWidth && el.scrollLeft >= half) el.scrollLeft -= half;
+          raf = window.requestAnimationFrame(step);
+        }
+        function startAuto() { if (!lessMotion() && raf === null) raf = window.requestAnimationFrame(step); }
+        function stopAuto() { if (raf !== null) { window.cancelAnimationFrame(raf); raf = null; } }
+        startAuto();
+        if (reduce.addEventListener) reduce.addEventListener('change', function () { stopAuto(); startAuto(); });
+        window.addEventListener('pagehide', stopAuto);
+      })();
+
+      /* ---------------- reviews carousel ---------------- */
+      (function () {
+        var viewport = document.getElementById('revViewport');
+        var track = document.getElementById('revTrack');
+        var dotsWrap = document.getElementById('revDots');
+        var countEl = document.getElementById('revCount');
+        if (!viewport || !track || !dotsWrap || !countEl) return;
+        var cards = Array.prototype.slice.call(track.children);
+        var page = 0, perPage = 3, pages = 1;
+
+        function measure() {
+          var w = window.innerWidth;
+          perPage = w <= 640 ? 1 : (w <= 1024 ? 2 : 3);
+          pages = Math.ceil(cards.length / perPage);
+          if (page > pages - 1) page = pages - 1;
+        }
+        function buildDots() {
+          dotsWrap.innerHTML = '';
+          for (var i = 0; i < pages; i++) {
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'revDot';
+            b.setAttribute('data-i', String(i));
+            b.setAttribute('aria-label', 'Go to review page ' + (i + 1));
+            dotsWrap.appendChild(b);
+          }
+        }
+        function paint() {
+          var gap = parseFloat(window.getComputedStyle(track).columnGap) || 0;
+          var offset = page * (viewport.clientWidth + gap);
+          track.style.transform = 'translateX(-' + offset + 'px)';
+          countEl.textContent = (page + 1) + ' / ' + pages;
+          var dots = dotsWrap.children;
+          for (var i = 0; i < dots.length; i++) {
+            dots[i].setAttribute('aria-current', i === page ? 'true' : 'false');
+          }
+          for (var j = 0; j < cards.length; j++) {
+            var visible = j >= page * perPage && j < (page + 1) * perPage;
+            cards[j].setAttribute('aria-hidden', visible ? 'false' : 'true');
+          }
+        }
+        function go(i) { page = ((i % pages) + pages) % pages; paint(); }
+
+        dotsWrap.addEventListener('click', function (e) {
+          var b = e.target.closest('.revDot');
+          if (b) go(parseInt(b.getAttribute('data-i'), 10) || 0);
+        });
+        document.getElementById('revPrev').addEventListener('click', function () { go(page - 1); });
+        document.getElementById('revNext').addEventListener('click', function () { go(page + 1); });
+
+        var rz = null;
+        window.addEventListener('resize', function () {
+          window.clearTimeout(rz);
+          rz = window.setTimeout(function () {
+            var before = perPage;
+            measure();
+            if (before !== perPage) buildDots();
+            paint();
+          }, 120);
+        });
+
+        measure(); buildDots(); paint();
+      })();
+
+      /* ---------------- client logo half cross-fade (8s) ---------------- */
+      (function () {
+        var pagesEls = Array.prototype.slice.call(document.querySelectorAll('.logoPage'));
+        if (pagesEls.length < 2) return;
+        var i = 0, t = null;
+        function start() {
+          window.clearInterval(t);
+          if (lessMotion()) return;
+          t = window.setInterval(function () {
+            i = (i + 1) % pagesEls.length;
+            for (var k = 0; k < pagesEls.length; k++) pagesEls[k].classList.toggle('is-on', k === i);
+          }, 8000);
+        }
+        start();
+        if (reduce.addEventListener) reduce.addEventListener('change', start);
+        window.addEventListener('pagehide', function () { window.clearInterval(t); });
+      })();
+
+      window.addEventListener('pagehide', function () { clearInterval(heroTimer); });
+    })();
+  </script>
+</Base>

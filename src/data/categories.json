@@ -1,0 +1,82 @@
+{
+  "categories": [
+    {
+      "label": "Dancers",
+      "name": "DANCERS",
+      "image": "",
+      "href": "/dancers"
+    },
+    {
+      "label": "BMX",
+      "name": "BMX",
+      "image": "",
+      "href": "/spacts"
+    },
+    {
+      "label": "Fighters",
+      "name": "FIGHTERS",
+      "image": "",
+      "href": "/spacts"
+    },
+    {
+      "label": "Gymnasts",
+      "name": "GYMNASTS",
+      "image": "",
+      "href": "/spacts"
+    },
+    {
+      "label": "Models",
+      "name": "MODELS",
+      "image": "",
+      "href": "/models"
+    },
+    {
+      "label": "Skateboard",
+      "name": "SKATEBOARD",
+      "image": "",
+      "href": "/spacts"
+    },
+    {
+      "label": "Intimacy",
+      "name": "INTIMACY",
+      "image": "",
+      "href": "/spacts"
+    },
+    {
+      "label": "Skaters",
+      "name": "SKATERS",
+      "image": "",
+      "href": "/spacts"
+    },
+    {
+      "label": "Contortion",
+      "name": "CONTORTION",
+      "image": "",
+      "href": "/spacts"
+    },
+    {
+      "label": "Circus",
+      "name": "CIRCUS",
+      "image": "",
+      "href": "/spacts"
+    },
+    {
+      "label": "Unique",
+      "name": "UNIQUE",
+      "image": "",
+      "href": "/spacts"
+    },
+    {
+      "label": "Firearms",
+      "name": "FIREARMS",
+      "image": "",
+      "href": "/spacts"
+    },
+    {
+      "label": "Fitness",
+      "name": "FITNESS",
+      "image": "",
+      "href": "/spacts"
+    }
+  ]
+}
