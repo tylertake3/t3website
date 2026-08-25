@@ -1,0 +1,56 @@
+---
+import Base from '../layouts/Base.astro';
+import { navLinks } from '../data/site';
+---
+
+<Base
+  title="Page not found — Take 3 Agency"
+  description="That page doesn't exist. Find dancers, models, SPACTs and stand-ins on the Take 3 Agency website."
+>
+  <section class="notFound">
+    <p class="kicker">ERROR 404</p>
+    <h1 class="notFoundTitle">This page has left the set.</h1>
+    <p class="notFoundBody">
+      The address you followed doesn't exist any more. Try one of these instead.
+    </p>
+    <div class="notFoundLinks">
+      <a class="btnGhost" href="/">HOME</a>
+      {navLinks.filter((l) => !l.href.includes('#')).map((l) => <a class="btnGhost" href={l.href}>{l.label}</a>)}
+    </div>
+  </section>
+
+  <style is:global>
+    .notFound {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 220px 40px 140px;
+    }
+    .notFoundTitle {
+      font-family: 'Anton', 'Jost', sans-serif;
+      text-transform: uppercase;
+      font-size: clamp(34px, 5vw, 76px);
+      font-weight: 400;
+      letter-spacing: 2px;
+      line-height: 1.05;
+      margin-top: 18px;
+    }
+    .notFoundBody {
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--sub);
+      margin-top: 22px;
+      max-width: 46ch;
+      text-wrap: pretty;
+    }
+    .notFoundLinks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 40px;
+    }
+    @media (max-width: 640px) {
+      .notFound { padding: 170px 20px 96px; }
+    }
+  </style>
+</Base>

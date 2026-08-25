@@ -28,3 +28,11 @@ pnpm-debug.log*
 
 # preview screenshots
 .preview/
+
+# original full-size photos (recoverable from git history)
+_originals/
+
+# stray CLI artefacts
+--clip
+--full-page
+mobile-top.png

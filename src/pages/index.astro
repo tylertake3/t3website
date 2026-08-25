@@ -1,4 +1,6 @@
 ---
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 import { contactHref } from '../data/site';
@@ -20,6 +22,11 @@ const marquee = [...categories, ...categories];
 const half = Math.ceil(clients.length / 2);
 const logoPages = [clients.slice(0, half), clients.slice(half)];
 
+/* Client logo artwork hasn't all been supplied yet. A cell whose file is missing
+   renders as an empty plate rather than firing a 404 for a picture that isn't there. */
+const hasLogo = (cell: { dark?: string; light?: string }) =>
+  Boolean(cell.dark) && existsSync(fileURLToPath(new URL('../../public' + cell.dark, import.meta.url)));
+
 const posterCount = 15;
 ---
 
@@ -28,7 +35,7 @@ const posterCount = 15;
   description={copy.meta.description}
   ogTitle={copy.meta.ogTitle}
   ogDescription={copy.meta.ogDescription}
-  ogImage="/uploads/the-odyssey-beach-horse.jpeg"
+  ogImage="/uploads/the-odyssey-beach-horse.webp"
 >
   <!-- full-bleed hero -->
   <section class="hero" id="hero" aria-label="Introduction">
@@ -178,9 +185,9 @@ const posterCount = 15;
             {page.map((cell) => (
               <div
                 class="logoCell"
-                style={`height:${cell.height}px; background-image:url("${cell.dark}");`}
-                data-light={cell.light}
-                data-dark={cell.dark}
+                style={hasLogo(cell) ? `height:${cell.height}px; background-image:url("${cell.dark}");` : `height:${cell.height}px;`}
+                data-light={hasLogo(cell) ? cell.light : undefined}
+                data-dark={hasLogo(cell) ? cell.dark : undefined}
               />
             ))}
           </div>

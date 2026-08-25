@@ -431,7 +431,7 @@ collections:
                 fields:
                   - { name: caption, label: Production name, widget: string, hint: 'The caption under the photo. Written in capitals.' }
                   - { name: alt, label: Photo description, widget: string, hint: 'Describes the photo for people using a screen reader and for Google. Not shown on the page.' }
-                  - { name: image, label: Photo file, widget: string, hint: 'The path to the image, such as /uploads/w1280.jpg. Upload images to the uploads folder first.' }
+                  - { name: image, label: Photo file, widget: string, hint: 'The path to the image, such as /uploads/w1280.webp. Upload images to the uploads folder first.' }
 
           - name: commercial
             label: For commercial & brand

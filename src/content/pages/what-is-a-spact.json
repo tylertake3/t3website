@@ -17,7 +17,7 @@
     "eyebrow": "TAKE 3 AGENCY · THE EXPLAINER",
     "heading": "What is\na SPACT?",
     "standfirst": "A SPACT is a Special Action supporting artist: a background performer booked for a real, proven skill — fighting, riding, dancing, driving, drilling like a soldier — and engaged to perform that skill safely and repeatably on camera.",
-    "image": "/uploads/Codex%20Image%2021%20Aug%202026,%2021_36_12.png",
+    "image": "/uploads/Codex%20Image%2021%20Aug%202026,%2021_36_12.webp",
     "imageAlt": "Storyboard frame of a crowd scene with six SPACTs marked out by callout boxes",
     "annotations": [
       { "label": "SPACT 01" },
@@ -68,7 +68,7 @@
     "frameAlt": "Production frame — stunt performer, SPACT and supporting artists",
     "scenes": [
       {
-        "image": "/uploads/Codex%20Image%2021%20Aug%202026,%2021_44_18.png",
+        "image": "/uploads/Codex%20Image%2021%20Aug%202026,%2021_44_18.webp",
         "title": "SC. 12 — THE SIEGE · ONE FRAME, THREE ROLES",
         "spots": [
           { "role": "sa", "label": "SUPPORTING ARTISTS (SA)", "side": "above", "left": 2, "top": 37.5, "width": 42, "height": 18.5, "delay": 0.6 },
@@ -79,7 +79,7 @@
         ]
       },
       {
-        "image": "/uploads/Codex%20Image%2021%20Aug%202026,%2021_52_54.png",
+        "image": "/uploads/Codex%20Image%2021%20Aug%202026,%2021_52_54.webp",
         "title": "SC. 34 — THE LANDING · ONE FRAME, THREE ROLES",
         "spots": [
           { "role": "sa", "label": "SUPPORTING ARTISTS (SA)", "side": "above", "left": 38, "top": 44, "width": 34, "height": 15, "delay": 0.6 },
@@ -91,7 +91,7 @@
         ]
       },
       {
-        "image": "/uploads/Codex%20Image%2021%20Aug%202026,%2022_12_36.png",
+        "image": "/uploads/Codex%20Image%2021%20Aug%202026,%2022_12_36.webp",
         "title": "SC. 51 — THE MELEE · ONE FRAME, THREE ROLES",
         "spots": [
           { "role": "sa", "label": "SUPPORTING ARTISTS (SA) — SPECTATORS", "side": "below", "left": 2, "top": 6, "width": 26, "height": 24, "delay": 0.6 },
