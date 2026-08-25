@@ -1,0 +1,106 @@
+{
+  "meta": {
+    "title": "Models — Take 3 Agency",
+    "description": "Faces for campaigns, character and camera — cast from a working roster, not a lookbook. Take 3 Agency supplies commercial and campaign models, real-people and character faces, fitting models and promotional talent for brands, film and television.",
+    "ogTitle": "Models — Take 3 Agency",
+    "ogDescription": "Faces for campaigns, character and camera — cast from a working roster, not a lookbook.",
+    "footerTitle": "Book models for your production",
+    "footerLinks": [
+      { "label": "STAND-INS →", "href": "/stand-ins" },
+      { "label": "DANCERS →", "href": "/dancers" }
+    ]
+  },
+
+  "hero": {
+    "eyebrow": "TAKE 3 AGENCY · No. 06",
+    "title": "Models",
+    "strapline": "Faces for campaigns, character and camera — cast from a working roster, not a lookbook.",
+    "tags": ["COMMERCIAL", "CHARACTER", "FITTING", "PROMOTIONAL"],
+    "figure": {
+      "slotLabel": "Hero portrait — 2:3",
+      "figNumber": "FIG. 01",
+      "figNote": "SHOT ON SET, NOT IN STUDIO"
+    }
+  },
+
+  "supply": {
+    "heading": "WHAT WE SUPPLY",
+    "items": [
+      {
+        "number": "01",
+        "title": "Commercial & campaign",
+        "body": "Campaign, stills and moving image — models who take direction and hold up across a full shoot day."
+      },
+      {
+        "number": "02",
+        "title": "Real people & character faces",
+        "body": "Faces with something behind them — real-people casting for productions and brands that want believable, not polished."
+      },
+      {
+        "number": "03",
+        "title": "Fitting models",
+        "body": "Measured, consistent and reliable — sample sizes and specific measurements for costume and fashion fittings."
+      },
+      {
+        "number": "04",
+        "title": "Promotional & event",
+        "body": "Launches, activations and front-of-house — presentable, personable people who represent a brand in the room."
+      }
+    ]
+  },
+
+  "brands": {
+    "figure": {
+      "slotLabel": "Campaign still — lifestyle",
+      "figNumber": "FIG. 02",
+      "figNote": "CAMPAIGN, STILLS, PRODUCT"
+    },
+    "eyebrow": "FOR BRANDS & COMMERCIAL",
+    "heading": "Campaigns, stills, product and lifestyle.",
+    "pullQuote": "“The difference between a model and the right model is a shoot day that runs on schedule.”",
+    "paragraph": "Our models come from working sets — comfortable with direction, continuity and long days. Send the brief and the boards; we shortlist from measured, photographed artists with current availability, for stills, moving image, product and lifestyle."
+  },
+
+  "film": {
+    "eyebrow": "FOR FILM & TELEVISION",
+    "heading": "Character faces and real-people casting.",
+    "paragraph": "When a production needs a face — a juror who reads lived-in, a featured role with no lines, a period look that holds in close-up — model-polished doesn't cut it. We cast character faces and real people from the same roster that supplies our SAs and doubles, so they already know how a set works.",
+    "definitions": [
+      {
+        "term": "FEATURED ROLES",
+        "description": "Faces that carry a frame without a line of dialogue."
+      },
+      {
+        "term": "PERIOD & SPECIFIC",
+        "description": "Looks cast to era, region and world — checked against your references."
+      },
+      {
+        "term": "REAL PEOPLE",
+        "description": "Believable, unpolished faces for documentary-style and testimonial work."
+      }
+    ],
+    "figure": {
+      "slotLabel": "Character portrait — in costume",
+      "figNumber": "FIG. 03",
+      "figNote": "IN COSTUME, ON CAMERA"
+    }
+  },
+
+  "why": {
+    "heading": "WHY BOOK THROUGH TAKE 3",
+    "cards": [
+      {
+        "title": "Set-experienced",
+        "body": "Models who have worked productions, not just studios — direction, continuity and etiquette come built in."
+      },
+      {
+        "title": "Measured & current",
+        "body": "Real measurements and recent photography on every artist — what arrives on the day matches the shortlist."
+      },
+      {
+        "title": "Admin handled",
+        "body": "Contracts, usage, fees and coordination through one point of contact — one roster, every format."
+      }
+    ]
+  }
+}

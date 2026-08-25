@@ -1,36 +1,47 @@
 ---
 import Base from '../layouts/Base.astro';
+import copy from '../content/pages/what-is-a-spact.json';
+
+/* the DOM ids the scene script hooks into, one per role card */
+const roleCardIds: Record<string, string> = {
+  sa: 'cardSa',
+  spact: 'cardSpact',
+  stunt: 'cardStunt',
+};
+
+const headingLines = copy.hero.heading.split('\n');
+const scene1 = copy.distinctions.scenes[0];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: copy.meta.articleHeadline,
+  description: copy.meta.description,
+  image: copy.hero.image,
+  articleSection: copy.meta.articleSection,
+  inLanguage: 'en-GB',
+  author: { '@type': 'Organization', name: 'Take 3 Agency' },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Take 3 Agency',
+    logo: { '@type': 'ImageObject', url: '/assets/take3-logo.svg' },
+  },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': '/what-is-a-spact' },
+};
 ---
 
 <Base
   navOverDark={false}
-  title="What is a SPACT? — Take 3 Agency"
-  description="A SPACT is a Special Action supporting artist: a background performer booked for a real, proven skill — fighting, riding, dancing, driving, drilling like a soldier — and engaged to perform that skill safely and repeatably on camera."
-  ogTitle="What is a SPACT? — Take 3 Agency"
-  ogDescription="A SPACT is a Special Action supporting artist: a background performer booked for a real, proven skill — fighting, riding, dancing, driving, drilling like a soldier — and engaged to perform that skill safely and repeatably on camera."
-  ogImage="/uploads/Codex%20Image%2021%20Aug%202026,%2021_36_12.png"
-  footerTitle="Need special action?"
-  footerIntro="Meet the SPACTs we represent, or tell us what the production needs and we'll build the book."
-  footerLinks={[{"label": "OUR SPACTS →", "href": "/spacts"}]}
+  title={copy.meta.title}
+  description={copy.meta.description}
+  ogTitle={copy.meta.ogTitle}
+  ogDescription={copy.meta.ogDescription}
+  ogImage={copy.hero.image}
+  footerTitle={copy.meta.footerTitle}
+  footerIntro={copy.meta.footerIntro}
+  footerLinks={copy.meta.footerLinks}
 >
-  <script slot="head" type="application/ld+json" is:inline>
-{
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "headline": "What is a SPACT?",
-  "description": "A SPACT is a Special Action supporting artist: a background performer booked for a real, proven skill — fighting, riding, dancing, driving, drilling like a soldier — and engaged to perform that skill safely and repeatably on camera.",
-  "image": "/uploads/Codex%20Image%2021%20Aug%202026,%2021_36_12.png",
-  "articleSection": "The Explainer",
-  "inLanguage": "en-GB",
-  "author": { "@type": "Organization", "name": "Take 3 Agency" },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Take 3 Agency",
-    "logo": { "@type": "ImageObject", "url": "/assets/take3-logo.svg" }
-  },
-  "mainEntityOfPage": { "@type": "WebPage", "@id": "/what-is-a-spact" }
-}
-  </script>
+  <script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd, null, 2)} />
 
   <article>
 
@@ -38,48 +49,48 @@ import Base from '../layouts/Base.astro';
   <div class="wrap pad titleWrap" style="padding-top:186px; padding-bottom:72px;">
     <div class="titleSplit">
       <div style="flex:1 1 420px; min-width:280px;">
-        <p class="eyebrow" style="letter-spacing:4px; font-size:13px;">TAKE 3 AGENCY · THE EXPLAINER</p>
-        <h1 class="h1Display" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(52px,7vw,120px); font-weight:400; letter-spacing:2px; line-height:1.02; margin:20px 0 0;">What is<br />a SPACT?</h1>
-        <p class="standfirst" style="font-size:clamp(18px,1.4vw,21px); font-weight:300; line-height:1.65; color:var(--sub); margin:36px 0 0; max-width:520px;">A SPACT is a Special Action supporting artist: a background performer booked for a real, proven skill — fighting, riding, dancing, driving, drilling like a soldier — and engaged to perform that skill safely and repeatably on camera.</p>
+        <p class="eyebrow" style="letter-spacing:4px; font-size:13px;">{copy.hero.eyebrow}</p>
+        <h1 class="h1Display" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(52px,7vw,120px); font-weight:400; letter-spacing:2px; line-height:1.02; margin:20px 0 0;">{headingLines.map((line, i) => (<>{i > 0 && <br />}{line}</>))}</h1>
+        <p class="standfirst" style="font-size:clamp(18px,1.4vw,21px); font-weight:300; line-height:1.65; color:var(--sub); margin:36px 0 0; max-width:520px;">{copy.hero.standfirst}</p>
       </div>
       <!-- casting overlay -->
       <figure style="flex:1 1 460px; min-width:0; max-width:640px; margin:0;">
         <div style="position:relative; aspect-ratio:3/2; overflow:hidden; background:var(--tileBg);">
-          <img src="/uploads/Codex%20Image%2021%20Aug%202026,%2021_36_12.png" alt="Storyboard frame of a crowd scene with six SPACTs marked out by callout boxes" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;" />
+          <img src={copy.hero.image} alt={copy.hero.imageAlt} style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;" />
           <div class="tann" style="left:13.5%; top:13%; width:8%; height:17%; animation-delay:0.6s;">
             <div class="tannBox"></div>
             <div class="tannTick" style="bottom:100%;"></div>
-            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:#c65b40;">●</span>&nbsp; SPACT 01</div>
+            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:#c65b40;">●</span>&nbsp; {copy.hero.annotations[0].label}</div>
           </div>
           <div class="tann" style="left:25.5%; top:18%; width:6.5%; height:12%; animation-delay:4.8s;">
             <div class="tannBox"></div>
             <div class="tannTick" style="top:100%;"></div>
-            <div class="tannLabel" style="top:calc(100% + 9px); transform:translateX(calc(-50% - 20px));"><span style="color:#c65b40;">●</span>&nbsp; SPACT 04</div>
+            <div class="tannLabel" style="top:calc(100% + 9px); transform:translateX(calc(-50% - 20px));"><span style="color:#c65b40;">●</span>&nbsp; {copy.hero.annotations[1].label}</div>
           </div>
           <div class="tann" style="left:34.5%; top:21%; width:9%; height:15%; animation-delay:2s;">
             <div class="tannBox"></div>
             <div class="tannTick" style="bottom:100%;"></div>
-            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:#c65b40;">●</span>&nbsp; SPACT 02</div>
+            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:#c65b40;">●</span>&nbsp; {copy.hero.annotations[2].label}</div>
           </div>
           <div class="tann" style="left:50.5%; top:18.5%; width:6.5%; height:12%; animation-delay:6.2s;">
             <div class="tannBox"></div>
             <div class="tannTick" style="top:100%;"></div>
-            <div class="tannLabel" style="top:calc(100% + 9px);"><span style="color:#c65b40;">●</span>&nbsp; SPACT 05</div>
+            <div class="tannLabel" style="top:calc(100% + 9px);"><span style="color:#c65b40;">●</span>&nbsp; {copy.hero.annotations[3].label}</div>
           </div>
           <div class="tann" style="left:62%; top:12.5%; width:9%; height:17%; animation-delay:3.4s;">
             <div class="tannBox"></div>
             <div class="tannTick" style="bottom:100%;"></div>
-            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:#c65b40;">●</span>&nbsp; SPACT 03</div>
+            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:#c65b40;">●</span>&nbsp; {copy.hero.annotations[4].label}</div>
           </div>
           <div class="tann" style="left:78.5%; top:20%; width:7.5%; height:13%; animation-delay:7.6s;">
             <div class="tannBox"></div>
             <div class="tannTick" style="bottom:100%;"></div>
-            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:#c65b40;">●</span>&nbsp; SPACT 06</div>
+            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:#c65b40;">●</span>&nbsp; {copy.hero.annotations[5].label}</div>
           </div>
         </div>
         <figcaption style="display:flex; justify-content:space-between; align-items:baseline; gap:16px; margin-top:12px; flex-wrap:wrap;">
-          <span style="font-size:10px; letter-spacing:3px; color:#96928c;">SC. 47 — ONE SCENE, SIX SPACTS</span>
-          <span style="font-size:10px; letter-spacing:3px; color:var(--accent);">ALL REAL SKILLS</span>
+          <span style="font-size:10px; letter-spacing:3px; color:#96928c;">{copy.hero.captionLeft}</span>
+          <span style="font-size:10px; letter-spacing:3px; color:var(--accent);">{copy.hero.captionRight}</span>
         </figcaption>
       </figure>
     </div>
@@ -89,12 +100,12 @@ import Base from '../layouts/Base.astro';
   <section class="rule" aria-labelledby="ch01">
     <div class="wrap pad split secPad" style="padding-top:80px; padding-bottom:80px;">
       <div>
-        <p class="eyebrow" id="ch01">01 · THE TERM</p>
-        <h2 class="dispM">Where the word comes from</h2>
+        <p class="eyebrow" id="ch01">{copy.origin.eyebrow}</p>
+        <h2 class="dispM">{copy.origin.heading}</h2>
       </div>
       <div class="body17">
-        <p style="margin:0;">SPACT is short for <strong>Special Action</strong>. On UK productions, supporting artists are engaged on crowd agreements, and when a role calls for genuine physical ability the booking is designated special action — a SPACT for short. The term lives in call sheets, crowd budgets and AD department shorthand rather than in any glossary, which is why so few people outside a set have heard it.</p>
-        <p style="margin:18px 0 0;">In practice, you'll hear it used as a noun for the performer themselves: "we need six SPACTs for the fight in the market", "the riders are SPACTs, not doubles". It signals to everyone on set — ADs, stunt coordinators, HODs — that the person can genuinely do the thing the scene requires, and has been booked, briefed and paid accordingly.</p>
+        <p style="margin:0;">{copy.origin.paragraph1.before}<strong>{copy.origin.paragraph1.bold}</strong>{copy.origin.paragraph1.after}</p>
+        <p style="margin:18px 0 0;">{copy.origin.paragraph2}</p>
       </div>
     </div>
   </section>
@@ -102,77 +113,75 @@ import Base from '../layouts/Base.astro';
   <!-- 02 distinctions -->
   <section class="onDark" aria-labelledby="ch02">
     <div class="wrap pad secPad" style="padding-top:80px; padding-bottom:88px;">
-      <p class="eyebrow" id="ch02" style="color:#c65b40;">02 · THE DISTINCTIONS</p>
-      <h2 class="dispM">SPACT, Stunt Performer, Supporting Artist</h2>
-      <p style="font-size:16px; font-weight:300; line-height:1.75; color:#c7c3bd; margin:18px 0 0; max-width:760px;">The three roles sit on one spectrum of screen action, and the honest answer is that the lines are drawn by risk, pay and responsibility — not by talent.</p>
-      <p style="font-size:11px; letter-spacing:2.5px; color:#96928c; margin:26px 0 0;">SELECT A ROLE TO ISOLATE IT IN THE FRAME BELOW</p>
+      <p class="eyebrow" id="ch02" style="color:#c65b40;">{copy.distinctions.eyebrow}</p>
+      <h2 class="dispM">{copy.distinctions.heading}</h2>
+      <p style="font-size:16px; font-weight:300; line-height:1.75; color:#c7c3bd; margin:18px 0 0; max-width:760px;">{copy.distinctions.intro}</p>
+      <p style="font-size:11px; letter-spacing:2.5px; color:#96928c; margin:26px 0 0;">{copy.distinctions.selectPrompt}</p>
 
       <div class="roleGrid">
-        <button type="button" class="roleCard roleCard--edge" id="cardSa" data-role="sa" aria-pressed="false">
-          <span class="roleTitle">SUPPORTING ARTIST</span>
-          <span class="roleBody" style="display:block;">Populates the world of the scene. No special skill is required and none is asked for on camera. Booked through crowd casting on a standard background agreement.</span>
-          <span class="roleFlag" style="display:block;">● IN FRAME — CLICK TO CLEAR</span>
-        </button>
-        <button type="button" class="roleCard roleCard--spact" id="cardSpact" data-role="spact" aria-pressed="true">
-          <span class="roleTitle">SPACT</span>
-          <span class="roleBody" style="display:block;">A supporting artist with a verified special skill, booked because of it. Performs real action — fights, dance, riding, drill — within limits agreed with the AD and stunt departments. Paid a special action rate above standard background.</span>
-          <span class="roleFlag" style="display:block;">● IN FRAME — CLICK TO CLEAR</span>
-        </button>
-        <button type="button" class="roleCard roleCard--edge" id="cardStunt" data-role="stunt" aria-pressed="false">
-          <span class="roleTitle">STUNT PERFORMER</span>
-          <span class="roleBody" style="display:block;">A registered professional engaged for hazardous action — falls, burns, wire work, crashes — under a stunt coordinator's supervision. Where the risk is real, the job is a stunt, and it is never a SPACT booking.</span>
-          <span class="roleFlag" style="display:block;">● IN FRAME — CLICK TO CLEAR</span>
-        </button>
+        {copy.distinctions.roles.map((card) => (
+          <button
+            type="button"
+            class={`roleCard ${card.role === 'spact' ? 'roleCard--spact' : 'roleCard--edge'}`}
+            id={roleCardIds[card.role]}
+            data-role={card.role}
+            aria-pressed={card.role === 'spact' ? 'true' : 'false'}
+          >
+            <span class="roleTitle">{card.title}</span>
+            <span class="roleBody" style="display:block;">{card.body}</span>
+            <span class="roleFlag" style="display:block;">{copy.distinctions.roleFlagLabel}</span>
+          </button>
+        ))}
       </div>
 
       <div class="frame" id="sceneFrame" style="margin-top:56px;">
-        <img class="frameImg" id="sceneImg" src="/uploads/Codex%20Image%2021%20Aug%202026,%2021_44_18.png" alt="Production frame — stunt performer, SPACT and supporting artists" />
+        <img class="frameImg" id="sceneImg" src={scene1.image} alt={copy.distinctions.frameAlt} />
         <div class="frameDim" id="sceneDim" style="opacity:1;"></div>
         <div id="spotLayer">
           <div class="spot" data-role="sa" style="left:2%; top:37.5%; width:42%; height:18.5%; animation-delay:0.6s; opacity:0; animation:none;">
-            <div class="spotImg" style="opacity:0;"><img src="/uploads/Codex%20Image%2021%20Aug%202026,%2021_44_18.png" alt="" aria-hidden="true" style="left:7.875458%; top:-144.386694%; width:183.150183%; height:415.800416%;" /></div>
+            <div class="spotImg" style="opacity:0;"><img src={scene1.image} alt="" aria-hidden="true" style="left:7.875458%; top:-144.386694%; width:183.150183%; height:415.800416%;" /></div>
             <div class="spotBox" style="border:1px dashed rgba(244,242,238,0.55);"></div>
             <div class="spotTick" style="bottom:100%; background:rgba(244,242,238,0.55);"></div>
-            <div class="spotLabel" style="bottom:calc(100% + 10px); border-color:#3a3a3e;"><span style="color:#96928c;">●</span>&nbsp; SUPPORTING ARTISTS (SA)</div>
+            <div class="spotLabel" style="bottom:calc(100% + 10px); border-color:#3a3a3e;"><span style="color:#96928c;">●</span>&nbsp; {scene1.spots[0].label}</div>
           </div>
           <div class="spot" data-role="sa" style="left:66%; top:58%; width:21%; height:15%; animation-delay:1.8s; opacity:0; animation:none;">
-            <div class="spotImg" style="opacity:0;"><img src="/uploads/Codex%20Image%2021%20Aug%202026,%2021_44_18.png" alt="" aria-hidden="true" style="left:-230.219780%; top:-285.897436%; width:366.300366%; height:512.820513%;" /></div>
+            <div class="spotImg" style="opacity:0;"><img src={scene1.image} alt="" aria-hidden="true" style="left:-230.219780%; top:-285.897436%; width:366.300366%; height:512.820513%;" /></div>
             <div class="spotBox" style="border:1px dashed rgba(244,242,238,0.55);"></div>
             <div class="spotTick" style="top:100%; background:rgba(244,242,238,0.55);"></div>
-            <div class="spotLabel" style="top:calc(100% + 10px); border-color:#3a3a3e;"><span style="color:#96928c;">●</span>&nbsp; SA</div>
+            <div class="spotLabel" style="top:calc(100% + 10px); border-color:#3a3a3e;"><span style="color:#96928c;">●</span>&nbsp; {scene1.spots[1].label}</div>
           </div>
           <div class="spot" data-role="spact" style="left:51.5%; top:60%; width:13.5%; height:36%; animation-delay:3.4s; opacity:1; animation:none; z-index:2;">
-            <div class="spotImg" style="opacity:1;"><img src="/uploads/Codex%20Image%2021%20Aug%202026,%2021_44_18.png" alt="" aria-hidden="true" style="left:-281.908832%; top:-116.666667%; width:569.800570%; height:213.675214%;" /></div>
+            <div class="spotImg" style="opacity:1;"><img src={scene1.image} alt="" aria-hidden="true" style="left:-281.908832%; top:-116.666667%; width:569.800570%; height:213.675214%;" /></div>
             <div class="spotBox" style="border:1px solid rgba(244,242,238,0.95); box-shadow:0 0 0 1px rgba(20,20,22,0.35);"></div>
             <div class="spotTick" style="bottom:100%; background:rgba(244,242,238,0.95);"></div>
-            <div class="spotLabel" style="bottom:calc(100% + 10px); border-color:#3a3a3e;"><span style="color:#f4f2ee;">●</span>&nbsp; SPACT — SCREEN FIGHTER</div>
+            <div class="spotLabel" style="bottom:calc(100% + 10px); border-color:#3a3a3e;"><span style="color:#f4f2ee;">●</span>&nbsp; {scene1.spots[2].label}</div>
           </div>
           <div class="spot" data-role="spact" style="left:4%; top:58%; width:24%; height:38%; animation-delay:3.8s; opacity:1; animation:none; z-index:2;">
-            <div class="spotImg" style="opacity:1;"><img src="/uploads/Codex%20Image%2021%20Aug%202026,%2021_44_18.png" alt="" aria-hidden="true" style="left:-1.282051%; top:-105.870445%; width:320.512821%; height:202.429150%;" /></div>
+            <div class="spotImg" style="opacity:1;"><img src={scene1.image} alt="" aria-hidden="true" style="left:-1.282051%; top:-105.870445%; width:320.512821%; height:202.429150%;" /></div>
             <div class="spotBox" style="border:1px solid rgba(244,242,238,0.95); box-shadow:0 0 0 1px rgba(20,20,22,0.35);"></div>
             <div class="spotTick" style="bottom:100%; background:rgba(244,242,238,0.95);"></div>
-            <div class="spotLabel" style="bottom:calc(100% + 10px); border-color:#3a3a3e;"><span style="color:#f4f2ee;">●</span>&nbsp; SPACT — SHIELD LINE</div>
+            <div class="spotLabel" style="bottom:calc(100% + 10px); border-color:#3a3a3e;"><span style="color:#f4f2ee;">●</span>&nbsp; {scene1.spots[3].label}</div>
           </div>
           <div class="spot" data-role="stunt" style="left:53.5%; top:8%; width:28%; height:38%; animation-delay:5s; opacity:0; animation:none;">
-            <div class="spotImg" style="opacity:0;"><img src="/uploads/Codex%20Image%2021%20Aug%202026,%2021_44_18.png" alt="" aria-hidden="true" style="left:-135.439560%; top:-4.655870%; width:274.725275%; height:202.429150%;" /></div>
+            <div class="spotImg" style="opacity:0;"><img src={scene1.image} alt="" aria-hidden="true" style="left:-135.439560%; top:-4.655870%; width:274.725275%; height:202.429150%;" /></div>
             <div class="spotBox" style="border:1px solid #c65b40; box-shadow:0 0 0 1px rgba(20,20,22,0.35);"></div>
             <div class="spotTick" style="bottom:100%; background:#c65b40;"></div>
-            <div class="spotLabel" style="bottom:calc(100% + 10px); border-color:#c65b40;"><span style="color:#c65b40;">●</span>&nbsp; STUNT PERFORMER — WIRE GAG</div>
+            <div class="spotLabel" style="bottom:calc(100% + 10px); border-color:#c65b40;"><span style="color:#c65b40;">●</span>&nbsp; {scene1.spots[4].label}</div>
           </div>
         </div>
       </div>
 
       <div class="frameMeta" style="display:flex; justify-content:space-between; align-items:baseline; gap:24px; margin-top:14px; flex-wrap:wrap;">
-        <p id="sceneTitle" style="font-size:10px; letter-spacing:3px; color:#96928c; margin:0;">SC. 12 — THE SIEGE · ONE FRAME, THREE ROLES</p>
+        <p id="sceneTitle" style="font-size:10px; letter-spacing:3px; color:#96928c; margin:0;">{scene1.title}</p>
         <div class="legend">
-          <button type="button" class="legBtn" id="legStunt" data-role="stunt" aria-pressed="false"><span style="color:#c65b40;">—</span> STUNT</button>
-          <button type="button" class="legBtn" id="legSpact" data-role="spact" aria-pressed="true"><span style="color:#f4f2ee;">—</span> SPACT</button>
-          <button type="button" class="legBtn" id="legSa" data-role="sa" aria-pressed="false">╌ SA</button>
-          <button type="button" class="nextBtn" id="nextScene">NEXT SCENE →</button>
+          <button type="button" class="legBtn" id="legStunt" data-role="stunt" aria-pressed="false"><span style="color:#c65b40;">—</span> {copy.distinctions.legend.stunt}</button>
+          <button type="button" class="legBtn" id="legSpact" data-role="spact" aria-pressed="true"><span style="color:#f4f2ee;">—</span> {copy.distinctions.legend.spact}</button>
+          <button type="button" class="legBtn" id="legSa" data-role="sa" aria-pressed="false">╌ {copy.distinctions.legend.sa}</button>
+          <button type="button" class="nextBtn" id="nextScene">{copy.distinctions.legend.nextButton}</button>
         </div>
       </div>
 
-      <p style="font-size:14px; font-weight:300; color:#96928c; line-height:1.7; margin:44px 0 0; max-width:760px;">The line between SPACT and stunt work is a judgement call on risk, and it belongs to the stunt coordinator. A good agency flags the borderline cases before they reach set — it's a conversation we have with productions weekly.</p>
+      <p style="font-size:14px; font-weight:300; color:#96928c; line-height:1.7; margin:44px 0 0; max-width:760px;">{copy.distinctions.note}</p>
     </div>
   </section>
 
@@ -180,19 +189,17 @@ import Base from '../layouts/Base.astro';
   <section class="rule" aria-labelledby="ch03">
     <div class="wrap pad split secPad" style="padding-top:80px; padding-bottom:80px;">
       <div>
-        <p class="eyebrow" id="ch03">03 · THE WORK</p>
-        <h2 class="dispM">What SPACTs are booked to do</h2>
+        <p class="eyebrow" id="ch03">{copy.work.eyebrow}</p>
+        <h2 class="dispM">{copy.work.heading}</h2>
       </div>
       <div>
         <div class="body17">
-          <p style="margin:0;">Anywhere a scene needs genuine ability in the background rather than a mime of it. Typical bookings we supply:</p>
+          <p style="margin:0;">{copy.work.intro}</p>
         </div>
         <div style="margin-top:28px;">
-          <div class="workRow"><div class="workKey">SCREEN FIGHTING</div><div class="workVal">Background brawls, battle lines, gunmen in shootouts — choreographed contact that reads as real.</div></div>
-          <div class="workRow"><div class="workKey">MOVEMENT</div><div class="workVal">Ballroom, Latin, club and period social dance filling a floor with people who can actually dance it.</div></div>
-          <div class="workRow"><div class="workKey">MILITARY &amp; POLICE</div><div class="workVal">Ex-forces performers who move, drill and handle weapons the way the real thing does.</div></div>
-          <div class="workRow"><div class="workKey">RIDING &amp; DRIVING</div><div class="workVal">Horse riders, cyclists and precision drivers working around principal action.</div></div>
-          <div class="workRow"><div class="workKey">SPECIALIST BODIES</div><div class="workVal">Gymnasts, acrobats, circus and creature performers — anywhere physical control is the skill.</div></div>
+          {copy.work.rows.map((row) => (
+            <div class="workRow"><div class="workKey">{row.term}</div><div class="workVal">{row.description}</div></div>
+          ))}
         </div>
       </div>
     </div>
@@ -202,13 +209,13 @@ import Base from '../layouts/Base.astro';
   <section class="rule" aria-labelledby="ch04">
     <div class="wrap pad split secPad" style="padding-top:80px; padding-bottom:88px;">
       <div>
-        <p class="eyebrow" id="ch04">04 · THE BOOKING</p>
-        <h2 class="dispM">How SPACTs are booked, and what to expect</h2>
+        <p class="eyebrow" id="ch04">{copy.booking.eyebrow}</p>
+        <h2 class="dispM">{copy.booking.heading}</h2>
       </div>
       <div class="body17">
-        <p style="margin:0;">SPACTs are booked through the crowd department, usually via an agency that specialises in them. The production sends a brief — the skill, the level, the look, the dates — and the agency returns a book of artists it can vouch for. Assessed skill levels matter more than showreels here: on the day, the performer either can or cannot do what the scene needs.</p>
-        <p style="margin:18px 0 0;">A production should expect a SPACT to arrive set-ready: briefed on the action, able to repeat it take after take, comfortable taking direction from ADs and coordinators, and clear about their own limits. Rates sit above standard background rates, agreed per the crowd agreement in place, with the special action noted on the chit.</p>
-        <p style="margin:18px 0 0;">Every SPACT on our books has been assessed and interviewed by the Take 3 team before joining. When we send someone to set, they are exactly who we say they are.</p>
+        {copy.booking.paragraphs.map((para, i) => (
+          <p style={i === 0 ? 'margin:0;' : 'margin:18px 0 0;'}>{para}</p>
+        ))}
       </div>
     </div>
   </section>
@@ -314,41 +321,13 @@ p { text-wrap:pretty; }
 }
   </style>
 
-  <script slot="scripts" is:inline>
+  <script slot="scripts" is:inline define:vars={{ SCENES: copy.distinctions.scenes }}>
 (function () {
   'use strict';
 
   /* ================= scene annotation ================= */
-  var IMG_SIEGE = '/uploads/Codex%20Image%2021%20Aug%202026,%2021_44_18.png';
-  var IMG_LANDING = '/uploads/Codex%20Image%2021%20Aug%202026,%2021_52_54.png';
-  var IMG_MELEE = '/uploads/Codex%20Image%2021%20Aug%202026,%2022_12_36.png';
-
-  var SCENES = [
-    { img: IMG_SIEGE, title: 'SC. 12 — THE SIEGE · ONE FRAME, THREE ROLES', spots: [
-      { role: 'sa', l: 2, t: 37.5, w: 42, h: 18.5, side: 'above', label: 'SUPPORTING ARTISTS (SA)', delay: 0.6 },
-      { role: 'sa', l: 66, t: 58, w: 21, h: 15, side: 'below', label: 'SA', delay: 1.8 },
-      { role: 'spact', l: 51.5, t: 60, w: 13.5, h: 36, side: 'above', label: 'SPACT — SCREEN FIGHTER', delay: 3.4 },
-      { role: 'spact', l: 4, t: 58, w: 24, h: 38, side: 'above', label: 'SPACT — SHIELD LINE', delay: 3.8 },
-      { role: 'stunt', l: 53.5, t: 8, w: 28, h: 38, side: 'above', label: 'STUNT PERFORMER — WIRE GAG', delay: 5 }
-    ] },
-    { img: IMG_LANDING, title: 'SC. 34 — THE LANDING · ONE FRAME, THREE ROLES', spots: [
-      { role: 'sa', l: 38, t: 44, w: 34, h: 15, side: 'above', label: 'SUPPORTING ARTISTS (SA)', delay: 0.6 },
-      { role: 'sa', l: 79, t: 42, w: 18, h: 20, side: 'below', label: 'SA', delay: 1.8 },
-      { role: 'spact', l: 52, t: 53, w: 15, h: 27, side: 'above', label: 'SPACT — WEAPONS HANDLING', delay: 3.4 },
-      { role: 'spact', l: 64, t: 72, w: 26, h: 26, side: 'above', label: 'SPACT', delay: 3.8 },
-      { role: 'spact', l: 27, t: 52, w: 13, h: 18, side: 'below', label: 'SPACT', delay: 4.2 },
-      { role: 'stunt', l: 28, t: 20, w: 20, h: 28, side: 'below', label: 'STUNT PERFORMER — EXPLOSION LAUNCH', delay: 5 }
-    ] },
-    { img: IMG_MELEE, title: 'SC. 51 — THE MELEE · ONE FRAME, THREE ROLES', spots: [
-      { role: 'sa', l: 2, t: 6, w: 26, h: 24, side: 'below', label: 'SUPPORTING ARTISTS (SA) — SPECTATORS', delay: 0.6 },
-      { role: 'sa', l: 62, t: 22, w: 26, h: 14, side: 'below', label: 'SA — SPECTATORS', delay: 1.8 },
-      { role: 'spact', l: 38, t: 34, w: 24, h: 20, side: 'below', label: 'SPACT — MELEE LINE', delay: 3.4 },
-      { role: 'spact', l: 1, t: 36, w: 12, h: 26, side: 'below', label: 'SPACT', delay: 3.7 },
-      { role: 'spact', l: 87, t: 30, w: 12, h: 30, side: 'below', label: 'SPACT', delay: 4 },
-      { role: 'stunt', l: 10, t: 38, w: 24, h: 52, side: 'above', label: 'STUNT PERFORMER — MUD FIGHT', delay: 4.2 },
-      { role: 'stunt', l: 62, t: 38, w: 24, h: 46, side: 'above', label: 'STUNT PERFORMER — MUD FIGHT', delay: 5 }
-    ] }
-  ];
+  /* SCENES (image, title, spot labels and geometry) comes from
+     src/content/pages/what-is-a-spact.json via define:vars above. */
 
   /* state: { role, scene } — role defaults to 'spact' as authored */
   var role = 'spact';
@@ -373,7 +352,7 @@ p { text-wrap:pretty; }
 
   function buildScene(i) {
     var scene = SCENES[i % SCENES.length];
-    if (frameImg) frameImg.setAttribute('src', scene.img);
+    if (frameImg) frameImg.setAttribute('src', scene.image);
     if (titleEl) titleEl.textContent = scene.title;
     if (!layer) return;
     layer.textContent = '';
@@ -381,22 +360,22 @@ p { text-wrap:pretty; }
     scene.spots.forEach(function (s) {
       var above = s.side !== 'below';
       /* spotlight geometry: expanded box is 1.3x the callout, centred on it */
-      var ew = s.w * 1.3, eh = s.h * 1.3;
-      var el = s.l - 0.15 * s.w, et = s.t - 0.15 * s.h;
+      var ew = s.width * 1.3, eh = s.height * 1.3;
+      var el = s.left - 0.15 * s.width, et = s.top - 0.15 * s.height;
 
       var spot = document.createElement('div');
       spot.className = 'spot';
       spot.setAttribute('data-role', s.role);
-      spot.style.left = s.l + '%';
-      spot.style.top = s.t + '%';
-      spot.style.width = s.w + '%';
-      spot.style.height = s.h + '%';
+      spot.style.left = s.left + '%';
+      spot.style.top = s.top + '%';
+      spot.style.width = s.width + '%';
+      spot.style.height = s.height + '%';
       spot.style.animationDelay = s.delay + 's';
 
       var mask = document.createElement('div');
       mask.className = 'spotImg';
       var im = document.createElement('img');
-      im.setAttribute('src', scene.img);
+      im.setAttribute('src', scene.image);
       im.setAttribute('alt', '');
       im.setAttribute('aria-hidden', 'true');
       im.style.width = (10000 / ew) + '%';
@@ -509,7 +488,7 @@ p { text-wrap:pretty; }
   }
 
   /* componentDidMount: preload the second scene image */
-  (function () { var pre = new Image(); pre.src = IMG_LANDING; })();
+  (function () { var pre = new Image(); pre.src = SCENES[1].image; })();
 
   /* sync the server-rendered initial frame with live state */
   applyRole();

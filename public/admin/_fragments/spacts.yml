@@ -1,0 +1,101 @@
+- name: page-spacts
+  label: SPACTs page text
+  file: src/content/pages/spacts.json
+  description: All the wording on the SPACTs page.
+  fields:
+    - name: meta
+      label: Search & sharing
+      widget: object
+      collapsed: true
+      fields:
+        - { name: title, label: Browser tab title, widget: string, hint: 'Shows in the browser tab and as the headline in Google results.' }
+        - { name: description, label: Google description, widget: text, hint: 'The grey summary under the title in Google results. Around 150–160 characters works best.' }
+        - { name: ogTitle, label: Title when shared on social, widget: string, hint: 'Used when someone pastes a link to this page into WhatsApp, Instagram, LinkedIn and so on.' }
+        - { name: ogDescription, label: Description when shared on social, widget: text, hint: 'The short line under the title on a shared link preview.' }
+        - { name: footerTitle, label: Footer headline, widget: string, hint: 'The big line above the contact details at the very bottom of the page.' }
+        - name: footerLinks
+          label: Footer buttons
+          widget: list
+          hint: 'The outlined buttons in the footer, pointing visitors to other pages. Reorder, add or remove them here.'
+          fields:
+            - { name: label, label: Button text, widget: string, hint: 'The arrow → is part of the text, so keep it if you want it.' }
+            - { name: href, label: Page it opens, widget: string, hint: 'A path on this site, such as /dancers.' }
+
+    - name: hero
+      label: Top of page
+      widget: object
+      hint: 'The full-width opening block with the production photos fading behind the title.'
+      fields:
+        - { name: eyebrow, label: Small line above the title, widget: string, hint: 'Written in capitals.' }
+        - { name: title, label: Page title, widget: string, hint: 'The very large word at the top. Always shown in capitals.' }
+        - { name: strapline, label: Opening sentence, widget: text, hint: 'The line under the title.' }
+        - { name: creditLabel, label: Photo credit label, widget: string, hint: 'The small line in the bottom corner above the production name, currently AS SEEN ON.' }
+        - { name: creditTitle, label: First production name, widget: string, hint: 'The production name shown when the page first loads. It then changes automatically as the background photos rotate; the later names are set in the page code, so ask your developer to change those.' }
+
+    - name: what
+      label: What is a SPACT
+      widget: object
+      hint: 'The section just below the photo explaining what a SPACT is.'
+      fields:
+        - { name: eyebrow, label: Small line above the heading, widget: string, hint: 'Written in capitals.' }
+        - { name: heading, label: Heading, widget: string, hint: 'The large heading. Always shown in capitals.' }
+        - { name: paragraph, label: Paragraph, widget: text }
+        - { name: linkLabel, label: Link text, widget: string, hint: 'The link under the paragraph. The arrow → is part of the text, so keep it if you want it.' }
+        - { name: linkHref, label: Page the link opens, widget: string, hint: 'A path on this site, such as /what-is-a-spact.' }
+
+    - name: disciplines
+      label: Disciplines
+      widget: object
+      hint: 'The three-column grid of numbered skills.'
+      fields:
+        - { name: heading, label: Section heading, widget: string, hint: 'The large heading on the left. Always shown in capitals.' }
+        - { name: kicker, label: Small line on the right, widget: string, hint: 'The short coloured line opposite the heading, currently NINE CORE AREAS. Update it if you change how many skills are listed.' }
+        - name: items
+          label: Skills
+          widget: list
+          hint: 'Add, reorder or remove skills here. They fill the grid three across.'
+          fields:
+            - { name: number, label: Number, widget: string, hint: 'The small number on the left, e.g. 01. Renumber them yourself if you reorder the list.' }
+            - { name: title, label: Skill, widget: string }
+        - { name: note, label: Note under the grid, widget: text, hint: 'The small grey sentence below the grid.' }
+
+    - name: film
+      label: For film & television
+      widget: object
+      hint: 'The dark section with the three production photos.'
+      fields:
+        - { name: eyebrow, label: Small line above the heading, widget: string, hint: 'Written in capitals.' }
+        - { name: heading, label: Heading, widget: string, hint: 'The large heading. Always shown in capitals.' }
+        - { name: paragraph, label: Paragraph, widget: text, hint: 'The text on the right, ending with the line that introduces the photos.' }
+        - name: tiles
+          label: Production photos
+          widget: list
+          hint: 'Three photos fit the row neatly. Add, reorder or remove them here.'
+          fields:
+            - { name: caption, label: Production name, widget: string, hint: 'The caption under the photo. Written in capitals.' }
+            - { name: alt, label: Photo description, widget: string, hint: 'Describes the photo for people using a screen reader and for Google. Not shown on the page.' }
+            - { name: image, label: Photo file, widget: string, hint: 'The path to the image, such as /uploads/w1280.jpg. Upload images to the uploads folder first.' }
+
+    - name: commercial
+      label: For commercial & brand
+      widget: object
+      hint: 'The section listing the kinds of commercial work SPACTs are booked for.'
+      fields:
+        - { name: eyebrow, label: Small line above the heading, widget: string, hint: 'Written in capitals.' }
+        - { name: heading, label: Heading, widget: string, hint: 'The large heading. Always shown in capitals.' }
+        - { name: items, label: List rows, widget: list, hint: 'One sentence per row, each on its own line with a rule between. Add, reorder or remove rows here.' }
+
+    - name: why
+      label: Why book through Take 3
+      widget: object
+      hint: 'The three numbered cards at the bottom of the page.'
+      fields:
+        - { name: heading, label: Section heading, widget: string, hint: 'The large heading above the cards. Always shown in capitals.' }
+        - name: cards
+          label: Cards
+          widget: list
+          hint: 'Three cards fit the row neatly. Add, reorder or remove them here.'
+          fields:
+            - { name: number, label: Card number, widget: string, hint: 'The small number above the title, e.g. 01. Renumber them yourself if you reorder the cards.' }
+            - { name: title, label: Card title, widget: string }
+            - { name: body, label: Card text, widget: text }

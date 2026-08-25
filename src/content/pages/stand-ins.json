@@ -1,0 +1,127 @@
+{
+  "meta": {
+    "title": "Stand-ins & Picture Doubles — Take 3 Agency",
+    "description": "Accurate stand-ins, picture doubles, body, intimacy, hand and stunt doubles matched to your leads on height, build, colouring, skin tone and hair — experienced on set, so lighting holds and cameras keep turning.",
+    "ogTitle": "Stand-ins & Picture Doubles — Take 3 Agency",
+    "ogDescription": "Accurate matches to your leads, experienced on set — so lighting holds, cameras keep turning and your actors' hours go where they matter.",
+    "footerTitle": "Book doubles for your production",
+    "footerLinks": [
+      { "label": "DANCERS →", "href": "/dancers" },
+      { "label": "SPACTS →", "href": "/spacts" }
+    ]
+  },
+
+  "hero": {
+    "eyebrow": "TAKE 3 AGENCY · CONTINUITY PERFORMERS",
+    "title": "Stand-ins & picture doubles",
+    "lede": "Accurate matches to your leads, experienced on set — so lighting holds, cameras keep turning and your actors' hours go where they matter."
+  },
+
+  "difference": {
+    "eyebrow": "THE DIFFERENCE",
+    "heading": "Six jobs, often confused. Here's what each one does.",
+    "cards": [
+      {
+        "number": "01",
+        "title": "Stand-in",
+        "body": "Takes the actor's place while shots are lit and blocked. Matched on height, build and colouring so every setup translates exactly when the actor steps in. Rarely on camera."
+      },
+      {
+        "number": "02",
+        "title": "Picture double",
+        "body": "Appears on camera in place of the actor — over-the-shoulder angles, hands, driving shots and distance work. The match has to hold in the frame, not just under the lights."
+      },
+      {
+        "number": "03",
+        "title": "Body double",
+        "body": "Steps in for specific physical work — physique shots, movement, anything the schedule or the script keeps the actor from doing. Cast to match in close quarters."
+      },
+      {
+        "number": "04",
+        "title": "Intimacy double",
+        "body": "Performs intimate scenes in the actor's place, working to the intimacy coordinator's choreography — cast with consent, closed-set experience and a match that holds in frame."
+      },
+      {
+        "number": "05",
+        "title": "Hand double",
+        "body": "Close-up insert work — writing, driving, product handling, instruments. Matched on skin tone, size and detail, steady under a macro lens."
+      },
+      {
+        "number": "06",
+        "title": "Stunt double",
+        "body": "Takes the action the actor can't — falls, fights, vehicle work — under the stunt coordinator, matched closely enough to cut seamlessly with the performance."
+      }
+    ]
+  },
+
+  "whyItMatters": {
+    "slotLabel": "On-set still — lighting setup",
+    "eyebrow": "WHY IT MATTERS",
+    "heading": "A good match keeps the whole unit moving.",
+    "rows": [
+      {
+        "label": "LIGHTING & CAMERA",
+        "text": "Setups are lit and blocked on a true match — nothing shifts when the actor steps onto their mark."
+      },
+      {
+        "label": "A MOVING SET",
+        "text": "Your leads rest, rehearse or shoot on another unit while setups continue without them."
+      },
+      {
+        "label": "SCHEDULE & COST",
+        "text": "Fewer resets and less actor downtime — the saving compounds across every shoot day."
+      }
+    ]
+  },
+
+  "matching": {
+    "eyebrow": "MATCHING",
+    "heading": "Matched to your leads, not close enough.",
+    "items": [
+      { "number": "01", "name": "Height" },
+      { "number": "02", "name": "Build" },
+      { "number": "03", "name": "Colouring" },
+      { "number": "04", "name": "Skin tone" },
+      { "number": "05", "name": "Hair" }
+    ],
+    "note": "Send your leads' details or casting references — we shortlist from measured, photographed artists on our books, not self-reported stats.",
+    "slotLabel": "Side-by-side — lead and double"
+  },
+
+  "commercial": {
+    "eyebrow": "FOR COMMERCIAL & BRAND",
+    "heading": "Not just for features.",
+    "rows": [
+      {
+        "label": "CAMPAIGN SHOOTS",
+        "text": "Lighting doubles for principal talent on limited hours — setups ready the moment they arrive."
+      },
+      {
+        "label": "STILLS & CONTENT",
+        "text": "Hands, product interaction and distance work shot on a double while your talent covers the hero frames."
+      },
+      {
+        "label": "TIGHT SCHEDULES",
+        "text": "One shoot day instead of two — a match on set is often the cheapest hour a smaller production can buy."
+      }
+    ]
+  },
+
+  "why": {
+    "heading": "WHY BOOK THROUGH TAKE 3",
+    "cards": [
+      {
+        "title": "Set-ready people",
+        "body": "Experienced stand-ins who know set etiquette — where to be, when to be silent, how to hold a mark and take direction from the camera department."
+      },
+      {
+        "title": "Admin handled",
+        "body": "Contracts, fees, overtime and on-the-day coordination dealt with by us — one invoice, no chasing."
+      },
+      {
+        "title": "One relationship",
+        "body": "Doubles, dancers, fighters and specialists through a single point of contact — one roster, every format."
+      }
+    ]
+  }
+}

@@ -1,17 +1,18 @@
 ---
 import Base from '../layouts/Base.astro';
+import copy from '../content/pages/models.json';
 ---
 
 <Base
   theme="light"
   navOverDark={false}
-  title="Models — Take 3 Agency"
-  description="Faces for campaigns, character and camera — cast from a working roster, not a lookbook. Take 3 Agency supplies commercial and campaign models, real-people and character faces, fitting models and promotional talent for brands, film and television."
-  ogTitle="Models — Take 3 Agency"
-  ogDescription="Faces for campaigns, character and camera — cast from a working roster, not a lookbook."
+  title={copy.meta.title}
+  description={copy.meta.description}
+  ogTitle={copy.meta.ogTitle}
+  ogDescription={copy.meta.ogDescription}
   ogImage="/assets/take3-logo.svg"
-  footerTitle="Book models for your production"
-  footerLinks={[{"label": "STAND-INS →", "href": "/stand-ins"}, {"label": "DANCERS →", "href": "/dancers"}]}
+  footerTitle={copy.meta.footerTitle}
+  footerLinks={copy.meta.footerLinks}
 >
   <link
     slot="head"
@@ -22,44 +23,31 @@ import Base from '../layouts/Base.astro';
   <!-- editorial hero -->
   <section class="rail hero" aria-labelledby="heroTitle">
     <div class="heroCopy">
-      <p class="eyebrow6">TAKE 3 AGENCY · No. 06</p>
-      <h1 class="display" id="heroTitle">Models</h1>
-      <p class="strapline">Faces for campaigns, character and camera — cast from a working roster, not a lookbook.</p>
+      <p class="eyebrow6">{copy.hero.eyebrow}</p>
+      <h1 class="display" id="heroTitle">{copy.hero.title}</h1>
+      <p class="strapline">{copy.hero.strapline}</p>
       <p class="tagRow">
-        <span>COMMERCIAL</span><span>CHARACTER</span><span>FITTING</span><span>PROMOTIONAL</span>
+        {copy.hero.tags.map((tag) => <span>{tag}</span>)}
       </p>
     </div>
     <figure class="heroFig" style="margin:0;">
-      <div class="slot" style="aspect-ratio:2/3;"><span class="slotLabel">Hero portrait — 2:3</span></div>
-      <figcaption class="figCap"><span>FIG. 01</span><span>SHOT ON SET, NOT IN STUDIO</span></figcaption>
+      <div class="slot" style="aspect-ratio:2/3;"><span class="slotLabel">{copy.hero.figure.slotLabel}</span></div>
+      <figcaption class="figCap"><span>{copy.hero.figure.figNumber}</span><span>{copy.hero.figure.figNote}</span></figcaption>
     </figure>
   </section>
 
   <!-- what we supply -->
   <section id="supply" class="band" aria-labelledby="supplyHead">
     <div class="rail bandInner">
-      <h2 class="eyebrow3" id="supplyHead">WHAT WE SUPPLY</h2>
+      <h2 class="eyebrow3" id="supplyHead">{copy.supply.heading}</h2>
       <div class="list">
-        <div class="listRow">
-          <span class="listNum">01</span>
-          <h3 class="listTitle">Commercial &amp; campaign</h3>
-          <p class="listBody" style="margin:0;">Campaign, stills and moving image — models who take direction and hold up across a full shoot day.</p>
-        </div>
-        <div class="listRow">
-          <span class="listNum">02</span>
-          <h3 class="listTitle">Real people &amp; character faces</h3>
-          <p class="listBody" style="margin:0;">Faces with something behind them — real-people casting for productions and brands that want believable, not polished.</p>
-        </div>
-        <div class="listRow">
-          <span class="listNum">03</span>
-          <h3 class="listTitle">Fitting models</h3>
-          <p class="listBody" style="margin:0;">Measured, consistent and reliable — sample sizes and specific measurements for costume and fashion fittings.</p>
-        </div>
-        <div class="listRow">
-          <span class="listNum">04</span>
-          <h3 class="listTitle">Promotional &amp; event</h3>
-          <p class="listBody" style="margin:0;">Launches, activations and front-of-house — presentable, personable people who represent a brand in the room.</p>
-        </div>
+        {copy.supply.items.map((item) => (
+          <div class="listRow">
+            <span class="listNum">{item.number}</span>
+            <h3 class="listTitle">{item.title}</h3>
+            <p class="listBody" style="margin:0;">{item.body}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -68,14 +56,14 @@ import Base from '../layouts/Base.astro';
   <section id="brands" class="band" aria-labelledby="brandsHead">
     <div class="rail splitInner split--brands">
       <figure class="splitFig" style="margin:0;">
-        <div class="slot" style="aspect-ratio:4/5;"><span class="slotLabel">Campaign still — lifestyle</span></div>
-        <figcaption class="figCap"><span>FIG. 02</span><span>CAMPAIGN, STILLS, PRODUCT</span></figcaption>
+        <div class="slot" style="aspect-ratio:4/5;"><span class="slotLabel">{copy.brands.figure.slotLabel}</span></div>
+        <figcaption class="figCap"><span>{copy.brands.figure.figNumber}</span><span>{copy.brands.figure.figNote}</span></figcaption>
       </figure>
       <div class="splitCopy">
-        <p class="eyebrow3">FOR BRANDS &amp; COMMERCIAL</p>
-        <h2 class="h2Anton" id="brandsHead">Campaigns, stills, product and lifestyle.</h2>
-        <blockquote class="pullQuote">“The difference between a model and the right model is a shoot day that runs on schedule.”</blockquote>
-        <p class="para">Our models come from working sets — comfortable with direction, continuity and long days. Send the brief and the boards; we shortlist from measured, photographed artists with current availability, for stills, moving image, product and lifestyle.</p>
+        <p class="eyebrow3">{copy.brands.eyebrow}</p>
+        <h2 class="h2Anton" id="brandsHead">{copy.brands.heading}</h2>
+        <blockquote class="pullQuote">{copy.brands.pullQuote}</blockquote>
+        <p class="para">{copy.brands.paragraph}</p>
       </div>
     </div>
   </section>
@@ -84,18 +72,18 @@ import Base from '../layouts/Base.astro';
   <section id="film" class="filmBand" aria-labelledby="filmHead">
     <div class="rail splitInner split--film">
       <div class="splitCopy">
-        <p class="eyebrow3">FOR FILM &amp; TELEVISION</p>
-        <h2 class="h2Anton" id="filmHead">Character faces and real-people casting.</h2>
-        <p class="para">When a production needs a face — a juror who reads lived-in, a featured role with no lines, a period look that holds in close-up — model-polished doesn't cut it. We cast character faces and real people from the same roster that supplies our SAs and doubles, so they already know how a set works.</p>
+        <p class="eyebrow3">{copy.film.eyebrow}</p>
+        <h2 class="h2Anton" id="filmHead">{copy.film.heading}</h2>
+        <p class="para">{copy.film.paragraph}</p>
         <div class="defs">
-          <div class="defRow"><span class="defKey">FEATURED ROLES</span><span>Faces that carry a frame without a line of dialogue.</span></div>
-          <div class="defRow"><span class="defKey">PERIOD &amp; SPECIFIC</span><span>Looks cast to era, region and world — checked against your references.</span></div>
-          <div class="defRow"><span class="defKey">REAL PEOPLE</span><span>Believable, unpolished faces for documentary-style and testimonial work.</span></div>
+          {copy.film.definitions.map((def) => (
+            <div class="defRow"><span class="defKey">{def.term}</span><span>{def.description}</span></div>
+          ))}
         </div>
       </div>
       <figure class="splitFig" style="margin:0;">
-        <div class="slot slot--dark" style="aspect-ratio:2/3;"><span class="slotLabel">Character portrait — in costume</span></div>
-        <figcaption class="figCap"><span>FIG. 03</span><span>IN COSTUME, ON CAMERA</span></figcaption>
+        <div class="slot slot--dark" style="aspect-ratio:2/3;"><span class="slotLabel">{copy.film.figure.slotLabel}</span></div>
+        <figcaption class="figCap"><span>{copy.film.figure.figNumber}</span><span>{copy.film.figure.figNote}</span></figcaption>
       </figure>
     </div>
   </section>
@@ -103,20 +91,14 @@ import Base from '../layouts/Base.astro';
   <!-- why book through take 3 -->
   <section class="band" aria-labelledby="whyHead">
     <div class="rail bandInner">
-      <h2 class="eyebrow3" id="whyHead">WHY BOOK THROUGH TAKE 3</h2>
+      <h2 class="eyebrow3" id="whyHead">{copy.why.heading}</h2>
       <div class="cards">
-        <div class="card">
-          <h3 class="cardTitle">Set-experienced</h3>
-          <p class="cardBody">Models who have worked productions, not just studios — direction, continuity and etiquette come built in.</p>
-        </div>
-        <div class="card">
-          <h3 class="cardTitle">Measured &amp; current</h3>
-          <p class="cardBody">Real measurements and recent photography on every artist — what arrives on the day matches the shortlist.</p>
-        </div>
-        <div class="card">
-          <h3 class="cardTitle">Admin handled</h3>
-          <p class="cardBody">Contracts, usage, fees and coordination through one point of contact — one roster, every format.</p>
-        </div>
+        {copy.why.cards.map((card) => (
+          <div class="card">
+            <h3 class="cardTitle">{card.title}</h3>
+            <p class="cardBody">{card.body}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>

@@ -1,15 +1,16 @@
 ---
 import Base from '../layouts/Base.astro';
+import copy from '../content/pages/spacts.json';
 ---
 
 <Base
-  title="SPACTs — Take 3 Agency"
-  description="A SPACT — Special Action Extra — is a background artist with a real, proven skill: a fighter, driver, dancer, gymnast or rider who can perform it safely, repeatably, on camera. Take 3 Agency supplies SPACTs across nine core disciplines to film, television and commercial productions."
-  ogTitle="SPACTs — Take 3 Agency"
-  ogDescription="Real skills, delivered safely on camera. Take 3 Agency supplies Special Action Performers across nine core disciplines."
+  title={copy.meta.title}
+  description={copy.meta.description}
+  ogTitle={copy.meta.ogTitle}
+  ogDescription={copy.meta.ogDescription}
   ogImage="/uploads/w1280.jpg"
-  footerTitle="Book SPACTs for your production"
-  footerLinks={[{"label": "DANCERS →", "href": "/dancers"}, {"label": "SPECIALISTS →", "href": "/stand-ins"}]}
+  footerTitle={copy.meta.footerTitle}
+  footerLinks={copy.meta.footerLinks}
 >
   <!-- full-bleed hero: production stills fade -->
   <header class="hero" style="position:relative; min-height:78vh; background:#101012; overflow:hidden;">
@@ -19,11 +20,11 @@ import Base from '../layouts/Base.astro';
     <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.15) 30%, rgba(20,20,22,0.15) 55%, rgba(20,20,22,0.8) 100%);"></div>
 
     <div class="heroPad" style="position:absolute; left:40px; right:40px; bottom:64px; z-index:2; color:#f4f2ee;">
-      <div style="font-size:12px; letter-spacing:6px; color:rgba(244,242,238,0.7);">TAKE 3 AGENCY · SPECIAL ACTION PERFORMERS</div>
-      <h1 class="heroTitle" style="font-family:'Anton','Jost',sans-serif; font-size:clamp(48px, 6vw, 104px); font-weight:400; letter-spacing:4px; line-height:1.02; margin:18px 0 0; text-transform:uppercase;">SPACTs</h1>
-      <p style="font-size:clamp(17px,1.6vw,22px); font-weight:300; letter-spacing:1px; margin:18px 0 0; max-width:640px; color:rgba(244,242,238,0.9); text-wrap:pretty;">Real skills, delivered safely on camera.</p>
+      <div style="font-size:12px; letter-spacing:6px; color:rgba(244,242,238,0.7);">{copy.hero.eyebrow}</div>
+      <h1 class="heroTitle" style="font-family:'Anton','Jost',sans-serif; font-size:clamp(48px, 6vw, 104px); font-weight:400; letter-spacing:4px; line-height:1.02; margin:18px 0 0; text-transform:uppercase;">{copy.hero.title}</h1>
+      <p style="font-size:clamp(17px,1.6vw,22px); font-weight:300; letter-spacing:1px; margin:18px 0 0; max-width:640px; color:rgba(244,242,238,0.9); text-wrap:pretty;">{copy.hero.strapline}</p>
       <div class="heroCredit" style="position:absolute; right:0; bottom:-24px; z-index:2; text-align:right; color:rgba(244,242,238,0.75); font-size:11px; letter-spacing:3px;">
-        AS SEEN ON<br /><span id="heroTitleTxt" style="font-size:20px; letter-spacing:5px; font-weight:300; color:#f4f2ee;">ANDOR</span>
+        {copy.hero.creditLabel}<br /><span id="heroTitleTxt" style="font-size:20px; letter-spacing:5px; font-weight:300; color:#f4f2ee;">{copy.hero.creditTitle}</span>
       </div>
     </div>
   </header>
@@ -31,33 +32,27 @@ import Base from '../layouts/Base.astro';
   <!-- what is a spact -->
   <section id="what" class="pad split" style="max-width:1280px; margin:0 auto; padding:96px 40px; display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start;">
     <div>
-      <h2 style="font-size:11px; letter-spacing:3px; color:var(--accent); font-weight:400; margin:0;">WHAT IS A SPACT</h2>
-      <p class="dispXL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0;">A performer, not just a face in the crowd.</p>
+      <h2 style="font-size:11px; letter-spacing:3px; color:var(--accent); font-weight:400; margin:0;">{copy.what.eyebrow}</h2>
+      <p class="dispXL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0;">{copy.what.heading}</p>
     </div>
     <div style="font-size:17px; font-weight:300; line-height:1.75; color:var(--sub); text-wrap:pretty;">
-      <p style="margin:0;">A SPACT — Special Action Extra — is a background artist with a real, proven skill: a fighter, driver, dancer, gymnast or rider who can perform that skill safely, repeatably, on camera. Productions book them where a scene needs genuine ability in the background, not a mime of it.</p>
-      <a href="/what-is-a-spact" style="display:inline-block; margin-top:24px; font-size:12px; letter-spacing:2px; color:var(--accent);">READ THE FULL EXPLAINER →</a>
+      <p style="margin:0;">{copy.what.paragraph}</p>
+      <a href={copy.what.linkHref} style="display:inline-block; margin-top:24px; font-size:12px; letter-spacing:2px; color:var(--accent);">{copy.what.linkLabel}</a>
     </div>
   </section>
 
   <!-- disciplines grid -->
   <section id="disciplines" class="pad" style="max-width:1280px; margin:0 auto; padding:0 40px 96px;">
     <div class="secHead" style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid var(--hair); padding-bottom:18px; margin-bottom:8px;">
-      <h2 class="dispL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(26px,3vw,40px); font-weight:400; letter-spacing:1px; margin:0;">Disciplines</h2>
-      <div style="font-size:11px; letter-spacing:3px; color:var(--accent);">NINE CORE AREAS</div>
+      <h2 class="dispL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(26px,3vw,40px); font-weight:400; letter-spacing:1px; margin:0;">{copy.disciplines.heading}</h2>
+      <div style="font-size:11px; letter-spacing:3px; color:var(--accent);">{copy.disciplines.kicker}</div>
     </div>
     <ul class="disc" style="list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(3,1fr); column-gap:48px;">
-      <li style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:#96928c;">01</span><span style="font-size:17px; letter-spacing:2px;">Screen fighting &amp; combat</span></li>
-      <li style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:#96928c;">02</span><span style="font-size:17px; letter-spacing:2px;">Precision &amp; stunt driving</span></li>
-      <li style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:#96928c;">03</span><span style="font-size:17px; letter-spacing:2px;">Dance</span></li>
-      <li style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:#96928c;">04</span><span style="font-size:17px; letter-spacing:2px;">Martial arts</span></li>
-      <li style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:#96928c;">05</span><span style="font-size:17px; letter-spacing:2px;">Gymnastics &amp; acrobatics</span></li>
-      <li style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:#96928c;">06</span><span style="font-size:17px; letter-spacing:2px;">Parkour &amp; free-running</span></li>
-      <li style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:#96928c;">07</span><span style="font-size:17px; letter-spacing:2px;">Skateboarding &amp; BMX</span></li>
-      <li style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:#96928c;">08</span><span style="font-size:17px; letter-spacing:2px;">Circus &amp; aerial</span></li>
-      <li style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:#96928c;">09</span><span style="font-size:17px; letter-spacing:2px;">Military &amp; armed police</span></li>
+      {copy.disciplines.items.map((item) => (
+        <li style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:#96928c;">{item.number}</span><span style="font-size:17px; letter-spacing:2px;">{item.title}</span></li>
+      ))}
     </ul>
-    <p style="font-size:14px; font-weight:300; color:#96928c; line-height:1.6; margin:24px 0 0; max-width:720px; text-wrap:pretty;">There's a fine line between SPACT and stunt work — our team will advise on the right booking for the action you need.</p>
+    <p style="font-size:14px; font-weight:300; color:#96928c; line-height:1.6; margin:24px 0 0; max-width:720px; text-wrap:pretty;">{copy.disciplines.note}</p>
   </section>
 
   <!-- for film and television -->
@@ -65,24 +60,18 @@ import Base from '../layouts/Base.astro';
     <div class="pad" style="max-width:1280px; margin:0 auto; padding:88px 40px;">
       <div class="split" style="display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start;">
         <div>
-          <h2 style="font-size:11px; letter-spacing:3px; color:#96928c; font-weight:400; margin:0;">FOR FILM &amp; TELEVISION</h2>
-          <p class="dispXL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0;">Booked under crowd. Delivering more.</p>
+          <h2 style="font-size:11px; letter-spacing:3px; color:#96928c; font-weight:400; margin:0;">{copy.film.eyebrow}</h2>
+          <p class="dispXL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0;">{copy.film.heading}</p>
         </div>
-        <p style="font-size:16px; font-weight:300; line-height:1.75; color:#c7c3bd; text-wrap:pretty; margin:0;">SPACTs come through the crowd budget but bring featured-level action — fights that land, riders who ride, soldiers who move like soldiers. Recent productions we've supplied:</p>
+        <p style="font-size:16px; font-weight:300; line-height:1.75; color:#c7c3bd; text-wrap:pretty; margin:0;">{copy.film.paragraph}</p>
       </div>
       <div class="tiles" style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:48px;">
-        <figure style="margin:0;">
-          <div style="aspect-ratio:16/9; overflow:hidden; background:#101012;"><img src="/uploads/w1280.jpg" alt="Still from the production ANDOR" loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
-          <figcaption style="font-size:14px; letter-spacing:4px; margin-top:12px;">ANDOR</figcaption>
-        </figure>
-        <figure style="margin:0;">
-          <div style="aspect-ratio:16/9; overflow:hidden; background:#101012;"><img src="/uploads/_dfa3c099-9b6c-45ce-8c99-e24d9e51a891.jpg" alt="Still from the production ODYSSEY" loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
-          <figcaption style="font-size:14px; letter-spacing:4px; margin-top:12px;">ODYSSEY</figcaption>
-        </figure>
-        <figure style="margin:0;">
-          <div style="aspect-ratio:16/9; overflow:hidden; background:#101012;"><img src="/uploads/lotr-s2-ut-230403-00131-r2-jpg-66f4b25127687.avif" alt="Still from the production RINGS OF POWER" loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
-          <figcaption style="font-size:14px; letter-spacing:4px; margin-top:12px;">RINGS OF POWER</figcaption>
-        </figure>
+        {copy.film.tiles.map((tile) => (
+          <figure style="margin:0;">
+            <div style="aspect-ratio:16/9; overflow:hidden; background:#101012;"><img src={tile.image} alt={tile.alt} loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
+            <figcaption style="font-size:14px; letter-spacing:4px; margin-top:12px;">{tile.caption}</figcaption>
+          </figure>
+        ))}
       </div>
     </div>
   </section>
@@ -91,14 +80,13 @@ import Base from '../layouts/Base.astro';
   <section class="pad" style="max-width:1280px; margin:0 auto; padding:88px 40px;">
     <div class="split" style="display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start;">
       <div>
-        <h2 style="font-size:11px; letter-spacing:3px; color:var(--accent); font-weight:400; margin:0;">FOR COMMERCIAL &amp; BRAND</h2>
-        <p class="dispXL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0;">When the campaign needs it done for real.</p>
+        <h2 style="font-size:11px; letter-spacing:3px; color:var(--accent); font-weight:400; margin:0;">{copy.commercial.eyebrow}</h2>
+        <p class="dispXL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0;">{copy.commercial.heading}</p>
       </div>
       <ul style="list-style:none; margin:0; padding:0; display:grid; row-gap:0; font-size:16px; font-weight:300; line-height:1.7; color:var(--sub);">
-        <li style="border-bottom:1px solid var(--hair); padding:18px 0;">Car campaigns that need a driver who can perform, not just pose.</li>
-        <li style="border-bottom:1px solid var(--hair); padding:18px 0;">Sportswear films that want genuine free-runners and gymnasts.</li>
-        <li style="border-bottom:1px solid var(--hair); padding:18px 0;">Cinematic spots calling for fight or aerial work.</li>
-        <li style="padding:18px 0;">Live events that need circus and movement artists.</li>
+        {copy.commercial.items.map((item, i) => (
+          <li style={i === copy.commercial.items.length - 1 ? 'padding:18px 0;' : 'border-bottom:1px solid var(--hair); padding:18px 0;'}>{item}</li>
+        ))}
       </ul>
     </div>
   </section>
@@ -106,24 +94,16 @@ import Base from '../layouts/Base.astro';
   <!-- why book through take 3 -->
   <section id="why" class="pad" style="max-width:1280px; margin:0 auto; padding:0 40px 96px;">
     <div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid var(--hair); padding-bottom:18px; margin-bottom:40px;">
-      <h2 class="dispL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(26px,3vw,40px); font-weight:400; letter-spacing:1px; margin:0;">Why book through Take 3</h2>
+      <h2 class="dispL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(26px,3vw,40px); font-weight:400; letter-spacing:1px; margin:0;">{copy.why.heading}</h2>
     </div>
     <div class="why" style="display:grid; grid-template-columns:repeat(3,1fr); gap:48px;">
-      <div>
-        <div style="font-size:12px; letter-spacing:2px; color:#96928c;">01</div>
-        <h3 style="font-size:19px; letter-spacing:1px; margin:12px 0 0; font-weight:400;">A vetted roster</h3>
-        <p style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin:10px 0 0; text-wrap:pretty;">Every artist assessed and interviewed by our team before they join. They are exactly who we say they are.</p>
-      </div>
-      <div>
-        <div style="font-size:12px; letter-spacing:2px; color:#96928c;">02</div>
-        <h3 style="font-size:19px; letter-spacing:1px; margin:12px 0 0; font-weight:400;">We handle the paperwork</h3>
-        <p style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin:10px 0 0; text-wrap:pretty;">Contracts, fees, overtime, buyouts and on-the-day coordination — dealt with by us, not your team.</p>
-      </div>
-      <div>
-        <div style="font-size:12px; letter-spacing:2px; color:#96928c;">03</div>
-        <h3 style="font-size:19px; letter-spacing:1px; margin:12px 0 0; font-weight:400;">One relationship</h3>
-        <p style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin:10px 0 0; text-wrap:pretty;">Every discipline through a single point of contact — from a lone precision driver to a full crowd of fighters.</p>
-      </div>
+      {copy.why.cards.map((card) => (
+        <div>
+          <div style="font-size:12px; letter-spacing:2px; color:#96928c;">{card.number}</div>
+          <h3 style="font-size:19px; letter-spacing:1px; margin:12px 0 0; font-weight:400;">{card.title}</h3>
+          <p style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin:10px 0 0; text-wrap:pretty;">{card.body}</p>
+        </div>
+      ))}
     </div>
   </section>
 

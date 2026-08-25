@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "title": "SPACTs — Take 3 Agency",
+    "description": "A SPACT — Special Action Extra — is a background artist with a real, proven skill: a fighter, driver, dancer, gymnast or rider who can perform it safely, repeatably, on camera. Take 3 Agency supplies SPACTs across nine core disciplines to film, television and commercial productions.",
+    "ogTitle": "SPACTs — Take 3 Agency",
+    "ogDescription": "Real skills, delivered safely on camera. Take 3 Agency supplies Special Action Performers across nine core disciplines.",
+    "footerTitle": "Book SPACTs for your production",
+    "footerLinks": [
+      { "label": "DANCERS →", "href": "/dancers" },
+      { "label": "SPECIALISTS →", "href": "/stand-ins" }
+    ]
+  },
+
+  "hero": {
+    "eyebrow": "TAKE 3 AGENCY · SPECIAL ACTION PERFORMERS",
+    "title": "SPACTs",
+    "strapline": "Real skills, delivered safely on camera.",
+    "creditLabel": "AS SEEN ON",
+    "creditTitle": "ANDOR"
+  },
+
+  "what": {
+    "eyebrow": "WHAT IS A SPACT",
+    "heading": "A performer, not just a face in the crowd.",
+    "paragraph": "A SPACT — Special Action Extra — is a background artist with a real, proven skill: a fighter, driver, dancer, gymnast or rider who can perform that skill safely, repeatably, on camera. Productions book them where a scene needs genuine ability in the background, not a mime of it.",
+    "linkLabel": "READ THE FULL EXPLAINER →",
+    "linkHref": "/what-is-a-spact"
+  },
+
+  "disciplines": {
+    "heading": "Disciplines",
+    "kicker": "NINE CORE AREAS",
+    "items": [
+      { "number": "01", "title": "Screen fighting & combat" },
+      { "number": "02", "title": "Precision & stunt driving" },
+      { "number": "03", "title": "Dance" },
+      { "number": "04", "title": "Martial arts" },
+      { "number": "05", "title": "Gymnastics & acrobatics" },
+      { "number": "06", "title": "Parkour & free-running" },
+      { "number": "07", "title": "Skateboarding & BMX" },
+      { "number": "08", "title": "Circus & aerial" },
+      { "number": "09", "title": "Military & armed police" }
+    ],
+    "note": "There's a fine line between SPACT and stunt work — our team will advise on the right booking for the action you need."
+  },
+
+  "film": {
+    "eyebrow": "FOR FILM & TELEVISION",
+    "heading": "Booked under crowd. Delivering more.",
+    "paragraph": "SPACTs come through the crowd budget but bring featured-level action — fights that land, riders who ride, soldiers who move like soldiers. Recent productions we've supplied:",
+    "tiles": [
+      {
+        "caption": "ANDOR",
+        "alt": "Still from the production ANDOR",
+        "image": "/uploads/w1280.jpg"
+      },
+      {
+        "caption": "ODYSSEY",
+        "alt": "Still from the production ODYSSEY",
+        "image": "/uploads/_dfa3c099-9b6c-45ce-8c99-e24d9e51a891.jpg"
+      },
+      {
+        "caption": "RINGS OF POWER",
+        "alt": "Still from the production RINGS OF POWER",
+        "image": "/uploads/lotr-s2-ut-230403-00131-r2-jpg-66f4b25127687.avif"
+      }
+    ]
+  },
+
+  "commercial": {
+    "eyebrow": "FOR COMMERCIAL & BRAND",
+    "heading": "When the campaign needs it done for real.",
+    "items": [
+      "Car campaigns that need a driver who can perform, not just pose.",
+      "Sportswear films that want genuine free-runners and gymnasts.",
+      "Cinematic spots calling for fight or aerial work.",
+      "Live events that need circus and movement artists."
+    ]
+  },
+
+  "why": {
+    "heading": "Why book through Take 3",
+    "cards": [
+      {
+        "number": "01",
+        "title": "A vetted roster",
+        "body": "Every artist assessed and interviewed by our team before they join. They are exactly who we say they are."
+      },
+      {
+        "number": "02",
+        "title": "We handle the paperwork",
+        "body": "Contracts, fees, overtime, buyouts and on-the-day coordination — dealt with by us, not your team."
+      },
+      {
+        "number": "03",
+        "title": "One relationship",
+        "body": "Every discipline through a single point of contact — from a lone precision driver to a full crowd of fighters."
+      }
+    ]
+  }
+}

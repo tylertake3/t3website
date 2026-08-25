@@ -1,15 +1,19 @@
 ---
 import Base from '../layouts/Base.astro';
+import copy from '../content/pages/dancers.json';
+
+/* "01", "02" … numbering for the genre accordion, derived from the list order */
+const twoDigit = (n: number) => String(n).padStart(2, '0');
 ---
 
 <Base
-  title="Dancers — Take 3 Agency"
-  description="Trained dancers for film, television, commercial and live — every style, screen-ready. Take 3 Agency supplies contemporary, commercial, period, ballroom, street and ensemble dancers, from solo artists to full ensembles."
-  ogTitle="Dancers — Take 3 Agency"
-  ogDescription="Trained dancers for film, television, commercial and live — every style, screen-ready."
+  title={copy.meta.title}
+  description={copy.meta.description}
+  ogTitle={copy.meta.ogTitle}
+  ogDescription={copy.meta.ogDescription}
   ogImage="/uploads/Codex%20Image%2021%20Aug%202026,%2014_26_52-52b0f5dc.png"
-  footerTitle="Book dancers for your production"
-  footerLinks={[{"label": "SPACTS →", "href": "/spacts"}, {"label": "SPECIALISTS →", "href": "/stand-ins"}]}
+  footerTitle={copy.meta.footerTitle}
+  footerLinks={copy.meta.footerLinks}
 >
 
   <!-- full-bleed hero: dancer stills fade -->
@@ -22,71 +26,35 @@ import Base from '../layouts/Base.astro';
     <div class="heroScrim"></div>
 
     <div class="heroCopy">
-      <div class="heroEyebrow">TAKE 3 AGENCY · DANCE</div>
-      <h1 class="heroTitle">DANCERS</h1>
-      <p class="heroLede">Trained dancers for film, television, commercial and live — every style, screen-ready.</p>
+      <div class="heroEyebrow">{copy.hero.eyebrow}</div>
+      <h1 class="heroTitle">{copy.hero.title}</h1>
+      <p class="heroLede">{copy.hero.lede}</p>
     </div>
   </header>
 
   <!-- what we supply: index list + tall still -->
   <section id="supply" class="supply" aria-labelledby="supplyHead">
     <div class="supplyCol">
-      <h2 id="supplyHead" class="eyebrowAccent" style="margin:0; font-weight:400;">WHAT WE SUPPLY</h2>
+      <h2 id="supplyHead" class="eyebrowAccent" style="margin:0; font-weight:400;">{copy.supply.heading}</h2>
       <div class="supplyList" id="genreList">
-        <div class="genre">
-          <button class="genreBtn" type="button" aria-expanded="false" aria-controls="genrePanel1">
-            <span class="genreNum">01</span>
-            <span class="genreName">Contemporary</span>
-            <span class="genreMark" aria-hidden="true">+</span>
-          </button>
-          <div class="genrePanel" id="genrePanel1"><div><div class="genreBlurb">Technically trained contemporary artists for narrative and abstract movement — floor work, partnering and release-based styles, comfortable improvising to direction on set.</div></div></div>
-        </div>
-        <div class="genre">
-          <button class="genreBtn" type="button" aria-expanded="false" aria-controls="genrePanel2">
-            <span class="genreNum">02</span>
-            <span class="genreName">Commercial</span>
-            <span class="genreMark" aria-hidden="true">+</span>
-          </button>
-          <div class="genrePanel" id="genrePanel2"><div><div class="genreBlurb">Sharp, camera-ready commercial dancers for promos, campaigns and live performance — fast with choreography and consistent take to take.</div></div></div>
-        </div>
-        <div class="genre">
-          <button class="genreBtn" type="button" aria-expanded="false" aria-controls="genrePanel3">
-            <span class="genreNum">03</span>
-            <span class="genreName">Period &amp; historical</span>
-            <span class="genreMark" aria-hidden="true">+</span>
-          </button>
-          <div class="genrePanel" id="genrePanel3"><div><div class="genreBlurb">Dancers drilled in court, regency, ragtime, swing and other era-specific social dance, styled and rehearsed to the production’s period.</div></div></div>
-        </div>
-        <div class="genre">
-          <button class="genreBtn" type="button" aria-expanded="false" aria-controls="genrePanel4">
-            <span class="genreNum">04</span>
-            <span class="genreName">Ballroom</span>
-            <span class="genreMark" aria-hidden="true">+</span>
-          </button>
-          <div class="genrePanel" id="genrePanel4"><div><div class="genreBlurb">Competition-level ballroom and Latin couples — waltz, foxtrot, tango, quickstep and more — able to perform full routines or background social dancing.</div></div></div>
-        </div>
-        <div class="genre">
-          <button class="genreBtn" type="button" aria-expanded="false" aria-controls="genrePanel5">
-            <span class="genreNum">05</span>
-            <span class="genreName">Street</span>
-            <span class="genreMark" aria-hidden="true">+</span>
-          </button>
-          <div class="genrePanel" id="genrePanel5"><div><div class="genreBlurb">Breakers, hip hop, popping, locking and krump artists from the UK battle scene, with the power moves and freestyle depth to hold a featured frame.</div></div></div>
-        </div>
-        <div class="genre">
-          <button class="genreBtn" type="button" aria-expanded="false" aria-controls="genrePanel6">
-            <span class="genreNum">06</span>
-            <span class="genreName">Choreographed ensemble work</span>
-            <span class="genreMark" aria-hidden="true">+</span>
-          </button>
-          <div class="genrePanel" id="genrePanel6"><div><div class="genreBlurb">Full ensembles cast to move as one — musical numbers, ceremonies and crowd choreography, matched for height, look and partnering experience.</div></div></div>
-        </div>
+        {
+          copy.supply.genres.map((genre, i) => (
+            <div class="genre">
+              <button class="genreBtn" type="button" aria-expanded="false" aria-controls={`genrePanel${i + 1}`}>
+                <span class="genreNum">{twoDigit(i + 1)}</span>
+                <span class="genreName">{genre.name}</span>
+                <span class="genreMark" aria-hidden="true">+</span>
+              </button>
+              <div class="genrePanel" id={`genrePanel${i + 1}`}><div><div class="genreBlurb">{genre.blurb}</div></div></div>
+            </div>
+          ))
+        }
       </div>
-      <p class="supplyNote">Solo artists to full ensembles, matched to the brief — style, look, height and partnering experience.</p>
+      <p class="supplyNote">{copy.supply.note}</p>
     </div>
     <div class="supplyStill">
-      <img src="/uploads/3W8A3054.jpg" alt="Breaker in a one-arm freeze" loading="lazy" decoding="async" />
-      <div class="stillCaption">TAKE 3 ROSTER · BREAKING</div>
+      <img src="/uploads/3W8A3054.jpg" alt={copy.supply.imageAlt} loading="lazy" decoding="async" />
+      <div class="stillCaption">{copy.supply.imageCaption}</div>
     </div>
   </section>
 
@@ -94,15 +62,17 @@ import Base from '../layouts/Base.astro';
   <section class="bandDark" aria-labelledby="filmTvHead">
     <div class="split split--filmTv">
       <div class="splitStill">
-        <img src="/uploads/DSC01767.jpg" alt="Dancer spinning in leather coat" loading="lazy" decoding="async" />
+        <img src="/uploads/DSC01767.jpg" alt={copy.filmTv.imageAlt} loading="lazy" decoding="async" />
       </div>
       <div class="splitBody">
-        <div class="eyebrowMuted">FOR FILM &amp; TELEVISION</div>
-        <h2 id="filmTvHead" class="dispHead">Movement that holds the frame.</h2>
+        <div class="eyebrowMuted">{copy.filmTv.eyebrow}</div>
+        <h2 id="filmTvHead" class="dispHead">{copy.filmTv.heading}</h2>
         <div class="rows rows--dark">
-          <div class="row"><span class="rowLabel">PERIOD SEQUENCES</span><span>Court dances, balls and social dance, drilled to the era.</span></div>
-          <div class="row"><span class="rowLabel">MUSICAL NUMBERS</span><span>Featured and ensemble dancers who take choreography fast.</span></div>
-          <div class="row"><span class="rowLabel">BACKGROUND</span><span>Dancers in crowd who move with intent, not filler.</span></div>
+          {
+            copy.filmTv.rows.map((row) => (
+              <div class="row"><span class="rowLabel">{row.label}</span><span>{row.text}</span></div>
+            ))
+          }
         </div>
       </div>
     </div>
@@ -111,16 +81,18 @@ import Base from '../layouts/Base.astro';
   <!-- for commercial and brand: rows + still, mirrored -->
   <section class="split split--commercial" aria-labelledby="commercialHead">
     <div class="splitBody">
-      <div class="eyebrowAccent">FOR COMMERCIAL &amp; BRAND</div>
-      <h2 id="commercialHead" class="dispHead">From treatment to wrap.</h2>
+      <div class="eyebrowAccent">{copy.commercial.eyebrow}</div>
+      <h2 id="commercialHead" class="dispHead">{copy.commercial.heading}</h2>
       <div class="rows rows--light">
-        <div class="row"><span class="rowLabel">CAMPAIGN FILMS</span><span>Real movement quality on camera, cast to the brief.</span></div>
-        <div class="row"><span class="rowLabel">MUSIC PROMOS</span><span>Commercial, street and contemporary artists.</span></div>
-        <div class="row"><span class="rowLabel">LIVE &amp; EVENTS</span><span>Activations from a single featured dancer to a cast.</span></div>
+        {
+          copy.commercial.rows.map((row) => (
+            <div class="row"><span class="rowLabel">{row.label}</span><span>{row.text}</span></div>
+          ))
+        }
       </div>
     </div>
     <div class="splitStill">
-      <img src="/uploads/DSC09954(1)-dc08728a.jpg" alt="Dancer in heels, hair in motion" loading="lazy" decoding="async" />
+      <img src="/uploads/DSC09954(1)-dc08728a.jpg" alt={copy.commercial.imageAlt} loading="lazy" decoding="async" />
     </div>
   </section>
 
@@ -128,12 +100,12 @@ import Base from '../layouts/Base.astro';
   <section id="choreographers" class="choreo" aria-labelledby="choreoHead">
     <div class="choreoGrid">
       <div>
-        <div class="eyebrowAccent">WORKING WITH CHOREOGRAPHERS</div>
-        <h2 id="choreoHead" class="dispHead">We supply the talent. You keep the room.</h2>
+        <div class="eyebrowAccent">{copy.choreographers.eyebrow}</div>
+        <h2 id="choreoHead" class="dispHead">{copy.choreographers.heading}</h2>
       </div>
       <div class="choreoBody">
-        <p style="margin:0;">Send us the brief — style, numbers, dates and look — and we shortlist from the roster, hold availability and handle contracts, fees and on-the-day coordination. You audition and direct as you always would; we take the admin off your desk.</p>
-        <p style="margin:18px 0 0;">Our commission comes from the artist’s fee, not from the client or the choreographer. Booking through Take 3 costs your production nothing extra.</p>
+        <p style="margin:0;">{copy.choreographers.paragraph1}</p>
+        <p style="margin:18px 0 0;">{copy.choreographers.paragraph2}</p>
       </div>
     </div>
   </section>
@@ -142,70 +114,31 @@ import Base from '../layouts/Base.astro';
   <section id="quotes" class="quotes" aria-labelledby="quotesTitle" aria-roledescription="carousel">
     <div class="quotesInner">
       <div class="quotesHead">
-        <h2 class="quotesTitle" id="quotesTitle">Reviews</h2>
-        <div class="quotesKicker">WHAT CHOREOGRAPHERS SAY</div>
+        <h2 class="quotesTitle" id="quotesTitle">{copy.reviews.heading}</h2>
+        <div class="quotesKicker">{copy.reviews.kicker}</div>
       </div>
       <div class="revViewport">
         <div class="revTrack" id="revTrack">
-          <figure class="revItem" style="margin:0;">
-            <div class="revName">Jason
-Gilkinson</div>
-            <div class="revRole">Creative Director &amp; Choreographer</div>
-            <div class="revCredits">Strictly Come Dancing &amp; Burn The Floor</div>
-            <blockquote class="revQuote" style="margin:22px 0 0;">Take 3 Agency have turned out to be the creative connection I have long been looking for. Tyler and Chanel understand instantly not only the type of talent I’m looking for but always connect me to artists who really enhance the creative process. This type of instinct doesn’t come along very often in our industry.</blockquote>
-          </figure>
-          <figure class="revItem" style="margin:0;">
-            <div class="revName">James
-Cousins</div>
-            <div class="revRole">Choreographer</div>
-            <div class="revCredits">James Cousins Company</div>
-            <blockquote class="revQuote" style="margin:22px 0 0;">Working with Take3 makes the process of casting and hiring artists extremely smooth and efficient. Tyler and the team really understand what’s needed for my work and I was thrilled.</blockquote>
-          </figure>
-          <figure class="revItem" style="margin:0;">
-            <div class="revName">Shelley
-Maxwell</div>
-            <div class="revRole">Movement Director &amp; Choreographer</div>
-            <div class="revCredits"></div>
-            <blockquote class="revQuote" style="margin:22px 0 0;">Every brief I’ve sent has come back with dancers who were right on the first look. The shortlists are considered, the admin is invisible and the artists arrive prepared.</blockquote>
-          </figure>
-          <figure class="revItem" style="margin:0;">
-            <div class="revName">Adam
-Murray</div>
-            <div class="revRole">Choreographer</div>
-            <div class="revCredits"></div>
-            <blockquote class="revQuote" style="margin:22px 0 0;">On tight commercial turnarounds I need availability confirmed fast and no surprises on set. Take 3 deliver both, every time.</blockquote>
-          </figure>
-          <figure class="revItem" style="margin:0;">
-            <div class="revName">Corey
-Baker</div>
-            <div class="revRole">Choreographer</div>
-            <div class="revCredits">Corey Baker Dance</div>
-            <blockquote class="revQuote" style="margin:22px 0 0;">They understand dancers as artists, not numbers. The people they’ve put in my rooms have lifted the work — that’s the only measure that matters.</blockquote>
-          </figure>
-          <figure class="revItem" style="margin:0;">
-            <div class="revName">Sammy
-Murray</div>
-            <div class="revRole">Choreographer</div>
-            <div class="revCredits"></div>
-            <blockquote class="revQuote" style="margin:22px 0 0;">From first call to wrap, the communication is clear and the talent is exceptional. Take 3 have become my first call on every production.</blockquote>
-          </figure>
-          <figure class="revItem" style="margin:0;">
-            <div class="revName">Nathan
-Kim</div>
-            <div class="revRole">Choreographer</div>
-            <div class="revCredits"></div>
-            <blockquote class="revQuote" style="margin:22px 0 0;">The roster runs deep — whatever style the job calls for, they have artists who can do it properly, and the process is effortless.</blockquote>
-          </figure>
+          {
+            copy.reviews.items.map((item) => (
+              <figure class="revItem" style="margin:0;">
+                <div class="revName">{item.name}</div>
+                <div class="revRole">{item.role}</div>
+                <div class="revCredits">{item.credits}</div>
+                <blockquote class="revQuote" style="margin:22px 0 0;">{item.quote}</blockquote>
+              </figure>
+            ))
+          }
         </div>
       </div>
       <div class="revFoot">
         <div class="revCounter" id="revCounter" aria-live="polite">01 / 03</div>
         <div class="revDots" id="revDots"></div>
         <div class="revNav">
-          <button class="revArrow" type="button" id="revPrev" aria-label="Previous reviews" aria-controls="revTrack">
+          <button class="revArrow" type="button" id="revPrev" aria-label={copy.reviews.previousLabel} aria-controls="revTrack">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M15 4l-8 8 8 8"></path></svg>
           </button>
-          <button class="revArrow" type="button" id="revNext" aria-label="Next reviews" aria-controls="revTrack">
+          <button class="revArrow" type="button" id="revNext" aria-label={copy.reviews.nextLabel} aria-controls="revTrack">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 4l8 8-8 8"></path></svg>
           </button>
         </div>
@@ -214,29 +147,26 @@ Kim</div>
   </section>
 
   <!-- roster stills -->
-  <section class="roster" aria-label="Take 3 roster still">
-    <div class="rosterFrame"><img src="/uploads/3W8A9961.jpg" alt="Two dancers crouching in profile" loading="lazy" decoding="async" /></div>
+  <section class="roster" aria-label={copy.roster.sectionLabel}>
+    <div class="rosterFrame"><img src="/uploads/3W8A9961.jpg" alt={copy.roster.imageAlt} loading="lazy" decoding="async" /></div>
   </section>
 
   <!-- supplied dancers for -->
   <section id="credits" class="credits" aria-labelledby="creditsHead">
     <div class="creditsInner">
-      <div class="eyebrowAccent">CREDITS</div>
+      <div class="eyebrowAccent">{copy.credits.eyebrow}</div>
       <div class="creditsHead">
-        <h2 id="creditsHead" class="dispHead" style="margin:0; max-width:none; font-size:clamp(26px,3vw,40px);">We have supplied dancers for</h2>
-        <div class="creditsNote">Film · Television · Commercial · Music</div>
+        <h2 id="creditsHead" class="dispHead" style="margin:0; max-width:none; font-size:clamp(26px,3vw,40px);">{copy.credits.heading}</h2>
+        <div class="creditsNote">{copy.credits.note}</div>
       </div>
       <div class="creditsGrid">
-        <div class="creditCard"><div class="creditFrame"><img src="/uploads/upload_fba01478540cf4034ae0e81967110fe9_8190d99b-f0e0-4c79-b9ee-f47f42b6aeda.avif" alt="Spider-Man" loading="lazy" decoding="async" /></div><div class="creditLabel">SPIDER-MAN</div></div>
-        <div class="creditCard"><div class="creditFrame"><img src="/uploads/witcher_season_3_conclave_ball.avif" alt="The Witcher" loading="lazy" decoding="async" /></div><div class="creditLabel">THE WITCHER</div></div>
-        <div class="creditCard"><div class="creditFrame"><img src="/uploads/587814346_18330318445213259_7568090946314122385_n.jpg" alt="10 Dance" loading="lazy" decoding="async" /></div><div class="creditLabel">10 DANCE</div></div>
-        <div class="creditCard"><div class="creditFrame"><img src="/uploads/10-dance-takeuchi-ryoma-new-ig-caption-in-the-blackpool-an-v0-s6hgudm85x8g1.jpg" alt="10 Dance — Blackpool" loading="lazy" decoding="async" /></div><div class="creditLabel">10 DANCE</div></div>
-        <div class="creditCard"><div class="creditFrame"><img src="/uploads/planetdance1.png" alt="The Marvels" loading="lazy" decoding="async" /></div><div class="creditLabel">THE MARVELS</div></div>
-        <div class="creditCard"><div class="creditFrame"><img src="/uploads/one-character-hangs-from-a-ladder-while-the-others-dance-in-the-tornado-wheel-in-wicked-s-dancing-through-life-musical-number.avif" alt="Wicked" loading="lazy" decoding="async" /></div><div class="creditLabel">WICKED</div></div>
-        <div class="creditCard"><div class="creditFrame"><img src="/uploads/barbie-film-040623-1-bfbbf50d182642318a6285aef36e1552.jpg" alt="Barbie" loading="lazy" decoding="async" /></div><div class="creditLabel">BARBIE</div></div>
-        <div class="creditCard"><div class="creditFrame"><img src="/uploads/The-Six-Triple-Eight-Soundtrack-Netflix-Every-Song-One.jpg" alt="The Six Triple Eight" loading="lazy" decoding="async" /></div><div class="creditLabel">THE SIX TRIPLE EIGHT</div></div>
+        {
+          copy.credits.cards.map((card) => (
+            <div class="creditCard"><div class="creditFrame"><img src={card.image} alt={card.alt} loading="lazy" decoding="async" /></div><div class="creditLabel">{card.label}</div></div>
+          ))
+        }
       </div>
-      <div class="creditsFoot">A SELECTION OF PRODUCTIONS SUPPLIED SINCE 2019</div>
+      <div class="creditsFoot">{copy.credits.foot}</div>
     </div>
   </section>
 

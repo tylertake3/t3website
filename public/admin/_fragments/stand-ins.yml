@@ -1,0 +1,109 @@
+- name: page-stand-ins
+  label: Stand-ins page text
+  file: src/content/pages/stand-ins.json
+  description: All the wording on the Stand-ins & picture doubles page.
+  fields:
+    - name: meta
+      label: Search & sharing
+      widget: object
+      collapsed: true
+      fields:
+        - { name: title, label: Browser tab title, widget: string, hint: 'Shows in the browser tab and as the headline in Google results.' }
+        - { name: description, label: Google description, widget: text, hint: 'The grey summary under the title in Google results. Around 150–160 characters works best.' }
+        - { name: ogTitle, label: Title when shared on social, widget: string, hint: 'Used when someone pastes a link to this page into WhatsApp, Instagram, LinkedIn and so on.' }
+        - { name: ogDescription, label: Description when shared on social, widget: text, hint: 'The short line under the title on a shared link preview.' }
+        - { name: footerTitle, label: Footer headline, widget: string, hint: 'The big line above the contact details at the very bottom of the page.' }
+        - name: footerLinks
+          label: Footer buttons
+          widget: list
+          hint: 'The outlined buttons in the footer, pointing visitors to other pages. Reorder, add or remove them here.'
+          fields:
+            - { name: label, label: Button text, widget: string, hint: 'The arrow → is part of the text, so keep it if you want it.' }
+            - { name: href, label: Page it opens, widget: string, hint: 'A path on this site, such as /dancers.' }
+
+    - name: hero
+      label: Top of page
+      widget: object
+      hint: 'The dark opening banner with the page title over it.'
+      fields:
+        - { name: eyebrow, label: Small line above the title, widget: string, hint: 'Written in capitals.' }
+        - { name: title, label: Page title, widget: string, hint: 'The very large heading at the top. Always shown in capitals.' }
+        - { name: lede, label: Opening sentence, widget: text, hint: 'The larger sentence under the title.' }
+
+    - name: difference
+      label: The difference
+      widget: object
+      hint: 'The section explaining the six different double jobs.'
+      fields:
+        - { name: eyebrow, label: Small line above the heading, widget: string, hint: 'Written in capitals.' }
+        - { name: heading, label: Heading, widget: string, hint: 'The large heading. Always shown in capitals.' }
+        - name: cards
+          label: Job cards
+          widget: list
+          hint: 'Cards run three to a row on a wide screen. Add, reorder or remove them here.'
+          fields:
+            - { name: number, label: Card number, widget: string, hint: 'The small number above the card title, e.g. 01. Renumber the cards yourself if you reorder them.' }
+            - { name: title, label: Card title, widget: string }
+            - { name: body, label: Card text, widget: text }
+
+    - name: whyItMatters
+      label: Why it matters
+      widget: object
+      hint: 'The dark band with a photo on the left and three rows of text on the right.'
+      fields:
+        - { name: slotLabel, label: Placeholder caption, widget: string, hint: 'The faint text shown in the empty photo box until a photo is added.' }
+        - { name: eyebrow, label: Small line above the heading, widget: string, hint: 'Written in capitals.' }
+        - { name: heading, label: Heading, widget: string, hint: 'The large heading. Always shown in capitals.' }
+        - name: rows
+          label: Rows
+          widget: list
+          hint: 'The two-column rows in this band. Add, reorder or remove rows here.'
+          fields:
+            - { name: label, label: Left-hand label, widget: string, hint: 'The short label in the left column. Written in capitals.' }
+            - { name: text, label: Explanation, widget: text, hint: 'The sentence in the right column.' }
+
+    - name: matching
+      label: Matching
+      widget: object
+      hint: 'The section listing what doubles are matched on, with a photo on the right.'
+      fields:
+        - { name: eyebrow, label: Small line above the heading, widget: string, hint: 'Written in capitals.' }
+        - { name: heading, label: Heading, widget: string, hint: 'The large heading. Always shown in capitals.' }
+        - name: items
+          label: Matching list
+          widget: list
+          hint: 'The numbered list of things you match on. Add, reorder or remove entries here.'
+          fields:
+            - { name: number, label: Row number, widget: string, hint: 'The small number on the left, e.g. 01. Renumber the rows yourself if you reorder them.' }
+            - { name: name, label: What is matched, widget: string, hint: 'Shown in capitals on the page.' }
+        - { name: note, label: Note under the list, widget: text, hint: 'The small grey paragraph below the list.' }
+        - { name: slotLabel, label: Placeholder caption, widget: string, hint: 'The faint text shown in the empty photo box until a photo is added.' }
+
+    - name: commercial
+      label: For commercial & brand
+      widget: object
+      hint: 'The section about commercial and brand shoots.'
+      fields:
+        - { name: eyebrow, label: Small line above the heading, widget: string, hint: 'Written in capitals.' }
+        - { name: heading, label: Heading, widget: string, hint: 'The large heading. Always shown in capitals.' }
+        - name: rows
+          label: Rows
+          widget: list
+          hint: 'The two-column rows on the right of this section. Add, reorder or remove rows here.'
+          fields:
+            - { name: label, label: Left-hand label, widget: string, hint: 'The short label in the left column. Written in capitals.' }
+            - { name: text, label: Explanation, widget: text, hint: 'The sentence in the right column.' }
+
+    - name: why
+      label: Why book through Take 3
+      widget: object
+      hint: 'The three cards at the bottom of the page.'
+      fields:
+        - { name: heading, label: Section heading, widget: string, hint: 'The small coloured heading above the cards. Written in capitals.' }
+        - name: cards
+          label: Cards
+          widget: list
+          hint: 'Three cards fit the row neatly. Add, reorder or remove them here.'
+          fields:
+            - { name: title, label: Card title, widget: string }
+            - { name: body, label: Card text, widget: text }

@@ -1,0 +1,178 @@
+{
+  "meta": {
+    "title": "Dancers — Take 3 Agency",
+    "description": "Trained dancers for film, television, commercial and live — every style, screen-ready. Take 3 Agency supplies contemporary, commercial, period, ballroom, street and ensemble dancers, from solo artists to full ensembles.",
+    "ogTitle": "Dancers — Take 3 Agency",
+    "ogDescription": "Trained dancers for film, television, commercial and live — every style, screen-ready.",
+    "footerTitle": "Book dancers for your production",
+    "footerLinks": [
+      { "label": "SPACTS →", "href": "/spacts" },
+      { "label": "SPECIALISTS →", "href": "/stand-ins" }
+    ]
+  },
+  "hero": {
+    "eyebrow": "TAKE 3 AGENCY · DANCE",
+    "title": "DANCERS",
+    "lede": "Trained dancers for film, television, commercial and live — every style, screen-ready."
+  },
+  "supply": {
+    "heading": "WHAT WE SUPPLY",
+    "genres": [
+      {
+        "name": "Contemporary",
+        "blurb": "Technically trained contemporary artists for narrative and abstract movement — floor work, partnering and release-based styles, comfortable improvising to direction on set."
+      },
+      {
+        "name": "Commercial",
+        "blurb": "Sharp, camera-ready commercial dancers for promos, campaigns and live performance — fast with choreography and consistent take to take."
+      },
+      {
+        "name": "Period & historical",
+        "blurb": "Dancers drilled in court, regency, ragtime, swing and other era-specific social dance, styled and rehearsed to the production’s period."
+      },
+      {
+        "name": "Ballroom",
+        "blurb": "Competition-level ballroom and Latin couples — waltz, foxtrot, tango, quickstep and more — able to perform full routines or background social dancing."
+      },
+      {
+        "name": "Street",
+        "blurb": "Breakers, hip hop, popping, locking and krump artists from the UK battle scene, with the power moves and freestyle depth to hold a featured frame."
+      },
+      {
+        "name": "Choreographed ensemble work",
+        "blurb": "Full ensembles cast to move as one — musical numbers, ceremonies and crowd choreography, matched for height, look and partnering experience."
+      }
+    ],
+    "note": "Solo artists to full ensembles, matched to the brief — style, look, height and partnering experience.",
+    "imageAlt": "Breaker in a one-arm freeze",
+    "imageCaption": "TAKE 3 ROSTER · BREAKING"
+  },
+  "filmTv": {
+    "eyebrow": "FOR FILM & TELEVISION",
+    "heading": "Movement that holds the frame.",
+    "imageAlt": "Dancer spinning in leather coat",
+    "rows": [
+      { "label": "PERIOD SEQUENCES", "text": "Court dances, balls and social dance, drilled to the era." },
+      { "label": "MUSICAL NUMBERS", "text": "Featured and ensemble dancers who take choreography fast." },
+      { "label": "BACKGROUND", "text": "Dancers in crowd who move with intent, not filler." }
+    ]
+  },
+  "commercial": {
+    "eyebrow": "FOR COMMERCIAL & BRAND",
+    "heading": "From treatment to wrap.",
+    "imageAlt": "Dancer in heels, hair in motion",
+    "rows": [
+      { "label": "CAMPAIGN FILMS", "text": "Real movement quality on camera, cast to the brief." },
+      { "label": "MUSIC PROMOS", "text": "Commercial, street and contemporary artists." },
+      { "label": "LIVE & EVENTS", "text": "Activations from a single featured dancer to a cast." }
+    ]
+  },
+  "choreographers": {
+    "eyebrow": "WORKING WITH CHOREOGRAPHERS",
+    "heading": "We supply the talent. You keep the room.",
+    "paragraph1": "Send us the brief — style, numbers, dates and look — and we shortlist from the roster, hold availability and handle contracts, fees and on-the-day coordination. You audition and direct as you always would; we take the admin off your desk.",
+    "paragraph2": "Our commission comes from the artist’s fee, not from the client or the choreographer. Booking through Take 3 costs your production nothing extra."
+  },
+  "reviews": {
+    "heading": "Reviews",
+    "kicker": "WHAT CHOREOGRAPHERS SAY",
+    "previousLabel": "Previous reviews",
+    "nextLabel": "Next reviews",
+    "items": [
+      {
+        "name": "Jason\nGilkinson",
+        "role": "Creative Director & Choreographer",
+        "credits": "Strictly Come Dancing & Burn The Floor",
+        "quote": "Take 3 Agency have turned out to be the creative connection I have long been looking for. Tyler and Chanel understand instantly not only the type of talent I’m looking for but always connect me to artists who really enhance the creative process. This type of instinct doesn’t come along very often in our industry."
+      },
+      {
+        "name": "James\nCousins",
+        "role": "Choreographer",
+        "credits": "James Cousins Company",
+        "quote": "Working with Take3 makes the process of casting and hiring artists extremely smooth and efficient. Tyler and the team really understand what’s needed for my work and I was thrilled."
+      },
+      {
+        "name": "Shelley\nMaxwell",
+        "role": "Movement Director & Choreographer",
+        "credits": "",
+        "quote": "Every brief I’ve sent has come back with dancers who were right on the first look. The shortlists are considered, the admin is invisible and the artists arrive prepared."
+      },
+      {
+        "name": "Adam\nMurray",
+        "role": "Choreographer",
+        "credits": "",
+        "quote": "On tight commercial turnarounds I need availability confirmed fast and no surprises on set. Take 3 deliver both, every time."
+      },
+      {
+        "name": "Corey\nBaker",
+        "role": "Choreographer",
+        "credits": "Corey Baker Dance",
+        "quote": "They understand dancers as artists, not numbers. The people they’ve put in my rooms have lifted the work — that’s the only measure that matters."
+      },
+      {
+        "name": "Sammy\nMurray",
+        "role": "Choreographer",
+        "credits": "",
+        "quote": "From first call to wrap, the communication is clear and the talent is exceptional. Take 3 have become my first call on every production."
+      },
+      {
+        "name": "Nathan\nKim",
+        "role": "Choreographer",
+        "credits": "",
+        "quote": "The roster runs deep — whatever style the job calls for, they have artists who can do it properly, and the process is effortless."
+      }
+    ]
+  },
+  "roster": {
+    "sectionLabel": "Take 3 roster still",
+    "imageAlt": "Two dancers crouching in profile"
+  },
+  "credits": {
+    "eyebrow": "CREDITS",
+    "heading": "We have supplied dancers for",
+    "note": "Film · Television · Commercial · Music",
+    "cards": [
+      {
+        "label": "SPIDER-MAN",
+        "alt": "Spider-Man",
+        "image": "/uploads/upload_fba01478540cf4034ae0e81967110fe9_8190d99b-f0e0-4c79-b9ee-f47f42b6aeda.avif"
+      },
+      {
+        "label": "THE WITCHER",
+        "alt": "The Witcher",
+        "image": "/uploads/witcher_season_3_conclave_ball.avif"
+      },
+      {
+        "label": "10 DANCE",
+        "alt": "10 Dance",
+        "image": "/uploads/587814346_18330318445213259_7568090946314122385_n.jpg"
+      },
+      {
+        "label": "10 DANCE",
+        "alt": "10 Dance — Blackpool",
+        "image": "/uploads/10-dance-takeuchi-ryoma-new-ig-caption-in-the-blackpool-an-v0-s6hgudm85x8g1.jpg"
+      },
+      {
+        "label": "THE MARVELS",
+        "alt": "The Marvels",
+        "image": "/uploads/planetdance1.png"
+      },
+      {
+        "label": "WICKED",
+        "alt": "Wicked",
+        "image": "/uploads/one-character-hangs-from-a-ladder-while-the-others-dance-in-the-tornado-wheel-in-wicked-s-dancing-through-life-musical-number.avif"
+      },
+      {
+        "label": "BARBIE",
+        "alt": "Barbie",
+        "image": "/uploads/barbie-film-040623-1-bfbbf50d182642318a6285aef36e1552.jpg"
+      },
+      {
+        "label": "THE SIX TRIPLE EIGHT",
+        "alt": "The Six Triple Eight",
+        "image": "/uploads/The-Six-Triple-Eight-Soundtrack-Netflix-Every-Song-One.jpg"
+      }
+    ],
+    "foot": "A SELECTION OF PRODUCTIONS SUPPLIED SINCE 2019"
+  }
+}

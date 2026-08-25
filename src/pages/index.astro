@@ -5,6 +5,7 @@ import { contactHref } from '../data/site';
 import heroData from '../data/hero.json';
 import categoryData from '../data/categories.json';
 import clientData from '../data/clients.json';
+import copy from '../content/pages/index.json';
 
 const heroSlides = heroData.slides;
 const categories = categoryData.categories;
@@ -23,10 +24,10 @@ const posterCount = 15;
 ---
 
 <Base
-  title="Take 3 Agency — Specialist Talent & SPACT Agency"
-  description="Take 3 is the UK's largest specialist talent agency. We supply dancers, fighters, SPACTs, models and specialist performers to film, television and commercial productions — 500+ productions since 2019."
-  ogTitle="Take 3 Agency — Specialist Talent & SPACT Agency"
-  ogDescription="The artists behind the action. Dancers, fighters, SPACTs, models and specialist performers for film, television and commercial productions."
+  title={copy.meta.title}
+  description={copy.meta.description}
+  ogTitle={copy.meta.ogTitle}
+  ogDescription={copy.meta.ogDescription}
   ogImage="/uploads/the-odyssey-beach-horse.jpeg"
 >
   <!-- full-bleed hero -->
@@ -44,21 +45,20 @@ const posterCount = 15;
     }
     <div class="heroScrim"></div>
     <div class="heroCopy">
-      <p class="heroKicker">SPECIALIST TALENT &amp; SPACT AGENCY</p>
-      <h1 class="heroTitle">{'The artists\nbehind the\naction.'}</h1>
+      <p class="heroKicker">{copy.hero.kicker}</p>
+      <h1 class="heroTitle">{copy.hero.title}</h1>
     </div>
-    <p class="heroProd">AS SEEN ON<span class="heroProdName" id="heroProd">{heroSlides[0]?.title}</span></p>
+    <p class="heroProd">{copy.hero.seenOnLabel}<span class="heroProdName" id="heroProd">{heroSlides[0]?.title}</span></p>
     <div class="heroStrip">
       <div>
-        <span>DANCERS</span><span class="sep">/</span>
-        <span>FIGHTERS</span><span class="sep">/</span>
-        <span class="nw">STUNT PERFORMERS</span><span class="sep">/</span>
-        <span>SPACTS</span><span class="sep">/</span>
-        <span>MODELS</span><span class="sep">/</span>
-        <span class="nw">CIRCUS ARTISTS</span><span class="sep">/</span>
-        <span>MILITARY</span><span class="sep">/</span>
-        <span>GYMNASTS</span><span class="sep">/</span>
-        <span>ATHLETES</span>
+        {
+          copy.hero.strip.map((word, i) => (
+            <>
+              <span class={word.includes(' ') ? 'nw' : undefined}>{word}</span>
+              {i < copy.hero.strip.length - 1 && <span class="sep">/</span>}
+            </>
+          ))
+        }
       </div>
     </div>
   </section>
@@ -67,33 +67,27 @@ const posterCount = 15;
   <div class="aboutWrap">
     <section class="about" id="about" aria-labelledby="aboutTitle">
       <div>
-        <p class="kicker">WHO WE ARE</p>
-        <h2 class="aboutTitle" id="aboutTitle">The UK's largest specialist talent agency.</h2>
+        <p class="kicker">{copy.about.kicker}</p>
+        <h2 class="aboutTitle" id="aboutTitle">{copy.about.heading}</h2>
       </div>
       <div>
         <div class="aboutBody">
           <p>
-            We supply dancers, fighters, <a href="/what-is-a-spact">SPACTs</a>, models and specialist performers to
-            film, television and commercial productions.
+            {copy.about.paragraph1.before}<a href="/what-is-a-spact">{copy.about.paragraph1.linkText}</a>{copy.about.paragraph1.after}
           </p>
           <p>
-            Every artist on our books has been assessed and interviewed by the Take 3 team before joining. When we send
-            talent to set, they are exactly who we say they are &mdash; the best of the best.
+            {copy.about.paragraph2}
           </p>
         </div>
         <div class="stats">
-          <div>
-            <div class="statNum">500+</div>
-            <div class="statLabel">PRODUCTIONS SUPPLIED</div>
-          </div>
-          <div>
-            <div class="statNum">1,500+</div>
-            <div class="statLabel">ARTISTS</div>
-          </div>
-          <div>
-            <div class="statNum">2019</div>
-            <div class="statLabel">TRUSTED SINCE</div>
-          </div>
+          {
+            copy.about.stats.map((stat) => (
+              <div>
+                <div class="statNum">{stat.number}</div>
+                <div class="statLabel">{stat.label}</div>
+              </div>
+            ))
+          }
         </div>
       </div>
     </section>
@@ -101,8 +95,8 @@ const posterCount = 15;
     <!-- what we supply -->
     <section class="supply" id="supply" aria-labelledby="supplyTitle">
       <div class="sectionHead">
-        <h2 class="sectionTitle" id="supplyTitle">What we supply</h2>
-        <p class="kicker">THE CORE ROSTER</p>
+        <h2 class="sectionTitle" id="supplyTitle">{copy.supply.heading}</h2>
+        <p class="kicker">{copy.supply.kicker}</p>
       </div>
       <div class="supplyScroll" id="supplyScroll">
         {
@@ -118,7 +112,7 @@ const posterCount = 15;
               <div class="supplyMeta">
                 <h3 class="supplyName">{cat.name}</h3>
                 <a class="supplyView" href={cat.href} tabindex={i >= categories.length ? -1 : undefined}>
-                  VIEW <span aria-hidden="true">&rarr;</span>
+                  {copy.supply.viewLabel} <span aria-hidden="true">&rarr;</span>
                 </a>
               </div>
             </div>
@@ -132,8 +126,8 @@ const posterCount = 15;
   <section class="reviews" id="reviews" aria-labelledby="reviewsTitle">
     <div class="reviewsInner">
       <div class="reviewsHead">
-        <h2 class="sectionTitle" id="reviewsTitle">Reviews</h2>
-        <p class="sub">WHAT PRODUCTIONS SAY</p>
+        <h2 class="sectionTitle" id="reviewsTitle">{copy.reviews.heading}</h2>
+        <p class="sub">{copy.reviews.kicker}</p>
       </div>
       <div class="revViewport" id="revViewport">
         <div class="revTrack" id="revTrack">
@@ -167,12 +161,11 @@ const posterCount = 15;
   <!-- who we've supplied: client logos -->
   <section class="clients" id="clients" aria-labelledby="clientsTitle">
     <div class="sectionHead">
-      <h2 class="sectionTitle" id="clientsTitle">Who we've supplied</h2>
-      <p class="kicker">FILM &middot; TV &middot; ADVERTISING</p>
+      <h2 class="sectionTitle" id="clientsTitle">{copy.clients.heading}</h2>
+      <p class="kicker">{copy.clients.kicker}</p>
     </div>
     <p class="clientsBody">
-      The companies we've supplied artists for &mdash; seventy-five of the world's biggest names across film, TV and
-      advertising.
+      {copy.clients.body}
     </p>
     <div class="logoStack" id="logoStack">
       {
@@ -199,17 +192,17 @@ const posterCount = 15;
   <!-- our credits: poster grid -->
   <section class="credits" aria-labelledby="creditsTitle">
     <div class="sectionHead">
-      <h2 class="sectionTitle" id="creditsTitle">Our credits</h2>
+      <h2 class="sectionTitle" id="creditsTitle">{copy.credits.heading}</h2>
       <div class="creditsCount">
-        <div class="creditsCountNum">500+</div>
-        <div class="creditsCountLabel">PRODUCTIONS SUPPLIED SINCE 2019</div>
+        <div class="creditsCountNum">{copy.credits.countNumber}</div>
+        <div class="creditsCountLabel">{copy.credits.countLabel}</div>
       </div>
     </div>
     <div class="posterGrid">
       {
         Array.from({ length: posterCount }).map(() => (
           <div class="slot posterSlot" style="aspect-ratio:2/3;">
-            <span class="slotLabel">Poster</span>
+            <span class="slotLabel">{copy.credits.posterPlaceholder}</span>
           </div>
         ))
       }
@@ -275,8 +268,13 @@ const posterCount = 15;
         el.addEventListener('click', function (e) {
           if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; }
         }, true);
+        var drift = 0;
         function step() {
-          if (!hover && !dragging && el.scrollWidth > el.clientWidth) el.scrollLeft += 0.4;
+          if (!hover && !dragging && el.scrollWidth > el.clientWidth) {
+            /* browsers round sub-pixel scrollLeft back to 0, so bank the fraction */
+            drift += 0.4;
+            if (drift >= 1) { el.scrollLeft += Math.floor(drift); drift -= Math.floor(drift); }
+          }
           var half = el.scrollWidth / 2;
           if (half > el.clientWidth && el.scrollLeft >= half) el.scrollLeft -= half;
           raf = window.requestAnimationFrame(step);

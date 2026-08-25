@@ -1,0 +1,59 @@
+{
+  "meta": {
+    "title": "Take 3 Agency — Specialist Talent & SPACT Agency",
+    "description": "Take 3 is the UK's largest specialist talent agency. We supply dancers, fighters, SPACTs, models and specialist performers to film, television and commercial productions — 500+ productions since 2019.",
+    "ogTitle": "Take 3 Agency — Specialist Talent & SPACT Agency",
+    "ogDescription": "The artists behind the action. Dancers, fighters, SPACTs, models and specialist performers for film, television and commercial productions."
+  },
+  "hero": {
+    "kicker": "SPECIALIST TALENT & SPACT AGENCY",
+    "title": "The artists\nbehind the\naction.",
+    "seenOnLabel": "AS SEEN ON",
+    "strip": [
+      "DANCERS",
+      "FIGHTERS",
+      "STUNT PERFORMERS",
+      "SPACTS",
+      "MODELS",
+      "CIRCUS ARTISTS",
+      "MILITARY",
+      "GYMNASTS",
+      "ATHLETES"
+    ]
+  },
+  "about": {
+    "kicker": "WHO WE ARE",
+    "heading": "The UK's largest specialist talent agency.",
+    "paragraph1": {
+      "before": "We supply dancers, fighters, ",
+      "linkText": "SPACTs",
+      "after": ", models and specialist performers to film, television and commercial productions."
+    },
+    "paragraph2": "Every artist on our books has been assessed and interviewed by the Take 3 team before joining. When we send talent to set, they are exactly who we say they are — the best of the best.",
+    "stats": [
+      { "number": "500+", "label": "PRODUCTIONS SUPPLIED" },
+      { "number": "1,500+", "label": "ARTISTS" },
+      { "number": "2019", "label": "TRUSTED SINCE" }
+    ]
+  },
+  "supply": {
+    "heading": "What we supply",
+    "kicker": "THE CORE ROSTER",
+    "viewLabel": "VIEW"
+  },
+  "reviews": {
+    "heading": "Reviews",
+    "kicker": "WHAT PRODUCTIONS SAY"
+  },
+  "clients": {
+    "heading": "Who we've supplied",
+    "kicker": "FILM · TV · ADVERTISING",
+    "body": "The companies we've supplied artists for — seventy-five of the world's biggest names across film, TV and advertising."
+  },
+  "credits": {
+    "heading": "Our credits",
+    "countNumber": "500+",
+    "countLabel": "PRODUCTIONS SUPPLIED SINCE 2019",
+    "posterPlaceholder": "Poster"
+  }
+}
