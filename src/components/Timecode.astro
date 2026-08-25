@@ -1,0 +1,91 @@
+---
+import { site } from '../data/site';
+---
+
+{/* Decorative production detail: clapperboard, city, running timecode.
+    aria-hidden because a screen reader would otherwise announce it constantly. */}
+<div class="slate" aria-hidden="true">
+  <svg class="slateIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" focusable="false">
+    <rect x="2.5" y="9" width="19" height="12" rx="1"></rect>
+    <path d="M2.9 9 5.4 4.2 22 6.1l-.6 2.9"></path>
+    <path d="m9.1 4.6-2 4.3M13.7 5.1l-2 4.3M18.3 5.6l-2 4.3"></path>
+  </svg>
+  <span class="slateCity">{site.city}</span>
+  <span class="slateTime" id="slateTime" data-timezone={site.timeZone}>00:00:00:00</span>
+</div>
+
+<script>
+  /* Live HH:MM:SS:FF timecode at 24fps on the agency's clock, not the
+     visitor's. Pauses in a background tab; falls back to a once-a-second
+     readout when the visitor has asked for reduced motion. */
+  const FPS = 24;
+  const el = document.getElementById('slateTime');
+
+  if (el) {
+    const timeZone = el.dataset.timezone || 'Europe/London';
+    const formatter = new Intl.DateTimeFormat('en-GB', {
+      timeZone,
+      hour12: false,
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const pad = (n: number) => String(n).padStart(2, '0');
+
+    let clock = '00:00:00';
+    let lastSecond = -1;
+    let frameId: number | null = null;
+    let intervalId: number | null = null;
+
+    /* Intl formatting is the expensive part, so it only runs when the second
+       actually rolls over; frames come from the millisecond remainder. */
+    const readClock = (now: Date) => {
+      const second = Math.floor(now.getTime() / 1000);
+      if (second !== lastSecond) {
+        lastSecond = second;
+        clock = formatter.format(now).replace(/^24:/, '00:');
+      }
+      return clock;
+    };
+
+    const paintLive = () => {
+      const now = new Date();
+      const frames = Math.floor((now.getMilliseconds() / 1000) * FPS);
+      el.textContent = `${readClock(now)}:${pad(frames)}`;
+      frameId = window.requestAnimationFrame(paintLive);
+    };
+
+    const paintStill = () => {
+      const now = new Date();
+      el.textContent = `${readClock(now)}:${pad(0)}`;
+    };
+
+    const stop = () => {
+      if (frameId !== null) window.cancelAnimationFrame(frameId);
+      if (intervalId !== null) window.clearInterval(intervalId);
+      frameId = null;
+      intervalId = null;
+    };
+
+    const start = () => {
+      stop();
+      if (document.hidden) return;
+      lastSecond = -1;
+      if (reduce.matches) {
+        paintStill();
+        intervalId = window.setInterval(paintStill, 1000);
+      } else {
+        frameId = window.requestAnimationFrame(paintLive);
+      }
+    };
+
+    document.addEventListener('visibilitychange', start);
+    reduce.addEventListener('change', start);
+    /* leave nothing running behind us, including across a client-side swap */
+    window.addEventListener('pagehide', stop);
+    document.addEventListener('astro:before-swap', stop);
+    start();
+  }
+</script>

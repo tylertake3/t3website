@@ -1,5 +1,5 @@
-:root { --bg:#161618; --ink:#f4f2ee; --sub:#c2beb6; --hair:#35353a; --tileBg:#232327; --accent:#c65b40; --heroBg:#101012; --heroInk:#f4f2ee; --heroInkSoft:rgba(244,242,238,0.7); --heroInkFaint:rgba(244,242,238,0.35); --heroLine:rgba(244,242,238,0.25); --heroBtnBorder:rgba(244,242,238,0.5); --heroScrim:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.18) 30%, rgba(20,20,22,0.18) 55%, rgba(20,20,22,0.8) 100%); --logoFilter:invert(1); --muted:#96928c; --revGap:56px; }
-[data-theme="light"] { --bg:#f4f2ee; --ink:#1a1a1c; --sub:#3a3632; --hair:#d9d6d1; --tileBg:#e2e0dc; --accent:#5d1f16; --heroBg:#101012; --heroInk:#f4f2ee; --heroInkSoft:rgba(244,242,238,0.7); --heroInkFaint:rgba(244,242,238,0.35); --heroLine:rgba(244,242,238,0.25); --heroBtnBorder:rgba(244,242,238,0.5); --heroScrim:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.18) 30%, rgba(20,20,22,0.18) 55%, rgba(20,20,22,0.8) 100%); --logoFilter:none; }
+:root { --bg:#161618; --ink:#f4f2ee; --sub:#c2beb6; --hair:#35353a; --tileBg:#232327; --accent:#d4704f; --heroBg:#101012; --heroInk:#f4f2ee; --heroInkSoft:rgba(244,242,238,0.7); --heroInkFaint:rgba(244,242,238,0.35); --heroLine:rgba(244,242,238,0.25); --heroBtnBorder:rgba(244,242,238,0.5); --heroScrim:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.18) 30%, rgba(20,20,22,0.18) 55%, rgba(20,20,22,0.8) 100%); --logoFilter:invert(1); --muted:#96928c; --ctrlBorder:#6f6f77; --revGap:56px; }
+[data-theme="light"] { --bg:#f4f2ee; --ink:#1a1a1c; --sub:#3a3632; --hair:#d9d6d1; --tileBg:#e2e0dc; --accent:#5d1f16; --muted:#605d57; --heroBg:#101012; --heroInk:#f4f2ee; --heroInkSoft:rgba(244,242,238,0.7); --heroInkFaint:rgba(244,242,238,0.35); --heroLine:rgba(244,242,238,0.25); --heroBtnBorder:rgba(244,242,238,0.5); --heroScrim:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.18) 30%, rgba(20,20,22,0.18) 55%, rgba(20,20,22,0.8) 100%); --logoFilter:none; --ctrlBorder:#8a8781; }
 * { box-sizing:border-box; }
 html, body { margin:0; background:#161618; font-family:'Jost', sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
 html { scroll-padding-top:84px; }
@@ -15,25 +15,95 @@ h1, h2, h3 { margin:0; font-weight:400; }
 /* focus visibility for keyboard users */
 a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
 .hero a:focus-visible, .nav a:focus-visible, .nav button:focus-visible { outline:2px solid var(--heroInk); outline-offset:3px; }
+/* the header sits on the page background (not a dark hero) on navOverDark={false}
+   pages — in light theme a cream ring would be invisible there. */
+[data-theme="light"] .navOnLight a:focus-visible,
+[data-theme="light"] .navOnLight button:focus-visible { outline-color:var(--ink); }
+/* the reviews band is dark in both themes, so its ring must stay light */
+.reviews a:focus-visible, .reviews button:focus-visible, .reviews [tabindex]:focus-visible { outline-color:#f4f2ee; }
 
 .skip { position:absolute; left:-9999px; top:0; z-index:200; background:var(--bg); color:var(--ink); padding:12px 18px; font-size:13px; letter-spacing:2px; border:1px solid var(--hair); }
 .skip:focus { left:12px; top:12px; }
 
 .page { background:var(--bg); color:var(--ink); min-height:100vh; transition:background 0.5s ease, color 0.5s ease; }
 
-/* ---------- nav ---------- */
-.nav { position:fixed; top:0; left:0; right:0; z-index:50; display:flex; justify-content:space-between; align-items:center; padding:16px 60px; background:rgba(22,22,24,0); }
-.navLogo { height:110px; width:auto; filter:invert(1); transform-origin:left center; }
-.navRight { display:flex; align-items:center; gap:28px; font-size:13px; letter-spacing:2px; white-space:nowrap; }
-.navLinks { display:flex; align-items:center; gap:28px; }
+/* ---------- header ---------- */
+.nav { position:fixed; top:0; left:0; right:0; z-index:120; display:flex; justify-content:space-between; align-items:center; gap:24px; padding:16px 60px; background:rgba(22,22,24,0); }
+/* hero photography is unpredictable, so the header carries its own gradient
+   to keep the controls above 4.5:1 whatever sits behind them */
+.nav::before { content:''; position:absolute; inset:0; z-index:-1; pointer-events:none; background:linear-gradient(180deg, rgba(14,14,16,0.82) 0%, rgba(14,14,16,0.5) 60%, rgba(14,14,16,0) 100%); transition:opacity 0.4s ease; }
+.nav.navOnLight::before, .nav.is-menuOpen::before { opacity:0; }
+.navLeft { display:flex; align-items:center; gap:26px; min-width:0; }
+.navLogoLink { flex:none; }
+.navLogo { height:110px; width:auto; flex:none; filter:invert(1); transform-origin:left center; }
+.navRight { display:flex; align-items:center; gap:20px; font-size:13px; letter-spacing:2px; white-space:nowrap; }
 .navRight a { color:var(--heroInk); }
-.themeBtn { cursor:pointer; width:36px; height:36px; border:1px solid var(--heroBtnBorder); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--heroInk); background:none; padding:0; }
+
+/* timecode slate — a production detail, not a control */
+.slate { display:flex; align-items:center; gap:10px; color:var(--heroInkSoft); font-size:11px; letter-spacing:2px; }
+.slateIcon { flex:none; }
+.slateCity { font-weight:400; }
+.slateTime { font-family:ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; font-variant-numeric:tabular-nums; font-feature-settings:'tnum' 1; letter-spacing:1px; width:11ch; text-align:left; color:var(--heroInk); }
+
+.themeBtn { cursor:pointer; width:36px; height:36px; border:1px solid var(--heroInkSoft); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--heroInk); background:none; padding:0; }
 .themeBtn:hover { border-color:var(--heroInk); }
-.navCta { border:1px solid var(--heroBtnBorder); padding:9px 18px; letter-spacing:2px; color:var(--heroInk); }
+.navCta { border:1px solid var(--heroInkSoft); padding:9px 18px; letter-spacing:2px; color:var(--heroInk); }
 .navCta:hover { border-color:var(--heroInk); color:var(--heroInk); }
-.navToggle { display:none; background:none; border:0; padding:8px; cursor:pointer; width:40px; height:36px; flex-direction:column; justify-content:center; gap:5px; }
-.navToggle span { display:block; width:24px; height:1.5px; background:var(--heroInk); }
-.navPanel { display:none; }
+
+/* menu button — bars morph into a cross when the overlay is open */
+.menuBtn { display:flex; align-items:center; gap:10px; background:none; border:0; padding:8px 0 8px 8px; cursor:pointer; color:var(--heroInk); font:inherit; font-size:13px; letter-spacing:2px; }
+.menuBtnBars { display:flex; flex-direction:column; justify-content:center; gap:5px; width:24px; height:24px; padding:5px 0; }
+.menuBtnBars span { display:block; height:1.5px; width:100%; background:currentColor; transition:transform 0.3s cubic-bezier(0.3, 0, 0.2, 1), opacity 0.2s ease; }
+.menuBtn[aria-expanded="true"] .menuBtnBars span:first-child { transform:translateY(3.25px) rotate(45deg); }
+.menuBtn[aria-expanded="true"] .menuBtnBars span:last-child { transform:translateY(-3.25px) rotate(-45deg); }
+.menuBtnLabel { min-width:5ch; text-align:left; }
+
+/* ---------- overlay menu ---------- */
+.menu:focus { outline:none; }
+.menu { position:fixed; inset:0; z-index:100; background:var(--bg); overflow-y:auto; opacity:0; transition:opacity 0.35s ease; }
+.menu.is-open { opacity:1; }
+.menuInner { max-width:1280px; margin:0 auto; padding:190px 60px 80px; display:grid; grid-template-columns:1.5fr 1fr; gap:72px; align-items:start; }
+.menuList { list-style:none; margin:0; padding:0; }
+.menuItem + .menuItem { margin-top:6px; }
+.menuLink { display:inline-block; font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(30px, 4vw, 58px); font-weight:400; letter-spacing:2px; line-height:1.12; color:var(--ink); }
+.menuLink:hover { color:var(--accent); }
+.menuLinkPlain { color:var(--muted); }
+.menuLinkPlain:hover { color:var(--muted); }
+.menuLink[aria-current="page"] { color:var(--accent); }
+.menuSubList { list-style:none; margin:6px 0 18px; padding:0 0 0 clamp(16px, 2.4vw, 34px); border-left:1px solid var(--ctrlBorder); }
+.menuSubLink { display:block; padding:7px 0; font-size:clamp(14px, 1.2vw, 17px); letter-spacing:2px; text-transform:uppercase; color:var(--sub); }
+.menuSubLink:hover, .menuSubLink[aria-current="page"] { color:var(--accent); }
+
+.menuAside { display:flex; flex-direction:column; gap:44px; padding-top:14px; }
+.menuAsideLabel { font-size:11px; letter-spacing:3px; color:var(--muted); }
+.menuPerformers { border-top:1px solid var(--hair); padding-top:22px; }
+.menuJoinLink { display:inline-block; margin-top:14px; font-size:clamp(19px, 1.8vw, 24px); letter-spacing:2px; text-transform:uppercase; color:var(--ink); text-decoration:underline; text-underline-offset:4px; }
+.menuJoinLink:hover, .menuJoinLink[aria-current="page"] { color:var(--accent); }
+.menuJoinNote { margin-top:12px; font-size:15px; font-weight:300; line-height:1.65; color:var(--sub); max-width:38ch; text-wrap:pretty; }
+.menuContact { border-top:1px solid var(--hair); padding-top:22px; }
+.menuContactLine { margin-top:12px; font-size:16px; font-weight:300; }
+.menuContactLine a { color:var(--sub); text-decoration:underline; text-underline-offset:3px; }
+.menuContactLine a:hover { color:var(--ink); }
+
+/* while the overlay is open the header sits above it, so its controls take
+   the page's own colours rather than the hero's */
+.nav.is-menuOpen .navRight a,
+.nav.is-menuOpen .themeBtn,
+.nav.is-menuOpen .menuBtn { color:var(--ink); }
+.nav.is-menuOpen .navCta,
+.nav.is-menuOpen .themeBtn { border-color:var(--ctrlBorder); }
+.nav.is-menuOpen .navCta:hover,
+.nav.is-menuOpen .themeBtn:hover { border-color:var(--ink); }
+.nav.is-menuOpen .navLogo { filter:var(--logoFilter); }
+.nav.is-menuOpen .slate { color:var(--muted); }
+.nav.is-menuOpen .slateTime { color:var(--sub); }
+.nav.is-menuOpen a:focus-visible,
+.nav.is-menuOpen button:focus-visible,
+.menu a:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+
+/* position:fixed with a top offset keeps the page where it was while the
+   overlay is open, instead of jumping to the top behind it */
+body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 
 /* ---------- hero ---------- */
 .hero { position:relative; min-height:78vh; background:var(--heroBg); overflow:hidden; transition:background 0.5s ease; }
@@ -56,6 +126,8 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline:2px so
 .aboutTitle { font-family:'Jost', sans-serif; text-transform:uppercase; font-size:clamp(30px,3.2vw,46px); font-weight:400; letter-spacing:1px; line-height:1.18; margin-top:16px; text-wrap:pretty; }
 .aboutBody { font-size:18px; font-weight:300; line-height:1.75; color:var(--sub); text-wrap:pretty; }
 .aboutBody p + p { margin-top:18px; }
+/* prose links must not rely on colour alone (WCAG 1.4.1) */
+.aboutBody a, .clientsBody a, .footerIntro a { text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1px; }
 .stats { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:32px; margin-top:44px; border-top:1px solid var(--hair); padding-top:28px; }
 .statNum { font-size:clamp(30px,3vw,44px); font-weight:300; letter-spacing:1px; line-height:1; color:var(--accent); }
 .statLabel { font-size:12px; letter-spacing:2px; color:var(--muted); margin-top:10px; }
@@ -92,9 +164,11 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline:2px so
 .revQuote { font-size:17px; font-weight:300; line-height:1.8; color:#c7c3bd; margin:22px 0 0; white-space:pre-line; text-wrap:pretty; }
 .revFoot { display:flex; justify-content:space-between; align-items:center; margin-top:36px; border-top:1px solid #3a3a3e; padding-top:20px; gap:16px; }
 .revCount { font-size:13px; letter-spacing:3px; color:var(--muted); }
-.revDots { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:14px; max-width:100%; }
-.revDot { width:9px; height:9px; border-radius:50%; cursor:pointer; background:rgba(244,242,238,0.35); border:0; padding:0; }
-.revDot[aria-current="true"] { background:#f4f2ee; }
+.revDots { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:0; max-width:100%; }
+/* 9px visual dot inside a 24x24 hit area (WCAG 2.2 target size) — the padding
+   carries the target, background-clip keeps the painted dot 9px. */
+.revDot { width:24px; height:24px; padding:7.5px; background-clip:content-box; border-radius:50%; cursor:pointer; background-color:rgba(244,242,238,0.35); border:0; }
+.revDot[aria-current="true"] { background-color:#f4f2ee; }
 .revNav { display:flex; gap:12px; }
 .revBtn { width:44px; height:44px; border:1px solid rgba(244,242,238,0.4); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#f4f2ee; background:none; padding:0; }
 .revBtn:hover { border-color:#f4f2ee; }
@@ -133,19 +207,21 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline:2px so
 
 /* ---------- mobile nav (860px) ---------- */
 @media (max-width:860px) {
-  .nav { padding:12px 20px; }
-  .navLinks, .navCta { display:none; }
-  .navToggle { display:flex; }
-  .navPanel { display:block; position:absolute; top:100%; left:0; right:0; background:var(--bg); border-top:1px solid var(--hair); max-height:0; overflow:hidden; visibility:hidden; transition:max-height 0.35s ease, visibility 0.35s; }
-  .navPanel.open { max-height:70vh; overflow:auto; visibility:visible; }
-  .navPanelInner { display:flex; flex-direction:column; padding:8px 20px 24px; }
-  .navPanel a { color:var(--ink); font-size:15px; text-transform:uppercase; letter-spacing:0.08em; padding:18px 0; border-bottom:1px solid var(--hair); }
-  .navPanel .btnSolid { margin-top:20px; text-align:center; border-bottom:0; padding:14px 22px; color:#f4f2ee; }
+  /* the Get in touch button stays visible at every width, just tighter */
+  .nav { padding:12px 20px; gap:12px; }
+  .navLeft { gap:14px; }
+  .navRight { gap:12px; }
+  .navLogo { height:72px; }
+  .navCta { padding:8px 12px; font-size:11px; letter-spacing:1.5px; }
+  .menuBtn { gap:8px; padding-left:0; }
+  .menuBtnLabel { min-width:0; }
+  .menuInner { padding:150px 20px 72px; grid-template-columns:1fr; gap:52px; }
 }
 
 /* ---------- tablet ---------- */
 @media (max-width:1024px) {
-  .nav { padding:14px 32px; }
+  /* .nav padding for this range lives with the header rules below, so the
+     narrower breakpoint isn't overridden by this later block */
   .heroCopy { left:32px; max-width:calc(100vw - 120px); }
   .heroProd { right:32px; }
   .about { grid-template-columns:1fr; gap:40px; }
@@ -189,7 +265,7 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline:2px so
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .heroLayer, .logoPage, .revTrack, .page, .hero, .navPanel { transition:none !important; }
+  .heroLayer, .logoPage, .revTrack, .page, .hero, .menu, .menuBtnBars span { transition:none !important; }
   html { scroll-behavior:auto; }
 }
 
@@ -198,8 +274,34 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline:2px so
 [data-theme="light"] .navOnLight .navCta,
 [data-theme="light"] .navOnLight .themeBtn { color:var(--ink); }
 [data-theme="light"] .navOnLight .navCta,
-[data-theme="light"] .navOnLight .themeBtn { border-color:var(--hair); }
+[data-theme="light"] .navOnLight .themeBtn { border-color:var(--ctrlBorder); }
 [data-theme="light"] .navOnLight .navCta:hover,
 [data-theme="light"] .navOnLight .themeBtn:hover { border-color:var(--ink); color:var(--ink); }
-[data-theme="light"] .navOnLight .navToggle span { background:var(--ink); }
+[data-theme="light"] .navOnLight .menuBtn { color:var(--ink); }
 [data-theme="light"] .navOnLight .navLogo { filter:none; }
+[data-theme="light"] .navOnLight .slate { color:var(--muted); }
+[data-theme="light"] .navOnLight .slateTime { color:var(--sub); }
+
+/* ---------- header responsive ---------- */
+@media (max-width:1024px) {
+  .nav { padding:14px 32px; }
+  .menuInner { padding:170px 32px 76px; gap:56px; }
+}
+@media (max-width:999px) {
+  /* the city label is the first thing to go; the clock itself stays */
+  .slateCity { display:none; }
+}
+@media (max-width:639px) {
+  /* no room for the slate once the logo and controls need the width */
+  .slate { display:none; }
+  .menuBtnLabel { font-size:12px; }
+}
+@media (max-width:400px) {
+  /* smallest phones: shrink the mark rather than let it crowd the controls */
+  .nav { padding:12px 14px; gap:8px; }
+  .navRight { gap:10px; }
+  .navLogo { height:54px; }
+  .navCta { padding:7px 9px; font-size:10px; letter-spacing:1px; }
+  .menuBtn { gap:6px; }
+  .menuBtnLabel { font-size:11px; }
+}

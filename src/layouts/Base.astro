@@ -1,7 +1,10 @@
 ---
 import '../styles/global.css';
-import Nav from '../components/Nav.astro';
+import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+const OG_DEFAULT = '/assets/og-default.jpg';
 
 interface Props {
   title: string;
@@ -9,6 +12,8 @@ interface Props {
   ogTitle?: string;
   ogDescription?: string;
   ogImage?: string;
+  /** Alt text for the share image, for crawlers that surface it. */
+  ogImageAlt?: string;
   footerTitle?: string;
   footerIntro?: string;
   footerLinks?: { label: string; href: string }[];
@@ -16,6 +21,8 @@ interface Props {
   theme?: 'dark' | 'light';
   /** false when the page has no dark hero photo behind the header. */
   navOverDark?: boolean;
+  /** Keep this page out of search results and out of the canonical set. */
+  noindex?: boolean;
 }
 
 const {
@@ -23,15 +30,24 @@ const {
   description,
   ogTitle = title,
   ogDescription = description,
-  ogImage = '/uploads/the-odyssey-beach-horse.webp',
+  ogImage = OG_DEFAULT,
+  ogImageAlt = `${site.name} — dancers, models, SPACTs and stand-ins for film and television`,
   footerTitle,
   footerIntro,
   footerLinks,
   theme = 'dark',
   navOverDark = true,
+  noindex = false,
 } = Astro.props;
 
-const ogImageUrl = new URL(ogImage, Astro.site ?? Astro.url).toString();
+const base = Astro.site ?? Astro.url;
+/* build.format:'file' makes Astro.url.pathname '/models.html'; the public URL
+   (and the sitemap) is '/models', so normalise before building canonicals. */
+const cleanPath = Astro.url.pathname.replace(/index\.html$/, '').replace(/\.html$/, '');
+const pageUrl = new URL(cleanPath, base).toString().replace(/\/$/, '/');
+/* SVG share images are ignored by most crawlers — fall back to the JPEG. */
+const shareImage = ogImage.endsWith('.svg') ? OG_DEFAULT : ogImage;
+const ogImageUrl = new URL(shareImage, base).toString();
 ---
 
 <!doctype html>
@@ -46,10 +62,14 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? Astro.url).toString();
     <meta property="og:description" content={ogDescription} />
     <meta property="og:type" content="website" />
     <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:site_name" content={site.name} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={ogTitle} />
     <meta name="twitter:description" content={ogDescription} />
-    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString()} />
+    {noindex && <meta name="robots" content="noindex" />}
+    {!noindex && <link rel="canonical" href={pageUrl} />}
     <link rel="icon" href="/assets/take3-logo.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -71,7 +91,7 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? Astro.url).toString();
   <body>
     <a class="skip" href="#main">Skip to content</a>
     <div class="page">
-      <Nav overDark={navOverDark} />
+      <Header overDark={navOverDark} />
       <main id="main">
         <slot />
       </main>

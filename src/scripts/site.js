@@ -16,34 +16,120 @@
     nav.style.boxShadow = p > 0
       ? '0 1px 0 rgba(' + (light ? '0,0,0,' : '255,255,255,') + (0.12 * p).toFixed(3) + ')'
       : 'none';
-    if (navLogo) navLogo.style.height = (110 - 58 * p).toFixed(1) + 'px';
+    if (navLogo) {
+      /* the logo shrinks as you scroll, from a smaller starting size on phones */
+      var w = window.innerWidth;
+      var tall = w <= 400 ? 54 : w <= 860 ? 72 : 110;
+      var short = w <= 400 ? 38 : w <= 860 ? 44 : 52;
+      navLogo.style.height = (tall - (tall - short) * p).toFixed(1) + 'px';
+    }
     navTick = false;
   }
   if (nav) {
-    window.addEventListener('scroll', function () {
+    var queueNavScroll = function () {
       if (!navTick) { navTick = true; window.requestAnimationFrame(navScroll); }
-    }, { passive: true });
+    };
+    window.addEventListener('scroll', queueNavScroll, { passive: true });
+    /* the logo's size depends on the viewport, so recompute when it changes */
+    window.addEventListener('resize', queueNavScroll, { passive: true });
+    window.addEventListener('orientationchange', queueNavScroll);
     navScroll();
   }
 
-  /* ---------------- mobile nav panel ---------------- */
-  var navToggle = document.getElementById('navToggle');
-  var navPanel = document.getElementById('navPanel');
-  if (navToggle && navPanel) {
-    var setPanel = function (open) {
-      navPanel.classList.toggle('open', open);
-      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  /* ---------------- overlay menu ---------------- */
+  var menuBtn = document.getElementById('menuBtn');
+  var menuBtnLabel = document.getElementById('menuBtnLabel');
+  var menu = document.getElementById('menuOverlay');
+  var main = document.getElementById('main');
+  var footer = document.querySelector('.footer');
+  var skip = document.querySelector('.skip');
+
+  if (menuBtn && menu) {
+    var menuOpen = false;
+    var scrollY = 0;
+    var closeTimer = null;
+
+    /* the header stays interactive above the overlay, so only the page
+       underneath is hidden from screen readers and pointer input */
+    var hideBehind = function (hidden) {
+      [main, footer, skip].forEach(function (el) {
+        if (!el) return;
+        if (hidden) {
+          el.setAttribute('inert', '');
+          el.setAttribute('aria-hidden', 'true');
+        } else {
+          el.removeAttribute('inert');
+          el.removeAttribute('aria-hidden');
+        }
+      });
     };
-    navToggle.addEventListener('click', function () {
-      setPanel(navToggle.getAttribute('aria-expanded') !== 'true');
+
+    var focusables = function () {
+      var all = document.querySelectorAll(
+        '#siteNav a[href], #siteNav button:not([disabled]), #menuOverlay a[href]'
+      );
+      return Array.prototype.filter.call(all, function (el) {
+        return el.offsetWidth > 0 || el.offsetHeight > 0 || el === document.activeElement;
+      });
+    };
+
+    var setMenu = function (open) {
+      if (open === menuOpen) return;
+      menuOpen = open;
+      window.clearTimeout(closeTimer);
+
+      menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      if (menuBtnLabel) menuBtnLabel.textContent = open ? 'CLOSE' : 'MENU';
+      nav.classList.toggle('is-menuOpen', open);
+
+      if (open) {
+        scrollY = window.scrollY;
+        menu.hidden = false;
+        /* let the browser paint the hidden state before fading in */
+        window.requestAnimationFrame(function () { menu.classList.add('is-open'); });
+        document.body.classList.add('menu-open');
+        document.body.style.top = '-' + scrollY + 'px';
+        hideBehind(true);
+        menu.focus();
+      } else {
+        menu.classList.remove('is-open');
+        document.body.classList.remove('menu-open');
+        document.body.style.top = '';
+        window.scrollTo(0, scrollY);
+        hideBehind(false);
+        var finish = function () { if (!menuOpen) menu.hidden = true; };
+        if (lessMotion()) finish();
+        else closeTimer = window.setTimeout(finish, 350);
+      }
+    };
+
+    menuBtn.addEventListener('click', function () { setMenu(!menuOpen); });
+
+    /* choosing anywhere in the menu closes it */
+    menu.addEventListener('click', function (e) {
+      if (e.target.closest('a')) setMenu(false);
     });
-    navPanel.addEventListener('click', function (e) {
-      if (e.target.closest('a')) setPanel(false);
-    });
+
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && navToggle.getAttribute('aria-expanded') === 'true') {
-        setPanel(false);
-        navToggle.focus();
+      if (!menuOpen) return;
+      if (e.key === 'Escape') {
+        setMenu(false);
+        menuBtn.focus();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      /* keep focus inside the header and the overlay while it is open */
+      var items = focusables();
+      if (!items.length) return;
+      var first = items[0];
+      var last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
       }
     });
   }

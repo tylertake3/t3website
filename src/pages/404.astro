@@ -6,6 +6,7 @@ import { navLinks } from '../data/site';
 <Base
   title="Page not found — Take 3 Agency"
   description="That page doesn't exist. Find dancers, models, SPACTs and stand-ins on the Take 3 Agency website."
+  noindex
 >
   <section class="notFound">
     <p class="kicker">ERROR 404</p>
@@ -15,7 +16,12 @@ import { navLinks } from '../data/site';
     </p>
     <div class="notFoundLinks">
       <a class="btnGhost" href="/">HOME</a>
-      {navLinks.filter((l) => !l.href.includes('#')).map((l) => <a class="btnGhost" href={l.href}>{l.label}</a>)}
+      {
+        /* the category pages, which is what a mistyped address is usually after */
+        navLinks
+          .flatMap((l) => l.children ?? [])
+          .map((l) => <a class="btnGhost" href={l.href}>{l.label.toUpperCase()}</a>)
+      }
     </div>
   </section>
 

@@ -26,10 +26,11 @@ Colours are CSS variables defined on `:root` (dark, the default) and overridden 
 | `--bg` | `#161618` | Page background |
 | `--ink` | `#f4f2ee` | Primary text |
 | `--sub` | `#c2beb6` | Secondary / body copy |
-| `--muted` | `#96928c` | Meta labels, fine print |
+| `--muted` | `#96928c` | Meta labels, fine print. 5.84:1 on `--bg`, 5.06:1 on `--tileBg` |
 | `--hair` | `#35353a` | Hairline borders / dividers |
 | `--tileBg` | `#232327` | Empty image plates, logo cells |
-| `--accent` | `#c65b40` | Burnt terracotta — kickers, stats, links-of-note |
+| `--accent` | `#d4704f` | Burnt terracotta — kickers, stats, links-of-note. 5.36:1 on `--bg`, 5.16:1 on the `#1a1a1c` reviews band, 4.65:1 on `--tileBg` |
+| `--ctrlBorder` | `#6f6f77` | Control outlines (buttons, sub-list rules) — 3.63:1 on `--bg`, clearing WCAG 1.4.11 |
 
 ### Light theme (`[data-theme="light"]`)
 
@@ -39,7 +40,9 @@ Colours are CSS variables defined on `:root` (dark, the default) and overridden 
 | `--ink` | `#1a1a1c` |
 | `--sub` | `#3a3632` |
 | `--hair` | `#d9d6d1` |
+| `--muted` | `#605d57` (5.87:1 on `--bg`, 4.98:1 on `--tileBg`) |
 | `--tileBg` | `#e2e0dc` |
+| `--ctrlBorder` | `#8a8781` |
 | `--accent` | `#5d1f16` (deep oxblood) |
 
 ### Hero tokens (constant across themes)
@@ -58,6 +61,7 @@ The hero is always dark, regardless of theme, so it has its own token set:
 
 ### Accent rules
 - Use `--accent` sparingly — kickers, stat numbers, "view" links, focus rings. It should feel like a highlight, never a fill for large areas.
+- Both `--accent` and `--muted` are used at body/label size, so any change to either must keep **≥4.5:1 against `--bg`, against `--tileBg`, and against the `#1a1a1c` reviews band** in the theme it belongs to.
 - The solid CTA button uses the oxblood `#5d1f16` (hover `#7a2f20`) in both themes for a consistent, weighty action colour.
 
 ---
@@ -112,7 +116,7 @@ All display headings use `font-weight:400` (never bold) and fluid `clamp()` sizi
 | Width | Target |
 |---|---|
 | `≤1024px` | Tablet — collapse multi-column grids, tighten padding |
-| `≤860px` | Mobile nav — hamburger + slide-down panel |
+| `≤860px` | Tighter header padding, smaller logo and Get in touch button |
 | `≤640px` | Phone — single columns, stacked hero |
 
 ---
@@ -125,10 +129,21 @@ All display headings use `font-weight:400` (never bold) and fluid `clamp()` sizi
 - **`.navCta`** — outlined pill in the nav, uses hero border tokens.
 - All button-ish text is `12–13px`, uppercase-feel, `letter-spacing:2px`.
 
-### Nav (`.nav`)
-- Fixed, transparent at top, fades to solid dark on scroll (driven by `site.js`).
-- Logo shrinks from `110px` → `52px` height as you scroll (JS).
-- Collapses to a hamburger + slide-down panel at ≤860px.
+### Header (`.nav`)
+- Fixed, with its own gradient scrim (`.nav::before`) so controls stay legible over any hero photograph. The scrim is removed on light pages (`.navOnLight`) and while the overlay menu is open.
+- Contents: logo, timecode slate, then theme toggle, Get in touch and Menu on the right. The theme toggle and Get in touch stay visible at every width and while the menu is open.
+- Background fades to solid on scroll (driven by `site.js`); logo shrinks `110px → 52px` on desktop, `72px → 44px` at ≤860px.
+
+### Timecode slate (`.slate`)
+- Clapperboard icon, city label and a live `HH:MM:SS:FF` readout at 24fps on `Europe/London`, in tabular monospace inside a fixed `11ch` box so digits never jitter.
+- `aria-hidden`: decorative. Pauses in a background tab; falls back to a once-a-second readout under `prefers-reduced-motion`.
+- Hides the city label below `1000px`, and the whole slate below `640px`.
+
+### Overlay menu (`.menu`)
+- Full-screen on desktop as well as mobile, opened from the Menu button. Primary client list in Anton `clamp(30px, 4vw, 58px)`; Artists carries a permanently visible indented sub-list (never a hover state).
+- A quieter "For performers" area holds the single performer-facing link, separated by a hairline.
+- Escape and any link close it, focus is trapped, background scroll is locked, and the page behind is `inert`.
+- Menu hierarchy and URLs are independent: categories keep flat top-level paths.
 
 ### Hero (`.hero`)
 - Min-height `78vh` (`82vh` on phone), dark `--heroBg`.
@@ -160,7 +175,10 @@ All display headings use `font-weight:400` (never bold) and fluid `clamp()` sizi
 
 - Keep the **skip link** (`.skip`) as the first focusable element.
 - **Focus rings** are explicit: `2px solid var(--accent)` (or `--heroInk` over dark areas), `outline-offset:3px`. Never remove focus outlines without an equivalent replacement.
-- Maintain contrast: body copy uses `--sub`/`--ink` on `--bg`, not `--muted` for anything longer than a label.
+  - The ring must be picked for the surface *behind* it, not the theme: `.navOnLight` (pages with `navOverDark={false}`) switches to `--ink` in light theme, and the always-dark `.reviews` band pins its ring to `#f4f2ee` in both themes.
+- Maintain contrast: body copy uses `--sub`/`--ink` on `--bg`, not `--muted` for anything longer than a label. Every text token must clear **4.5:1** on the surfaces it is used on, in both themes.
+- **Links in prose must not be colour-only.** `a { text-decoration:none }` is site-wide, so body-copy blocks (`.aboutBody`, `.clientsBody`, `.footerIntro`) re-add `text-decoration:underline` with `text-underline-offset:3px`. Nav, buttons and tile links stay undecorated.
+- **Minimum target size is 24x24px** (WCAG 2.2 AA). Small visual controls carry the extra size as padding — e.g. `.revDot` paints a 9px circle inside a 24x24 button using `background-clip:content-box`.
 - Provide `alt` text on images, `aria-label`s on icon-only buttons (see the theme toggle and nav toggle).
 
 ---
