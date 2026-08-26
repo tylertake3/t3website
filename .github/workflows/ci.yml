@@ -25,7 +25,8 @@ jobs:
         run: npm ci
 
       - name: Build the site
-        run: npx astro build
+        # the same command the host runs, so a failing build can't pass here
+        run: npm run build
 
       - name: Check pages, links, images and file sizes
         run: node scripts/check-build.mjs
