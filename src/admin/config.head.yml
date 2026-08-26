@@ -1,0 +1,35 @@
+# Take 3 Agency — content settings for the website editor.
+# Repo and branch are filled in once the site is on GitHub.
+
+backend:
+  name: github
+  repo: tylertake3/t3website
+  branch: main
+  # Sign-in is handled by this site's own /api/auth and /api/callback, rather
+  # than the Netlify service the editor assumes by default.
+  base_url: https://t3website-take-3.vercel.app
+  auth_endpoint: api/auth
+
+media_folder: public/uploads
+public_folder: /uploads
+
+site_url: https://www.take3agency.com
+display_url: https://www.take3agency.com
+logo_url: /assets/take3-logo.svg
+
+collections:
+  - name: reviews
+    label: Reviews
+    label_singular: Review
+    folder: src/content/reviews
+    create: true
+    identifier_field: name
+    format: frontmatter
+    summary: '{{name}} — {{role}}'
+    sortable_fields: [order, name]
+    fields:
+      - { name: name, label: Name, widget: string, hint: 'Use a line break to split the name across two lines.' }
+      - { name: role, label: Job title, widget: string }
+      - { name: credits, label: Productions, widget: string, required: false }
+      - { name: order, label: Position in the slider, widget: number, value_type: int, default: 99 }
+      - { name: body, label: What they said, widget: text }

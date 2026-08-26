@@ -6,6 +6,10 @@ backend:
   name: github
   repo: tylertake3/t3website
   branch: main
+  # Sign-in is handled by this site's own /api/auth and /api/callback, rather
+  # than the Netlify service the editor assumes by default.
+  base_url: https://t3website-take-3.vercel.app
+  auth_endpoint: api/auth
 
 media_folder: public/uploads
 public_folder: /uploads
