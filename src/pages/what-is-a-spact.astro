@@ -9,24 +9,28 @@ const roleCardIds: Record<string, string> = {
   stunt: 'cardStunt',
 };
 
-const headingLines = copy.hero.heading.split('\n');
 const scene1 = copy.distinctions.scenes[0];
+
+/* structured data must carry absolute URLs — Google ignores relative ones.
+   Astro.site is the configured production origin; Astro.url is the dev fallback. */
+const abs = (path: string) => new URL(path, Astro.site ?? Astro.url).href;
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Article',
   headline: copy.meta.articleHeadline,
   description: copy.meta.description,
-  image: copy.hero.image,
+  image: abs(copy.hero.image),
   articleSection: copy.meta.articleSection,
   inLanguage: 'en-GB',
   author: { '@type': 'Organization', name: 'Take 3 Agency' },
   publisher: {
     '@type': 'Organization',
     name: 'Take 3 Agency',
-    logo: { '@type': 'ImageObject', url: '/assets/take3-logo.svg' },
+    /* Google's Article guidelines require a raster publisher logo, not an SVG */
+    logo: { '@type': 'ImageObject', url: abs('/assets/og-default.jpg') },
   },
-  mainEntityOfPage: { '@type': 'WebPage', '@id': '/what-is-a-spact' },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': abs('/what-is-a-spact') },
 };
 ---
 
@@ -50,7 +54,10 @@ const jsonLd = {
     <div class="titleSplit">
       <div style="flex:1 1 420px; min-width:280px;">
         <p class="eyebrow" style="letter-spacing:4px; font-size:13px;">{copy.hero.eyebrow}</p>
-        <h1 class="h1Display" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(52px,7vw,120px); font-weight:400; letter-spacing:2px; line-height:1.02; margin:20px 0 0;">{headingLines.map((line, i) => (<>{i > 0 && <br />}{line}</>))}</h1>
+        {/* the line break comes from the \n in the copy + white-space:pre-line (the
+            .heroTitle pattern in global.css), so textContent keeps the words apart —
+            a <br /> alone renders "What isa SPACT?" to scrapers and share previews */}
+        <h1 class="h1Display" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(52px,7vw,120px); font-weight:400; letter-spacing:2px; line-height:1.02; margin:20px 0 0; white-space:pre-line;">{copy.hero.heading}</h1>
         <p class="standfirst" style="font-size:clamp(18px,1.4vw,21px); font-weight:300; line-height:1.65; color:var(--sub); margin:36px 0 0; max-width:520px;">{copy.hero.standfirst}</p>
       </div>
       <!-- casting overlay -->
@@ -60,36 +67,36 @@ const jsonLd = {
           <div class="tann" style="left:13.5%; top:13%; width:8%; height:17%; animation-delay:0.6s;">
             <div class="tannBox"></div>
             <div class="tannTick" style="bottom:100%;"></div>
-            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:#c65b40;">●</span>&nbsp; {copy.hero.annotations[0].label}</div>
+            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:var(--accent);">●</span>&nbsp; {copy.hero.annotations[0].label}</div>
           </div>
           <div class="tann" style="left:25.5%; top:18%; width:6.5%; height:12%; animation-delay:4.8s;">
             <div class="tannBox"></div>
             <div class="tannTick" style="top:100%;"></div>
-            <div class="tannLabel" style="top:calc(100% + 9px); transform:translateX(calc(-50% - 20px));"><span style="color:#c65b40;">●</span>&nbsp; {copy.hero.annotations[1].label}</div>
+            <div class="tannLabel" style="top:calc(100% + 9px); transform:translateX(calc(-50% - 20px));"><span style="color:var(--accent);">●</span>&nbsp; {copy.hero.annotations[1].label}</div>
           </div>
           <div class="tann" style="left:34.5%; top:21%; width:9%; height:15%; animation-delay:2s;">
             <div class="tannBox"></div>
             <div class="tannTick" style="bottom:100%;"></div>
-            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:#c65b40;">●</span>&nbsp; {copy.hero.annotations[2].label}</div>
+            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:var(--accent);">●</span>&nbsp; {copy.hero.annotations[2].label}</div>
           </div>
           <div class="tann" style="left:50.5%; top:18.5%; width:6.5%; height:12%; animation-delay:6.2s;">
             <div class="tannBox"></div>
             <div class="tannTick" style="top:100%;"></div>
-            <div class="tannLabel" style="top:calc(100% + 9px);"><span style="color:#c65b40;">●</span>&nbsp; {copy.hero.annotations[3].label}</div>
+            <div class="tannLabel" style="top:calc(100% + 9px);"><span style="color:var(--accent);">●</span>&nbsp; {copy.hero.annotations[3].label}</div>
           </div>
           <div class="tann" style="left:62%; top:12.5%; width:9%; height:17%; animation-delay:3.4s;">
             <div class="tannBox"></div>
             <div class="tannTick" style="bottom:100%;"></div>
-            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:#c65b40;">●</span>&nbsp; {copy.hero.annotations[4].label}</div>
+            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:var(--accent);">●</span>&nbsp; {copy.hero.annotations[4].label}</div>
           </div>
           <div class="tann" style="left:78.5%; top:20%; width:7.5%; height:13%; animation-delay:7.6s;">
             <div class="tannBox"></div>
             <div class="tannTick" style="bottom:100%;"></div>
-            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:#c65b40;">●</span>&nbsp; {copy.hero.annotations[5].label}</div>
+            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:var(--accent);">●</span>&nbsp; {copy.hero.annotations[5].label}</div>
           </div>
         </div>
         <figcaption style="display:flex; justify-content:space-between; align-items:baseline; gap:16px; margin-top:12px; flex-wrap:wrap;">
-          <span style="font-size:10px; letter-spacing:3px; color:#96928c;">{copy.hero.captionLeft}</span>
+          <span style="font-size:10px; letter-spacing:3px; color:var(--muted);">{copy.hero.captionLeft}</span>
           <span style="font-size:10px; letter-spacing:3px; color:var(--accent);">{copy.hero.captionRight}</span>
         </figcaption>
       </figure>
@@ -113,10 +120,10 @@ const jsonLd = {
   <!-- 02 distinctions -->
   <section class="onDark" aria-labelledby="ch02">
     <div class="wrap pad secPad" style="padding-top:80px; padding-bottom:88px;">
-      <p class="eyebrow" id="ch02" style="color:#c65b40;">{copy.distinctions.eyebrow}</p>
+      <p class="eyebrow" id="ch02">{copy.distinctions.eyebrow}</p>
       <h2 class="dispM">{copy.distinctions.heading}</h2>
       <p style="font-size:16px; font-weight:300; line-height:1.75; color:#c7c3bd; margin:18px 0 0; max-width:760px;">{copy.distinctions.intro}</p>
-      <p style="font-size:11px; letter-spacing:2.5px; color:#96928c; margin:26px 0 0;">{copy.distinctions.selectPrompt}</p>
+      <p style="font-size:11px; letter-spacing:2.5px; color:var(--muted); margin:26px 0 0;">{copy.distinctions.selectPrompt}</p>
 
       <div class="roleGrid">
         {copy.distinctions.roles.map((card) => (
@@ -134,54 +141,56 @@ const jsonLd = {
         ))}
       </div>
 
-      <div class="frame" id="sceneFrame" style="margin-top:56px;">
-        <img class="frameImg" id="sceneImg" src={scene1.image} alt={copy.distinctions.frameAlt} />
+      <div class="frame" id="sceneFrame" style="margin-top:40px;">
+        {/* the scene frame is well below the fold on every viewport, so it is
+            never part of the initial payload */}
+        <img class="frameImg" id="sceneImg" src={scene1.image} alt={copy.distinctions.frameAlt} loading="lazy" decoding="async" />
         <div class="frameDim" id="sceneDim" style="opacity:1;"></div>
         <div id="spotLayer">
           <div class="spot" data-role="sa" style="left:2%; top:37.5%; width:42%; height:18.5%; animation-delay:0.6s; opacity:0; animation:none;">
-            <div class="spotImg" style="opacity:0;"><img src={scene1.image} alt="" aria-hidden="true" style="left:7.875458%; top:-144.386694%; width:183.150183%; height:415.800416%;" /></div>
+            <div class="spotImg" style="opacity:0;"><img src={scene1.image} alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:7.875458%; top:-144.386694%; width:183.150183%; height:415.800416%;" /></div>
             <div class="spotBox" style="border:1px dashed rgba(244,242,238,0.55);"></div>
             <div class="spotTick" style="bottom:100%; background:rgba(244,242,238,0.55);"></div>
-            <div class="spotLabel" style="bottom:calc(100% + 10px); border-color:#3a3a3e;"><span style="color:#96928c;">●</span>&nbsp; {scene1.spots[0].label}</div>
+            <div class="spotLabel" style="bottom:calc(100% + 10px); border-color:#3a3a3e;"><span style="color:var(--muted);">●</span>&nbsp; {scene1.spots[0].label}</div>
           </div>
           <div class="spot" data-role="sa" style="left:66%; top:58%; width:21%; height:15%; animation-delay:1.8s; opacity:0; animation:none;">
-            <div class="spotImg" style="opacity:0;"><img src={scene1.image} alt="" aria-hidden="true" style="left:-230.219780%; top:-285.897436%; width:366.300366%; height:512.820513%;" /></div>
+            <div class="spotImg" style="opacity:0;"><img src={scene1.image} alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:-230.219780%; top:-285.897436%; width:366.300366%; height:512.820513%;" /></div>
             <div class="spotBox" style="border:1px dashed rgba(244,242,238,0.55);"></div>
             <div class="spotTick" style="top:100%; background:rgba(244,242,238,0.55);"></div>
-            <div class="spotLabel" style="top:calc(100% + 10px); border-color:#3a3a3e;"><span style="color:#96928c;">●</span>&nbsp; {scene1.spots[1].label}</div>
+            <div class="spotLabel" style="top:calc(100% + 10px); border-color:#3a3a3e;"><span style="color:var(--muted);">●</span>&nbsp; {scene1.spots[1].label}</div>
           </div>
           <div class="spot" data-role="spact" style="left:51.5%; top:60%; width:13.5%; height:36%; animation-delay:3.4s; opacity:1; animation:none; z-index:2;">
-            <div class="spotImg" style="opacity:1;"><img src={scene1.image} alt="" aria-hidden="true" style="left:-281.908832%; top:-116.666667%; width:569.800570%; height:213.675214%;" /></div>
+            <div class="spotImg" style="opacity:1;"><img src={scene1.image} alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:-281.908832%; top:-116.666667%; width:569.800570%; height:213.675214%;" /></div>
             <div class="spotBox" style="border:1px solid rgba(244,242,238,0.95); box-shadow:0 0 0 1px rgba(20,20,22,0.35);"></div>
             <div class="spotTick" style="bottom:100%; background:rgba(244,242,238,0.95);"></div>
             <div class="spotLabel" style="bottom:calc(100% + 10px); border-color:#3a3a3e;"><span style="color:#f4f2ee;">●</span>&nbsp; {scene1.spots[2].label}</div>
           </div>
           <div class="spot" data-role="spact" style="left:4%; top:58%; width:24%; height:38%; animation-delay:3.8s; opacity:1; animation:none; z-index:2;">
-            <div class="spotImg" style="opacity:1;"><img src={scene1.image} alt="" aria-hidden="true" style="left:-1.282051%; top:-105.870445%; width:320.512821%; height:202.429150%;" /></div>
+            <div class="spotImg" style="opacity:1;"><img src={scene1.image} alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:-1.282051%; top:-105.870445%; width:320.512821%; height:202.429150%;" /></div>
             <div class="spotBox" style="border:1px solid rgba(244,242,238,0.95); box-shadow:0 0 0 1px rgba(20,20,22,0.35);"></div>
             <div class="spotTick" style="bottom:100%; background:rgba(244,242,238,0.95);"></div>
             <div class="spotLabel" style="bottom:calc(100% + 10px); border-color:#3a3a3e;"><span style="color:#f4f2ee;">●</span>&nbsp; {scene1.spots[3].label}</div>
           </div>
           <div class="spot" data-role="stunt" style="left:53.5%; top:8%; width:28%; height:38%; animation-delay:5s; opacity:0; animation:none;">
-            <div class="spotImg" style="opacity:0;"><img src={scene1.image} alt="" aria-hidden="true" style="left:-135.439560%; top:-4.655870%; width:274.725275%; height:202.429150%;" /></div>
-            <div class="spotBox" style="border:1px solid #c65b40; box-shadow:0 0 0 1px rgba(20,20,22,0.35);"></div>
-            <div class="spotTick" style="bottom:100%; background:#c65b40;"></div>
-            <div class="spotLabel" style="bottom:calc(100% + 10px); border-color:#c65b40;"><span style="color:#c65b40;">●</span>&nbsp; {scene1.spots[4].label}</div>
+            <div class="spotImg" style="opacity:0;"><img src={scene1.image} alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:-135.439560%; top:-4.655870%; width:274.725275%; height:202.429150%;" /></div>
+            <div class="spotBox" style="border:1px solid var(--accent); box-shadow:0 0 0 1px rgba(20,20,22,0.35);"></div>
+            <div class="spotTick" style="bottom:100%; background:var(--accent);"></div>
+            <div class="spotLabel" style="bottom:calc(100% + 10px); border-color:var(--accent);"><span style="color:var(--accent);">●</span>&nbsp; {scene1.spots[4].label}</div>
           </div>
         </div>
       </div>
 
       <div class="frameMeta" style="display:flex; justify-content:space-between; align-items:baseline; gap:24px; margin-top:14px; flex-wrap:wrap;">
-        <p id="sceneTitle" style="font-size:10px; letter-spacing:3px; color:#96928c; margin:0;">{scene1.title}</p>
+        <p id="sceneTitle" style="font-size:10px; letter-spacing:3px; color:var(--muted); margin:0;">{scene1.title}</p>
         <div class="legend">
-          <button type="button" class="legBtn" id="legStunt" data-role="stunt" aria-pressed="false"><span style="color:#c65b40;">—</span> {copy.distinctions.legend.stunt}</button>
+          <button type="button" class="legBtn" id="legStunt" data-role="stunt" aria-pressed="false"><span style="color:var(--accent);">—</span> {copy.distinctions.legend.stunt}</button>
           <button type="button" class="legBtn" id="legSpact" data-role="spact" aria-pressed="true"><span style="color:#f4f2ee;">—</span> {copy.distinctions.legend.spact}</button>
           <button type="button" class="legBtn" id="legSa" data-role="sa" aria-pressed="false">╌ {copy.distinctions.legend.sa}</button>
           <button type="button" class="nextBtn" id="nextScene">{copy.distinctions.legend.nextButton}</button>
         </div>
       </div>
 
-      <p style="font-size:14px; font-weight:300; color:#96928c; line-height:1.7; margin:44px 0 0; max-width:760px;">{copy.distinctions.note}</p>
+      <p style="font-size:14px; font-weight:300; color:var(--muted); line-height:1.7; margin:44px 0 0; max-width:760px;">{copy.distinctions.note}</p>
     </div>
   </section>
 
@@ -240,6 +249,17 @@ p { text-wrap:pretty; }
 .rule { border-top:1px solid var(--hair); }
 .onDark { border-top:1px solid #3a3a3e; background:#1a1a1c; color:#f4f2ee; }
 
+/* Two surfaces on this page are hard-coded dark in BOTH themes: the .onDark
+   distinctions band (#1a1a1c) and the .tannLabel callout chips over the hero
+   still (rgba(22,22,24,0.92)). The light-theme --accent (#5d1f16 oxblood) and
+   --muted (#605d57) are picked for a cream page and measure ~1.4:1 and ~2.3:1
+   there — unreadable. So both surfaces re-scope the two tokens to their
+   dark-theme values, which clear 4.5:1 on #1a1a1c (accent 5.16:1, muted
+   5.62:1). Everything inside still references var(--accent) / var(--muted);
+   this is the same "pin the value to the surface, not the theme" rule
+   global.css applies to the always-dark reviews band's focus ring. */
+.onDark, .tannLabel { --accent:#d4704f; --muted:#96928c; }
+
 .eyebrow { font-size:12px; letter-spacing:3px; color:var(--accent); font-weight:400; margin:0; }
 .dispM { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(24px,2.4vw,36px); font-weight:400; letter-spacing:1px; line-height:1.2; margin:14px 0 0; }
 .body17 { font-size:17px; font-weight:300; line-height:1.8; color:var(--sub); }
@@ -254,14 +274,17 @@ p { text-wrap:pretty; }
 /* ---------- role cards ---------- */
 .roleGrid { display:grid; grid-template-columns:repeat(3,1fr); gap:48px; margin-top:36px; }
 .roleCard { display:block; width:100%; text-align:left; font-family:inherit; font-size:inherit; color:inherit; background:none; border:0; border-top:1px solid #3a3a3e; padding:24px 0 0; margin:0; cursor:pointer; transition:border-top-color .25s, background .25s; }
-.roleCard--edge:hover { border-top-color:#96928c; }
-.roleCard--spact:hover { background:rgba(198,91,64,0.04); }
+.roleCard--edge:hover { border-top-color:var(--muted); }
+.roleCard--spact:hover { background:color-mix(in srgb, var(--accent) 4%, transparent); }
 .roleTitle { font-size:15px; letter-spacing:3px; font-weight:500; color:#f4f2ee; transition:color .25s; }
 .roleBody { font-size:15px; font-weight:300; line-height:1.75; color:#c7c3bd; margin:14px 0 0; }
-.roleFlag { font-size:10px; letter-spacing:2.5px; color:#c65b40; margin-top:14px; opacity:0; transition:opacity .25s; }
+.roleFlag { font-size:10px; letter-spacing:2.5px; color:var(--accent); margin-top:14px; opacity:0; transition:opacity .25s; }
 
 /* ---------- annotated scene frame ---------- */
-.frame { position:relative; aspect-ratio:3/2; overflow:hidden; background:#242426; }
+/* The annotation boxes are positioned as percentages of this frame, so the
+   3:2 shape has to hold. Capping the width scales the whole thing down
+   together and keeps the three role cards in view above it. */
+.frame { position:relative; aspect-ratio:3/2; overflow:hidden; background:#242426; width:100%; max-width:min(100%, 62vh * 1.5, 820px); margin-left:auto; margin-right:auto; }
 .frame > img.frameImg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
 .frameDim { position:absolute; inset:0; background:rgba(14,14,16,0.55); transition:opacity .35s; pointer-events:none; }
 .spot { position:absolute; opacity:0; animation:annIn 16s linear infinite; transition:opacity .35s; }
@@ -272,11 +295,17 @@ p { text-wrap:pretty; }
 .spotLabel { position:absolute; left:50%; transform:translateX(-50%); background:rgba(22,22,24,0.92); border:1px solid #3a3a3e; padding:4px 10px; font-size:10px; letter-spacing:2.5px; color:#f4f2ee; white-space:nowrap; }
 
 /* ---------- legend ---------- */
-.legend { display:flex; gap:28px; font-size:10px; letter-spacing:2.5px; color:#96928c; flex-wrap:wrap; align-items:baseline; }
-.legBtn { background:none; border:0; padding:0; margin:0; font:inherit; letter-spacing:inherit; color:inherit; cursor:pointer; white-space:nowrap; }
+.legend { display:flex; gap:28px; font-size:10px; letter-spacing:2.5px; color:var(--muted); flex-wrap:wrap; align-items:baseline; }
+/* the label text is only 15px tall; 5px of vertical padding carries the
+   24x24 target (WCAG 2.2 AA) without moving a pixel of it — the legend is
+   baseline-aligned, so padding grows the hit box around the text rather than
+   shifting it, and the row height is still set by the taller .nextBtn.
+   All three are already >=24px wide, so no horizontal padding is needed
+   (that would change the gaps). */
+.legBtn { background:none; border:0; padding:5px 0; margin:0; font:inherit; letter-spacing:inherit; color:inherit; cursor:pointer; white-space:nowrap; }
 .legBtn:hover { color:#f4f2ee; }
 .nextBtn { background:none; font:inherit; letter-spacing:inherit; color:#f4f2ee; border:1px solid #3a3a3e; padding:6px 12px; margin:0; cursor:pointer; white-space:nowrap; transition:border-color .25s, color .25s; }
-.nextBtn:hover { border-color:#c65b40; color:#c65b40; }
+.nextBtn:hover { border-color:var(--accent); color:var(--accent); }
 
 /* ---------- work table ---------- */
 .workRow { border-top:1px solid var(--hair); padding:18px 0; display:grid; grid-template-columns:220px 1fr; gap:24px; }
@@ -338,17 +367,22 @@ p { text-wrap:pretty; }
   var layer = document.getElementById('spotLayer');
   var titleEl = document.getElementById('sceneTitle');
 
+  /* These write inline styles, so they hand the browser `var(--accent)` /
+     `var(--muted)` rather than a hex: the token is resolved against the
+     element's own cascade (the .onDark band pins both to their dark-surface
+     values) and re-resolves for free when the theme toggle flips, which
+     reading a computed value once at startup would not. */
   function borderFor(r) {
     return r === 'sa' ? '1px dashed rgba(244,242,238,0.55)'
-      : (r === 'stunt' ? '1px solid #c65b40' : '1px solid rgba(244,242,238,0.95)');
+      : (r === 'stunt' ? '1px solid var(--accent)' : '1px solid rgba(244,242,238,0.95)');
   }
   function colFor(r) {
-    return r === 'stunt' ? '#c65b40' : (r === 'spact' ? 'rgba(244,242,238,0.95)' : 'rgba(244,242,238,0.55)');
+    return r === 'stunt' ? 'var(--accent)' : (r === 'spact' ? 'rgba(244,242,238,0.95)' : 'rgba(244,242,238,0.55)');
   }
   function dotFor(r) {
-    return r === 'stunt' ? '#c65b40' : (r === 'spact' ? '#f4f2ee' : '#96928c');
+    return r === 'stunt' ? 'var(--accent)' : (r === 'spact' ? '#f4f2ee' : 'var(--muted)');
   }
-  function labBorderFor(r) { return r === 'stunt' ? '#c65b40' : '#3a3a3e'; }
+  function labBorderFor(r) { return r === 'stunt' ? 'var(--accent)' : '#3a3a3e'; }
 
   function buildScene(i) {
     var scene = SCENES[i % SCENES.length];
@@ -454,10 +488,10 @@ p { text-wrap:pretty; }
     CARDS.forEach(function (c) {
       if (!c.el) return;
       var sel = role === c.role;
-      c.el.style.borderTopColor = sel ? '#c65b40' : '#3a3a3e';
+      c.el.style.borderTopColor = sel ? 'var(--accent)' : '#3a3a3e';
       c.el.setAttribute('aria-pressed', sel ? 'true' : 'false');
       var t = c.el.querySelector('.roleTitle');
-      if (t) t.style.color = sel ? '#c65b40' : '#f4f2ee';
+      if (t) t.style.color = sel ? 'var(--accent)' : '#f4f2ee';
       var f = c.el.querySelector('.roleFlag');
       if (f) f.style.opacity = sel ? '1' : '0';
     });
@@ -487,8 +521,28 @@ p { text-wrap:pretty; }
     });
   }
 
-  /* componentDidMount: preload the second scene image */
-  (function () { var pre = new Image(); pre.src = SCENES[1].image; })();
+  /* Preload the second scene only once someone reaches for the stepper.
+     It used to be fetched on page load, which cost every visitor ~197KB for a
+     control most of them never touch. Firing on the first hover/focus/touch
+     (rather than on idle) keeps that cost at zero for the majority while still
+     starting the fetch in the gap between reaching the button and pressing it;
+     an idle preload would still spend the bytes on everyone. */
+  (function () {
+    if (!nextBtn || !SCENES[1]) return;
+    var armed = true;
+    function preload() {
+      if (!armed) return;
+      armed = false;
+      var pre = new Image();
+      pre.src = SCENES[1].image;
+      ['pointerenter', 'focus', 'touchstart'].forEach(function (evt) {
+        nextBtn.removeEventListener(evt, preload);
+      });
+    }
+    ['pointerenter', 'focus', 'touchstart'].forEach(function (evt) {
+      nextBtn.addEventListener(evt, preload, { passive: true });
+    });
+  })();
 
   /* sync the server-rendered initial frame with live state */
   applyRole();
