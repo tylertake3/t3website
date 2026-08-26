@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "title": "Specialist Casting for Film, TV & Commercial | Take 3 Agency",
+    "description": "When a brief calls for a skill or a look beyond the standing roster, Take 3 sources it: footballers, circus artists, stunt performers, motion capture and more.",
+    "ogTitle": "Specialists | Take 3 Agency",
+    "ogDescription": "When a brief calls for a skill or a look beyond the standing roster, Take 3 sources it.",
+    "footerTitle": "Tell us what you need"
+  },
+  "hero": {
+    "eyebrow": "SPECIALISTS",
+    "heading": "If the scene needs it, we'll find it",
+    "lede": "TODO: copy — one or two sentences opening the specialist offer. This is the strongest sell on the site, so it needs the client's own words rather than a placeholder."
+  },
+  "promise": {
+    "kicker": "THE PROMISE",
+    "heading": "Sourcing beyond the standing roster",
+    "body": "TODO: copy — what actually happens when a brief asks for something unusual. Should make clear that Specialists is the flexible tier rather than a fifth discipline, and that it is where the crossover between the other categories resolves itself."
+  },
+  "examples": {
+    "kicker": "ILLUSTRATIVE, NOT EXHAUSTIVE",
+    "heading": "The kind of thing this covers",
+    "items": [
+      "Footballers",
+      "Circus artists",
+      "Stunt performers",
+      "Skateboarders",
+      "Creature performers",
+      "Martial artists",
+      "Athletes",
+      "Motion capture",
+      "Military and armed police"
+    ],
+    "note": "Categories, not a closed list.",
+    "specifics": {
+      "heading": "Physical and character specifics",
+      "body": "A brief calling for a 6ft 9 actor, an identical twin, a particular build or a distinctive face is a specialist requirement, not a separate division."
+    }
+  },
+  "process": {
+    "kicker": "HOW IT WORKS",
+    "heading": "From brief to options",
+    "steps": [
+      { "number": "01", "name": "Brief in" },
+      { "number": "02", "name": "Sourcing" },
+      { "number": "03", "name": "Vetting" },
+      { "number": "04", "name": "Options presented" }
+    ],
+    "todo": "TODO: copy — one short line under each of the four steps. Keep it brief: the point is that there is a process, not a lecture on it."
+  },
+  "worked": {
+    "kicker": "A WORKED EXAMPLE",
+    "heading": "An unusual brief, start to finish",
+    "todo": "TODO: copy — one or two genuine unusual briefs Take 3 has filled, with the production's permission. Needs real examples gathered from the client first. Nothing in this section may be invented."
+  },
+  "related": {
+    "kicker": "WHERE THE OVERLAP IS REAL",
+    "heading": "Related disciplines",
+    "items": [
+      {
+        "name": "SPACTs",
+        "href": "/spacts",
+        "description": "Real skills, delivered safely on camera.",
+        "linkLabel": "View SPACTs"
+      },
+      {
+        "name": "Dancers",
+        "href": "/dancers",
+        "description": "Trained dancers for film, television, commercial and live.",
+        "linkLabel": "View dancers"
+      }
+    ]
+  }
+}

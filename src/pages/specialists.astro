@@ -1,0 +1,191 @@
+---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import Base from '../layouts/Base.astro';
+import { pageExists } from '../lib/pages';
+import copy from '../content/pages/specialists.json';
+
+/* Only link to a sibling category once its page is actually in the build —
+   the same guard artists.astro uses for its link through to this page.
+ *
+ * The `|| builtFromRoot` half is a local workaround, not a second opinion.
+ * pageExists() resolves `../pages` from import.meta.url, which under
+ * `astro build` is a bundled chunk in dist/.prerender/chunks/, so it answers
+ * false for every route in a production build (the same resolution is used
+ * inside Header.astro, which is why the overlay menu ships empty). Resolving
+ * from the project root instead is correct in dev and in the build. Drop this
+ * once src/lib/pages.ts is fixed. */
+const builtFromRoot = (href: string) => {
+  const slug = href.replace(/^\//, '').replace(/[#?].*$/, '');
+  if (!slug) return false;
+  const pages = join(process.cwd(), 'src', 'pages');
+  return existsSync(join(pages, `${slug}.astro`)) || existsSync(join(pages, slug, 'index.astro'));
+};
+
+const related = copy.related.items.filter((item) => pageExists(item.href) || builtFromRoot(item.href));
+---
+
+<Base
+  title={copy.meta.title}
+  description={copy.meta.description}
+  ogTitle={copy.meta.ogTitle}
+  ogDescription={copy.meta.ogDescription}
+  footerTitle={copy.meta.footerTitle}
+>
+  <!-- hero -->
+  <section class="pageHero specHero" aria-labelledby="specialistsTitle">
+    <div class="pageHeroInner">
+      <p class="kicker">{copy.hero.eyebrow}</p>
+      <h1 class="pageHeroTitle" id="specialistsTitle">{copy.hero.heading}</h1>
+      <p class="todoNote specHeroTodo">{copy.hero.lede}</p>
+    </div>
+  </section>
+
+  <!-- the promise -->
+  <section class="band" aria-labelledby="promiseTitle">
+    <div class="bandInner bandSplit">
+      <div>
+        <p class="kicker">{copy.promise.kicker}</p>
+        <h2 class="sectionTitle" id="promiseTitle">{copy.promise.heading}</h2>
+      </div>
+      <p class="todoNote">{copy.promise.body}</p>
+    </div>
+  </section>
+
+  <!-- examples: illustrative rather than exhaustive -->
+  <section class="band" aria-labelledby="examplesTitle">
+    <div class="bandInner">
+      <div class="sectionHead specHead">
+        <h2 class="sectionTitle" id="examplesTitle">{copy.examples.heading}</h2>
+        <p class="kicker">{copy.examples.kicker}</p>
+      </div>
+
+      <ul class="specExampleGrid">
+        {copy.examples.items.map((item) => <li class="specExampleItem">{item}</li>)}
+      </ul>
+      <p class="specExampleNote">{copy.examples.note}</p>
+
+      <div class="specSpecifics">
+        <h3 class="specSpecificsTitle">{copy.examples.specifics.heading}</h3>
+        <p class="bandBody specSpecificsBody">{copy.examples.specifics.body}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- how it works -->
+  <section class="band bandDark specDark" aria-labelledby="processTitle">
+    <div class="bandInner">
+      <div class="sectionHead specHead">
+        <h2 class="sectionTitle" id="processTitle">{copy.process.heading}</h2>
+        <p class="kicker">{copy.process.kicker}</p>
+      </div>
+      <ol class="specSteps">
+        {
+          copy.process.steps.map((step) => (
+            <li class="specStep">
+              <span class="specStepNum">{step.number}</span>
+              <span class="specStepName">{step.name}</span>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="todoNote">{copy.process.todo}</p>
+    </div>
+  </section>
+
+  <!-- a worked example: needs real briefs before it can be written -->
+  <section class="band" aria-labelledby="workedTitle">
+    <div class="bandInner bandSplit">
+      <div>
+        <p class="kicker">{copy.worked.kicker}</p>
+        <h2 class="sectionTitle" id="workedTitle">{copy.worked.heading}</h2>
+      </div>
+      <p class="todoNote">{copy.worked.todo}</p>
+    </div>
+  </section>
+
+  <!-- cross-links: the overlap with SPACTs and Dancers is real -->
+  {
+    related.length > 0 && (
+      <section class="band" aria-labelledby="relatedTitle">
+        <div class="bandInner">
+          <div class="sectionHead specHead">
+            <h2 class="sectionTitle" id="relatedTitle">
+              {copy.related.heading}
+            </h2>
+            <p class="kicker">{copy.related.kicker}</p>
+          </div>
+          <ul class="specRelated">
+            {related.map((item) => (
+              <li class="specRelatedCard">
+                <h3 class="specRelatedName">
+                  <a class="specRelatedLink" href={item.href}>
+                    {item.name}
+                  </a>
+                </h3>
+                <p class="specRelatedDesc">{item.description}</p>
+                <a class="specRelatedGo" href={item.href}>
+                  {item.linkLabel.toUpperCase()}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <style is:global>
+    /* Page-scoped patterns for /specialists. Prefixed `spec` so they cannot
+       collide with anything shared; ready to be lifted into global.css if a
+       second page ever needs them. */
+
+    /* The hero and the dark band are dark in BOTH themes, so they pin the two
+       tokens tuned for a cream page: light-theme --accent (#5d1f16) and
+       --muted (#605d57) measure roughly 1.4:1 and 2.3:1 on #1a1a1c. Same
+       "pin the value to the surface, not the theme" rule global.css applies
+       to the always-dark reviews band. */
+    .specHero, .specDark { --accent:#d4704f; --muted:#96928c; }
+    .specDark { --sub:#c7c3bd; --ink:#f4f2ee; --hair:#3a3a3e; }
+
+    .specHead { padding-bottom:18px; }
+    .specHeroTodo { max-width:56ch; }
+
+    /* examples: a plain hairline list, so it reads as categories rather than
+       as a claim about who has been booked */
+    .specExampleGrid { list-style:none; margin:34px 0 0; padding:0; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:0 48px; }
+    .specExampleItem { border-top:1px solid var(--hair); padding:16px 0; font-size:16px; letter-spacing:1.5px; color:var(--ink); }
+    .specExampleNote { margin:22px 0 0; font-size:12px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); }
+
+    .specSpecifics { margin-top:56px; border-top:1px solid var(--hair); padding-top:26px; max-width:68ch; }
+    .specSpecificsTitle { margin:0; font-size:15px; letter-spacing:2.5px; text-transform:uppercase; font-weight:400; color:var(--ink); }
+    .specSpecificsBody { margin-top:14px; }
+
+    /* how it works */
+    .specSteps { list-style:none; margin:34px 0 0; padding:0; display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:32px; }
+    .specStep { border-top:1px solid var(--hair); padding-top:18px; }
+    .specStepNum { display:block; font-size:11px; letter-spacing:3px; color:var(--accent); }
+    .specStepName { display:block; margin-top:12px; font-size:17px; letter-spacing:2.5px; text-transform:uppercase; color:var(--ink); }
+
+    /* cross-links */
+    .specRelated { list-style:none; margin:34px 0 0; padding:0; display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:32px 48px; }
+    .specRelatedCard { border-top:1px solid var(--hair); padding-top:20px; }
+    .specRelatedName { margin:0; font-weight:400; }
+    .specRelatedLink { font-size:17px; letter-spacing:3px; text-transform:uppercase; color:var(--ink); }
+    .specRelatedLink:hover { color:var(--accent); }
+    .specRelatedDesc { margin:10px 0 0; font-size:15px; font-weight:300; line-height:1.6; color:var(--sub); text-wrap:pretty; }
+    .specRelatedGo { display:inline-block; margin-top:14px; font-size:11px; letter-spacing:2.5px; color:var(--accent); }
+    .specRelatedGo:hover { color:var(--ink); }
+
+    @media (max-width:1024px) {
+      .specExampleGrid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:0 32px; }
+      .specSteps { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:28px; }
+    }
+
+    @media (max-width:640px) {
+      .specExampleGrid { grid-template-columns:1fr; }
+      .specSteps, .specRelated { grid-template-columns:1fr; gap:26px; }
+      .specSpecifics { margin-top:40px; }
+    }
+  </style>
+</Base>
