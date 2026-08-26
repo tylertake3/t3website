@@ -1,0 +1,106 @@
+---
+import Base from '../layouts/Base.astro';
+import { pageExists } from '../lib/pages';
+import copy from '../content/pages/artists.json';
+
+const specialistsBuilt = pageExists(copy.specialists.href);
+---
+
+<Base
+  title={copy.meta.title}
+  description={copy.meta.description}
+  ogTitle={copy.meta.ogTitle}
+  ogDescription={copy.meta.ogDescription}
+  footerTitle={copy.meta.footerTitle}
+>
+  <!-- hero -->
+  <section class="pageHero" aria-labelledby="artistsTitle">
+    <div class="pageHeroInner">
+      <p class="kicker">{copy.hero.eyebrow}</p>
+      <h1 class="pageHeroTitle" id="artistsTitle">{copy.hero.heading}</h1>
+      <p class="pageHeroLede">{copy.hero.lede}</p>
+    </div>
+  </section>
+
+  <!-- the full range -->
+  <section class="band" aria-labelledby="rangeTitle">
+    <div class="bandInner bandSplit">
+      <div>
+        <p class="kicker">{copy.range.kicker}</p>
+        <h2 class="sectionTitle" id="rangeTitle">{copy.range.heading}</h2>
+      </div>
+      <p class="bandBody">{copy.range.body}</p>
+    </div>
+  </section>
+
+  <!-- the four core routes -->
+  <section class="band" aria-labelledby="categoriesTitle">
+    <div class="bandInner">
+      <div class="sectionHead">
+        <h2 class="sectionTitle" id="categoriesTitle">{copy.categories.heading}</h2>
+        <p class="kicker">{copy.categories.kicker}</p>
+      </div>
+      <ul class="catGrid">
+        {
+          copy.categories.items.map((cat) => (
+            <li class="catCard">
+              <a class="catLink" href={cat.href}>
+                <span class="slot catSlot" style="aspect-ratio:4/5;">
+                  <span class="slotLabel">{cat.slotLabel}</span>
+                </span>
+                <span class="catName">{cat.name}</span>
+              </a>
+              <p class="catDesc">{cat.description}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- specialists: deliberately given more room than a tile -->
+  <section class="band bandDark" aria-labelledby="specialistsTitle">
+    <div class="bandInner specialistsBlock">
+      <div>
+        <p class="kicker">{copy.specialists.kicker}</p>
+        <h2 class="displayTitle" id="specialistsTitle">{copy.specialists.heading}</h2>
+      </div>
+      <div>
+        <p class="bandBody">{copy.specialists.body}</p>
+        {
+          specialistsBuilt ? (
+            <a class="btnSolid specialistsCta" href={copy.specialists.href}>
+              {copy.specialists.linkLabel.toUpperCase()}
+            </a>
+          ) : (
+            <p class="todoNote">{copy.specialists.pendingNote}</p>
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- represented, not listed -->
+  <section class="band" aria-labelledby="representedTitle">
+    <div class="bandInner bandSplit">
+      <div>
+        <p class="kicker">{copy.represented.kicker}</p>
+        <h2 class="sectionTitle" id="representedTitle">{copy.represented.heading}</h2>
+      </div>
+      <div class="bandBody">
+        {copy.represented.paragraphs.map((para) => <p>{para}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- who we work with -->
+  <section class="band" aria-labelledby="clientsTitle">
+    <div class="bandInner bandSplit">
+      <div>
+        <p class="kicker">{copy.clients.kicker}</p>
+        <h2 class="sectionTitle" id="clientsTitle">{copy.clients.heading}</h2>
+      </div>
+      <p class="bandBody">{copy.clients.body}</p>
+    </div>
+  </section>
+</Base>

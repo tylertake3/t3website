@@ -1,5 +1,6 @@
-# Take 3 Agency — content settings for the website editor.
-# Repo and branch are filled in once the site is on GitHub.
+# GENERATED FILE — do not edit by hand.
+# Built by scripts/build-admin-config.mjs from src/admin/config.head.yml,
+# public/admin/_fragments/*.yml and src/admin/config.tail.yml.
 
 backend:
   name: github
@@ -9,8 +10,8 @@ backend:
 media_folder: public/uploads
 public_folder: /uploads
 
-site_url: https://take3agency.com
-display_url: https://take3agency.com
+site_url: https://www.take3agency.com
+display_url: https://www.take3agency.com
 logo_url: /assets/take3-logo.svg
 
 collections:
@@ -29,6 +30,7 @@ collections:
       - { name: credits, label: Productions, widget: string, required: false }
       - { name: order, label: Position in the slider, widget: number, value_type: int, default: 99 }
       - { name: body, label: What they said, widget: text }
+
 
   - name: pages
     label: Page text
@@ -91,6 +93,8 @@ collections:
               - { name: heading, label: Section heading, widget: string }
               - { name: kicker, label: Small label beside the heading, widget: string }
               - { name: viewLabel, label: Link text on each tile, widget: string, hint: Appears under every category tile, followed by an arrow. }
+              - { name: pauseLabel, label: Button text that stops the tiles scrolling, widget: string, hint: Small button beside the heading. Shown while the tiles are moving. }
+              - { name: playLabel, label: Button text that starts the tiles scrolling again, widget: string, hint: Replaces the pause text once the tiles have been stopped. }
           - name: reviews
             label: Reviews
             widget: object
@@ -114,6 +118,77 @@ collections:
               - { name: countNumber, label: Headline figure, widget: string }
               - { name: countLabel, label: Caption under the figure, widget: string }
               - { name: posterPlaceholder, label: Placeholder text on empty poster tiles, widget: string, hint: Shown on each poster space until real artwork is added. }
+      - name: page-artists
+        label: Artists page text
+        file: src/content/pages/artists.json
+        description: All the wording on the Our Artists page.
+        fields:
+          - name: meta
+            label: Search & sharing
+            widget: object
+            collapsed: true
+            hint: The words Google and social media show. Not visible on the page itself.
+            fields:
+              - { name: title, label: Browser tab & Google title, widget: string }
+              - { name: description, label: Google description, widget: text, hint: Around 150-160 characters works best. }
+              - { name: ogTitle, label: Title when shared on social, widget: string }
+              - { name: ogDescription, label: Description when shared on social, widget: text }
+              - { name: footerTitle, label: Footer headline, widget: string, hint: The big line in the contact strip at the bottom of the page. }
+          - name: hero
+            label: Top of the page
+            widget: object
+            fields:
+              - { name: eyebrow, label: Small line above the headline, widget: string }
+              - { name: heading, label: Headline, widget: string }
+              - { name: lede, label: Opening paragraph, widget: text }
+          - name: range
+            label: The full range
+            widget: object
+            fields:
+              - { name: kicker, label: Small label above the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: body, label: Paragraph, widget: text }
+          - name: categories
+            label: The four categories
+            widget: object
+            fields:
+              - { name: kicker, label: Small label beside the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - name: items
+                label: Category tiles
+                label_singular: Category
+                widget: list
+                hint: Shown as four equal tiles. Each links to its own page.
+                fields:
+                  - { name: name, label: Name, widget: string }
+                  - { name: href, label: Links to, widget: string, hint: 'A path on this site, for example /spacts' }
+                  - { name: description, label: One line on who it is for, widget: text }
+                  - { name: slotLabel, label: Placeholder caption, widget: string, hint: Shown on the empty picture plate until artwork is added. }
+          - name: specialists
+            label: Specialists block
+            widget: object
+            hint: Deliberately given more room than a tile, because it does a different job.
+            fields:
+              - { name: kicker, label: Small label above the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: body, label: Paragraph, widget: text }
+              - { name: linkLabel, label: Button text, widget: string }
+              - { name: href, label: Button links to, widget: string }
+              - { name: pendingNote, label: Note shown until that page exists, widget: string }
+          - name: represented
+            label: Represented, not listed
+            widget: object
+            fields:
+              - { name: kicker, label: Small label above the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: paragraphs, label: Paragraphs, widget: list, hint: One entry per paragraph. }
+          - name: clients
+            label: Who we work with
+            widget: object
+            fields:
+              - { name: kicker, label: Small label above the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: body, label: Paragraph, widget: text }
       - name: page-dancers
         label: Dancers page text
         file: src/content/pages/dancers.json
@@ -261,6 +336,7 @@ collections:
               - { name: description, label: Google description, widget: text, hint: 'The grey summary under the title in Google results. Around 150–160 characters works best.' }
               - { name: ogTitle, label: Title when shared on social, widget: string, hint: 'Used when someone pastes a link to this page into WhatsApp, Instagram, LinkedIn and so on.' }
               - { name: ogDescription, label: Description when shared on social, widget: text, hint: 'The short line under the title on a shared link preview.' }
+              - { name: ogImageAlt, label: Description of the shared image, widget: text, hint: 'Describes the preview picture for screen readers and for anyone whose email or app does not load images.' }
               - { name: footerTitle, label: Footer headline, widget: string, hint: 'The big line above the contact details at the very bottom of the page.' }
               - name: footerLinks
                 label: Footer buttons
@@ -387,7 +463,13 @@ collections:
               - { name: title, label: Page title, widget: string, hint: 'The very large word at the top. Always shown in capitals.' }
               - { name: strapline, label: Opening sentence, widget: text, hint: 'The line under the title.' }
               - { name: creditLabel, label: Photo credit label, widget: string, hint: 'The small line in the bottom corner above the production name, currently AS SEEN ON.' }
-              - { name: creditTitle, label: First production name, widget: string, hint: 'The production name shown when the page first loads. It then changes automatically as the background photos rotate; the later names are set in the page code, so ask your developer to change those.' }
+              - name: slides
+                label: Rotating photos
+                widget: list
+                hint: 'The background photos that fade from one to the next, every five seconds, in this order. The first one shows when the page loads. Add, reorder or remove them here.'
+                fields:
+                  - { name: image, label: Photo file, widget: string, hint: 'The path to the photo, such as /uploads/my-photo.webp. Upload images to the uploads folder first.' }
+                  - { name: production, label: Production name, widget: string, hint: 'The name shown in the bottom corner while this photo is on screen. Written in capitals.' }
 
           - name: what
             label: What is a SPACT
@@ -431,7 +513,7 @@ collections:
                 fields:
                   - { name: caption, label: Production name, widget: string, hint: 'The caption under the photo. Written in capitals.' }
                   - { name: alt, label: Photo description, widget: string, hint: 'Describes the photo for people using a screen reader and for Google. Not shown on the page.' }
-                  - { name: image, label: Photo file, widget: string, hint: 'The path to the image, such as /uploads/w1280.webp. Upload images to the uploads folder first.' }
+                  - { name: image, label: Photo file, widget: string, hint: 'The path to the image, such as /uploads/w1280.jpg. Upload images to the uploads folder first.' }
 
           - name: commercial
             label: For commercial & brand
@@ -470,6 +552,7 @@ collections:
               - { name: description, label: Google description, widget: text, hint: 'The grey summary under the title in Google results. Around 150–160 characters works best.' }
               - { name: ogTitle, label: Title when shared on social, widget: string, hint: 'Used when someone pastes a link to this page into WhatsApp, Instagram, LinkedIn and so on.' }
               - { name: ogDescription, label: Description when shared on social, widget: text, hint: 'The short line under the title on a shared link preview.' }
+              - { name: ogImageAlt, label: Description of the shared image, widget: text, hint: 'Describes the preview picture for screen readers and for anyone whose email or app does not load images.' }
               - { name: footerTitle, label: Footer headline, widget: string, hint: 'The big line above the contact details at the very bottom of the page.' }
               - name: footerLinks
                 label: Footer buttons
@@ -701,6 +784,7 @@ collections:
               - { name: eyebrow, label: Small numbered line above the heading, widget: string, hint: 'Written in capitals, e.g. 04 · THE BOOKING.' }
               - { name: heading, label: Section heading, widget: string, hint: 'Always shown in capitals.' }
               - { name: paragraphs, label: Paragraphs, widget: list, hint: 'One entry per paragraph. Add, reorder or remove them here.' }
+
   - name: homepage
     label: Homepage
     files:

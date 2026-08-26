@@ -305,3 +305,57 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   .menuBtn { gap:6px; }
   .menuBtnLabel { font-size:11px; }
 }
+
+/* ---------- page patterns (shared by the pages built from BUILD-SPEC) ---------- */
+
+/* text-led hero for pages without a full-bleed photograph */
+.pageHero { background:var(--heroBg); color:var(--heroInk); padding:200px 0 72px; }
+.pageHeroInner { max-width:1280px; margin:0 auto; padding:0 40px; }
+.pageHeroTitle { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(44px, 5.4vw, 92px); font-weight:400; letter-spacing:2px; line-height:1.06; margin-top:18px; }
+.pageHeroLede { font-size:clamp(17px, 1.6vw, 21px); font-weight:300; line-height:1.7; color:var(--heroInkSoft); margin-top:22px; max-width:56ch; text-wrap:pretty; }
+.pageHero .kicker { color:var(--accent); }
+
+/* a standard content band */
+.band { padding:96px 0; }
+.band + .band { padding-top:0; }
+.bandInner { max-width:1280px; margin:0 auto; padding:0 40px; }
+.bandSplit { display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start; }
+.bandBody { font-size:18px; font-weight:300; line-height:1.75; color:var(--sub); text-wrap:pretty; }
+.bandBody p + p { margin-top:18px; }
+.displayTitle { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(30px, 3.6vw, 52px); font-weight:400; letter-spacing:1px; line-height:1.1; margin-top:16px; }
+
+/* the always-dark band, for a section that needs to sit apart */
+.bandDark { background:#1a1a1c; color:#f4f2ee; border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); padding:88px 0; }
+.bandDark + .band { padding-top:96px; }
+.bandDark .bandBody { color:#c7c3bd; }
+.bandDark a:focus-visible, .bandDark button:focus-visible { outline-color:#f4f2ee; }
+.specialistsBlock { display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start; }
+.specialistsCta { display:inline-block; margin-top:26px; }
+
+/* category tiles: four equal routes, no discipline favoured */
+.catGrid { list-style:none; margin:32px 0 0; padding:0; display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:24px; }
+.catLink { display:block; }
+.catSlot { display:flex; align-items:center; justify-content:center; }
+.catLink:hover .catSlot { outline:1px solid var(--ctrlBorder); outline-offset:-1px; }
+.catName { display:block; margin-top:14px; font-size:17px; letter-spacing:3px; text-transform:uppercase; color:var(--ink); }
+.catLink:hover .catName { color:var(--accent); }
+.catDesc { margin-top:8px; font-size:15px; font-weight:300; line-height:1.6; color:var(--sub); text-wrap:pretty; }
+
+/* copy still to be written, deliberately visible rather than quietly missing */
+.todoNote { margin-top:22px; font-size:13px; letter-spacing:1px; color:var(--accent); border-left:2px solid var(--accent); padding-left:12px; }
+
+@media (max-width:1024px) {
+  .pageHero { padding:180px 0 64px; }
+  .pageHeroInner, .bandInner { padding:0 32px; }
+  .band { padding:72px 0; }
+  .bandSplit, .specialistsBlock { grid-template-columns:1fr; gap:36px; }
+  .catGrid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width:640px) {
+  .pageHero { padding:150px 0 52px; }
+  .pageHeroInner, .bandInner { padding:0 20px; }
+  .band { padding:56px 0; }
+  .bandBody { font-size:16px; }
+  .catGrid { grid-template-columns:1fr; gap:28px; }
+}
