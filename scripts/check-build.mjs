@@ -9,7 +9,9 @@ import { readdir, readFile, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join, extname } from 'node:path';
 
-const DIST = 'dist';
+/* The Vercel adapter puts the static site under dist/client and writes each
+   page as a folder with an index.html inside. */
+const DIST = existsSync('dist/client') ? 'dist/client' : 'dist';
 const MAX_IMAGE_BYTES = 900 * 1024;
 
 /* Every page a visitor can reach. Add new pages here so a missing build fails. */
@@ -41,8 +43,13 @@ if (!existsSync(DIST)) {
 }
 
 /* ---------- every expected page and file was built ---------- */
+const builtAs = (page) => {
+  const asFile = join(DIST, page);
+  const asFolder = join(DIST, page.replace(/\.html$/, ''), 'index.html');
+  return existsSync(asFile) || existsSync(asFolder);
+};
 for (const page of EXPECTED_PAGES) {
-  if (!existsSync(join(DIST, page))) note(`page missing from the build: ${page}`);
+  if (!builtAs(page)) note(`page missing from the build: ${page}`);
 }
 for (const file of EXPECTED_FILES) {
   if (!existsSync(join(DIST, file))) note(`file missing from the build: ${file}`);
@@ -112,7 +119,7 @@ for (const file of htmlFiles) {
   /* --- a page must not load another page's stylesheet ---
      One page's styles landing on another silently rearranges the layout, which
      is exactly how the homepage hero once got the Models page's grid. */
-  const pageName = page.replace(/\.html$/, '');
+  const pageName = page.replace(/\/index\.html$/, '').replace(/\.html$/, '');
   for (const m of html.matchAll(/href="\/_astro\/([^".]+)\.[^".]+\.css"/g)) {
     const styleOwner = m[1];
     const shared = ['Base', 'index'];
