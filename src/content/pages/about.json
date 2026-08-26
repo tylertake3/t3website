@@ -1,0 +1,79 @@
+{
+  "meta": {
+    "title": "Who We Are | Specialist Talent Agency | Take 3 Agency",
+    "description": "Take 3 has supplied specialist talent to film, television and commercial productions since 2019. Contracts, fees, overtime and coordination handled by us.",
+    "ogTitle": "Who We Are | Take 3 Agency",
+    "ogDescription": "Take 3 Agency has supplied specialist talent to film, television and commercial productions since 2019.",
+    "footerTitle": "Start a conversation"
+  },
+  "hero": {
+    "eyebrow": "TAKE 3 AGENCY",
+    "heading": "Who we are",
+    "lede": "A specialist talent agency working with film, television and commercial productions across the UK and Europe, trading since 2019."
+  },
+  "story": {
+    "kicker": "SINCE 2019",
+    "heading": "The story so far",
+    "body": "TODO: copy — the story since 2019. How Take 3 started, what it set out to do differently, and how the roster grew to its present size. Facts only, and nothing that cannot be evidenced.",
+    "stats": [
+      { "number": "2019", "label": "Trading since" },
+      { "number": "500+", "label": "Productions supplied" },
+      { "number": "1,500+", "label": "Artists" },
+      { "number": "UK & Europe", "label": "Where we work" }
+    ]
+  },
+  "operations": {
+    "kicker": "HOW WE WORK",
+    "heading": "The operational difference",
+    "body": "Contracts, fees, overtime, buyouts and coordination are handled by Take 3, not left with the production to chase.",
+    "items": [
+      {
+        "name": "Contracts",
+        "detail": "TODO: copy — one line on how contracting is handled and what the production does not have to do."
+      },
+      {
+        "name": "Fees",
+        "detail": "TODO: copy — one line on how fees are agreed and settled."
+      },
+      {
+        "name": "Overtime",
+        "detail": "TODO: copy — one line on how overtime is tracked and paid."
+      },
+      {
+        "name": "Buyouts",
+        "detail": "TODO: copy — one line on how usage and buyouts are handled."
+      },
+      {
+        "name": "Coordination",
+        "detail": "TODO: copy — one line on what Take 3 coordinates between the production and the artists."
+      }
+    ]
+  },
+  "team": {
+    "kicker": "THE TEAM",
+    "heading": "The people you deal with",
+    "body": "TODO: copy — a short introduction to the team, written once the list below is confirmed.",
+    "slotLabel": "Photograph to come",
+    "plates": 3,
+    "todo": "TODO: content — no team members have been listed. Supply each person's name, job title and photograph, and correct the number of plates below: three is a placeholder, not a headcount."
+  },
+  "principles": {
+    "kicker": "WHAT WE STAND FOR",
+    "heading": "Shown, not stated",
+    "body": "TODO: copy — one short paragraph setting up the examples below, without claiming anything the examples do not prove.",
+    "todo": "TODO: content — three real examples of the agency living up to what it stands for. Each needs a short title and two or three sentences. Anything invented here defeats the point of the section, so leave the plates empty until genuine examples are supplied.",
+    "examples": [
+      { "slotLabel": "Example one" },
+      { "slotLabel": "Example two" },
+      { "slotLabel": "Example three" }
+    ]
+  },
+  "laural": {
+    "kicker": "THE PLATFORM",
+    "heading": "Every booking runs on Laural",
+    "body": "The roster is only half the job. Everything around a booking runs on Laural, the platform Take 3 works from.",
+    "linkLabel": "About Laural",
+    "href": "/laural",
+    "pendingNote": "TODO: link — the Laural page is still to be built, so this link is held back until it exists."
+  }
+}

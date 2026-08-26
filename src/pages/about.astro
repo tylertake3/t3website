@@ -1,0 +1,197 @@
+---
+import Base from '../layouts/Base.astro';
+import { pageExists } from '../lib/pages';
+import copy from '../content/pages/about.json';
+
+const lauralBuilt = pageExists(copy.laural.href);
+
+/* Copy still to be written is styled as a visible note rather than passed off as
+   body text. The moment real wording replaces it, it reads as body text again. */
+const isTodo = (text: string) => text.trimStart().startsWith('TODO:');
+const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `bandBody ${extra}`.trim());
+---
+
+<Base
+  title={copy.meta.title}
+  description={copy.meta.description}
+  ogTitle={copy.meta.ogTitle}
+  ogDescription={copy.meta.ogDescription}
+  footerTitle={copy.meta.footerTitle}
+>
+  <!-- hero -->
+  <section class="pageHero" aria-labelledby="aboutTitle">
+    <div class="pageHeroInner">
+      <p class="kicker">{copy.hero.eyebrow}</p>
+      <h1 class="pageHeroTitle" id="aboutTitle">{copy.hero.heading}</h1>
+      <p class="pageHeroLede">{copy.hero.lede}</p>
+    </div>
+  </section>
+
+  <!-- the story since 2019 -->
+  <section class="band" aria-labelledby="storyTitle">
+    <div class="bandInner bandSplit">
+      <div>
+        <p class="kicker">{copy.story.kicker}</p>
+        <h2 class="sectionTitle" id="storyTitle">{copy.story.heading}</h2>
+      </div>
+      <div>
+        <p class={bodyClass(copy.story.body)}>{copy.story.body}</p>
+        <div class="stats">
+          {
+            copy.story.stats.map((stat) => (
+              <div class="stat">
+                {/* a figure made of words, like "UK & Europe", takes a smaller
+                    size so it holds one line beside the numbers */}
+                <div class={/\d/.test(stat.number) ? 'statNum' : 'statNum statNumText'} data-countup>
+                  {stat.number}
+                </div>
+                <div class="statLabel">{stat.label}</div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- how the agency works -->
+  <section class="band" aria-labelledby="operationsTitle">
+    <div class="bandInner">
+      <div class="sectionHead">
+        <h2 class="sectionTitle" id="operationsTitle">{copy.operations.heading}</h2>
+        <p class="kicker">{copy.operations.kicker}</p>
+      </div>
+      <p class={bodyClass(copy.operations.body, 'aboutIntro')}>{copy.operations.body}</p>
+      <ul class="aboutOpsList">
+        {
+          copy.operations.items.map((item) => (
+            <li class="aboutOp">
+              <h3 class="aboutOpName">{item.name}</h3>
+              <p class={isTodo(item.detail) ? 'todoNote aboutOpDetail' : 'aboutOpDetail'}>{item.detail}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- the team -->
+  <section class="band" aria-labelledby="teamTitle">
+    <div class="bandInner">
+      <div class="sectionHead">
+        <h2 class="sectionTitle" id="teamTitle">{copy.team.heading}</h2>
+        <p class="kicker">{copy.team.kicker}</p>
+      </div>
+      <p class={bodyClass(copy.team.body, 'aboutIntro')}>{copy.team.body}</p>
+      <ul class="aboutTeam">
+        {
+          Array.from({ length: copy.team.plates }).map(() => (
+            <li>
+              <span class="slot aboutTeamSlot" style="aspect-ratio:4/5;">
+                <span class="slotLabel">{copy.team.slotLabel}</span>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="todoNote">{copy.team.todo}</p>
+    </div>
+  </section>
+
+  <!-- what the agency stands for, shown through examples -->
+  <section class="band" aria-labelledby="principlesTitle">
+    <div class="bandInner">
+      <div class="sectionHead">
+        <h2 class="sectionTitle" id="principlesTitle">{copy.principles.heading}</h2>
+        <p class="kicker">{copy.principles.kicker}</p>
+      </div>
+      <p class={bodyClass(copy.principles.body, 'aboutIntro')}>{copy.principles.body}</p>
+      <ul class="aboutExamples">
+        {
+          copy.principles.examples.map((example) => (
+            <li>
+              <span class="slot aboutExampleSlot" style="aspect-ratio:3/2;">
+                <span class="slotLabel">{example.slotLabel}</span>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="todoNote">{copy.principles.todo}</p>
+    </div>
+  </section>
+
+  <!-- a light link through to Laural -->
+  <section class="band bandDark" aria-labelledby="lauralTitle">
+    <div class="bandInner bandSplit">
+      <div>
+        <p class="kicker">{copy.laural.kicker}</p>
+        <h2 class="displayTitle" id="lauralTitle">{copy.laural.heading}</h2>
+      </div>
+      <div>
+        <p class="bandBody">{copy.laural.body}</p>
+        {
+          lauralBuilt ? (
+            <a class="aboutLauralLink" href={copy.laural.href}>
+              {copy.laural.linkLabel} <span aria-hidden="true">&rarr;</span>
+            </a>
+          ) : (
+            <p class="todoNote">{copy.laural.pendingNote}</p>
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  <style is:global>
+    .aboutIntro { margin-top:26px; max-width:64ch; }
+
+    /* the operational difference: one row per thing Take 3 takes off the production */
+    .aboutOpsList {
+      list-style:none; margin:40px 0 0; padding:0;
+      display:grid; grid-template-columns:repeat(5, minmax(0, 1fr)); gap:28px;
+    }
+    .aboutOp { border-top:1px solid var(--hair); padding-top:18px; }
+    .aboutOpName { font-size:15px; letter-spacing:3px; text-transform:uppercase; font-weight:400; color:var(--ink); }
+    .aboutOpDetail { margin-top:14px; font-size:15px; font-weight:300; line-height:1.6; color:var(--sub); text-wrap:pretty; }
+    .todoNote.aboutOpDetail { font-size:13px; color:var(--accent); }
+
+    /* the hero and the dark band are dark in both themes, so they keep the dark
+       accent: the light theme's oxblood falls below 4.5:1 on either surface */
+    .pageHero .kicker,
+    .bandDark .kicker,
+    .bandDark .todoNote { color:#d4704f; }
+    .bandDark .todoNote { border-left-color:#d4704f; }
+
+    /* team plates: a placeholder count, not a headcount */
+    .aboutTeam {
+      list-style:none; margin:36px 0 0; padding:0;
+      display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:24px;
+    }
+    .aboutTeamSlot { display:flex; align-items:center; justify-content:center; }
+
+    /* examples of what the agency stands for, empty until the real ones arrive */
+    .aboutExamples {
+      list-style:none; margin:36px 0 0; padding:0;
+      display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:24px;
+    }
+    .aboutExampleSlot { display:flex; align-items:center; justify-content:center; }
+
+    .aboutLauralLink {
+      display:inline-block; margin-top:26px; font-size:13px; letter-spacing:2px;
+      text-transform:uppercase; color:#f4f2ee;
+      border-bottom:1px solid rgba(244,242,238,0.5); padding-bottom:4px;
+    }
+    .aboutLauralLink:hover { border-bottom-color:#f4f2ee; }
+
+    @media (max-width:1024px) {
+      .aboutOpsList { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:24px; }
+      .aboutTeam, .aboutExamples { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width:640px) {
+      .aboutOpsList { grid-template-columns:1fr; gap:20px; }
+      .aboutTeam, .aboutExamples { grid-template-columns:1fr; gap:28px; }
+    }
+  </style>
+</Base>
