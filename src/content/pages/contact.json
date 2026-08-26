@@ -1,0 +1,159 @@
+{
+  "meta": {
+    "title": "Contact Take 3 Agency | Talent Enquiries for Film, TV & Commercial",
+    "description": "Talk to Take 3 Agency about casting dancers, SPACTs, models, stand-ins and specialist performers for film, television and commercial productions in the UK.",
+    "ogTitle": "Contact | Take 3 Agency",
+    "ogDescription": "Talk to Take 3 about casting dancers, SPACTs, models, stand-ins and specialist performers for film, television and commercial productions.",
+    "footerTitle": "Tell us what the production needs"
+  },
+  "hero": {
+    "eyebrow": "TAKE 3 AGENCY",
+    "heading": "Contact",
+    "lede": "Email, phone, or the enquiry form below. Tell us what the production needs, when and where, and we will come back to you."
+  },
+  "details": {
+    "kicker": "DIRECT CONTACT",
+    "heading": "Reach us",
+    "items": [
+      {
+        "id": "email",
+        "label": "Email",
+        "note": "The quickest route for a brief, a shortlist request or a rate query."
+      },
+      {
+        "id": "phone",
+        "label": "Phone",
+        "note": "Office hours, UK time. Useful when a date has moved and the answer cannot wait."
+      },
+      {
+        "id": "instagram",
+        "label": "Instagram",
+        "note": "Recent work, and the fastest way to see who is on the books."
+      }
+    ],
+    "hoursNote": "TODO: copy — the hours the phone is answered, and who to contact outside them if there is an out-of-hours route."
+  },
+  "form": {
+    "kicker": "GENERAL ENQUIRY",
+    "heading": "Send us a brief",
+    "intro": "The more of this you fill in, the more useful the first reply will be. Anything marked optional can be left blank.",
+    "formAction": "",
+    "method": "post",
+    "notConnectedTitle": "This form is not connected yet",
+    "notConnectedBody": "TODO: setup — no form handler has been chosen, so nothing typed below would reach us. The form is switched off until one is in place. Please email or phone us in the meantime.",
+    "optionalLabel": "Optional",
+    "selectPlaceholder": "Please choose",
+    "submitLabel": "Send enquiry",
+    "privacyNote": "TODO: copy — one line on what happens to the details sent through this form, and a link to the privacy policy once it exists.",
+    "groups": [
+      {
+        "legend": "About you",
+        "fields": [
+          {
+            "id": "name",
+            "label": "Your name",
+            "type": "text",
+            "autocomplete": "name",
+            "required": true
+          },
+          {
+            "id": "email",
+            "label": "Email",
+            "type": "email",
+            "autocomplete": "email",
+            "inputmode": "email",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "label": "Phone",
+            "type": "tel",
+            "autocomplete": "tel",
+            "inputmode": "tel",
+            "required": false
+          },
+          {
+            "id": "company",
+            "label": "Company",
+            "type": "text",
+            "autocomplete": "organization",
+            "required": false
+          },
+          {
+            "id": "role",
+            "label": "Your role",
+            "type": "text",
+            "autocomplete": "organization-title",
+            "required": false,
+            "hint": "Producer, first AD, coordinator, casting director, and so on."
+          }
+        ]
+      },
+      {
+        "legend": "About the production",
+        "fields": [
+          {
+            "id": "production",
+            "label": "Production or brand",
+            "type": "text",
+            "required": false
+          },
+          {
+            "id": "projectType",
+            "label": "Project type",
+            "type": "select",
+            "required": false,
+            "options": [
+              { "value": "film", "label": "Film" },
+              { "value": "television", "label": "Television" },
+              { "value": "commercial", "label": "Commercial" },
+              { "value": "other", "label": "Other" }
+            ]
+          },
+          {
+            "id": "brief",
+            "label": "What you are looking for",
+            "type": "textarea",
+            "rows": 6,
+            "required": true,
+            "hint": "Roles, numbers, skills or looks. A rough brief is enough to start with."
+          },
+          {
+            "id": "dates",
+            "label": "Shoot dates",
+            "type": "text",
+            "required": false,
+            "hint": "Approximate is fine if the schedule is not locked."
+          },
+          {
+            "id": "location",
+            "label": "Location",
+            "type": "text",
+            "autocomplete": "address-level2",
+            "required": false,
+            "hint": "Where the shoot is based."
+          }
+        ]
+      }
+    ]
+  },
+  "audience": {
+    "kicker": "WHO THIS PAGE IS FOR",
+    "heading": "Two different conversations",
+    "clients": {
+      "title": "Casting for a production",
+      "body": "Producers, ADs, coordinators, casting directors and commercial agencies: the form above, the email address or the phone number all reach the same desk."
+    },
+    "performers": {
+      "title": "Looking for representation",
+      "body": "Applications are not taken through this form. Everything for performers, including what we look for and how to apply, sits on one page.",
+      "linkLabel": "Join the roster",
+      "href": "/join"
+    }
+  },
+  "company": {
+    "kicker": "COMPANY DETAILS",
+    "heading": "The legal bit",
+    "todo": "TODO: copy — registered company name, company number, registered address, and the VAT number if the company is registered for VAT. None of this can be guessed, so it needs to come from the client before the page goes live."
+  }
+}

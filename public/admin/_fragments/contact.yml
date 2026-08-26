@@ -1,0 +1,117 @@
+- name: page-contact
+  label: Contact page text
+  file: src/content/pages/contact.json
+  description: All the wording on the Contact page, including every label on the enquiry form.
+  fields:
+    - name: meta
+      label: Search & sharing
+      widget: object
+      collapsed: true
+      hint: The words Google and social media show. Not visible on the page itself.
+      fields:
+        - { name: title, label: Browser tab & Google title, widget: string }
+        - { name: description, label: Google description, widget: text, hint: Around 150-160 characters works best. }
+        - { name: ogTitle, label: Title when shared on social, widget: string }
+        - { name: ogDescription, label: Description when shared on social, widget: text }
+        - { name: footerTitle, label: Footer headline, widget: string, hint: The big line in the contact strip at the bottom of the page. }
+    - name: hero
+      label: Top of the page
+      widget: object
+      fields:
+        - { name: eyebrow, label: Small line above the headline, widget: string }
+        - { name: heading, label: Headline, widget: string }
+        - { name: lede, label: Opening paragraph, widget: text }
+    - name: details
+      label: Direct contact details
+      widget: object
+      hint: The email address, phone number and Instagram handle themselves are set once for the whole site, so they are not edited here. Only the wording around them is.
+      fields:
+        - { name: kicker, label: Small label beside the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - name: items
+          label: Ways to reach us
+          label_singular: Contact route
+          widget: list
+          fields:
+            - { name: id, label: Which route this is, widget: string, hint: 'Must be exactly email, phone or instagram. This is what pulls in the right address or number, so do not change it unless you know what it does.' }
+            - { name: label, label: Small label above it, widget: string }
+            - { name: note, label: One line explaining when to use it, widget: text }
+        - { name: hoursNote, label: Note about opening hours, widget: text, hint: Shown as a highlighted note until real opening hours are written. }
+    - name: form
+      label: Enquiry form
+      widget: object
+      hint: Every word on the form. The form is switched off until a place to send it has been set up.
+      fields:
+        - { name: kicker, label: Small label beside the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - { name: intro, label: Introduction paragraph, widget: text }
+        - name: formAction
+          label: Where the form sends to
+          widget: string
+          required: false
+          hint: Leave this empty until a form service has been set up. While it is empty the form is switched off on the page and visitors are told to email instead.
+        - { name: method, label: How the form sends, widget: string, hint: 'Almost always post. Technical setting, leave it alone unless the form service asks for something else.' }
+        - { name: notConnectedTitle, label: 'Form switched off: heading', widget: string }
+        - { name: notConnectedBody, label: 'Form switched off: explanation', widget: text }
+        - { name: optionalLabel, label: Word shown beside fields that are not required, widget: string }
+        - { name: selectPlaceholder, label: First line in a drop-down list, widget: string, hint: 'For example: Please choose.' }
+        - { name: submitLabel, label: Send button text, widget: string }
+        - { name: privacyNote, label: Note under the form about privacy, widget: text }
+        - name: groups
+          label: Sections of the form
+          label_singular: Form section
+          widget: list
+          hint: Each section has a small heading and a set of questions.
+          fields:
+            - { name: legend, label: Section heading, widget: string }
+            - name: fields
+              label: Questions
+              label_singular: Question
+              widget: list
+              hint: The wording of each question. The settings below the label decide what kind of box it is, so change those only if you know what they do.
+              fields:
+                - { name: label, label: Question, widget: string, hint: The words shown above the box. }
+                - { name: hint, label: Helper line under the box, widget: string, required: false }
+                - { name: required, label: Must be filled in, widget: boolean, default: false, hint: Keep this off wherever you can. Every question a visitor is forced to answer loses enquiries. }
+                - { name: id, label: Reference name, widget: string, hint: 'Technical: the name the answer arrives under. Do not change it once the form is connected.' }
+                - { name: type, label: Kind of box, widget: string, hint: 'Technical: text, email, tel, textarea or select.' }
+                - { name: autocomplete, label: Autofill setting, widget: string, required: false, hint: 'Technical: lets a phone fill the box in automatically. Leave as it is.' }
+                - { name: inputmode, label: Phone keyboard setting, widget: string, required: false, hint: 'Technical: which keyboard a phone opens. Leave as it is.' }
+                - { name: rows, label: Height of a big text box, widget: number, value_type: int, required: false, hint: 'Only used by the large comment boxes.' }
+                - name: options
+                  label: Choices in the drop-down
+                  label_singular: Choice
+                  widget: list
+                  required: false
+                  hint: Only used by a drop-down question.
+                  fields:
+                    - { name: label, label: Choice, widget: string }
+                    - { name: value, label: Reference name, widget: string, hint: 'Technical: how the choice is recorded. Lower case, no spaces.' }
+    - name: audience
+      label: Clients and performers
+      widget: object
+      hint: The block that sends productions to the form and performers to the Join page.
+      fields:
+        - { name: kicker, label: Small label beside the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - name: clients
+          label: For productions
+          widget: object
+          fields:
+            - { name: title, label: Heading, widget: string }
+            - { name: body, label: Paragraph, widget: text }
+        - name: performers
+          label: For performers
+          widget: object
+          fields:
+            - { name: title, label: Heading, widget: string }
+            - { name: body, label: Paragraph, widget: text }
+            - { name: linkLabel, label: Link text, widget: string }
+            - { name: href, label: Link goes to, widget: string, hint: 'A path on this site, for example /join' }
+    - name: company
+      label: Company details
+      widget: object
+      fields:
+        - { name: kicker, label: Small label above the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - { name: todo, label: Company details text, widget: text, hint: Registered name, company number, registered address and VAT number. Shown as a highlighted note until it is filled in. }

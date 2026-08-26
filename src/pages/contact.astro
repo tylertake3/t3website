@@ -1,0 +1,322 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, contactHref } from '../data/site';
+import copy from '../content/pages/contact.json';
+
+/* Copy still to be written is shown as a visible note rather than passed off as
+   body text, the same rule /credits and /specialists follow. */
+const isTodo = (text: string) => text.trimStart().startsWith('TODO:');
+
+interface Field {
+  id: string;
+  label: string;
+  type: string;
+  required?: boolean;
+  autocomplete?: string;
+  inputmode?: string;
+  hint?: string;
+  rows?: number;
+  options?: { value: string; label: string }[];
+}
+
+const groups = copy.form.groups as { legend: string; fields: Field[] }[];
+
+/* No form handler has been chosen yet. Rather than let a visitor type a brief
+   into something that silently drops it, the form is made inert and the reason
+   is stated above it, with the email address left live beside it. */
+const formConnected = copy.form.formAction.trim().length > 0;
+
+/* The values themselves live in src/data/site.ts so the whole site shares one
+   email address and one phone number; the JSON carries only the wording. */
+const channels: Record<string, { value: string; href: string; external?: boolean }> = {
+  email: { value: site.email, href: contactHref },
+  phone: { value: site.phone, href: `tel:${site.phoneHref}` },
+  instagram: { value: '@take3agency', href: site.instagram, external: true },
+};
+---
+
+<Base
+  title={copy.meta.title}
+  description={copy.meta.description}
+  ogTitle={copy.meta.ogTitle}
+  ogDescription={copy.meta.ogDescription}
+  footerTitle={copy.meta.footerTitle}
+>
+  <!-- hero -->
+  <section class="pageHero contactHero" aria-labelledby="contactTitle">
+    <div class="pageHeroInner">
+      <p class="kicker">{copy.hero.eyebrow}</p>
+      <h1 class="pageHeroTitle" id="contactTitle">{copy.hero.heading}</h1>
+      <p class="pageHeroLede">{copy.hero.lede}</p>
+    </div>
+  </section>
+
+  <!-- direct contact details -->
+  <section class="band" aria-labelledby="detailsTitle">
+    <div class="bandInner">
+      <div class="sectionHead contactHead">
+        <h2 class="sectionTitle" id="detailsTitle">{copy.details.heading}</h2>
+        <p class="kicker">{copy.details.kicker}</p>
+      </div>
+
+      <ul class="contactChannels">
+        {
+          copy.details.items.map((item) => {
+            const channel = channels[item.id];
+            return (
+              <li class="contactChannel">
+                <span class="contactChannelLabel">{item.label}</span>
+                <a
+                  class="contactChannelValue"
+                  href={channel.href}
+                  target={channel.external ? '_blank' : undefined}
+                  rel={channel.external ? 'noopener' : undefined}
+                >
+                  {channel.value}
+                </a>
+                <span class="contactChannelNote">{item.note}</span>
+              </li>
+            );
+          })
+        }
+      </ul>
+
+      <p class="todoNote">{copy.details.hoursNote}</p>
+    </div>
+  </section>
+
+  <!-- general enquiry form -->
+  <section class="band" aria-labelledby="formTitle">
+    <div class="bandInner">
+      <div class="sectionHead contactHead">
+        <h2 class="sectionTitle" id="formTitle">{copy.form.heading}</h2>
+        <p class="kicker">{copy.form.kicker}</p>
+      </div>
+
+      <p class="bandBody contactFormIntro">{copy.form.intro}</p>
+
+      {
+        !formConnected && (
+          <div class="contactNotice" role="note">
+            <p class="contactNoticeTitle">{copy.form.notConnectedTitle}</p>
+            <p class="contactNoticeBody">{copy.form.notConnectedBody}</p>
+            <p class="contactNoticeLinks">
+              <a href={contactHref}>{site.email}</a>
+              <span aria-hidden="true">&middot;</span>
+              <a href={`tel:${site.phoneHref}`}>{site.phone}</a>
+            </p>
+          </div>
+        )
+      }
+
+      <form
+        class="contactForm"
+        method={copy.form.method}
+        action={formConnected ? copy.form.formAction : undefined}
+        {...(formConnected ? {} : { inert: true })}
+      >
+        {
+          groups.map((group) => (
+            <fieldset class="contactGroup">
+              <legend class="contactLegend">{group.legend}</legend>
+              <div class="contactFields">
+                {group.fields.map((field) => {
+                  const id = `contact-${field.id}`;
+                  const hintId = field.hint ? `${id}-hint` : undefined;
+                  return (
+                    <div class={field.type === 'textarea' ? 'contactField contactFieldWide' : 'contactField'}>
+                      <label class="contactLabel" for={id}>
+                        {field.label}
+                        {!field.required && <span class="contactOptional">{copy.form.optionalLabel}</span>}
+                      </label>
+
+                      {field.type === 'textarea' && (
+                        <textarea
+                          class="contactControl"
+                          id={id}
+                          name={field.id}
+                          rows={field.rows ?? 5}
+                          required={field.required}
+                          aria-describedby={hintId}
+                        />
+                      )}
+
+                      {field.type === 'select' && (
+                        <select
+                          class="contactControl contactSelect"
+                          id={id}
+                          name={field.id}
+                          required={field.required}
+                          aria-describedby={hintId}
+                        >
+                          <option value="">{copy.form.selectPlaceholder}</option>
+                          {(field.options ?? []).map((option) => (
+                            <option value={option.value}>{option.label}</option>
+                          ))}
+                        </select>
+                      )}
+
+                      {field.type !== 'textarea' && field.type !== 'select' && (
+                        <input
+                          class="contactControl"
+                          id={id}
+                          name={field.id}
+                          type={field.type}
+                          autocomplete={field.autocomplete}
+                          inputmode={field.inputmode}
+                          required={field.required}
+                          aria-describedby={hintId}
+                        />
+                      )}
+
+                      {field.hint && (
+                        <p class="contactHint" id={hintId}>
+                          {field.hint}
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </fieldset>
+          ))
+        }
+
+        <button class="btnSolid contactSubmit" type="submit">{copy.form.submitLabel.toUpperCase()}</button>
+      </form>
+
+      <p class="todoNote">{copy.form.privacyNote}</p>
+    </div>
+  </section>
+
+  <!-- signposting: clients one way, performers the other -->
+  <section class="band bandDark contactDark" aria-labelledby="audienceTitle">
+    <div class="bandInner">
+      <div class="sectionHead contactHead">
+        <h2 class="sectionTitle" id="audienceTitle">{copy.audience.heading}</h2>
+        <p class="kicker">{copy.audience.kicker}</p>
+      </div>
+
+      <div class="contactSplit">
+        <div class="contactRoute">
+          <h3 class="contactRouteTitle">{copy.audience.clients.title}</h3>
+          <p class="bandBody contactRouteBody">{copy.audience.clients.body}</p>
+        </div>
+        <div class="contactRoute">
+          <h3 class="contactRouteTitle">{copy.audience.performers.title}</h3>
+          <p class="bandBody contactRouteBody">{copy.audience.performers.body}</p>
+          <a class="contactRouteLink" href={copy.audience.performers.href}>
+            {copy.audience.performers.linkLabel.toUpperCase()} &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- company details and registered address -->
+  <section class="band" aria-labelledby="companyTitle">
+    <div class="bandInner bandSplit">
+      <div>
+        <p class="kicker">{copy.company.kicker}</p>
+        <h2 class="sectionTitle" id="companyTitle">{copy.company.heading}</h2>
+      </div>
+      <p class={isTodo(copy.company.todo) ? 'todoNote' : 'bandBody'}>{copy.company.todo}</p>
+    </div>
+  </section>
+
+  <style is:global>
+    /* Page-scoped patterns for /contact, prefixed `contact` so they cannot
+       collide with anything shared. */
+
+    /* The hero and the dark band are dark in BOTH themes, so they pin the two
+       tokens tuned for a cream page: the light theme's oxblood accent and its
+       near-black muted grey both fall under 4.5:1 on those surfaces. */
+    .contactHero, .contactDark { --accent:#d4704f; --muted:#96928c; }
+    .contactDark { --sub:#c7c3bd; --ink:#f4f2ee; --hair:#3a3a3e; }
+
+    .contactHead { padding-bottom:18px; }
+    .contactFormIntro { margin-top:26px; max-width:60ch; }
+
+    /* direct contact details */
+    .contactChannels {
+      list-style:none; margin:34px 0 0; padding:0;
+      display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:32px;
+    }
+    .contactChannel { border-top:1px solid var(--hair); padding-top:18px; }
+    .contactChannelLabel { display:block; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
+    .contactChannelValue {
+      display:inline-block; margin-top:12px; font-size:clamp(19px, 1.9vw, 26px);
+      font-weight:300; letter-spacing:1px; color:var(--ink);
+      text-decoration:underline; text-underline-offset:5px; text-decoration-thickness:1px;
+    }
+    .contactChannelValue:hover { color:var(--accent); }
+    .contactChannelNote { display:block; margin-top:12px; font-size:15px; font-weight:300; line-height:1.6; color:var(--sub); text-wrap:pretty; }
+
+    /* the form is switched off until a handler exists — said plainly, with the
+       working routes repeated inside the notice */
+    .contactNotice { margin-top:30px; border:1px solid var(--accent); padding:22px 24px; max-width:72ch; }
+    .contactNoticeTitle { font-size:13px; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent); }
+    .contactNoticeBody { margin-top:12px; font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); text-wrap:pretty; }
+    .contactNoticeLinks { margin-top:14px; font-size:16px; font-weight:300; display:flex; flex-wrap:wrap; gap:12px; align-items:baseline; }
+    .contactNoticeLinks a { color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
+    .contactNoticeLinks a:hover { color:var(--accent); }
+    .contactNoticeLinks span { color:var(--muted); }
+
+    /* the form itself */
+    .contactForm { margin-top:40px; max-width:960px; }
+    .contactGroup { border:0; margin:0; padding:0; }
+    .contactGroup + .contactGroup { margin-top:48px; }
+    .contactLegend {
+      padding:0; font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--accent);
+      border-bottom:1px solid var(--hair); width:100%; padding-bottom:14px;
+    }
+    .contactFields { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:26px 40px; margin-top:26px; }
+    .contactField { display:flex; flex-direction:column; }
+    .contactFieldWide { grid-column:1 / -1; }
+    .contactLabel { font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--ink); }
+    .contactOptional { margin-left:10px; letter-spacing:2px; color:var(--muted); text-transform:none; font-size:11px; }
+    .contactControl {
+      margin-top:10px; width:100%;
+      background:var(--tileBg); color:var(--ink);
+      border:1px solid var(--ctrlBorder); border-radius:0;
+      /* 16px keeps iOS Safari from zooming the page on focus */
+      font-family:'Jost', sans-serif; font-size:16px; font-weight:300; line-height:1.5;
+      padding:13px 14px;
+    }
+    textarea.contactControl { resize:vertical; min-height:132px; }
+    /* the select keeps its native arrow: a hand-drawn one would have to be
+       redrawn for both themes, and the browser's already follows the text colour */
+    .contactSelect { padding-right:12px; }
+    .contactControl:hover { border-color:var(--ink); }
+    /* global.css only rings links, buttons and [tabindex]; form controls need
+       their own, and it must clear the field's own border */
+    .contactControl:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+    .contactControl::placeholder { color:var(--muted); }
+    .contactHint { margin-top:8px; font-size:13px; font-weight:300; line-height:1.5; color:var(--muted); text-wrap:pretty; }
+    .contactSubmit { display:inline-block; margin-top:36px; border:0; cursor:pointer; font-family:'Jost', sans-serif; }
+
+    /* clients one way, performers the other */
+    .contactSplit { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:48px; margin-top:34px; }
+    .contactRoute { border-top:1px solid var(--hair); padding-top:20px; }
+    .contactRouteTitle { font-size:17px; letter-spacing:3px; text-transform:uppercase; color:var(--ink); }
+    .contactRouteBody { margin-top:14px; max-width:46ch; }
+    .contactRouteLink {
+      display:inline-block; margin-top:18px; font-size:12px; letter-spacing:2.5px; color:var(--accent);
+      text-decoration:underline; text-underline-offset:4px;
+    }
+    .contactRouteLink:hover { color:var(--ink); }
+
+    @media (max-width:1024px) {
+      .contactChannels { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+      .contactSplit { grid-template-columns:1fr; gap:34px; }
+    }
+
+    @media (max-width:640px) {
+      .contactChannels { grid-template-columns:1fr; gap:26px; }
+      .contactFields { grid-template-columns:1fr; gap:22px; }
+      .contactNotice { padding:18px 18px; }
+      .contactForm { margin-top:32px; }
+      .contactSubmit { width:100%; text-align:center; }
+    }
+  </style>
+</Base>
