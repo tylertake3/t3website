@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import { pageExists } from '../lib/pages';
 import copy from '../content/pages/about.json';
+import WhereWeWork from '../components/WhereWeWork.astro';
 
 const lauralBuilt = pageExists(copy.laural.href);
 
@@ -74,6 +75,14 @@ const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `ba
       </ul>
     </div>
   </section>
+
+  <!-- where we have worked -->
+  <WhereWeWork
+    kicker={copy.where.kicker}
+    heading={copy.where.heading}
+    body={copy.where.body}
+    countLabel={copy.where.countLabel}
+  />
 
   <!-- the team -->
   <section class="band" aria-labelledby="teamTitle">

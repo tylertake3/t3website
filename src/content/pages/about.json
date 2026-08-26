@@ -16,10 +16,22 @@
     "heading": "The story so far",
     "body": "TODO: copy — the story since 2019. How Take 3 started, what it set out to do differently, and how the roster grew to its present size. Facts only, and nothing that cannot be evidenced.",
     "stats": [
-      { "number": "2019", "label": "Trading since" },
-      { "number": "500+", "label": "Productions supplied" },
-      { "number": "1,500+", "label": "Artists" },
-      { "number": "UK & Europe", "label": "Where we work" }
+      {
+        "number": "2019",
+        "label": "Trading since"
+      },
+      {
+        "number": "500+",
+        "label": "Productions supplied"
+      },
+      {
+        "number": "1,500+",
+        "label": "Artists"
+      },
+      {
+        "number": "UK & Europe",
+        "label": "Where we work"
+      }
     ]
   },
   "operations": {
@@ -49,6 +61,12 @@
       }
     ]
   },
+  "where": {
+    "kicker": "WHERE WE HAVE WORKED",
+    "heading": "On location, wherever the shoot goes",
+    "body": "TODO: copy — a line or two on travelling with productions, and what the agency handles when artists work away.",
+    "countLabel": "places worked"
+  },
   "team": {
     "kicker": "THE TEAM",
     "heading": "The people you deal with",
@@ -63,9 +81,15 @@
     "body": "TODO: copy — one short paragraph setting up the examples below, without claiming anything the examples do not prove.",
     "todo": "TODO: content — three real examples of the agency living up to what it stands for. Each needs a short title and two or three sentences. Anything invented here defeats the point of the section, so leave the plates empty until genuine examples are supplied.",
     "examples": [
-      { "slotLabel": "Example one" },
-      { "slotLabel": "Example two" },
-      { "slotLabel": "Example three" }
+      {
+        "slotLabel": "Example one"
+      },
+      {
+        "slotLabel": "Example two"
+      },
+      {
+        "slotLabel": "Example three"
+      }
     ]
   },
   "laural": {

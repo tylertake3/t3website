@@ -384,3 +384,45 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   .bandBody { font-size:16px; }
   .catGrid { grid-template-columns:1fr; gap:28px; }
 }
+
+/* ---------- where we have worked ---------- */
+.whereGrid { display:grid; grid-template-columns:1.5fr 1fr; gap:56px; align-items:start; margin-top:36px; }
+.whereMapWrap { position:relative; }
+.whereMap { width:100%; height:auto; display:block; overflow:visible; }
+.whereLand { fill:var(--tileBg); stroke:none; }
+/* worked countries carry a standing tint so the map reads at a glance,
+   before anyone hovers anything */
+.whereCountry { fill:var(--accent); fill-opacity:0.22; stroke:var(--bg); stroke-width:0.4; transition:fill-opacity .25s ease; }
+.whereCountry.is-active { fill-opacity:0.55; }
+.wherePinHalo { fill:var(--accent); opacity:0.18; transform-origin:center; transition:opacity .25s ease; }
+.wherePinDot { fill:var(--accent); transition:r .25s ease; }
+.wherePin { cursor:default; }
+.wherePin.is-active .wherePinHalo { opacity:0.4; }
+.wherePin.is-active .wherePinDot { r:5; }
+.whereReadout { min-height:1.4em; margin-top:14px; font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--accent); }
+
+.whereAside { padding-top:4px; }
+.whereBody { margin-bottom:26px; }
+.whereCount { display:flex; align-items:baseline; gap:12px; border-top:1px solid var(--hair); padding-top:20px; }
+.whereCountNum { font-size:clamp(28px,2.6vw,42px); font-weight:300; line-height:1; color:var(--accent); font-variant-numeric:tabular-nums; }
+.whereCountLabel { font-size:12px; letter-spacing:2px; color:var(--muted); }
+.whereList { list-style:none; margin:24px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:8px; }
+.whereItem {
+  font:inherit; font-size:13px; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--sub); background:none; border:1px solid var(--ctrlBorder);
+  padding:7px 12px; cursor:pointer; transition:color .2s ease, border-color .2s ease, background .2s ease;
+}
+.whereItem:hover, .whereItem.is-active { color:var(--ink); border-color:var(--ink); }
+.whereItem.is-active { background:rgba(212,112,79,0.08); }
+
+@media (prefers-reduced-motion: reduce) {
+  .whereCountry, .wherePinHalo, .wherePinDot, .whereItem { transition:none; }
+}
+
+@media (max-width:1024px) {
+  .whereGrid { grid-template-columns:1fr; gap:36px; }
+}
+@media (max-width:640px) {
+  .whereList { gap:6px; }
+  .whereItem { font-size:12px; padding:6px 10px; }
+}

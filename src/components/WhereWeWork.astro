@@ -1,0 +1,122 @@
+---
+import map from '../data/world-map.json';
+
+interface Props {
+  kicker: string;
+  heading: string;
+  body?: string;
+  countLabel: string;
+}
+const { kicker, heading, body, countLabel } = Astro.props;
+
+/* Places in reading order, grouped so the list beside the map scans as
+   somewhere-you-know rather than a raw dump. */
+const places = map.points;
+const shapeFor = (id: string) => map.shapes.find((s) => s.id === id);
+---
+
+<section class="band whereBand" aria-labelledby="whereTitle">
+  <div class="bandInner">
+    <div class="sectionHead">
+      <h2 class="sectionTitle" id="whereTitle">{heading}</h2>
+      <p class="kicker">{kicker}</p>
+    </div>
+
+    <div class="whereGrid">
+      <div class="whereMapWrap">
+        <svg
+          class="whereMap"
+          id="whereMap"
+          viewBox={`0 0 ${map.width} ${map.height}`}
+          role="img"
+          aria-label={`World map with ${places.length} places highlighted, listed in full beside it.`}
+        >
+          <path class="whereLand" d={map.land} />
+          {
+            map.shapes.map((shape) => (
+              <path class="whereCountry" d={shape.d} data-country={shape.id} />
+            ))
+          }
+          {
+            places.map((place) => (
+              <g class="wherePin" data-place={place.name} data-country={place.country}>
+                <circle class="wherePinHalo" cx={place.x} cy={place.y} r="9" />
+                <circle class="wherePinDot" cx={place.x} cy={place.y} r="3" />
+              </g>
+            ))
+          }
+        </svg>
+        <p class="whereReadout" id="whereReadout" aria-live="polite"></p>
+      </div>
+
+      <div class="whereAside">
+        {body && <p class="bandBody whereBody">{body}</p>}
+        <p class="whereCount">
+          <span class="whereCountNum" data-countup>{places.length}</span>
+          <span class="whereCountLabel">{countLabel}</span>
+        </p>
+        <ul class="whereList" id="whereList">
+          {
+            places.map((place) => (
+              <li>
+                <button
+                  class="whereItem"
+                  type="button"
+                  data-place={place.name}
+                  data-country={place.country}
+                  aria-pressed="false"
+                >
+                  {place.name}
+                </button>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  /* Hovering or focusing a place lights it on the map, and the reverse.
+     The list is the real content: everything works without the map, and the
+     map is labelled as a picture so a screen reader is not walked through
+     177 outlines. */
+  const section = document.getElementById('whereMap')?.closest('.whereBand');
+  if (section) {
+    const readout = section.querySelector<HTMLElement>('#whereReadout');
+    const items = Array.from(section.querySelectorAll<HTMLElement>('.whereItem'));
+    const pins = Array.from(section.querySelectorAll<HTMLElement>('.wherePin'));
+    const countries = Array.from(section.querySelectorAll<HTMLElement>('.whereCountry'));
+
+    const setActive = (place: string | null) => {
+      const country = place
+        ? (items.find((i) => i.dataset.place === place)?.dataset.country ?? null)
+        : null;
+
+      items.forEach((el) => {
+        const on = el.dataset.place === place;
+        el.classList.toggle('is-active', on);
+        el.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      pins.forEach((el) => el.classList.toggle('is-active', el.dataset.place === place));
+      countries.forEach((el) => el.classList.toggle('is-active', !!country && el.dataset.country === country));
+      if (readout) readout.textContent = place ?? '';
+    };
+
+    items.forEach((item) => {
+      const place = item.dataset.place ?? null;
+      item.addEventListener('mouseenter', () => setActive(place));
+      item.addEventListener('focus', () => setActive(place));
+      item.addEventListener('click', () => setActive(place));
+      item.addEventListener('mouseleave', () => setActive(null));
+      item.addEventListener('blur', () => setActive(null));
+    });
+
+    pins.forEach((pin) => {
+      const place = pin.dataset.place ?? null;
+      pin.addEventListener('mouseenter', () => setActive(place));
+      pin.addEventListener('mouseleave', () => setActive(null));
+    });
+  }
+</script>
