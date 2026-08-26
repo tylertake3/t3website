@@ -30,7 +30,13 @@
         - { name: title, label: Page title, widget: string, hint: 'The very large word at the top. Always shown in capitals.' }
         - { name: strapline, label: Opening sentence, widget: text, hint: 'The line under the title.' }
         - { name: creditLabel, label: Photo credit label, widget: string, hint: 'The small line in the bottom corner above the production name, currently AS SEEN ON.' }
-        - { name: creditTitle, label: First production name, widget: string, hint: 'The production name shown when the page first loads. It then changes automatically as the background photos rotate; the later names are set in the page code, so ask your developer to change those.' }
+        - name: slides
+          label: Rotating photos
+          widget: list
+          hint: 'The background photos that fade from one to the next, every five seconds, in this order. The first one shows when the page loads. Add, reorder or remove them here.'
+          fields:
+            - { name: image, label: Photo file, widget: string, hint: 'The path to the photo, such as /uploads/my-photo.webp. Upload images to the uploads folder first.' }
+            - { name: production, label: Production name, widget: string, hint: 'The name shown in the bottom corner while this photo is on screen. Written in capitals.' }
 
     - name: what
       label: What is a SPACT

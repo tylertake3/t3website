@@ -12,6 +12,7 @@
         - { name: description, label: Google description, widget: text, hint: 'The grey summary under the title in Google results. Around 150–160 characters works best.' }
         - { name: ogTitle, label: Title when shared on social, widget: string, hint: 'Used when someone pastes a link to this page into WhatsApp, Instagram, LinkedIn and so on.' }
         - { name: ogDescription, label: Description when shared on social, widget: text, hint: 'The short line under the title on a shared link preview.' }
+        - { name: ogImageAlt, label: Description of the shared image, widget: text, hint: 'Describes the preview picture for screen readers and for anyone whose email or app does not load images.' }
         - { name: footerTitle, label: Footer headline, widget: string, hint: 'The big line above the contact details at the very bottom of the page.' }
         - name: footerLinks
           label: Footer buttons

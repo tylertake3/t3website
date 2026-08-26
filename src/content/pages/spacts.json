@@ -16,7 +16,20 @@
     "title": "SPACTs",
     "strapline": "Real skills, delivered safely on camera.",
     "creditLabel": "AS SEEN ON",
-    "creditTitle": "ANDOR"
+    "slides": [
+      {
+        "image": "/uploads/w1280.webp",
+        "production": "ANDOR"
+      },
+      {
+        "image": "/uploads/_dfa3c099-9b6c-45ce-8c99-e24d9e51a891.webp",
+        "production": "ODYSSEY"
+      },
+      {
+        "image": "/uploads/lotr-s2-ut-230403-00131-r2-jpg-66f4b25127687.webp",
+        "production": "RINGS OF POWER"
+      }
+    ]
   },
 
   "what": {
