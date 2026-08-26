@@ -146,7 +146,9 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .supplyScroll { display:flex; gap:16px; overflow-x:auto; scrollbar-width:none; cursor:grab; }
 .supplyScroll:active { cursor:grabbing; }
 .supplyScroll::-webkit-scrollbar { display:none; }
-.supplyTile { flex:0 0 clamp(200px, 28vw, 900px); }
+/* sized so a tile never dominates the page on a wide screen: the old
+   28vw ran to nearly 800px tall on a large display */
+.supplyTile { flex:0 0 clamp(170px, 17vw, 260px); }
 .supplyMeta { display:flex; justify-content:space-between; align-items:baseline; margin-top:14px; padding:0 4px; }
 .supplyName { font-size:19px; letter-spacing:4px; color:var(--ink); font-weight:400; }
 .supplyView { font-size:12px; letter-spacing:2px; color:var(--accent); }
