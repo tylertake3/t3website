@@ -1,0 +1,71 @@
+- name: page-artists
+  label: Artists page text
+  file: src/content/pages/artists.json
+  description: All the wording on the Our Artists page.
+  fields:
+    - name: meta
+      label: Search & sharing
+      widget: object
+      collapsed: true
+      hint: The words Google and social media show. Not visible on the page itself.
+      fields:
+        - { name: title, label: Browser tab & Google title, widget: string }
+        - { name: description, label: Google description, widget: text, hint: Around 150-160 characters works best. }
+        - { name: ogTitle, label: Title when shared on social, widget: string }
+        - { name: ogDescription, label: Description when shared on social, widget: text }
+        - { name: footerTitle, label: Footer headline, widget: string, hint: The big line in the contact strip at the bottom of the page. }
+    - name: hero
+      label: Top of the page
+      widget: object
+      fields:
+        - { name: eyebrow, label: Small line above the headline, widget: string }
+        - { name: heading, label: Headline, widget: string }
+        - { name: lede, label: Opening paragraph, widget: text }
+    - name: range
+      label: The full range
+      widget: object
+      fields:
+        - { name: kicker, label: Small label above the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - { name: body, label: Paragraph, widget: text }
+    - name: categories
+      label: The four categories
+      widget: object
+      fields:
+        - { name: kicker, label: Small label beside the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - name: items
+          label: Category tiles
+          label_singular: Category
+          widget: list
+          hint: Shown as four equal tiles. Each links to its own page.
+          fields:
+            - { name: name, label: Name, widget: string }
+            - { name: href, label: Links to, widget: string, hint: 'A path on this site, for example /spacts' }
+            - { name: description, label: One line on who it is for, widget: text }
+            - { name: slotLabel, label: Placeholder caption, widget: string, hint: Shown on the empty picture plate until artwork is added. }
+    - name: specialists
+      label: Specialists block
+      widget: object
+      hint: Deliberately given more room than a tile, because it does a different job.
+      fields:
+        - { name: kicker, label: Small label above the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - { name: body, label: Paragraph, widget: text }
+        - { name: linkLabel, label: Button text, widget: string }
+        - { name: href, label: Button links to, widget: string }
+        - { name: pendingNote, label: Note shown until that page exists, widget: string }
+    - name: represented
+      label: Represented, not listed
+      widget: object
+      fields:
+        - { name: kicker, label: Small label above the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - { name: paragraphs, label: Paragraphs, widget: list, hint: One entry per paragraph. }
+    - name: clients
+      label: Who we work with
+      widget: object
+      fields:
+        - { name: kicker, label: Small label above the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - { name: body, label: Paragraph, widget: text }

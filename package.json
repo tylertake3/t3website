@@ -16,7 +16,8 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
     "@astrojs/vercel": "^11.0.8",
-    "astro": "^7.2.6"
+    "astro": "^7.2.6",
+    "number-flow": "^0.6.2"
   },
   "allowScripts": {
     "esbuild": true

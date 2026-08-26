@@ -1,3 +1,5 @@
+import NumberFlow from 'number-flow';
+
 /* Shared site behaviour: sticky nav, mobile menu, theme toggle.
    Runs on every page. Page-specific behaviour lives with its page. */
 (function () {
@@ -158,37 +160,31 @@
       };
     };
 
-    var format = function (n, spec) {
-      var fixed = n.toFixed(spec.decimals);
-      if (spec.grouped) {
-        var parts = fixed.split('.');
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        fixed = parts.join('.');
-      }
-      return spec.prefix + fixed + spec.suffix;
-    };
-
     /* a year counting up from zero looks absurd, so it ticks the last stretch */
     var startValue = function (v, spec) {
       var isYear = spec.decimals === 0 && !spec.grouped && v >= 1900 && v <= 2100;
       return isYear ? v - 12 : 0;
     };
 
-    var run = function (el, spec, delay) {
-      var from = startValue(spec.value, spec);
-      var duration = 1400;
-      var began = null;
-      var ease = function (t) { return 1 - Math.pow(1 - t, 3); };
-
-      var step = function (now) {
-        if (began === null) began = now;
-        var t = Math.min((now - began) / duration, 1);
-        el.textContent = format(from + (spec.value - from) * ease(t), spec);
-        if (t < 1) window.requestAnimationFrame(step);
-        else el.textContent = spec.original;
+    var prepare = function (el, spec) {
+      var flow = new NumberFlow();
+      flow.numberPrefix = spec.prefix;
+      flow.numberSuffix = spec.suffix;
+      flow.locales = document.documentElement.lang || 'en-GB';
+      flow.setAttribute('aria-hidden', 'true');
+      flow.format = {
+        minimumFractionDigits: spec.decimals,
+        maximumFractionDigits: spec.decimals,
+        useGrouping: spec.grouped
       };
-
-      window.setTimeout(function () { window.requestAnimationFrame(step); }, delay);
+      /* Paint the starting figure without motion. The next update is the one
+         NumberFlow turns into its digit-by-digit transition. */
+      flow.animated = false;
+      flow.update(startValue(spec.value, spec));
+      el.textContent = '';
+      el.appendChild(flow);
+      flow.animated = true;
+      return flow;
     };
 
     var specs = [];
@@ -200,12 +196,14 @@
     });
     if (!specs.length) return;
 
-    if (lessMotion() || !('IntersectionObserver' in window)) return;
+    if (lessMotion() || !('IntersectionObserver' in window) || !('customElements' in window)) return;
 
     /* hold the final width so the row does not reflow as digits change */
-    specs.forEach(function (item) { item.el.style.fontVariantNumeric = 'tabular-nums'; });
+    specs.forEach(function (item) {
+      item.el.style.fontVariantNumeric = 'tabular-nums';
+      item.flow = prepare(item.el, item.spec);
+    });
 
-    var seen = new WeakSet ? new WeakSet() : null;
     var observer = new IntersectionObserver(function (entries) {
       var delay = 0;
       entries.forEach(function (entry) {
@@ -213,15 +211,15 @@
         var item = specs.filter(function (s) { return s.el === entry.target; })[0];
         observer.unobserve(entry.target);
         if (!item) return;
-        run(item.el, item.spec, delay);
+        window.setTimeout(function () { item.flow.update(item.spec.value); }, delay);
         delay += 110;
       });
     }, { threshold: 0.6, rootMargin: '0px 0px -8% 0px' });
 
     specs.forEach(function (item) {
       /* screen readers always get the final figure, never a spinning one */
+      item.el.setAttribute('role', 'img');
       item.el.setAttribute('aria-label', item.spec.original);
-      item.el.textContent = format(startValue(item.spec.value, item.spec), item.spec);
       observer.observe(item.el);
     });
   })();

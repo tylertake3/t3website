@@ -1,0 +1,101 @@
+- name: page-about
+  label: Who We Are page text
+  file: src/content/pages/about.json
+  description: All the wording on the Who We Are page.
+  fields:
+    - name: meta
+      label: Search & sharing
+      widget: object
+      collapsed: true
+      hint: The words Google and social media show. Not visible on the page itself.
+      fields:
+        - { name: title, label: Browser tab & Google title, widget: string }
+        - { name: description, label: Google description, widget: text, hint: Around 150-160 characters works best. }
+        - { name: ogTitle, label: Title when shared on social, widget: string }
+        - { name: ogDescription, label: Description when shared on social, widget: text }
+        - { name: footerTitle, label: Footer headline, widget: string, hint: The big line in the contact strip at the bottom of the page. }
+    - name: hero
+      label: Top of the page
+      widget: object
+      fields:
+        - { name: eyebrow, label: Small line above the headline, widget: string }
+        - { name: heading, label: Headline, widget: string }
+        - { name: lede, label: Opening paragraph, widget: text }
+    - name: story
+      label: The story since 2019
+      widget: object
+      fields:
+        - { name: kicker, label: Small label above the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - { name: body, label: Paragraph, widget: text }
+        - name: stats
+          label: Figures
+          label_singular: Figure
+          widget: list
+          hint: The row of numbers under the paragraph. They count up as the page is scrolled.
+          fields:
+            - { name: number, label: The figure, widget: string, hint: 'For example 500+ or UK & Europe' }
+            - { name: label, label: What it counts, widget: string }
+    - name: operations
+      label: How the agency works
+      widget: object
+      hint: The operational difference. What Take 3 takes off the production.
+      fields:
+        - { name: kicker, label: Small label beside the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - { name: body, label: Paragraph, widget: text }
+        - name: items
+          label: What we handle
+          label_singular: Item
+          widget: list
+          fields:
+            - { name: name, label: Name, widget: string, hint: 'For example Contracts, Fees, Overtime, Buyouts, Coordination' }
+            - { name: detail, label: One line of detail, widget: text }
+    - name: where
+      label: Where we have worked
+      widget: object
+      hint: The world map section. The places themselves are set in the site's map data, not here.
+      fields:
+        - { name: kicker, label: Small label beside the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - { name: body, label: Paragraph, widget: text }
+        - { name: countLabel, label: Caption after the number of places, widget: string }
+    - name: team
+      label: The team
+      widget: object
+      fields:
+        - { name: kicker, label: Small label beside the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - { name: body, label: Introduction, widget: text }
+        - { name: slotLabel, label: Placeholder caption, widget: string, hint: Shown on each empty photograph plate until pictures are added. }
+        - name: plates
+          label: How many empty plates
+          widget: number
+          value_type: int
+          hint: A placeholder count, not a headcount. Set it to the real number of people once the team is confirmed.
+        - { name: todo, label: Note about what is still needed, widget: text }
+    - name: principles
+      label: What we stand for
+      widget: object
+      hint: Shown through real examples rather than stated. Leave the plates empty until genuine examples are supplied.
+      fields:
+        - { name: kicker, label: Small label beside the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - { name: body, label: Introduction, widget: text }
+        - { name: todo, label: Note about what is still needed, widget: text }
+        - name: examples
+          label: Example plates
+          label_singular: Example
+          widget: list
+          fields:
+            - { name: slotLabel, label: Placeholder caption, widget: string }
+    - name: laural
+      label: Link through to Laural
+      widget: object
+      fields:
+        - { name: kicker, label: Small label above the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - { name: body, label: Paragraph, widget: text }
+        - { name: linkLabel, label: Link text, widget: string }
+        - { name: href, label: Link goes to, widget: string, hint: 'A path on this site, for example /laural' }
+        - { name: pendingNote, label: Note shown until that page exists, widget: string }
