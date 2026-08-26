@@ -1,0 +1,127 @@
+- name: page-join
+  label: Join the roster page text
+  file: src/content/pages/join.json
+  description: All the wording on the Join page, the one page written for performers rather than productions. Includes every label on the application form.
+  fields:
+    - name: meta
+      label: Search & sharing
+      widget: object
+      collapsed: true
+      hint: The words Google and social media show. Not visible on the page itself.
+      fields:
+        - { name: title, label: Browser tab & Google title, widget: string }
+        - { name: description, label: Google description, widget: text, hint: Around 150-160 characters works best. }
+        - { name: ogTitle, label: Title when shared on social, widget: string }
+        - { name: ogDescription, label: Description when shared on social, widget: text }
+        - { name: footerTitle, label: Footer headline, widget: string, hint: The big line in the contact strip at the bottom of the page. }
+    - name: hero
+      label: Top of the page
+      widget: object
+      fields:
+        - { name: eyebrow, label: Small line above the headline, widget: string }
+        - { name: heading, label: Headline, widget: string }
+        - { name: lede, label: Opening paragraph, widget: text }
+    - name: disciplines
+      label: Who we are looking for
+      widget: object
+      fields:
+        - { name: kicker, label: Small label beside the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - name: items
+          label: Disciplines
+          label_singular: Discipline
+          widget: list
+          hint: One entry per discipline. Add, reorder or remove them freely.
+          fields:
+            - { name: name, label: Discipline, widget: string }
+            - { name: looksFor, label: What we look for, widget: text, hint: Shown as a highlighted note until real wording replaces it. }
+        - { name: note, label: Closing line under the list, widget: text }
+    - name: offer
+      label: What we offer a performer
+      widget: object
+      fields:
+        - { name: kicker, label: Small label above the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - { name: todo, label: Paragraph, widget: text, hint: Shown as a highlighted note until real wording replaces it. }
+    - name: requirements
+      label: Requirements and experience
+      widget: object
+      fields:
+        - { name: kicker, label: Small label above the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - { name: todo, label: Paragraph, widget: text, hint: Shown as a highlighted note until real wording replaces it. }
+        - { name: standInsNote, label: Note about the stand-ins criteria, widget: text, hint: A reminder that the stand-ins recruitment criteria belong in this section. Delete it once they are here. }
+    - name: process
+      label: How applying works
+      widget: object
+      fields:
+        - { name: kicker, label: Small label beside the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - name: steps
+          label: Steps
+          label_singular: Step
+          widget: list
+          hint: Four steps fit the row neatly. Renumber them yourself if you reorder them.
+          fields:
+            - { name: number, label: Step number, widget: string, hint: 'For example 01.' }
+            - { name: name, label: Step name, widget: string }
+        - { name: todo, label: Note under the steps, widget: text, hint: Shown as a highlighted note until the detail of each step is written. }
+    - name: honest
+      label: An honest note
+      widget: object
+      hint: Response times, and the fact that not everyone who applies is taken on. Sits just above the form so it is read before anyone applies.
+      fields:
+        - { name: kicker, label: Small label above the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - { name: todo, label: Paragraph, widget: text, hint: Shown as a highlighted note until real wording replaces it. }
+    - name: form
+      label: Application form
+      widget: object
+      hint: Every word on the form. The form is switched off until a place to send it has been set up. Never add a question about age, date of birth, health, ethnicity or anything similar.
+      fields:
+        - { name: kicker, label: Small label beside the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - { name: intro, label: Introduction paragraph, widget: text }
+        - name: formAction
+          label: Where the form sends to
+          widget: string
+          required: false
+          hint: Leave this empty until a form service has been set up. While it is empty the form is switched off on the page and applicants are told to email instead.
+        - { name: method, label: How the form sends, widget: string, hint: 'Almost always post. Technical setting, leave it alone unless the form service asks for something else.' }
+        - { name: notConnectedTitle, label: 'Form switched off: heading', widget: string }
+        - { name: notConnectedBody, label: 'Form switched off: explanation', widget: text }
+        - { name: optionalLabel, label: Word shown beside questions that are not required, widget: string }
+        - { name: selectPlaceholder, label: First line in a drop-down list, widget: string, hint: 'For example: Please choose.' }
+        - { name: submitLabel, label: Send button text, widget: string }
+        - { name: fieldsNote, label: Note about the questions asked, widget: text, hint: A reminder that the list of questions still needs signing off. Delete it once it has been. }
+        - { name: privacyNote, label: Note under the form about privacy, widget: text }
+        - name: groups
+          label: Sections of the form
+          label_singular: Form section
+          widget: list
+          hint: Each section has a small heading and a set of questions.
+          fields:
+            - { name: legend, label: Section heading, widget: string }
+            - name: fields
+              label: Questions
+              label_singular: Question
+              widget: list
+              hint: The wording of each question. The settings below the label decide what kind of box it is, so change those only if you know what they do.
+              fields:
+                - { name: label, label: Question, widget: string, hint: The words shown above the box. }
+                - { name: hint, label: Helper line under the box, widget: string, required: false }
+                - { name: required, label: Must be filled in, widget: boolean, default: false, hint: Keep this off wherever you can. Every question an applicant is forced to answer loses applications. }
+                - { name: id, label: Reference name, widget: string, hint: 'Technical: the name the answer arrives under. Do not change it once the form is connected.' }
+                - { name: type, label: Kind of box, widget: string, hint: 'Technical: text, email, tel, textarea or select.' }
+                - { name: autocomplete, label: Autofill setting, widget: string, required: false, hint: 'Technical: lets a phone fill the box in automatically. Leave as it is.' }
+                - { name: inputmode, label: Phone keyboard setting, widget: string, required: false, hint: 'Technical: which keyboard a phone opens. Leave as it is.' }
+                - { name: rows, label: Height of a big text box, widget: number, value_type: int, required: false, hint: 'Only used by the large comment boxes.' }
+                - name: options
+                  label: Choices in the drop-down
+                  label_singular: Choice
+                  widget: list
+                  required: false
+                  hint: Only used by a drop-down question.
+                  fields:
+                    - { name: label, label: Choice, widget: string }
+                    - { name: value, label: Reference name, widget: string, hint: 'Technical: how the choice is recorded. Lower case, no spaces.' }

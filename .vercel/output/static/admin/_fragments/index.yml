@@ -1,0 +1,83 @@
+- name: page-index
+  label: Homepage text
+  file: src/content/pages/index.json
+  description: All the wording on the homepage.
+  fields:
+    - name: meta
+      label: Search & sharing
+      widget: object
+      collapsed: true
+      hint: The words Google and social media show when someone finds or shares the homepage. Not visible on the page itself.
+      fields:
+        - { name: title, label: Browser tab & Google title, widget: string }
+        - { name: description, label: Google description, widget: text, hint: Around 150-160 characters works best. }
+        - { name: ogTitle, label: Title when shared on social media, widget: string }
+        - { name: ogDescription, label: Description when shared on social media, widget: text }
+    - name: hero
+      label: Hero (big photo at the top)
+      widget: object
+      fields:
+        - { name: kicker, label: Small line above the headline, widget: string }
+        - name: title
+          label: Headline
+          widget: text
+          hint: Use line breaks to control exactly where the headline wraps onto the next line.
+        - { name: seenOnLabel, label: Label before the production name, widget: string, hint: Sits to the left of the rotating production title, bottom right of the photo. }
+        - name: strip
+          label: Talent words along the bottom
+          widget: list
+          hint: One word or phrase per entry. They are shown in order, separated by slashes.
+    - name: about
+      label: Who we are
+      widget: object
+      fields:
+        - { name: kicker, label: Small line above the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - name: paragraph1
+          label: Opening paragraph
+          widget: object
+          hint: Split into three parts so the middle part can be a link through to the "What is a SPACT" page.
+          fields:
+            - { name: before, label: Text before the link, widget: text }
+            - { name: linkText, label: Linked words, widget: string, hint: These words link to the "What is a SPACT" page. }
+            - { name: after, label: Text after the link, widget: text }
+        - { name: paragraph2, label: Second paragraph, widget: text }
+        - name: stats
+          label: Statistics
+          widget: list
+          hint: The figures shown beside the paragraphs. Any figure containing a number counts up when it scrolls into view.
+          fields:
+            - { name: number, label: Figure, widget: string }
+            - { name: label, label: Caption under the figure, widget: string }
+    - name: supply
+      label: What we supply
+      widget: object
+      fields:
+        - { name: heading, label: Section heading, widget: string }
+        - { name: kicker, label: Small label beside the heading, widget: string }
+        - { name: viewLabel, label: Link text on each tile, widget: string, hint: Appears under every category tile, followed by an arrow. }
+        - { name: pauseLabel, label: Button text that stops the tiles scrolling, widget: string, hint: Small button beside the heading. Shown while the tiles are moving. }
+        - { name: playLabel, label: Button text that starts the tiles scrolling again, widget: string, hint: Replaces the pause text once the tiles have been stopped. }
+    - name: reviews
+      label: Reviews
+      widget: object
+      hint: Only the section heading lives here. The reviews themselves are edited separately.
+      fields:
+        - { name: heading, label: Section heading, widget: string }
+        - { name: kicker, label: Small label beside the heading, widget: string }
+    - name: clients
+      label: Who we've supplied
+      widget: object
+      hint: The section with the grid of client logos.
+      fields:
+        - { name: heading, label: Section heading, widget: string }
+        - { name: kicker, label: Small label beside the heading, widget: string }
+        - { name: body, label: Introduction paragraph, widget: text }
+    - name: credits
+      label: Our credits
+      widget: object
+      fields:
+        - { name: heading, label: Section heading, widget: string }
+        - { name: countNumber, label: Headline figure, widget: string }
+        - { name: countLabel, label: Caption under the figure, widget: string }
+        - { name: posterPlaceholder, label: Placeholder text on empty poster tiles, widget: string, hint: Shown on each poster space until real artwork is added. }

@@ -1,0 +1,90 @@
+- name: page-specialists
+  label: Specialists page text
+  file: src/content/pages/specialists.json
+  description: All the wording on the Specialists page.
+  fields:
+    - name: meta
+      label: Search & sharing
+      widget: object
+      collapsed: true
+      hint: The words Google and social media show. Not visible on the page itself.
+      fields:
+        - { name: title, label: Browser tab & Google title, widget: string }
+        - { name: description, label: Google description, widget: text, hint: Around 150-160 characters works best. }
+        - { name: ogTitle, label: Title when shared on social, widget: string }
+        - { name: ogDescription, label: Description when shared on social, widget: text }
+        - { name: footerTitle, label: Footer headline, widget: string, hint: The big line in the contact strip at the bottom of the page. }
+    - name: hero
+      label: Top of the page
+      widget: object
+      fields:
+        - { name: eyebrow, label: Small line above the headline, widget: string }
+        - { name: heading, label: Headline, widget: string }
+        - { name: lede, label: Opening paragraph, widget: text, hint: This is the strongest sell on the site. Worth writing in your own words. }
+    - name: promise
+      label: The promise
+      widget: object
+      hint: What happens when a brief asks for something the four main categories do not cover.
+      fields:
+        - { name: kicker, label: Small label above the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - { name: body, label: Paragraph, widget: text }
+    - name: examples
+      label: Examples
+      widget: object
+      hint: Shown as a plain list so it reads as the kind of thing we can find, not a list of who we have booked.
+      fields:
+        - { name: kicker, label: Small label beside the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - name: items
+          label: Example list
+          label_singular: Example
+          widget: list
+          hint: One short entry per line, for example "Circus artists". Keep them general.
+        - { name: note, label: Line under the list, widget: string, hint: Makes clear the list is not the limit of what we can source. }
+        - name: specifics
+          label: Physical and character specifics
+          widget: object
+          hint: Briefs about height, build, twins or a distinctive face belong here too.
+          fields:
+            - { name: heading, label: Heading, widget: string }
+            - { name: body, label: Paragraph, widget: text }
+    - name: process
+      label: How it works
+      widget: object
+      fields:
+        - { name: kicker, label: Small label beside the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - name: steps
+          label: Steps
+          label_singular: Step
+          widget: list
+          hint: Keep it to four. The point is that there is a process, not a lecture on it.
+          fields:
+            - { name: number, label: Step number, widget: string, hint: 'Two digits, for example 01' }
+            - { name: name, label: Step name, widget: string }
+        - { name: todo, label: Note under the steps, widget: text, hint: Replace this with a short line under each step once the wording is agreed, or clear it. }
+    - name: worked
+      label: A worked example
+      widget: object
+      hint: The most persuasive part of the page. It needs one or two real briefs before it can be written.
+      fields:
+        - { name: kicker, label: Small label above the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - { name: todo, label: Placeholder note, widget: text, hint: Replace with the real story once you have cleared it with the production. }
+    - name: related
+      label: Links to related pages
+      widget: object
+      hint: Only shown for pages that have been built.
+      fields:
+        - { name: kicker, label: Small label beside the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - name: items
+          label: Linked pages
+          label_singular: Link
+          widget: list
+          fields:
+            - { name: name, label: Name, widget: string }
+            - { name: href, label: Links to, widget: string, hint: 'A path on this site, for example /spacts' }
+            - { name: description, label: One line about it, widget: text }
+            - { name: linkLabel, label: Link text, widget: string }

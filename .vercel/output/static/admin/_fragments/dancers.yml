@@ -1,0 +1,133 @@
+- name: page-dancers
+  label: Dancers page text
+  file: src/content/pages/dancers.json
+  description: All the wording on the Dancers page.
+  fields:
+    - name: meta
+      label: Search & sharing
+      widget: object
+      collapsed: true
+      fields:
+        - { name: title, label: Browser tab & Google title, widget: string, hint: 'Shown in the browser tab and as the blue headline in Google results.' }
+        - { name: description, label: Google description, widget: text, hint: 'The grey summary under the title in Google results. Around 150–160 characters works best.' }
+        - { name: ogTitle, label: Title when shared on social, widget: string, hint: 'Used when someone pastes a link to this page into WhatsApp, Instagram or LinkedIn.' }
+        - { name: ogDescription, label: Description when shared on social, widget: text, hint: 'The short line under the title on a shared link preview.' }
+        - { name: footerTitle, label: Footer headline, widget: string, hint: 'The big line in the dark contact strip at the bottom of the page.' }
+        - name: footerLinks
+          label: Footer buttons
+          widget: list
+          label_singular: Footer button
+          hint: 'The buttons beside the footer headline. Add, reorder or remove them.'
+          fields:
+            - { name: label, label: Button text, widget: string }
+            - { name: href, label: Where it goes, widget: string, hint: 'A path on this site, for example /spacts' }
+
+    - name: hero
+      label: Hero (top of the page)
+      widget: object
+      fields:
+        - { name: eyebrow, label: Small line above the headline, widget: string }
+        - { name: title, label: Headline, widget: string, hint: 'Shown in very large capitals over the rotating photos.' }
+        - { name: lede, label: Opening paragraph, widget: text }
+
+    - name: supply
+      label: What we supply
+      widget: object
+      fields:
+        - { name: heading, label: Section heading, widget: string }
+        - name: genres
+          label: Dance genres
+          widget: list
+          label_singular: Genre
+          hint: 'The click-to-open list of dance styles. Numbering (01, 02, 03…) is added automatically, so you can add, reorder or remove rows freely.'
+          fields:
+            - { name: name, label: Genre name, widget: string }
+            - { name: blurb, label: Description, widget: text, hint: 'The paragraph that slides open when the genre is clicked.' }
+        - { name: note, label: Closing note under the list, widget: text }
+        - { name: imageAlt, label: Photo description, widget: string, hint: 'Read aloud to visitors who cannot see the photo. Not shown on screen.' }
+        - { name: imageCaption, label: Photo caption, widget: string, hint: 'The small caption printed over the bottom of the photo.' }
+
+    - name: filmTv
+      label: For film & television
+      widget: object
+      fields:
+        - { name: eyebrow, label: Small line above the headline, widget: string }
+        - { name: heading, label: Headline, widget: string }
+        - { name: imageAlt, label: Photo description, widget: string, hint: 'Read aloud to visitors who cannot see the photo. Not shown on screen.' }
+        - name: rows
+          label: What we cover
+          widget: list
+          label_singular: Row
+          hint: 'Each row is a short label on the left and a sentence on the right.'
+          fields:
+            - { name: label, label: Row label, widget: string, hint: 'Usually written in capitals.' }
+            - { name: text, label: Row text, widget: text }
+
+    - name: commercial
+      label: For commercial & brand
+      widget: object
+      fields:
+        - { name: eyebrow, label: Small line above the headline, widget: string }
+        - { name: heading, label: Headline, widget: string }
+        - { name: imageAlt, label: Photo description, widget: string, hint: 'Read aloud to visitors who cannot see the photo. Not shown on screen.' }
+        - name: rows
+          label: What we cover
+          widget: list
+          label_singular: Row
+          hint: 'Each row is a short label on the left and a sentence on the right.'
+          fields:
+            - { name: label, label: Row label, widget: string, hint: 'Usually written in capitals.' }
+            - { name: text, label: Row text, widget: text }
+
+    - name: choreographers
+      label: Working with choreographers
+      widget: object
+      fields:
+        - { name: eyebrow, label: Small line above the headline, widget: string }
+        - { name: heading, label: Headline, widget: string }
+        - { name: paragraph1, label: First paragraph, widget: text }
+        - { name: paragraph2, label: Second paragraph, widget: text }
+
+    - name: reviews
+      label: Choreographer reviews
+      widget: object
+      fields:
+        - { name: heading, label: Section heading, widget: string }
+        - { name: kicker, label: Small line beside the heading, widget: string }
+        - { name: previousLabel, label: 'Back arrow: spoken label', widget: string, hint: 'Not shown on screen — read aloud by screen readers for the left arrow.' }
+        - { name: nextLabel, label: 'Forward arrow: spoken label', widget: string, hint: 'Not shown on screen — read aloud by screen readers for the right arrow.' }
+        - name: items
+          label: Reviews
+          widget: list
+          label_singular: Review
+          hint: 'The slider of choreographer quotes. Add, reorder or remove reviews — the slide counter and dots update on their own.'
+          fields:
+            - { name: name, label: Name, widget: text, hint: 'Put the first name and surname on separate lines to split the name across two lines.' }
+            - { name: role, label: Job title, widget: string }
+            - { name: credits, label: Productions, widget: string, required: false, hint: 'Optional — shown under the job title. Leave blank to hide.' }
+            - { name: quote, label: What they said, widget: text }
+
+    - name: roster
+      label: Full-width roster photo
+      widget: object
+      fields:
+        - { name: sectionLabel, label: Spoken name for this section, widget: string, hint: 'Not shown on screen — read aloud by screen readers.' }
+        - { name: imageAlt, label: Photo description, widget: string, hint: 'Read aloud to visitors who cannot see the photo. Not shown on screen.' }
+
+    - name: credits
+      label: Credits
+      widget: object
+      fields:
+        - { name: eyebrow, label: Small line above the headline, widget: string }
+        - { name: heading, label: Headline, widget: string }
+        - { name: note, label: Note beside the headline, widget: string }
+        - name: cards
+          label: Productions
+          widget: list
+          label_singular: Production
+          hint: 'The grid of production stills. Add, reorder or remove productions.'
+          fields:
+            - { name: label, label: Production name, widget: string, hint: 'The caption under the still. Usually written in capitals.' }
+            - { name: alt, label: Photo description, widget: string, hint: 'Read aloud to visitors who cannot see the photo. Not shown on screen.' }
+            - { name: image, label: Still, widget: image }
+        - { name: foot, label: Small line under the grid, widget: string }

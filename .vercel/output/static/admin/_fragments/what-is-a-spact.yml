@@ -1,0 +1,136 @@
+- name: page-what-is-a-spact
+  label: What is a SPACT page text
+  file: src/content/pages/what-is-a-spact.json
+  description: All the wording on the "What is a SPACT?" explainer page.
+  fields:
+    - name: meta
+      label: Search & sharing
+      widget: object
+      collapsed: true
+      fields:
+        - { name: title, label: Browser tab title, widget: string, hint: 'Shows in the browser tab and as the headline in Google results.' }
+        - { name: description, label: Google description, widget: text, hint: 'The grey summary under the title in Google results. Around 150–160 characters works best. It is also used as the article summary Google reads behind the scenes.' }
+        - { name: ogTitle, label: Title when shared on social, widget: string, hint: 'Used when someone pastes a link to this page into WhatsApp, Instagram, LinkedIn and so on.' }
+        - { name: ogDescription, label: Description when shared on social, widget: text, hint: 'The short line under the title on a shared link preview.' }
+        - { name: footerTitle, label: Footer headline, widget: string, hint: 'The big line above the contact details at the very bottom of the page.' }
+        - { name: footerIntro, label: Footer introduction, widget: text, hint: 'The sentence under the footer headline.' }
+        - name: footerLinks
+          label: Footer buttons
+          widget: list
+          hint: 'The outlined buttons in the footer, pointing visitors to other pages. Reorder, add or remove them here.'
+          fields:
+            - { name: label, label: Button text, widget: string, hint: 'The arrow → is part of the text, so keep it if you want it.' }
+            - { name: href, label: Page it opens, widget: string, hint: 'A path on this site, such as /spacts.' }
+        - { name: articleHeadline, label: Article headline for Google, widget: string, hint: 'The plain title Google files this page under. Not shown anywhere on the page itself.' }
+        - { name: articleSection, label: Article section for Google, widget: string, hint: 'The category this article belongs to, e.g. The Explainer. Not shown anywhere on the page itself.' }
+
+    - name: hero
+      label: Top of page
+      widget: object
+      hint: 'The opening block with the huge title and the annotated storyboard photo.'
+      fields:
+        - { name: eyebrow, label: Small line above the title, widget: string, hint: 'Written in capitals.' }
+        - { name: heading, label: Page title, widget: text, hint: 'The very large title. Press Enter where you want the line to break — the break is kept exactly where you put it.' }
+        - { name: standfirst, label: Opening paragraph, widget: text, hint: 'The larger grey paragraph under the title.' }
+        - { name: image, label: Storyboard photo, widget: string, hint: 'The path to the photo, e.g. /uploads/my-photo.png. This same photo is used for social link previews.' }
+        - { name: imageAlt, label: Photo description for screen readers, widget: text, hint: 'Describes the photo for visitors who cannot see it. Not shown on screen.' }
+        - name: annotations
+          label: Callout labels on the photo
+          widget: list
+          hint: 'The six small labels that fade in and out over the storyboard photo, in the order they appear across the frame. The boxes stay where they are — only the wording changes here.'
+          fields:
+            - { name: label, label: Label text, widget: string, hint: 'Kept short — long labels can run off the edge of the photo.' }
+        - { name: captionLeft, label: Caption under photo (left), widget: string, hint: 'The small grey line under the photo, on the left.' }
+        - { name: captionRight, label: Caption under photo (right), widget: string, hint: 'The small orange line under the photo, on the right.' }
+
+    - name: origin
+      label: 01 · Where the word comes from
+      widget: object
+      hint: 'The first section, explaining the term itself.'
+      fields:
+        - { name: eyebrow, label: Small numbered line above the heading, widget: string, hint: 'Written in capitals, e.g. 01 · THE TERM.' }
+        - { name: heading, label: Section heading, widget: string, hint: 'Always shown in capitals.' }
+        - name: paragraph1
+          label: First paragraph
+          widget: object
+          hint: 'Split into three parts so the middle words can be shown in bold on the page.'
+          fields:
+            - { name: before, label: Text before the bold words, widget: text, hint: 'Keep the space at the end if the bold words should not run into it.' }
+            - { name: bold, label: Bold words, widget: string, hint: 'Shown in darker, heavier type.' }
+            - { name: after, label: Text after the bold words, widget: text, hint: 'Usually starts with the full stop or comma that follows the bold words.' }
+        - { name: paragraph2, label: Second paragraph, widget: text }
+
+    - name: distinctions
+      label: 02 · SPACT, stunt performer, supporting artist
+      widget: object
+      hint: 'The dark section with the three clickable role cards and the annotated production frame.'
+      fields:
+        - { name: eyebrow, label: Small numbered line above the heading, widget: string, hint: 'Written in capitals, e.g. 02 · THE DISTINCTIONS.' }
+        - { name: heading, label: Section heading, widget: string, hint: 'Always shown in capitals.' }
+        - { name: intro, label: Introduction paragraph, widget: text, hint: 'The paragraph directly under the heading.' }
+        - { name: selectPrompt, label: Instruction above the cards, widget: string, hint: 'The small grey line telling visitors they can click a role. Written in capitals.' }
+        - { name: roleFlagLabel, label: "\"In frame\" flag on the chosen card", widget: string, hint: 'Appears under whichever role card is currently selected. The same wording is used on all three cards.' }
+        - name: roles
+          label: Role cards
+          widget: list
+          hint: 'The three cards side by side. Keep them in this order — supporting artist, SPACT, stunt performer — so they line up with the frame below.'
+          fields:
+            - { name: role, label: Which role this card is, widget: string, hint: 'Must be exactly sa, spact or stunt. This links the card to the matching outlines in the photo below, so do not change it unless you know what it does.' }
+            - { name: title, label: Card title, widget: string, hint: 'Written in capitals.' }
+            - { name: body, label: Card description, widget: text }
+        - { name: frameAlt, label: Production frame description for screen readers, widget: text, hint: 'Describes the large annotated photo for visitors who cannot see it. Not shown on screen.' }
+        - name: scenes
+          label: Annotated scenes
+          widget: list
+          hint: 'The photos behind the role cards. Visitors move through them with the NEXT SCENE button, and the page loops back to the first one at the end. The first scene here is the one that shows when the page loads.'
+          fields:
+            - { name: image, label: Scene photo, widget: string, hint: 'The path to the photo, e.g. /uploads/my-photo.png.' }
+            - { name: title, label: Scene caption, widget: string, hint: 'The small grey line under the photo, e.g. SC. 12 — THE SIEGE · ONE FRAME, THREE ROLES.' }
+            - name: spots
+              label: Outlined people in this photo
+              widget: list
+              hint: 'One entry per person marked out with a box and a label. The position settings decide where the box sits, so change those only if the photo itself changes.'
+              fields:
+                - { name: role, label: Which role this person is, widget: string, hint: 'Must be exactly sa, spact or stunt. This decides the outline colour and which role card reveals them.' }
+                - { name: label, label: Label text, widget: string, hint: 'The wording in the little box beside the person. Keep it short so it fits in the frame.' }
+                - { name: side, label: Label position, widget: string, hint: 'Type above to hang the label over the box, or below to drop it underneath.' }
+                - { name: left, label: 'Position: distance from left edge (%)', widget: number, hint: 'Percentage across the photo, 0 at the left edge and 100 at the right.' }
+                - { name: top, label: 'Position: distance from top edge (%)', widget: number, hint: 'Percentage down the photo, 0 at the top and 100 at the bottom.' }
+                - { name: width, label: 'Position: box width (%)', widget: number, hint: 'Percentage of the photo width.' }
+                - { name: height, label: 'Position: box height (%)', widget: number, hint: 'Percentage of the photo height.' }
+                - { name: delay, label: 'Timing: seconds before this label appears', widget: number, hint: 'Staggers the labels so they do not all pop up at once.' }
+        - name: legend
+          label: Key under the photo
+          widget: object
+          hint: 'The small buttons under the photo that filter the frame down to one role.'
+          fields:
+            - { name: stunt, label: Stunt button text, widget: string, hint: 'The coloured dash before the word is added automatically.' }
+            - { name: spact, label: SPACT button text, widget: string, hint: 'The pale dash before the word is added automatically.' }
+            - { name: sa, label: Supporting artist button text, widget: string, hint: 'The dotted dash before the word is added automatically.' }
+            - { name: nextButton, label: Next scene button text, widget: string, hint: 'The outlined button that moves to the next photo. The arrow → is part of the text.' }
+        - { name: note, label: Closing note, widget: text, hint: 'The small grey paragraph at the end of this section.' }
+
+    - name: work
+      label: 03 · What SPACTs are booked to do
+      widget: object
+      hint: 'The section with the two-column table of skill types.'
+      fields:
+        - { name: eyebrow, label: Small numbered line above the heading, widget: string, hint: 'Written in capitals, e.g. 03 · THE WORK.' }
+        - { name: heading, label: Section heading, widget: string, hint: 'Always shown in capitals.' }
+        - { name: intro, label: Introduction line, widget: text, hint: 'The sentence that leads into the table.' }
+        - name: rows
+          label: Table rows
+          widget: list
+          hint: 'Add, reorder or remove rows here.'
+          fields:
+            - { name: term, label: Left-hand label, widget: string, hint: 'The short skill name in the left column. Written in capitals.' }
+            - { name: description, label: Explanation, widget: text, hint: 'The sentence in the right column.' }
+
+    - name: booking
+      label: 04 · How SPACTs are booked
+      widget: object
+      hint: 'The closing section about the booking process.'
+      fields:
+        - { name: eyebrow, label: Small numbered line above the heading, widget: string, hint: 'Written in capitals, e.g. 04 · THE BOOKING.' }
+        - { name: heading, label: Section heading, widget: string, hint: 'Always shown in capitals.' }
+        - { name: paragraphs, label: Paragraphs, widget: list, hint: 'One entry per paragraph. Add, reorder or remove them here.' }

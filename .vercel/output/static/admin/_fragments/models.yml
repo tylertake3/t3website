@@ -1,0 +1,109 @@
+- name: page-models
+  label: Models page text
+  file: src/content/pages/models.json
+  description: All the wording on the Models page.
+  fields:
+    - name: meta
+      label: Search & sharing
+      widget: object
+      collapsed: true
+      fields:
+        - { name: title, label: Browser tab title, widget: string, hint: 'Shows in the browser tab and as the headline in Google results.' }
+        - { name: description, label: Google description, widget: text, hint: 'The grey summary under the title in Google results. Around 150–160 characters works best.' }
+        - { name: ogTitle, label: Title when shared on social, widget: string, hint: 'Used when someone pastes a link to this page into WhatsApp, Instagram, LinkedIn and so on.' }
+        - { name: ogDescription, label: Description when shared on social, widget: text, hint: 'The short line under the title on a shared link preview.' }
+        - { name: ogImageAlt, label: Description of the shared image, widget: text, hint: 'Describes the preview picture for screen readers and for anyone whose email or app does not load images.' }
+        - { name: footerTitle, label: Footer headline, widget: string, hint: 'The big line above the contact details at the very bottom of the page.' }
+        - name: footerLinks
+          label: Footer buttons
+          widget: list
+          hint: 'The outlined buttons in the footer, pointing visitors to other pages. Reorder, add or remove them here.'
+          fields:
+            - { name: label, label: Button text, widget: string, hint: 'The arrow → is part of the text, so keep it if you want it.' }
+            - { name: href, label: Page it opens, widget: string, hint: 'A path on this site, such as /dancers.' }
+
+    - name: hero
+      label: Top of page
+      widget: object
+      hint: 'The big opening block with the page title and the tall portrait.'
+      fields:
+        - { name: eyebrow, label: Small line above the title, widget: string }
+        - { name: title, label: Page title, widget: string, hint: 'The very large word at the top. Always shown in capitals.' }
+        - { name: strapline, label: Opening sentence, widget: text, hint: 'The italic line under the title.' }
+        - { name: tags, label: Keyword row, widget: list, hint: 'The row of short words under the opening sentence. One entry per word, shown in capitals.' }
+        - name: figure
+          label: Portrait photo area
+          widget: object
+          fields:
+            - { name: slotLabel, label: Placeholder caption, widget: string, hint: 'The faint text shown in the empty photo box until a photo is added.' }
+            - { name: figNumber, label: Figure number, widget: string, hint: 'The small label on the left under the photo, e.g. FIG. 01.' }
+            - { name: figNote, label: Figure note, widget: string, hint: 'The small label on the right under the photo.' }
+
+    - name: supply
+      label: What we supply
+      widget: object
+      hint: 'The numbered list of the kinds of model you provide.'
+      fields:
+        - { name: heading, label: Section heading, widget: string, hint: 'The small coloured heading above the list. Written in capitals.' }
+        - name: items
+          label: List rows
+          widget: list
+          hint: 'Add, reorder or remove rows here.'
+          fields:
+            - { name: number, label: Row number, widget: string, hint: 'The small number on the left, e.g. 01. Renumber the rows yourself if you reorder them.' }
+            - { name: title, label: Row title, widget: string, hint: 'Shown in capitals on the page.' }
+            - { name: body, label: Row description, widget: text }
+
+    - name: brands
+      label: For brands & commercial
+      widget: object
+      hint: 'The section with the campaign photo on the left and the quote on the right.'
+      fields:
+        - name: figure
+          label: Campaign photo area
+          widget: object
+          fields:
+            - { name: slotLabel, label: Placeholder caption, widget: string, hint: 'The faint text shown in the empty photo box until a photo is added.' }
+            - { name: figNumber, label: Figure number, widget: string, hint: 'The small label on the left under the photo, e.g. FIG. 02.' }
+            - { name: figNote, label: Figure note, widget: string, hint: 'The small label on the right under the photo.' }
+        - { name: eyebrow, label: Small line above the heading, widget: string, hint: 'Written in capitals.' }
+        - { name: heading, label: Heading, widget: string, hint: 'The large heading. Always shown in capitals.' }
+        - { name: pullQuote, label: Pull quote, widget: text, hint: 'The large italic quote. Type the quotation marks yourself if you want them.' }
+        - { name: paragraph, label: Paragraph, widget: text }
+
+    - name: film
+      label: For film & television
+      widget: object
+      hint: 'The dark section about character faces and real-people casting.'
+      fields:
+        - { name: eyebrow, label: Small line above the heading, widget: string, hint: 'Written in capitals.' }
+        - { name: heading, label: Heading, widget: string, hint: 'The large heading. Always shown in capitals.' }
+        - { name: paragraph, label: Paragraph, widget: text }
+        - name: definitions
+          label: Definition rows
+          widget: list
+          hint: 'The two-column rows near the bottom of this section. Add, reorder or remove rows here.'
+          fields:
+            - { name: term, label: Left-hand label, widget: string, hint: 'The short label in the left column. Written in capitals.' }
+            - { name: description, label: Explanation, widget: text, hint: 'The sentence in the right column.' }
+        - name: figure
+          label: Character photo area
+          widget: object
+          fields:
+            - { name: slotLabel, label: Placeholder caption, widget: string, hint: 'The faint text shown in the empty photo box until a photo is added.' }
+            - { name: figNumber, label: Figure number, widget: string, hint: 'The small label on the left under the photo, e.g. FIG. 03.' }
+            - { name: figNote, label: Figure note, widget: string, hint: 'The small label on the right under the photo.' }
+
+    - name: why
+      label: Why book through Take 3
+      widget: object
+      hint: 'The three cards at the bottom of the page.'
+      fields:
+        - { name: heading, label: Section heading, widget: string, hint: 'The small coloured heading above the cards. Written in capitals.' }
+        - name: cards
+          label: Cards
+          widget: list
+          hint: 'Three cards fit the row neatly. Add, reorder or remove them here.'
+          fields:
+            - { name: title, label: Card title, widget: string }
+            - { name: body, label: Card text, widget: text }
