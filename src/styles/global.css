@@ -128,8 +128,12 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .aboutBody p + p { margin-top:18px; }
 /* prose links must not rely on colour alone (WCAG 1.4.1) */
 .aboutBody a, .clientsBody a, .footerIntro a { text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1px; }
-.stats { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:32px; margin-top:44px; border-top:1px solid var(--hair); padding-top:28px; }
-.statNum { font-size:clamp(30px,3vw,44px); font-weight:300; letter-spacing:1px; line-height:1; color:var(--accent); }
+.stats { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); align-items:end; gap:32px; margin-top:44px; border-top:1px solid var(--hair); padding-top:28px; }
+.statNum { font-size:clamp(28px,2.6vw,42px); font-weight:300; letter-spacing:1px; line-height:1; color:var(--accent); font-variant-numeric:tabular-nums; text-wrap:balance; }
+/* each figure sits on its own row so the captions line up even when a
+   figure wraps to two lines */
+.stat { display:grid; grid-template-rows:1fr auto; height:100%; }
+.statNumText { font-size:clamp(22px,2vw,30px); line-height:1.15; align-self:end; }
 .statLabel { font-size:12px; letter-spacing:2px; color:var(--muted); margin-top:10px; }
 
 /* ---------- supply ---------- */
@@ -220,6 +224,7 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 
 /* ---------- tablet ---------- */
 @media (max-width:1024px) {
+  .stats { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:28px; }
   /* .nav padding for this range lives with the header rules below, so the
      narrower breakpoint isn't overridden by this later block */
   .heroCopy { left:32px; max-width:calc(100vw - 120px); }
@@ -243,7 +248,7 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   .aboutWrap { padding:64px 0 32px; }
   .about { padding:0 20px 40px; }
   .aboutBody { font-size:16px; }
-  .stats { grid-template-columns:1fr; gap:24px; }
+  .stats { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:22px; }
   .supply { padding:0 12px 32px; }
   .supply .sectionHead { padding:0 8px 14px; }
   .sectionHead { flex-direction:column; align-items:flex-start; gap:8px; }

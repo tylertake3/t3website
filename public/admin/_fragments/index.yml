@@ -45,7 +45,7 @@
         - name: stats
           label: Statistics
           widget: list
-          hint: The three big figures shown beside the paragraphs.
+          hint: The figures shown beside the paragraphs. Any figure containing a number counts up when it scrolls into view.
           fields:
             - { name: number, label: Figure, widget: string }
             - { name: label, label: Caption under the figure, widget: string }
@@ -56,6 +56,8 @@
         - { name: heading, label: Section heading, widget: string }
         - { name: kicker, label: Small label beside the heading, widget: string }
         - { name: viewLabel, label: Link text on each tile, widget: string, hint: Appears under every category tile, followed by an arrow. }
+        - { name: pauseLabel, label: Button text that stops the tiles scrolling, widget: string, hint: Small button beside the heading. Shown while the tiles are moving. }
+        - { name: playLabel, label: Button text that starts the tiles scrolling again, widget: string, hint: Replaces the pause text once the tiles have been stopped. }
     - name: reviews
       label: Reviews
       widget: object

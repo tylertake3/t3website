@@ -82,7 +82,7 @@ collections:
               - name: stats
                 label: Statistics
                 widget: list
-                hint: The three big figures shown beside the paragraphs.
+                hint: The figures shown beside the paragraphs. Any figure containing a number counts up when it scrolls into view.
                 fields:
                   - { name: number, label: Figure, widget: string }
                   - { name: label, label: Caption under the figure, widget: string }

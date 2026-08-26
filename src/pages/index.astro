@@ -3,7 +3,7 @@ import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
-import { contactHref } from '../data/site';
+import { contactHref, site } from '../data/site';
 import heroData from '../data/hero.json';
 import categoryData from '../data/categories.json';
 import clientData from '../data/clients.json';
@@ -28,6 +28,21 @@ const hasLogo = (cell: { dark?: string; light?: string }) =>
   Boolean(cell.dark) && existsSync(fileURLToPath(new URL('../../public' + cell.dark, import.meta.url)));
 
 const posterCount = 15;
+
+/* Organization schema — absolute URLs, sourced from src/data/site.ts */
+const abs = (path: string) => new URL(path, Astro.site ?? Astro.url).toString();
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.name,
+  url: abs('/'),
+  logo: abs('/assets/take3-logo.svg'),
+  image: abs('/uploads/the-odyssey-beach-horse.webp'),
+  email: site.email,
+  telephone: site.phoneHref,
+  sameAs: [site.instagram],
+  description: copy.meta.description,
+};
 ---
 
 <Base
@@ -37,16 +52,22 @@ const posterCount = 15;
   ogDescription={copy.meta.ogDescription}
   ogImage="/uploads/the-odyssey-beach-horse.webp"
 >
+  <script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(organizationSchema)} />
+
   <!-- full-bleed hero -->
   <section class="hero" id="hero" aria-label="Introduction">
     {
+      /* only the first frame is fetched with the page — the rest are attached
+         from `data-bg` once the page has loaded, so the hero costs one photo. */
       heroSlides.map((slide, i) => (
         <div
           class="heroLayer"
           data-title={slide.title}
+          data-bg={i === 0 ? undefined : slide.image}
           role="img"
           aria-label={slide.alt}
-          style={`background-image:url("${slide.image}"); opacity:${i === 0 ? 1 : 0};`}
+          aria-hidden={i === 0 ? undefined : 'true'}
+          style={i === 0 ? `background-image:url("${slide.image}"); opacity:1;` : 'opacity:0;'}
         />
       ))
     }
@@ -89,8 +110,12 @@ const posterCount = 15;
         <div class="stats">
           {
             copy.about.stats.map((stat) => (
-              <div>
-                <div class="statNum">{stat.number}</div>
+              <div class="stat">
+                {/* a figure made of words, like "UK & Europe", takes a smaller
+                    size so it holds one line beside the numbers */}
+                <div class={/\d/.test(stat.number) ? 'statNum' : 'statNum statNumText'} data-countup>
+                  {stat.number}
+                </div>
                 <div class="statLabel">{stat.label}</div>
               </div>
             ))
@@ -103,7 +128,20 @@ const posterCount = 15;
     <section class="supply" id="supply" aria-labelledby="supplyTitle">
       <div class="sectionHead">
         <h2 class="sectionTitle" id="supplyTitle">{copy.supply.heading}</h2>
-        <p class="kicker">{copy.supply.kicker}</p>
+        <div class="supplyHeadMeta">
+          <p class="kicker">{copy.supply.kicker}</p>
+          <button
+            class="marqueeToggle"
+            id="supplyToggle"
+            type="button"
+            aria-pressed="false"
+            aria-controls="supplyScroll"
+            data-pause-label={copy.supply.pauseLabel}
+            data-play-label={copy.supply.playLabel}
+          >
+            {copy.supply.pauseLabel}
+          </button>
+        </div>
       </div>
       <div class="supplyScroll" id="supplyScroll">
         {
@@ -118,7 +156,12 @@ const posterCount = 15;
               )}
               <div class="supplyMeta">
                 <h3 class="supplyName">{cat.name}</h3>
-                <a class="supplyView" href={cat.href} tabindex={i >= categories.length ? -1 : undefined}>
+                <a
+                  class="supplyView"
+                  href={cat.href}
+                  aria-label={`${copy.supply.viewLabel} ${cat.label}`}
+                  tabindex={i >= categories.length ? -1 : undefined}
+                >
                   {copy.supply.viewLabel} <span aria-hidden="true">&rarr;</span>
                 </a>
               </div>
@@ -218,6 +261,14 @@ const posterCount = 15;
 
   <style is:global>
     .supplyImg { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; }
+    .supplyHeadMeta { display:flex; align-items:baseline; gap:18px; }
+    .marqueeToggle {
+      font-family:inherit; font-size:12px; letter-spacing:2px; text-transform:uppercase;
+      color:var(--muted); background:none; border:0; border-bottom:1px solid var(--hair);
+      padding:0 0 3px; cursor:pointer;
+    }
+    .marqueeToggle:hover { color:var(--ink); border-bottom-color:var(--ink); }
+    .marqueeToggle[hidden] { display:none; }
   </style>
 
   <script slot="scripts" is:inline>
@@ -232,9 +283,31 @@ const posterCount = 15;
       var heroIdx = 0, heroTimer = null;
       function heroShow(i) {
         heroIdx = i;
-        for (var k = 0; k < layers.length; k++) layers[k].style.opacity = k === i ? '1' : '0';
+        for (var k = 0; k < layers.length; k++) {
+          var on = k === i;
+          layers[k].style.opacity = on ? '1' : '0';
+          /* opacity alone leaves the layer in the accessibility tree, so a
+             screen reader would announce all seven slides at once */
+          layers[k].setAttribute('aria-hidden', on ? 'false' : 'true');
+        }
         if (heroProd) heroProd.textContent = layers[i].getAttribute('data-title');
       }
+      /* the frames after the first are only fetched once the page has loaded */
+      function heroLoadRest() {
+        for (var k = 0; k < layers.length; k++) {
+          var src = layers[k].getAttribute('data-bg');
+          if (src) {
+            layers[k].style.backgroundImage = 'url("' + src + '")';
+            layers[k].removeAttribute('data-bg');
+          }
+        }
+      }
+      function heroQueueRest() {
+        if (window.requestIdleCallback) window.requestIdleCallback(heroLoadRest, { timeout: 2000 });
+        else window.setTimeout(heroLoadRest, 200);
+      }
+      if (document.readyState === 'complete') heroQueueRest();
+      else window.addEventListener('load', heroQueueRest);
       function heroStart() {
         clearInterval(heroTimer);
         if (lessMotion() || layers.length < 2) return;
@@ -249,9 +322,13 @@ const posterCount = 15;
       (function () {
         var el = document.getElementById('supplyScroll');
         if (!el) return;
-        var dragging = false, hover = false, moved = false, startX = 0, startScroll = 0, raf = null;
+        var dragging = false, hover = false, focused = false, paused = false, moved = false;
+        var startX = 0, startScroll = 0, raf = null;
         el.addEventListener('mouseenter', function () { hover = true; });
         el.addEventListener('mouseleave', function () { hover = false; });
+        /* keyboard users tabbing through the tiles get the same reprieve as the cursor */
+        el.addEventListener('focusin', function () { focused = true; });
+        el.addEventListener('focusout', function () { focused = false; });
         el.addEventListener('pointerdown', function (e) {
           dragging = true; moved = false; startX = e.clientX; startScroll = el.scrollLeft;
         });
@@ -277,7 +354,7 @@ const posterCount = 15;
         }, true);
         var drift = 0;
         function step() {
-          if (!hover && !dragging && el.scrollWidth > el.clientWidth) {
+          if (!paused && !hover && !focused && !dragging && el.scrollWidth > el.clientWidth) {
             /* browsers round sub-pixel scrollLeft back to 0, so bank the fraction */
             drift += 0.4;
             if (drift >= 1) { el.scrollLeft += Math.floor(drift); drift -= Math.floor(drift); }
@@ -289,7 +366,22 @@ const posterCount = 15;
         function startAuto() { if (!lessMotion() && raf === null) raf = window.requestAnimationFrame(step); }
         function stopAuto() { if (raf !== null) { window.cancelAnimationFrame(raf); raf = null; } }
         startAuto();
-        if (reduce.addEventListener) reduce.addEventListener('change', function () { stopAuto(); startAuto(); });
+
+        /* WCAG 2.2.2 — the scroll must be stoppable. Reduced motion already
+           stops it, so the control hides itself in that state. */
+        var toggle = document.getElementById('supplyToggle');
+        function paintToggle() {
+          if (!toggle) return;
+          toggle.hidden = lessMotion();
+          toggle.setAttribute('aria-pressed', paused ? 'true' : 'false');
+          toggle.textContent = toggle.getAttribute(paused ? 'data-play-label' : 'data-pause-label') || '';
+        }
+        if (toggle) {
+          toggle.addEventListener('click', function () { paused = !paused; paintToggle(); });
+          paintToggle();
+        }
+
+        if (reduce.addEventListener) reduce.addEventListener('change', function () { stopAuto(); startAuto(); paintToggle(); });
         window.addEventListener('pagehide', stopAuto);
       })();
 
