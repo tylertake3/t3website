@@ -29,7 +29,7 @@ const shapeFor = (id: string) => map.shapes.find((s) => s.id === id);
           id="whereMap"
           viewBox={`0 0 ${map.width} ${map.height}`}
           role="img"
-          aria-label={`World map with ${places.length} places highlighted, listed in full beside it.`}
+          aria-label={`World map with ${map.countryCount} countries highlighted, listed in full beside it.`}
         >
           <path class="whereLand" d={map.land} />
           {
@@ -52,7 +52,7 @@ const shapeFor = (id: string) => map.shapes.find((s) => s.id === id);
       <div class="whereAside">
         {body && <p class="bandBody whereBody">{body}</p>}
         <p class="whereCount">
-          <span class="whereCountNum" data-countup>{places.length}</span>
+          <span class="whereCountNum" data-countup>{map.countryCount}</span>
           <span class="whereCountLabel">{countLabel}</span>
         </p>
         <ul class="whereList" id="whereList">

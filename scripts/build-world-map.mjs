@@ -47,8 +47,10 @@ const shapes = countries.features
   .map((f) => ({ id: String(f.id), name: f.properties.name, d: round(path(f) || '') }))
   .filter((c) => c.d);
 
-/* Where the agency has worked. Cities are marked as points; countries are
-   filled. Coordinates are [longitude, latitude]. */
+/* Where the agency has worked. Every entry gets a marker; the country it sits
+   in gets filled. `territory` is what the headline count counts: England,
+   Wales and Scotland each count, while Los Angeles and New York are two
+   markers in one country. Coordinates are [longitude, latitude]. */
 const PLACES = [
   { name: 'England', country: '826', at: [-1.5, 52.5] },
   { name: 'Wales', country: '826', at: [-3.6, 52.3] },
@@ -71,8 +73,9 @@ const PLACES = [
   { name: 'Morocco', country: '504', at: [-7.1, 31.8] },
   { name: 'Kenya', country: '404', at: [37.9, 0.0] },
   { name: 'Bahrain', country: '048', at: [50.6, 26.0] },
-  { name: 'Los Angeles', country: '840', at: [-118.2, 34.1] },
-  { name: 'New York', country: '840', at: [-74.0, 40.7] },
+  { name: 'Abu Dhabi', country: '784', at: [54.4, 24.4], territory: 'United Arab Emirates' },
+  { name: 'Los Angeles', country: '840', at: [-118.2, 34.1], territory: 'United States' },
+  { name: 'New York', country: '840', at: [-74.0, 40.7], territory: 'United States' },
   { name: 'Bahamas', country: '044', at: [-77.4, 25.0] },
   { name: 'Dominican Republic', country: '214', at: [-70.2, 18.7] },
 ];
@@ -82,6 +85,8 @@ const points = PLACES.map((p) => {
   return { name: p.name, country: p.country, x: +x.toFixed(1), y: +y.toFixed(1) };
 });
 
+const countryCount = new Set(PLACES.map((p) => p.territory ?? p.name)).size;
+
 const worked = [...new Set(PLACES.map((p) => p.country))];
 const missing = worked.filter((id) => !shapes.some((s) => s.id === id));
 
@@ -89,13 +94,13 @@ const highlighted = shapes.filter((c) => worked.includes(c.id));
 
 await writeFile(
   'src/data/world-map.json',
-  JSON.stringify({ width: WIDTH, height: HEIGHT, land, shapes: highlighted, points, worked }, null, 0) + '\n'
+  JSON.stringify({ width: WIDTH, height: HEIGHT, land, shapes: highlighted, points, worked, countryCount }, null, 0) + '\n'
 );
 
 const size = (land.length + JSON.stringify(highlighted).length) / 1024;
 console.log(
   `wrote src/data/world-map.json — coastline plus ${highlighted.length} highlighted countries ` +
-    `(${Math.round(size)}KB of paths), ${points.length} places`
+    `(${Math.round(size)}KB of paths), ${points.length} markers, ${countryCount} countries`
 );
 if (missing.length) {
   console.log(
