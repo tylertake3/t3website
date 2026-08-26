@@ -9,10 +9,17 @@ interface Props {
 }
 const { kicker, heading, body, countLabel } = Astro.props;
 
-/* Places in reading order, grouped so the list beside the map scans as
-   somewhere-you-know rather than a raw dump. */
 const places = map.points;
-const shapeFor = (id: string) => map.shapes.find((s) => s.id === id);
+
+/* The markers arrive west to east, so the world fills in as a sweep rather
+   than 26 dots appearing at once. Order is for the animation only; the list
+   beside the map keeps its own reading order. */
+const arrival = new Map(
+  [...places]
+    .map((place, index) => ({ place, index }))
+    .sort((a, b) => a.place.x - b.place.x)
+    .map(({ index }, order) => [index, order])
+);
 ---
 
 <section class="band whereBand" aria-labelledby="whereTitle">
@@ -38,8 +45,13 @@ const shapeFor = (id: string) => map.shapes.find((s) => s.id === id);
             ))
           }
           {
-            places.map((place) => (
-              <g class="wherePin" data-place={place.name} data-country={place.country}>
+            places.map((place, i) => (
+              <g
+                class="wherePin"
+                data-place={place.name}
+                data-country={place.country}
+                style={`--pin-delay:${(arrival.get(i) ?? 0) * 45}ms`}
+              >
                 <circle class="wherePinHalo" cx={place.x} cy={place.y} r="9" />
                 <circle class="wherePinDot" cx={place.x} cy={place.y} r="3" />
               </g>
@@ -84,6 +96,24 @@ const shapeFor = (id: string) => map.shapes.find((s) => s.id === id);
      177 outlines. */
   const section = document.getElementById('whereMap')?.closest('.whereBand');
   if (section) {
+    /* The markers only hide themselves once we know we can bring them back:
+       with no JavaScript, or no observer, they are simply there. */
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if ('IntersectionObserver' in window && !reduce.matches) {
+      section.classList.add('is-armed');
+      const watcher = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            section.classList.add('is-inview');
+            watcher.disconnect();
+          });
+        },
+        { threshold: 0.25 }
+      );
+      watcher.observe(section);
+    }
+
     const readout = section.querySelector<HTMLElement>('#whereReadout');
     const items = Array.from(section.querySelectorAll<HTMLElement>('.whereItem'));
     const pins = Array.from(section.querySelectorAll<HTMLElement>('.wherePin'));

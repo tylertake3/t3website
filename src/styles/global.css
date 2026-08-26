@@ -399,6 +399,19 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .wherePinHalo { fill:var(--accent); opacity:0.18; transform-origin:center; transition:opacity .25s ease; }
 .wherePinDot { fill:var(--accent); transition:r .25s ease; }
 .wherePin { cursor:default; }
+
+/* markers drop in as the section arrives, west to east */
+.whereBand.is-armed .wherePin { opacity:0; }
+.whereBand.is-inview .wherePin {
+  transform-box:fill-box; transform-origin:center;
+  animation:pinIn .5s cubic-bezier(0.3, 0, 0.2, 1) both;
+  animation-delay:var(--pin-delay, 0ms);
+}
+@keyframes pinIn {
+  from { opacity:0; transform:scale(0.2); }
+  60%  { opacity:1; transform:scale(1.35); }
+  to   { opacity:1; transform:scale(1); }
+}
 .wherePin.is-active .wherePinHalo { opacity:0.4; }
 .wherePin.is-active .wherePinDot { r:5; }
 .whereReadout { min-height:1.4em; margin-top:14px; font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--accent); }
@@ -428,6 +441,8 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 
 @media (prefers-reduced-motion: reduce) {
   .whereCountry, .wherePinHalo, .wherePinDot, .whereItem, .whereItem::before { transition:none; }
+  .whereBand.is-armed .wherePin { opacity:1; }
+  .whereBand.is-inview .wherePin { animation:none; }
 }
 
 @media (max-width:1024px) {
