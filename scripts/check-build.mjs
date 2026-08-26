@@ -102,6 +102,19 @@ for (const file of htmlFiles) {
     if (!existsSync(join(DIST, decodePath(ref)))) note(`${page}: image not found ${ref}`);
   }
 
+  /* --- a page must not load another page's stylesheet ---
+     One page's styles landing on another silently rearranges the layout, which
+     is exactly how the homepage hero once got the Models page's grid. */
+  const pageName = page.replace(/\.html$/, '');
+  for (const m of html.matchAll(/href="\/_astro\/([^".]+)\.[^".]+\.css"/g)) {
+    const styleOwner = m[1];
+    const shared = ['Base', 'index'];
+    if (shared.includes(styleOwner)) continue;
+    if (styleOwner !== pageName) {
+      note(`${page}: is loading ${styleOwner}'s stylesheet, which will fight its own layout`);
+    }
+  }
+
   /* --- the basics search engines need --- */
   if (!/<title>[^<]{5,}<\/title>/.test(html)) note(`${page}: no page title`);
   if (!/<meta name="description" content="[^"]{20,}"/.test(html)) note(`${page}: no description`);
