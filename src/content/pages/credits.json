@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "Credits | Film, TV & Commercial Productions | Take 3 Agency",
+    "description": "Productions supplied by Take 3 Agency since 2019 in film, television and commercial, with client logos and what production teams say about working with us.",
+    "ogTitle": "Credits | Take 3 Agency",
+    "ogDescription": "Productions supplied by Take 3 Agency since 2019 across film, television and commercial, and what production teams say about working with us.",
+    "footerTitle": "Tell us about your production"
+  },
+  "hero": {
+    "eyebrow": "TAKE 3 AGENCY",
+    "heading": "Credits",
+    "lede": "Since 2019 Take 3 has supplied more than 500 productions across the UK and Europe, in film, television and commercial."
+  },
+  "figures": {
+    "kicker": "BY THE NUMBERS",
+    "heading": "The work so far",
+    "items": [
+      { "number": "500+", "label": "Productions supplied" },
+      { "number": "1,500+", "label": "Artists represented" },
+      { "number": "2019", "label": "Trading since" }
+    ]
+  },
+  "productions": {
+    "kicker": "PRODUCTION CREDITS",
+    "heading": "Film, television and commercial",
+    "intro": "TODO: copy — a short line framing the credits list. Two or three sentences at most, since the titles themselves do the work.",
+    "clearanceNote": "TODO: clearance — no title appears on this page until it has been checked against what Take 3 is contractually permitted to name, and until the embargo status of every unreleased title has been confirmed. Nothing here goes live before both checks are signed off.",
+    "groups": [
+      {
+        "id": "film",
+        "name": "Film",
+        "slotLabel": "Title to come",
+        "plates": 5,
+        "todo": "TODO: content — feature film titles, once cleared. Include the year and, where it helps, what Take 3 supplied."
+      },
+      {
+        "id": "television",
+        "name": "Television",
+        "slotLabel": "Title to come",
+        "plates": 5,
+        "todo": "TODO: content — television titles, once cleared. Include the broadcaster or platform where naming it is permitted."
+      },
+      {
+        "id": "commercial",
+        "name": "Commercial",
+        "slotLabel": "Brand to come",
+        "plates": 5,
+        "todo": "TODO: content — commercial work, once cleared. Brand and agency, where both are permitted to be named."
+      }
+    ]
+  },
+  "clients": {
+    "kicker": "WHO WE WORK WITH",
+    "heading": "Client logos",
+    "body": "TODO: copy — one short paragraph introducing the wall of clients. Keep it factual and let the marks speak.",
+    "artworkNote": "TODO: artwork — logo files have not been supplied yet, so every cell renders as an empty plate. Drop the artwork into public/assets/logos and each mark appears in place."
+  },
+  "testimonials": {
+    "kicker": "IN THEIR WORDS",
+    "heading": "What production teams say",
+    "intro": "The people below have worked with Take 3 on set. Their words are reproduced as given.",
+    "emptyNote": "TODO: content — no testimonials have been added yet. Add them under Reviews in the editor and they appear here."
+  }
+}

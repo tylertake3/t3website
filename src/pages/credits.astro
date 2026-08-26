@@ -1,0 +1,221 @@
+---
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import clientData from '../data/clients.json';
+import copy from '../content/pages/credits.json';
+
+const clients = clientData.clients;
+
+/* Client logo artwork hasn't been supplied yet. A cell whose file is missing
+   renders as an empty plate rather than firing a 404 for a picture that isn't
+   there — the same rule the homepage logo wall follows. */
+const hasLogo = (cell: { dark?: string; light?: string }) =>
+  Boolean(cell.dark) && existsSync(fileURLToPath(new URL('../../public' + cell.dark, import.meta.url)));
+
+const anyLogoSupplied = clients.some(hasLogo);
+
+/* Testimonials are editable content, not page copy: they live in
+   src/content/reviews and are managed under Reviews in the editor. */
+const reviews = (await getCollection('reviews')).sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+
+/* Copy still to be written is styled as a visible note rather than passed off as
+   body text. The moment real wording replaces it, it reads as body text again. */
+const isTodo = (text: string) => text.trimStart().startsWith('TODO:');
+const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `bandBody ${extra}`.trim());
+---
+
+<Base
+  title={copy.meta.title}
+  description={copy.meta.description}
+  ogTitle={copy.meta.ogTitle}
+  ogDescription={copy.meta.ogDescription}
+  footerTitle={copy.meta.footerTitle}
+>
+  <!-- hero -->
+  <section class="pageHero" aria-labelledby="creditsTitle">
+    <div class="pageHeroInner">
+      <p class="kicker">{copy.hero.eyebrow}</p>
+      <h1 class="pageHeroTitle" id="creditsTitle">{copy.hero.heading}</h1>
+      <p class="pageHeroLede">{copy.hero.lede}</p>
+    </div>
+  </section>
+
+  <!-- headline figures -->
+  <section class="band" aria-labelledby="figuresTitle">
+    <div class="bandInner">
+      <div class="sectionHead">
+        <h2 class="sectionTitle" id="figuresTitle">{copy.figures.heading}</h2>
+        <p class="kicker">{copy.figures.kicker}</p>
+      </div>
+      <div class="stats creditsStats">
+        {
+          copy.figures.items.map((figure) => (
+            <div class="stat">
+              <div class="statNum" data-countup>{figure.number}</div>
+              <div class="statLabel">{figure.label}</div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- production credits, grouped by format -->
+  <section class="band" aria-labelledby="productionsTitle">
+    <div class="bandInner">
+      <div class="sectionHead">
+        <h2 class="sectionTitle" id="productionsTitle">{copy.productions.heading}</h2>
+        <p class="kicker">{copy.productions.kicker}</p>
+      </div>
+      <p class={bodyClass(copy.productions.intro, 'creditsIntro')}>{copy.productions.intro}</p>
+      <p class="todoNote">{copy.productions.clearanceNote}</p>
+
+      {
+        copy.productions.groups.map((group) => (
+          <div class="creditsGroup">
+            <h3 class="creditsGroupName" id={`credits-${group.id}`}>{group.name}</h3>
+            <ul class="posterGrid creditsPosters" aria-labelledby={`credits-${group.id}`}>
+              {Array.from({ length: group.plates }).map(() => (
+                <li class="slot creditsPlate" style="aspect-ratio:2/3;">
+                  <span class="slotLabel">{group.slotLabel}</span>
+                </li>
+              ))}
+            </ul>
+            <p class="todoNote">{group.todo}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- client logos -->
+  <section class="band creditsClients" aria-labelledby="clientsTitle">
+    <div class="bandInner">
+      <div class="sectionHead">
+        <h2 class="sectionTitle" id="clientsTitle">{copy.clients.heading}</h2>
+        <p class="kicker">{copy.clients.kicker}</p>
+      </div>
+      <p class={bodyClass(copy.clients.body, 'creditsIntro')}>{copy.clients.body}</p>
+      {!anyLogoSupplied && <p class="todoNote">{copy.clients.artworkNote}</p>}
+    </div>
+    <div class="logoStack creditsLogoWall">
+      <div class="logoPage is-on" style="position:relative;" aria-hidden="true">
+        {
+          clients.map((cell) => (
+            <div
+              class="logoCell"
+              style={
+                hasLogo(cell)
+                  ? `height:${cell.height}px; background-image:url("${cell.dark}");`
+                  : `height:${cell.height}px;`
+              }
+              data-light={hasLogo(cell) ? cell.light : undefined}
+              data-dark={hasLogo(cell) ? cell.dark : undefined}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- testimonials -->
+  <section class="band bandDark" aria-labelledby="testimonialsTitle">
+    <div class="bandInner">
+      <div class="sectionHead">
+        <h2 class="sectionTitle" id="testimonialsTitle">{copy.testimonials.heading}</h2>
+        <p class="kicker">{copy.testimonials.kicker}</p>
+      </div>
+      {
+        reviews.length > 0 ? (
+          <>
+            <p class={bodyClass(copy.testimonials.intro, 'creditsIntro')}>{copy.testimonials.intro}</p>
+            <ul class="creditsQuoteGrid">
+              {reviews.map((review) => (
+                <li>
+                  <figure class="creditsQuote">
+                    <blockquote class="creditsQuoteText">{review.body?.trim()}</blockquote>
+                    <figcaption>
+                      <span class="creditsQuoteName">{review.data.name}</span>
+                      <span class="creditsQuoteRole">{review.data.role}</span>
+                      {review.data.credits && <span class="creditsQuoteCredits">{review.data.credits}</span>}
+                    </figcaption>
+                  </figure>
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <p class="todoNote">{copy.testimonials.emptyNote}</p>
+        )
+      }
+    </div>
+  </section>
+
+  <style is:global>
+    /* three headline figures, not the homepage's four. The section header
+       already draws a rule, so the row does not draw a second one. */
+    .stats.creditsStats {
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      border-top:0; padding-top:0; margin-top:36px;
+    }
+
+    .creditsIntro { margin-top:26px; max-width:64ch; }
+
+    /* the hero and the dark band are dark in both themes, so they keep the dark
+       accent: the light theme's oxblood falls below 4.5:1 on either surface */
+    .pageHero .kicker,
+    .bandDark .kicker,
+    .bandDark .todoNote { color:#d4704f; }
+    .bandDark .todoNote { border-left-color:#d4704f; }
+
+    /* one group per format: film, television, commercial */
+    .creditsGroup { margin-top:56px; }
+    .creditsGroupName {
+      font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-weight:400;
+      font-size:clamp(20px, 2vw, 28px); letter-spacing:2px;
+      border-bottom:1px solid var(--hair); padding-bottom:12px;
+    }
+    .creditsPosters { list-style:none; margin:20px 0 0; padding:0; }
+    .creditsPlate { text-align:center; padding:10px; }
+
+    /* the wall runs long, so it breathes less than the homepage's two half-grids */
+    .creditsLogoWall { margin-top:44px; }
+    .creditsLogoWall .logoPage { row-gap:44px; }
+
+    /* testimonials, reproduced as given */
+    .creditsQuoteGrid {
+      list-style:none; margin:36px 0 0; padding:0;
+      display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:44px 40px;
+    }
+    .creditsQuote { margin:0; display:flex; flex-direction:column; height:100%; }
+    .creditsQuoteText {
+      margin:0; font-size:17px; font-weight:300; line-height:1.8; color:#c7c3bd;
+      text-wrap:pretty; flex:1 1 auto;
+    }
+    .creditsQuote figcaption { margin-top:22px; border-top:1px solid #3a3a3e; padding-top:18px; }
+    .creditsQuoteName {
+      display:block; white-space:pre-line;
+      font-family:'Bebas Neue', 'Jost', sans-serif; font-size:clamp(26px, 2.4vw, 34px);
+      letter-spacing:2px; line-height:1.02; font-weight:400; color:#f4f2ee;
+    }
+    .creditsQuoteRole {
+      display:block; margin-top:10px; font-size:13px; letter-spacing:2px;
+      font-weight:500; text-transform:uppercase; color:#f4f2ee;
+    }
+    .creditsQuoteCredits { display:block; margin-top:6px; font-size:15px; font-weight:300; color:#c7c3bd; }
+
+    @media (max-width:1024px) {
+      .stats.creditsStats { grid-template-columns:repeat(3, minmax(0, 1fr)); }
+      .creditsQuoteGrid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:36px 32px; }
+      .creditsGroup { margin-top:44px; }
+    }
+
+    @media (max-width:640px) {
+      .stats.creditsStats { grid-template-columns:1fr; gap:22px; }
+      .creditsQuoteGrid { grid-template-columns:1fr; gap:34px; }
+      .creditsLogoWall .logoPage { row-gap:36px; }
+    }
+  </style>
+</Base>
