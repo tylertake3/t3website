@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: https://take3agency.com/sitemap-index.xml
+Sitemap: https://www.take3agency.com/sitemap-index.xml
