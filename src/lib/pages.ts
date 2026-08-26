@@ -1,8 +1,11 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 
-const pagesDir = fileURLToPath(new URL('../pages', import.meta.url));
+/* Resolved from the project root, not from this module's own URL: during a
+   production build this file is bundled into dist/.prerender/chunks/, so a
+   relative lookup pointed at a folder that does not exist and every menu
+   entry silently disappeared from the built site. */
+const pagesDir = join(process.cwd(), 'src', 'pages');
 
 /** True when a route has a page behind it, checked at build time.
  *

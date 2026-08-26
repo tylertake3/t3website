@@ -189,6 +189,596 @@ collections:
               - { name: kicker, label: Small label above the heading, widget: string }
               - { name: heading, label: Heading, widget: string }
               - { name: body, label: Paragraph, widget: text }
+      - name: page-specialists
+        label: Specialists page text
+        file: src/content/pages/specialists.json
+        description: All the wording on the Specialists page.
+        fields:
+          - name: meta
+            label: Search & sharing
+            widget: object
+            collapsed: true
+            hint: The words Google and social media show. Not visible on the page itself.
+            fields:
+              - { name: title, label: Browser tab & Google title, widget: string }
+              - { name: description, label: Google description, widget: text, hint: Around 150-160 characters works best. }
+              - { name: ogTitle, label: Title when shared on social, widget: string }
+              - { name: ogDescription, label: Description when shared on social, widget: text }
+              - { name: footerTitle, label: Footer headline, widget: string, hint: The big line in the contact strip at the bottom of the page. }
+          - name: hero
+            label: Top of the page
+            widget: object
+            fields:
+              - { name: eyebrow, label: Small line above the headline, widget: string }
+              - { name: heading, label: Headline, widget: string }
+              - { name: lede, label: Opening paragraph, widget: text, hint: This is the strongest sell on the site. Worth writing in your own words. }
+          - name: promise
+            label: The promise
+            widget: object
+            hint: What happens when a brief asks for something the four main categories do not cover.
+            fields:
+              - { name: kicker, label: Small label above the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: body, label: Paragraph, widget: text }
+          - name: examples
+            label: Examples
+            widget: object
+            hint: Shown as a plain list so it reads as the kind of thing we can find, not a list of who we have booked.
+            fields:
+              - { name: kicker, label: Small label beside the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - name: items
+                label: Example list
+                label_singular: Example
+                widget: list
+                hint: One short entry per line, for example "Circus artists". Keep them general.
+              - { name: note, label: Line under the list, widget: string, hint: Makes clear the list is not the limit of what we can source. }
+              - name: specifics
+                label: Physical and character specifics
+                widget: object
+                hint: Briefs about height, build, twins or a distinctive face belong here too.
+                fields:
+                  - { name: heading, label: Heading, widget: string }
+                  - { name: body, label: Paragraph, widget: text }
+          - name: process
+            label: How it works
+            widget: object
+            fields:
+              - { name: kicker, label: Small label beside the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - name: steps
+                label: Steps
+                label_singular: Step
+                widget: list
+                hint: Keep it to four. The point is that there is a process, not a lecture on it.
+                fields:
+                  - { name: number, label: Step number, widget: string, hint: 'Two digits, for example 01' }
+                  - { name: name, label: Step name, widget: string }
+              - { name: todo, label: Note under the steps, widget: text, hint: Replace this with a short line under each step once the wording is agreed, or clear it. }
+          - name: worked
+            label: A worked example
+            widget: object
+            hint: The most persuasive part of the page. It needs one or two real briefs before it can be written.
+            fields:
+              - { name: kicker, label: Small label above the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: todo, label: Placeholder note, widget: text, hint: Replace with the real story once you have cleared it with the production. }
+          - name: related
+            label: Links to related pages
+            widget: object
+            hint: Only shown for pages that have been built.
+            fields:
+              - { name: kicker, label: Small label beside the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - name: items
+                label: Linked pages
+                label_singular: Link
+                widget: list
+                fields:
+                  - { name: name, label: Name, widget: string }
+                  - { name: href, label: Links to, widget: string, hint: 'A path on this site, for example /spacts' }
+                  - { name: description, label: One line about it, widget: text }
+                  - { name: linkLabel, label: Link text, widget: string }
+      - name: page-laural
+        label: Laural page text
+        file: src/content/pages/laural.json
+        description: >-
+          All the wording on the Laural page. Please keep the page silent on where Laural came from:
+          say that Take 3 runs on it, and nothing about who made it or who owns it.
+        fields:
+          - name: meta
+            label: Search & sharing
+            widget: object
+            collapsed: true
+            hint: The words Google and social media show. Not visible on the page itself.
+            fields:
+              - { name: title, label: Browser tab & Google title, widget: string }
+              - { name: description, label: Google description, widget: text, hint: Around 150-160 characters works best. }
+              - { name: ogTitle, label: Title when shared on social, widget: string }
+              - { name: ogDescription, label: Description when shared on social, widget: text }
+              - { name: footerTitle, label: Footer headline, widget: string, hint: The big line in the contact strip at the bottom of the page. }
+          - name: hero
+            label: Top of the page
+            widget: object
+            fields:
+              - { name: eyebrow, label: Small line above the headline, widget: string }
+              - { name: heading, label: Headline, widget: string }
+              - { name: lede, label: Opening line, widget: text }
+              - { name: markSlotLabel, label: Caption on the empty logo plate, widget: string, hint: Shown until the Laural logo artwork is added. }
+              - { name: markSlotNote, label: Note about the missing logo, widget: text, hint: Clear this once the logo has been added. }
+              - name: disciplines
+                label: Disciplines strip
+                label_singular: Discipline
+                widget: list
+                hint: The short row of words under the opening line.
+              - { name: disciplinesLabel, label: Small label above that row, widget: string }
+          - { name: publishNote, label: Do-not-publish note, widget: text, hint: A visible warning that this page must not go live before Laural is live for productions. Clear it when that is true. }
+          - name: why
+            label: Why it exists
+            widget: object
+            fields:
+              - { name: kicker, label: Small label above the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: paragraphs, label: Paragraphs, widget: list, hint: One entry per paragraph. }
+          - name: casting
+            label: Casting & selection
+            widget: object
+            fields:
+              - { name: kicker, label: Small label beside the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - name: features
+                label: Features
+                label_singular: Feature
+                widget: list
+                fields:
+                  - { name: name, label: Feature name, widget: string }
+                  - { name: body, label: One line about it, widget: text }
+              - { name: shotLabel, label: Caption on the empty screenshot plate, widget: string, hint: Any screenshot must use made-up names, faces and figures. }
+              - { name: shotNote, label: Note about the missing screenshot, widget: text, hint: Clear this once a screenshot with dummy data has been added. }
+          - name: onset
+            label: On set
+            widget: object
+            fields:
+              - { name: kicker, label: Small label beside the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - name: features
+                label: Features
+                label_singular: Feature
+                widget: list
+                fields:
+                  - { name: name, label: Feature name, widget: string }
+                  - { name: body, label: One line about it, widget: text }
+          - name: numbers
+            label: The numbers
+            widget: object
+            fields:
+              - { name: kicker, label: Small label beside the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - name: features
+                label: Features
+                label_singular: Feature
+                widget: list
+                fields:
+                  - { name: name, label: Feature name, widget: string }
+                  - { name: body, label: One line about it, widget: text }
+              - { name: shotLabel, label: Caption on the empty screenshot plate, widget: string, hint: Any screenshot must use made-up names, faces and figures. }
+              - { name: shotNote, label: Note about the missing screenshot, widget: text, hint: Clear this once a screenshot with dummy data has been added. }
+      - name: page-credits
+        label: Credits page text
+        file: src/content/pages/credits.json
+        description: All the wording on the Credits page. The testimonials themselves are edited under Reviews.
+        fields:
+          - name: meta
+            label: Search & sharing
+            widget: object
+            collapsed: true
+            hint: The words Google and social media show. Not visible on the page itself.
+            fields:
+              - { name: title, label: Browser tab & Google title, widget: string }
+              - { name: description, label: Google description, widget: text, hint: Around 150-160 characters works best. }
+              - { name: ogTitle, label: Title when shared on social, widget: string }
+              - { name: ogDescription, label: Description when shared on social, widget: text }
+              - { name: footerTitle, label: Footer headline, widget: string, hint: The big line in the contact strip at the bottom of the page. }
+          - name: hero
+            label: Top of the page
+            widget: object
+            fields:
+              - { name: eyebrow, label: Small line above the headline, widget: string }
+              - { name: heading, label: Headline, widget: string }
+              - { name: lede, label: Opening paragraph, widget: text }
+          - name: figures
+            label: Headline figures
+            widget: object
+            hint: The three numbers near the top. They count up as the page is scrolled.
+            fields:
+              - { name: kicker, label: Small label beside the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - name: items
+                label: Figures
+                label_singular: Figure
+                widget: list
+                fields:
+                  - { name: number, label: The figure, widget: string, hint: 'For example 500+ or 1,500+ or 2019' }
+                  - { name: label, label: What it counts, widget: string }
+          - name: productions
+            label: Production credits
+            widget: object
+            hint: Grouped by film, television and commercial. No title goes on this page until it has been cleared.
+            fields:
+              - { name: kicker, label: Small label beside the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: intro, label: Introduction, widget: text }
+              - name: clearanceNote
+                label: Clearance warning
+                widget: text
+                hint: Shown on the page in the highlight style until it is cleared out. Delete it only once permission and embargo checks are signed off.
+              - name: groups
+                label: Groups
+                label_singular: Group
+                widget: list
+                hint: One group per format. Film, television and commercial.
+                fields:
+                  - { name: id, label: Short code, widget: string, hint: 'Lowercase, no spaces. Used to join the heading to its list, for example film.' }
+                  - { name: name, label: Group name, widget: string }
+                  - { name: slotLabel, label: Placeholder caption, widget: string, hint: Shown on each empty picture plate until artwork is added. }
+                  - { name: plates, label: How many empty plates, widget: number, value_type: int }
+                  - { name: todo, label: Note about what is still needed, widget: text }
+          - name: clients
+            label: Client logos
+            widget: object
+            fields:
+              - { name: kicker, label: Small label beside the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: body, label: Paragraph, widget: text }
+              - name: artworkNote
+                label: Note shown while no logo files exist
+                widget: text
+                hint: Disappears on its own as soon as logo artwork is added to the site.
+          - name: testimonials
+            label: Testimonials
+            widget: object
+            hint: The quotes themselves are added and reordered under Reviews. Only the wording around them is set here.
+            fields:
+              - { name: kicker, label: Small label beside the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: intro, label: Introduction, widget: text }
+              - { name: emptyNote, label: Note shown when there are no reviews yet, widget: text }
+      - name: page-about
+        label: Who We Are page text
+        file: src/content/pages/about.json
+        description: All the wording on the Who We Are page.
+        fields:
+          - name: meta
+            label: Search & sharing
+            widget: object
+            collapsed: true
+            hint: The words Google and social media show. Not visible on the page itself.
+            fields:
+              - { name: title, label: Browser tab & Google title, widget: string }
+              - { name: description, label: Google description, widget: text, hint: Around 150-160 characters works best. }
+              - { name: ogTitle, label: Title when shared on social, widget: string }
+              - { name: ogDescription, label: Description when shared on social, widget: text }
+              - { name: footerTitle, label: Footer headline, widget: string, hint: The big line in the contact strip at the bottom of the page. }
+          - name: hero
+            label: Top of the page
+            widget: object
+            fields:
+              - { name: eyebrow, label: Small line above the headline, widget: string }
+              - { name: heading, label: Headline, widget: string }
+              - { name: lede, label: Opening paragraph, widget: text }
+          - name: story
+            label: The story since 2019
+            widget: object
+            fields:
+              - { name: kicker, label: Small label above the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: body, label: Paragraph, widget: text }
+              - name: stats
+                label: Figures
+                label_singular: Figure
+                widget: list
+                hint: The row of numbers under the paragraph. They count up as the page is scrolled.
+                fields:
+                  - { name: number, label: The figure, widget: string, hint: 'For example 500+ or UK & Europe' }
+                  - { name: label, label: What it counts, widget: string }
+          - name: operations
+            label: How the agency works
+            widget: object
+            hint: The operational difference. What Take 3 takes off the production.
+            fields:
+              - { name: kicker, label: Small label beside the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: body, label: Paragraph, widget: text }
+              - name: items
+                label: What we handle
+                label_singular: Item
+                widget: list
+                fields:
+                  - { name: name, label: Name, widget: string, hint: 'For example Contracts, Fees, Overtime, Buyouts, Coordination' }
+                  - { name: detail, label: One line of detail, widget: text }
+          - name: team
+            label: The team
+            widget: object
+            fields:
+              - { name: kicker, label: Small label beside the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: body, label: Introduction, widget: text }
+              - { name: slotLabel, label: Placeholder caption, widget: string, hint: Shown on each empty photograph plate until pictures are added. }
+              - name: plates
+                label: How many empty plates
+                widget: number
+                value_type: int
+                hint: A placeholder count, not a headcount. Set it to the real number of people once the team is confirmed.
+              - { name: todo, label: Note about what is still needed, widget: text }
+          - name: principles
+            label: What we stand for
+            widget: object
+            hint: Shown through real examples rather than stated. Leave the plates empty until genuine examples are supplied.
+            fields:
+              - { name: kicker, label: Small label beside the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: body, label: Introduction, widget: text }
+              - { name: todo, label: Note about what is still needed, widget: text }
+              - name: examples
+                label: Example plates
+                label_singular: Example
+                widget: list
+                fields:
+                  - { name: slotLabel, label: Placeholder caption, widget: string }
+          - name: laural
+            label: Link through to Laural
+            widget: object
+            fields:
+              - { name: kicker, label: Small label above the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: body, label: Paragraph, widget: text }
+              - { name: linkLabel, label: Link text, widget: string }
+              - { name: href, label: Link goes to, widget: string, hint: 'A path on this site, for example /laural' }
+              - { name: pendingNote, label: Note shown until that page exists, widget: string }
+      - name: page-contact
+        label: Contact page text
+        file: src/content/pages/contact.json
+        description: All the wording on the Contact page, including every label on the enquiry form.
+        fields:
+          - name: meta
+            label: Search & sharing
+            widget: object
+            collapsed: true
+            hint: The words Google and social media show. Not visible on the page itself.
+            fields:
+              - { name: title, label: Browser tab & Google title, widget: string }
+              - { name: description, label: Google description, widget: text, hint: Around 150-160 characters works best. }
+              - { name: ogTitle, label: Title when shared on social, widget: string }
+              - { name: ogDescription, label: Description when shared on social, widget: text }
+              - { name: footerTitle, label: Footer headline, widget: string, hint: The big line in the contact strip at the bottom of the page. }
+          - name: hero
+            label: Top of the page
+            widget: object
+            fields:
+              - { name: eyebrow, label: Small line above the headline, widget: string }
+              - { name: heading, label: Headline, widget: string }
+              - { name: lede, label: Opening paragraph, widget: text }
+          - name: details
+            label: Direct contact details
+            widget: object
+            hint: The email address, phone number and Instagram handle themselves are set once for the whole site, so they are not edited here. Only the wording around them is.
+            fields:
+              - { name: kicker, label: Small label beside the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - name: items
+                label: Ways to reach us
+                label_singular: Contact route
+                widget: list
+                fields:
+                  - { name: id, label: Which route this is, widget: string, hint: 'Must be exactly email, phone or instagram. This is what pulls in the right address or number, so do not change it unless you know what it does.' }
+                  - { name: label, label: Small label above it, widget: string }
+                  - { name: note, label: One line explaining when to use it, widget: text }
+              - { name: hoursNote, label: Note about opening hours, widget: text, hint: Shown as a highlighted note until real opening hours are written. }
+          - name: form
+            label: Enquiry form
+            widget: object
+            hint: Every word on the form. The form is switched off until a place to send it has been set up.
+            fields:
+              - { name: kicker, label: Small label beside the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: intro, label: Introduction paragraph, widget: text }
+              - name: formAction
+                label: Where the form sends to
+                widget: string
+                required: false
+                hint: Leave this empty until a form service has been set up. While it is empty the form is switched off on the page and visitors are told to email instead.
+              - { name: method, label: How the form sends, widget: string, hint: 'Almost always post. Technical setting, leave it alone unless the form service asks for something else.' }
+              - { name: notConnectedTitle, label: 'Form switched off: heading', widget: string }
+              - { name: notConnectedBody, label: 'Form switched off: explanation', widget: text }
+              - { name: optionalLabel, label: Word shown beside fields that are not required, widget: string }
+              - { name: selectPlaceholder, label: First line in a drop-down list, widget: string, hint: 'For example: Please choose.' }
+              - { name: submitLabel, label: Send button text, widget: string }
+              - { name: privacyNote, label: Note under the form about privacy, widget: text }
+              - name: groups
+                label: Sections of the form
+                label_singular: Form section
+                widget: list
+                hint: Each section has a small heading and a set of questions.
+                fields:
+                  - { name: legend, label: Section heading, widget: string }
+                  - name: fields
+                    label: Questions
+                    label_singular: Question
+                    widget: list
+                    hint: The wording of each question. The settings below the label decide what kind of box it is, so change those only if you know what they do.
+                    fields:
+                      - { name: label, label: Question, widget: string, hint: The words shown above the box. }
+                      - { name: hint, label: Helper line under the box, widget: string, required: false }
+                      - { name: required, label: Must be filled in, widget: boolean, default: false, hint: Keep this off wherever you can. Every question a visitor is forced to answer loses enquiries. }
+                      - { name: id, label: Reference name, widget: string, hint: 'Technical: the name the answer arrives under. Do not change it once the form is connected.' }
+                      - { name: type, label: Kind of box, widget: string, hint: 'Technical: text, email, tel, textarea or select.' }
+                      - { name: autocomplete, label: Autofill setting, widget: string, required: false, hint: 'Technical: lets a phone fill the box in automatically. Leave as it is.' }
+                      - { name: inputmode, label: Phone keyboard setting, widget: string, required: false, hint: 'Technical: which keyboard a phone opens. Leave as it is.' }
+                      - { name: rows, label: Height of a big text box, widget: number, value_type: int, required: false, hint: 'Only used by the large comment boxes.' }
+                      - name: options
+                        label: Choices in the drop-down
+                        label_singular: Choice
+                        widget: list
+                        required: false
+                        hint: Only used by a drop-down question.
+                        fields:
+                          - { name: label, label: Choice, widget: string }
+                          - { name: value, label: Reference name, widget: string, hint: 'Technical: how the choice is recorded. Lower case, no spaces.' }
+          - name: audience
+            label: Clients and performers
+            widget: object
+            hint: The block that sends productions to the form and performers to the Join page.
+            fields:
+              - { name: kicker, label: Small label beside the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - name: clients
+                label: For productions
+                widget: object
+                fields:
+                  - { name: title, label: Heading, widget: string }
+                  - { name: body, label: Paragraph, widget: text }
+              - name: performers
+                label: For performers
+                widget: object
+                fields:
+                  - { name: title, label: Heading, widget: string }
+                  - { name: body, label: Paragraph, widget: text }
+                  - { name: linkLabel, label: Link text, widget: string }
+                  - { name: href, label: Link goes to, widget: string, hint: 'A path on this site, for example /join' }
+          - name: company
+            label: Company details
+            widget: object
+            fields:
+              - { name: kicker, label: Small label above the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: todo, label: Company details text, widget: text, hint: Registered name, company number, registered address and VAT number. Shown as a highlighted note until it is filled in. }
+      - name: page-join
+        label: Join the roster page text
+        file: src/content/pages/join.json
+        description: All the wording on the Join page, the one page written for performers rather than productions. Includes every label on the application form.
+        fields:
+          - name: meta
+            label: Search & sharing
+            widget: object
+            collapsed: true
+            hint: The words Google and social media show. Not visible on the page itself.
+            fields:
+              - { name: title, label: Browser tab & Google title, widget: string }
+              - { name: description, label: Google description, widget: text, hint: Around 150-160 characters works best. }
+              - { name: ogTitle, label: Title when shared on social, widget: string }
+              - { name: ogDescription, label: Description when shared on social, widget: text }
+              - { name: footerTitle, label: Footer headline, widget: string, hint: The big line in the contact strip at the bottom of the page. }
+          - name: hero
+            label: Top of the page
+            widget: object
+            fields:
+              - { name: eyebrow, label: Small line above the headline, widget: string }
+              - { name: heading, label: Headline, widget: string }
+              - { name: lede, label: Opening paragraph, widget: text }
+          - name: disciplines
+            label: Who we are looking for
+            widget: object
+            fields:
+              - { name: kicker, label: Small label beside the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - name: items
+                label: Disciplines
+                label_singular: Discipline
+                widget: list
+                hint: One entry per discipline. Add, reorder or remove them freely.
+                fields:
+                  - { name: name, label: Discipline, widget: string }
+                  - { name: looksFor, label: What we look for, widget: text, hint: Shown as a highlighted note until real wording replaces it. }
+              - { name: note, label: Closing line under the list, widget: text }
+          - name: offer
+            label: What we offer a performer
+            widget: object
+            fields:
+              - { name: kicker, label: Small label above the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: todo, label: Paragraph, widget: text, hint: Shown as a highlighted note until real wording replaces it. }
+          - name: requirements
+            label: Requirements and experience
+            widget: object
+            fields:
+              - { name: kicker, label: Small label above the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: todo, label: Paragraph, widget: text, hint: Shown as a highlighted note until real wording replaces it. }
+              - { name: standInsNote, label: Note about the stand-ins criteria, widget: text, hint: A reminder that the stand-ins recruitment criteria belong in this section. Delete it once they are here. }
+          - name: process
+            label: How applying works
+            widget: object
+            fields:
+              - { name: kicker, label: Small label beside the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - name: steps
+                label: Steps
+                label_singular: Step
+                widget: list
+                hint: Four steps fit the row neatly. Renumber them yourself if you reorder them.
+                fields:
+                  - { name: number, label: Step number, widget: string, hint: 'For example 01.' }
+                  - { name: name, label: Step name, widget: string }
+              - { name: todo, label: Note under the steps, widget: text, hint: Shown as a highlighted note until the detail of each step is written. }
+          - name: honest
+            label: An honest note
+            widget: object
+            hint: Response times, and the fact that not everyone who applies is taken on. Sits just above the form so it is read before anyone applies.
+            fields:
+              - { name: kicker, label: Small label above the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: todo, label: Paragraph, widget: text, hint: Shown as a highlighted note until real wording replaces it. }
+          - name: form
+            label: Application form
+            widget: object
+            hint: Every word on the form. The form is switched off until a place to send it has been set up. Never add a question about age, date of birth, health, ethnicity or anything similar.
+            fields:
+              - { name: kicker, label: Small label beside the heading, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: intro, label: Introduction paragraph, widget: text }
+              - name: formAction
+                label: Where the form sends to
+                widget: string
+                required: false
+                hint: Leave this empty until a form service has been set up. While it is empty the form is switched off on the page and applicants are told to email instead.
+              - { name: method, label: How the form sends, widget: string, hint: 'Almost always post. Technical setting, leave it alone unless the form service asks for something else.' }
+              - { name: notConnectedTitle, label: 'Form switched off: heading', widget: string }
+              - { name: notConnectedBody, label: 'Form switched off: explanation', widget: text }
+              - { name: optionalLabel, label: Word shown beside questions that are not required, widget: string }
+              - { name: selectPlaceholder, label: First line in a drop-down list, widget: string, hint: 'For example: Please choose.' }
+              - { name: submitLabel, label: Send button text, widget: string }
+              - { name: fieldsNote, label: Note about the questions asked, widget: text, hint: A reminder that the list of questions still needs signing off. Delete it once it has been. }
+              - { name: privacyNote, label: Note under the form about privacy, widget: text }
+              - name: groups
+                label: Sections of the form
+                label_singular: Form section
+                widget: list
+                hint: Each section has a small heading and a set of questions.
+                fields:
+                  - { name: legend, label: Section heading, widget: string }
+                  - name: fields
+                    label: Questions
+                    label_singular: Question
+                    widget: list
+                    hint: The wording of each question. The settings below the label decide what kind of box it is, so change those only if you know what they do.
+                    fields:
+                      - { name: label, label: Question, widget: string, hint: The words shown above the box. }
+                      - { name: hint, label: Helper line under the box, widget: string, required: false }
+                      - { name: required, label: Must be filled in, widget: boolean, default: false, hint: Keep this off wherever you can. Every question an applicant is forced to answer loses applications. }
+                      - { name: id, label: Reference name, widget: string, hint: 'Technical: the name the answer arrives under. Do not change it once the form is connected.' }
+                      - { name: type, label: Kind of box, widget: string, hint: 'Technical: text, email, tel, textarea or select.' }
+                      - { name: autocomplete, label: Autofill setting, widget: string, required: false, hint: 'Technical: lets a phone fill the box in automatically. Leave as it is.' }
+                      - { name: inputmode, label: Phone keyboard setting, widget: string, required: false, hint: 'Technical: which keyboard a phone opens. Leave as it is.' }
+                      - { name: rows, label: Height of a big text box, widget: number, value_type: int, required: false, hint: 'Only used by the large comment boxes.' }
+                      - name: options
+                        label: Choices in the drop-down
+                        label_singular: Choice
+                        widget: list
+                        required: false
+                        hint: Only used by a drop-down question.
+                        fields:
+                          - { name: label, label: Choice, widget: string }
+                          - { name: value, label: Reference name, widget: string, hint: 'Technical: how the choice is recorded. Lower case, no spaces.' }
       - name: page-dancers
         label: Dancers page text
         file: src/content/pages/dancers.json

@@ -1,8 +1,6 @@
 ---
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { navLinks, performerLink, site, contactHref } from '../data/site';
+import { pageExists } from '../lib/pages';
 import Timecode from './Timecode.astro';
 
 interface Props {
@@ -15,17 +13,8 @@ const currentPath = Astro.url.pathname.replace(/index\.html$/, '/').replace(/\.h
 const isCurrent = (href: string) => href === currentPath;
 
 /* The menu is defined ahead of the build-out, so only show entries whose page
-   actually exists. Each new page appears in the menu the moment it lands.
-
-   This deliberately reads the filesystem rather than using import.meta.glob:
-   globbing the pages folder pulls every page into this component's module
-   graph, which makes Astro ship all their stylesheets on every page. */
-const pagesDir = fileURLToPath(new URL('../pages', import.meta.url));
-const exists = (href: string) => {
-  const slug = href.replace(/^\//, '');
-  if (!slug) return existsSync(join(pagesDir, 'index.astro'));
-  return existsSync(join(pagesDir, `${slug}.astro`)) || existsSync(join(pagesDir, slug, 'index.astro'));
-};
+   actually exists. Each new page appears in the menu the moment it lands. */
+const exists = pageExists;
 
 const menuItems = navLinks
   .filter((item) => exists(item.href) || item.children?.some((c) => exists(c.href)))

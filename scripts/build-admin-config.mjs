@@ -4,7 +4,10 @@
    Run on its own with: node scripts/build-admin-config.mjs */
 import { readFile, writeFile } from 'node:fs/promises';
 
-const PAGES = ['index', 'artists', 'dancers', 'models', 'spacts', 'stand-ins', 'what-is-a-spact'];
+const PAGES = [
+  'index', 'artists', 'specialists', 'laural', 'credits', 'about', 'contact', 'join',
+  'dancers', 'models', 'spacts', 'stand-ins', 'what-is-a-spact',
+];
 const OUT = 'public/admin/config.yml';
 
 const indent = (text, spaces) =>

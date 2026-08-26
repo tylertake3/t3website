@@ -317,6 +317,20 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 
 /* ---------- page patterns (shared by the pages built from BUILD-SPEC) ---------- */
 
+/* Always-dark surfaces keep the dark palette whatever the theme: in light mode
+   the oxblood accent on near-black fails contrast badly. Pages had each been
+   patching this locally, so it belongs here once. */
+[data-theme="light"] .pageHero,
+[data-theme="light"] .bandDark {
+  --accent:#d4704f;
+  --muted:#96928c;
+  --sub:#c2beb6;
+  --hair:#35353a;
+  --tileBg:#232327;
+  --ctrlBorder:#6f6f77;
+}
+
+
 /* text-led hero for pages without a full-bleed photograph */
 .pageHero { background:var(--heroBg); color:var(--heroInk); padding:200px 0 72px; }
 .pageHeroInner { max-width:1280px; margin:0 auto; padding:0 40px; }

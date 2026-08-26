@@ -21,6 +21,12 @@ const EXPECTED_PAGES = [
   'stand-ins.html',
   'what-is-a-spact.html',
   'artists.html',
+  'specialists.html',
+  'laural.html',
+  'credits.html',
+  'about.html',
+  'contact.html',
+  'join.html',
   '404.html',
 ];
 
