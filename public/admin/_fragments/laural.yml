@@ -1,0 +1,84 @@
+- name: page-laural
+  label: Laural page text
+  file: src/content/pages/laural.json
+  description: >-
+    All the wording on the Laural page. Please keep the page silent on where Laural came from:
+    say that Take 3 runs on it, and nothing about who made it or who owns it.
+  fields:
+    - name: meta
+      label: Search & sharing
+      widget: object
+      collapsed: true
+      hint: The words Google and social media show. Not visible on the page itself.
+      fields:
+        - { name: title, label: Browser tab & Google title, widget: string }
+        - { name: description, label: Google description, widget: text, hint: Around 150-160 characters works best. }
+        - { name: ogTitle, label: Title when shared on social, widget: string }
+        - { name: ogDescription, label: Description when shared on social, widget: text }
+        - { name: footerTitle, label: Footer headline, widget: string, hint: The big line in the contact strip at the bottom of the page. }
+    - name: hero
+      label: Top of the page
+      widget: object
+      fields:
+        - { name: eyebrow, label: Small line above the headline, widget: string }
+        - { name: heading, label: Headline, widget: string }
+        - { name: lede, label: Opening line, widget: text }
+        - { name: markSlotLabel, label: Caption on the empty logo plate, widget: string, hint: Shown until the Laural logo artwork is added. }
+        - { name: markSlotNote, label: Note about the missing logo, widget: text, hint: Clear this once the logo has been added. }
+        - name: disciplines
+          label: Disciplines strip
+          label_singular: Discipline
+          widget: list
+          hint: The short row of words under the opening line.
+        - { name: disciplinesLabel, label: Small label above that row, widget: string }
+    - { name: publishNote, label: Do-not-publish note, widget: text, hint: A visible warning that this page must not go live before Laural is live for productions. Clear it when that is true. }
+    - name: why
+      label: Why it exists
+      widget: object
+      fields:
+        - { name: kicker, label: Small label above the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - { name: paragraphs, label: Paragraphs, widget: list, hint: One entry per paragraph. }
+    - name: casting
+      label: Casting & selection
+      widget: object
+      fields:
+        - { name: kicker, label: Small label beside the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - name: features
+          label: Features
+          label_singular: Feature
+          widget: list
+          fields:
+            - { name: name, label: Feature name, widget: string }
+            - { name: body, label: One line about it, widget: text }
+        - { name: shotLabel, label: Caption on the empty screenshot plate, widget: string, hint: Any screenshot must use made-up names, faces and figures. }
+        - { name: shotNote, label: Note about the missing screenshot, widget: text, hint: Clear this once a screenshot with dummy data has been added. }
+    - name: onset
+      label: On set
+      widget: object
+      fields:
+        - { name: kicker, label: Small label beside the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - name: features
+          label: Features
+          label_singular: Feature
+          widget: list
+          fields:
+            - { name: name, label: Feature name, widget: string }
+            - { name: body, label: One line about it, widget: text }
+    - name: numbers
+      label: The numbers
+      widget: object
+      fields:
+        - { name: kicker, label: Small label beside the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - name: features
+          label: Features
+          label_singular: Feature
+          widget: list
+          fields:
+            - { name: name, label: Feature name, widget: string }
+            - { name: body, label: One line about it, widget: text }
+        - { name: shotLabel, label: Caption on the empty screenshot plate, widget: string, hint: Any screenshot must use made-up names, faces and figures. }
+        - { name: shotNote, label: Note about the missing screenshot, widget: text, hint: Clear this once a screenshot with dummy data has been added. }

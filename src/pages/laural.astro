@@ -1,0 +1,170 @@
+---
+import Base from '../layouts/Base.astro';
+import copy from '../content/pages/laural.json';
+---
+
+<Base
+  title={copy.meta.title}
+  description={copy.meta.description}
+  ogTitle={copy.meta.ogTitle}
+  ogDescription={copy.meta.ogDescription}
+  footerTitle={copy.meta.footerTitle}
+>
+  <!-- hero -->
+  <section class="pageHero lauralHero" aria-labelledby="lauralTitle">
+    <div class="pageHeroInner">
+      <!-- the mark itself has not been supplied, so this is a deliberate plate
+           rather than a broken image -->
+      <div class="lauralMark">
+        <span class="slot" style="aspect-ratio:5/1;">
+          <span class="slotLabel">{copy.hero.markSlotLabel}</span>
+        </span>
+      </div>
+
+      <p class="kicker">{copy.hero.eyebrow}</p>
+      <h1 class="pageHeroTitle" id="lauralTitle">{copy.hero.heading}</h1>
+      <p class="pageHeroLede">{copy.hero.lede}</p>
+
+      <p class="lauralStripLabel" id="lauralStripLabel">{copy.hero.disciplinesLabel}</p>
+      <ul class="lauralStrip" aria-labelledby="lauralStripLabel">
+        {copy.hero.disciplines.map((item) => <li class="lauralStripItem">{item}</li>)}
+      </ul>
+
+      <p class="todoNote">{copy.hero.markSlotNote}</p>
+      <p class="todoNote">{copy.publishNote}</p>
+    </div>
+  </section>
+
+  <!-- why it exists -->
+  <section class="band" aria-labelledby="whyTitle">
+    <div class="bandInner bandSplit">
+      <div>
+        <p class="kicker">{copy.why.kicker}</p>
+        <h2 class="sectionTitle" id="whyTitle">{copy.why.heading}</h2>
+      </div>
+      <div class="bandBody">
+        {copy.why.paragraphs.map((para) => <p>{para}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- casting & selection -->
+  <section class="band" aria-labelledby="castingTitle">
+    <div class="bandInner">
+      <div class="sectionHead lauralHead">
+        <h2 class="sectionTitle" id="castingTitle">{copy.casting.heading}</h2>
+        <p class="kicker">{copy.casting.kicker}</p>
+      </div>
+      <ul class="lauralFeatures">
+        {
+          copy.casting.features.map((feature) => (
+            <li class="lauralFeature">
+              <h3 class="lauralFeatureName">{feature.name}</h3>
+              <p class="lauralFeatureBody">{feature.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="lauralShot">
+        <span class="slot" style="aspect-ratio:16/9;">
+          <span class="slotLabel">{copy.casting.shotLabel}</span>
+        </span>
+        <p class="todoNote">{copy.casting.shotNote}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- on set -->
+  <section class="band bandDark lauralDark" aria-labelledby="onsetTitle">
+    <div class="bandInner">
+      <div class="sectionHead lauralHead">
+        <h2 class="sectionTitle" id="onsetTitle">{copy.onset.heading}</h2>
+        <p class="kicker">{copy.onset.kicker}</p>
+      </div>
+      <ul class="lauralFeatures lauralFeatures--three">
+        {
+          copy.onset.features.map((feature) => (
+            <li class="lauralFeature">
+              <h3 class="lauralFeatureName">{feature.name}</h3>
+              <p class="lauralFeatureBody">{feature.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- the numbers -->
+  <section class="band" aria-labelledby="numbersTitle">
+    <div class="bandInner">
+      <div class="sectionHead lauralHead">
+        <h2 class="sectionTitle" id="numbersTitle">{copy.numbers.heading}</h2>
+        <p class="kicker">{copy.numbers.kicker}</p>
+      </div>
+      <ul class="lauralFeatures">
+        {
+          copy.numbers.features.map((feature) => (
+            <li class="lauralFeature">
+              <h3 class="lauralFeatureName">{feature.name}</h3>
+              <p class="lauralFeatureBody">{feature.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="lauralShot">
+        <span class="slot" style="aspect-ratio:16/9;">
+          <span class="slotLabel">{copy.numbers.shotLabel}</span>
+        </span>
+        <p class="todoNote">{copy.numbers.shotNote}</p>
+      </div>
+    </div>
+  </section>
+
+  <style is:global>
+    /* Page-scoped patterns for /laural. Prefixed `laural` so they cannot
+       collide with anything shared; ready to be lifted into global.css if a
+       second page ever needs them. */
+
+    /* Two surfaces here are dark in BOTH themes: the hero (--heroBg) and the
+       on-set band (#1a1a1c). The light-theme --accent (#5d1f16) and --muted
+       (#605d57) are picked for a cream page and are unreadable on either, so
+       both surfaces pin the tokens to their dark-theme values. Same rule
+       global.css applies to the always-dark reviews band. */
+    .lauralHero, .lauralDark { --accent:#d4704f; --muted:#96928c; --tileBg:#232327; }
+    .lauralDark { --sub:#c7c3bd; --ink:#f4f2ee; --hair:#3a3a3e; }
+
+    .lauralHead { padding-bottom:18px; }
+
+    /* the mark plate sits above the kicker, sized like a wordmark rather than
+       stretching the full column */
+    .lauralMark { max-width:260px; margin-bottom:34px; }
+
+    /* discipline strip */
+    .lauralStripLabel { margin:44px 0 0; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
+    .lauralStrip { list-style:none; margin:14px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:10px 28px; border-top:1px solid var(--heroLine); padding-top:16px; }
+    .lauralStripItem { font-size:14px; letter-spacing:3px; text-transform:uppercase; color:var(--heroInk); }
+
+    /* feature rows */
+    .lauralFeatures { list-style:none; margin:34px 0 0; padding:0; display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:34px 48px; }
+    .lauralFeatures--three { grid-template-columns:repeat(3, minmax(0, 1fr)); }
+    .lauralFeature { border-top:1px solid var(--hair); padding-top:20px; }
+    .lauralFeatureName { margin:0; font-size:15px; letter-spacing:2.5px; text-transform:uppercase; font-weight:400; color:var(--ink); }
+    .lauralFeatureBody { margin:12px 0 0; font-size:16px; font-weight:300; line-height:1.7; color:var(--sub); text-wrap:pretty; }
+
+    /* screenshot plates: nothing goes in these until it uses dummy data.
+       Capped in width so an empty plate does not swallow the section. */
+    .lauralShot { margin-top:52px; max-width:820px; }
+
+    @media (max-width:1024px) {
+      .lauralFeatures, .lauralFeatures--three { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:28px 32px; }
+      .lauralMark { max-width:220px; }
+    }
+
+    @media (max-width:640px) {
+      .lauralFeatures, .lauralFeatures--three { grid-template-columns:1fr; gap:26px; }
+      .lauralStrip { gap:8px 20px; }
+      .lauralStripItem { font-size:13px; letter-spacing:2px; }
+      .lauralShot { margin-top:36px; }
+    }
+  </style>
+</Base>

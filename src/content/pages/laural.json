@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "title": "Laural | The Production Platform Take 3 Runs On | Take 3 Agency",
+    "description": "Every Take 3 booking runs on Laural: collaborative lookbooks, verified profiles, digital check-in, on-set messaging and live cost reporting in one place.",
+    "ogTitle": "Laural | Take 3 Agency",
+    "ogDescription": "Every Take 3 booking runs on Laural: casting, on-set logistics and live cost reporting in one place.",
+    "footerTitle": "Ask us how a booking actually runs"
+  },
+  "hero": {
+    "eyebrow": "THE PLATFORM",
+    "heading": "Take 3 runs on Laural",
+    "lede": "Every booking runs on it, from the first shortlist to the final figure.",
+    "markSlotLabel": "Laural mark",
+    "markSlotNote": "TODO: artwork — the Laural mark, supplied at the right size for a dark background.",
+    "disciplines": ["SPACTs", "Dancers", "Stunt", "Models", "Actors"],
+    "disciplinesLabel": "Used across"
+  },
+  "publishNote": "TODO: publishing — this page must not go live before Laural is genuinely live for productions. Remove this note only when that is true.",
+  "why": {
+    "kicker": "WHY IT EXISTS",
+    "heading": "The roster is only half the job",
+    "paragraphs": [
+      "What actually determines whether a shoot runs smoothly is everything around the booking.",
+      "That part of the industry still runs on annotated PDFs and spreadsheets."
+    ]
+  },
+  "casting": {
+    "kicker": "CASTING & SELECTION",
+    "heading": "Choosing together, not in sequence",
+    "features": [
+      {
+        "name": "Collaborative lookbooks",
+        "body": "Costume, hair and make-up selecting simultaneously."
+      },
+      {
+        "name": "The triple-tick system",
+        "body": "Department choices tracked live, greenlit by consensus."
+      }
+    ],
+    "shotLabel": "Screenshot — dummy data needed",
+    "shotNote": "TODO: artwork — a lookbook screenshot using dummy names, faces and figures only."
+  },
+  "onset": {
+    "kicker": "ON SET",
+    "heading": "From call time to wrap",
+    "features": [
+      {
+        "name": "Verified profiles",
+        "body": "Look checks captured live, so who you cast is who arrives."
+      },
+      {
+        "name": "Digital check-in",
+        "body": "QR passes setting arrival and wrap times automatically."
+      },
+      {
+        "name": "On-set messaging",
+        "body": "Reaching the on-set area rather than one AD's mobile."
+      }
+    ]
+  },
+  "numbers": {
+    "kicker": "THE NUMBERS",
+    "heading": "What it cost, while it is still happening",
+    "features": [
+      {
+        "name": "Live cost reporting",
+        "body": "Spend, overtime and day types in one dashboard."
+      },
+      {
+        "name": "Simplified queries",
+        "body": "Itemised, approve or deny."
+      }
+    ],
+    "shotLabel": "Screenshot — dummy data needed",
+    "shotNote": "TODO: artwork — a cost dashboard screenshot using dummy figures only."
+  }
+}
