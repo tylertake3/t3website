@@ -34,16 +34,32 @@ const arrival = new Map(
         <svg
           class="whereMap"
           id="whereMap"
-          viewBox={`0 0 ${map.width} ${map.height}`}
+          {/* cropped to the region worked in; land outside is clipped by the frame */}
+          viewBox={`${map.view.x} ${map.view.y} ${map.view.width} ${map.view.height}`}
           role="img"
           aria-label={`World map with ${map.countryCount} countries highlighted, listed in full beside it.`}
         >
-          <path class="whereLand" d={map.land} />
-          {
-            map.shapes.map((shape) => (
-              <path class="whereCountry" d={shape.d} data-country={shape.id} />
-            ))
-          }
+          <defs>
+            {/* the crop has to end somewhere, so the land fades out at the
+                left and right edges rather than stopping at a hard line */}
+            <linearGradient id="whereFadeGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#000" />
+              <stop offset="0.06" stop-color="#fff" />
+              <stop offset="0.94" stop-color="#fff" />
+              <stop offset="1" stop-color="#000" />
+            </linearGradient>
+            <mask id="whereFade" maskUnits="userSpaceOnUse" x={map.view.x} y={map.view.y} width={map.view.width} height={map.view.height}>
+              <rect x={map.view.x} y={map.view.y} width={map.view.width} height={map.view.height} fill="url(#whereFadeGrad)" />
+            </mask>
+          </defs>
+          <g mask="url(#whereFade)">
+            <path class="whereLand" d={map.land} />
+            {
+              map.shapes.map((shape) => (
+                <path class="whereCountry" d={shape.d} data-country={shape.id} />
+              ))
+            }
+          </g>
           {
             places.map((place, i) => (
               <g

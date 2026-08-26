@@ -31,10 +31,8 @@ const mainland = topology.objects.countries.geometries.filter(
 );
 const landShape = merge(topology, mainland);
 
-/* Natural Earth: the usual compromise projection for a world map, keeping
-   country shapes recognisable without Mercator's polar exaggeration. Fitted
-   to the landmass being drawn, so the picture fills its box with no dead
-   band where Antarctica used to be. */
+/* Natural Earth: the usual compromise projection, keeping country shapes
+   recognisable without Mercator's polar exaggeration. */
 const projection = geoNaturalEarth1().fitWidth(WIDTH, landShape);
 const path = geoPath(projection);
 const [[, minY], [, maxY]] = path.bounds(landShape);
@@ -87,6 +85,22 @@ const points = PLACES.map((p) => {
 
 const countryCount = new Set(PLACES.map((p) => p.territory ?? p.name)).size;
 
+/* The picture is cropped to the part of the world actually worked in, with
+   room around it. Drawing the whole globe would hand a third of the frame to
+   empty ocean and to Asia, where there is nothing to show. Land outside the
+   crop is clipped by the frame rather than removed from the data. */
+const xs = points.map((p) => p.x);
+const ys = points.map((p) => p.y);
+const padX = WIDTH * 0.075;
+const padTop = HEIGHT * 0.14;
+const padBottom = HEIGHT * 0.16;
+const view = {
+  x: +Math.max(0, Math.min(...xs) - padX).toFixed(1),
+  y: +Math.max(0, Math.min(...ys) - padTop).toFixed(1),
+  width: +Math.min(WIDTH, Math.max(...xs) + padX - Math.max(0, Math.min(...xs) - padX)).toFixed(1),
+  height: +Math.min(HEIGHT, Math.max(...ys) + padBottom - Math.max(0, Math.min(...ys) - padTop)).toFixed(1),
+};
+
 const worked = [...new Set(PLACES.map((p) => p.country))];
 const missing = worked.filter((id) => !shapes.some((s) => s.id === id));
 
@@ -94,13 +108,14 @@ const highlighted = shapes.filter((c) => worked.includes(c.id));
 
 await writeFile(
   'src/data/world-map.json',
-  JSON.stringify({ width: WIDTH, height: HEIGHT, land, shapes: highlighted, points, worked, countryCount }, null, 0) + '\n'
+  JSON.stringify({ width: WIDTH, height: HEIGHT, view, land, shapes: highlighted, points, worked, countryCount }, null, 0) + '\n'
 );
 
 const size = (land.length + JSON.stringify(highlighted).length) / 1024;
 console.log(
   `wrote src/data/world-map.json — coastline plus ${highlighted.length} highlighted countries ` +
-    `(${Math.round(size)}KB of paths), ${points.length} markers, ${countryCount} countries`
+    `(${Math.round(size)}KB of paths), ${points.length} markers, ${countryCount} countries, ` +
+    `cropped to ${view.width}x${view.height} of ${WIDTH}x${HEIGHT}`
 );
 if (missing.length) {
   console.log(

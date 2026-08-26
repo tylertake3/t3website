@@ -391,7 +391,7 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 /* the index is taller than the map, so the map sits centred against it
    rather than stranded at the top of its column */
 .whereMapWrap { position:relative; align-self:center; }
-.whereMap { width:100%; height:auto; display:block; overflow:visible; }
+.whereMap { width:100%; height:auto; display:block; overflow:hidden; }
 .whereLand { fill:var(--tileBg); stroke:none; }
 /* worked countries carry a standing tint so the map reads at a glance,
    before anyone hovers anything */
