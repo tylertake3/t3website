@@ -1,0 +1,318 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, contactHref } from '../data/site';
+import copy from '../content/pages/join.json';
+
+/* Copy still to be written is shown as a visible note rather than passed off as
+   body text, the same rule /credits and /specialists follow. */
+const isTodo = (text: string) => text.trimStart().startsWith('TODO:');
+const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `bandBody ${extra}`.trim());
+
+interface Field {
+  id: string;
+  label: string;
+  type: string;
+  required?: boolean;
+  autocomplete?: string;
+  inputmode?: string;
+  hint?: string;
+  rows?: number;
+  options?: { value: string; label: string }[];
+}
+
+const groups = copy.form.groups as { legend: string; fields: Field[] }[];
+
+/* No form handler has been chosen yet. Rather than let an applicant type out
+   their experience into something that silently drops it, the form is made
+   inert and the reason is stated above it, with the email address left live. */
+const formConnected = copy.form.formAction.trim().length > 0;
+---
+
+<Base
+  title={copy.meta.title}
+  description={copy.meta.description}
+  ogTitle={copy.meta.ogTitle}
+  ogDescription={copy.meta.ogDescription}
+  footerTitle={copy.meta.footerTitle}
+>
+  <!-- hero -->
+  <section class="pageHero joinHero" aria-labelledby="joinTitle">
+    <div class="pageHeroInner">
+      <p class="kicker">{copy.hero.eyebrow}</p>
+      <h1 class="pageHeroTitle" id="joinTitle">{copy.hero.heading}</h1>
+      <p class="pageHeroLede">{copy.hero.lede}</p>
+    </div>
+  </section>
+
+  <!-- who we are looking for, by discipline -->
+  <section class="band" aria-labelledby="disciplinesTitle">
+    <div class="bandInner">
+      <div class="sectionHead joinHead">
+        <h2 class="sectionTitle" id="disciplinesTitle">{copy.disciplines.heading}</h2>
+        <p class="kicker">{copy.disciplines.kicker}</p>
+      </div>
+
+      <ul class="joinDisciplines">
+        {
+          copy.disciplines.items.map((item) => (
+            <li class="joinDiscipline">
+              <h3 class="joinDisciplineName">{item.name}</h3>
+              <p class={bodyClass(item.looksFor, 'joinDisciplineBody')}>{item.looksFor}</p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="joinDisciplineNote">{copy.disciplines.note}</p>
+    </div>
+  </section>
+
+  <!-- what the agency offers a performer -->
+  <section class="band" aria-labelledby="offerTitle">
+    <div class="bandInner bandSplit">
+      <div>
+        <p class="kicker">{copy.offer.kicker}</p>
+        <h2 class="sectionTitle" id="offerTitle">{copy.offer.heading}</h2>
+      </div>
+      <p class={bodyClass(copy.offer.todo)}>{copy.offer.todo}</p>
+    </div>
+  </section>
+
+  <!-- requirements and experience expectations -->
+  <section class="band" aria-labelledby="requirementsTitle">
+    <div class="bandInner bandSplit">
+      <div>
+        <p class="kicker">{copy.requirements.kicker}</p>
+        <h2 class="sectionTitle" id="requirementsTitle">{copy.requirements.heading}</h2>
+      </div>
+      <div>
+        <p class={bodyClass(copy.requirements.todo)}>{copy.requirements.todo}</p>
+        <p class="todoNote">{copy.requirements.standInsNote}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- application process -->
+  <section class="band bandDark joinDark" aria-labelledby="processTitle">
+    <div class="bandInner">
+      <div class="sectionHead joinHead">
+        <h2 class="sectionTitle" id="processTitle">{copy.process.heading}</h2>
+        <p class="kicker">{copy.process.kicker}</p>
+      </div>
+      <ol class="joinSteps">
+        {
+          copy.process.steps.map((step) => (
+            <li class="joinStep">
+              <span class="joinStepNum">{step.number}</span>
+              <span class="joinStepName">{step.name}</span>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="todoNote">{copy.process.todo}</p>
+    </div>
+  </section>
+
+  <!-- the honest note sits before the form, so it is read before anyone applies -->
+  <section class="band" aria-labelledby="honestTitle">
+    <div class="bandInner bandSplit">
+      <div>
+        <p class="kicker">{copy.honest.kicker}</p>
+        <h2 class="sectionTitle" id="honestTitle">{copy.honest.heading}</h2>
+      </div>
+      <p class={bodyClass(copy.honest.todo)}>{copy.honest.todo}</p>
+    </div>
+  </section>
+
+  <!-- application form -->
+  <section class="band" aria-labelledby="formTitle">
+    <div class="bandInner">
+      <div class="sectionHead joinHead">
+        <h2 class="sectionTitle" id="formTitle">{copy.form.heading}</h2>
+        <p class="kicker">{copy.form.kicker}</p>
+      </div>
+
+      <p class="bandBody joinFormIntro">{copy.form.intro}</p>
+
+      {
+        !formConnected && (
+          <div class="joinNotice" role="note">
+            <p class="joinNoticeTitle">{copy.form.notConnectedTitle}</p>
+            <p class="joinNoticeBody">{copy.form.notConnectedBody}</p>
+            <p class="joinNoticeLinks">
+              <a href={contactHref}>{site.email}</a>
+              <span aria-hidden="true">&middot;</span>
+              <a href={`tel:${site.phoneHref}`}>{site.phone}</a>
+            </p>
+          </div>
+        )
+      }
+
+      <form
+        class="joinForm"
+        method={copy.form.method}
+        action={formConnected ? copy.form.formAction : undefined}
+        {...(formConnected ? {} : { inert: true })}
+      >
+        {
+          groups.map((group) => (
+            <fieldset class="joinGroup">
+              <legend class="joinLegend">{group.legend}</legend>
+              <div class="joinFields">
+                {group.fields.map((field) => {
+                  const id = `join-${field.id}`;
+                  const hintId = field.hint ? `${id}-hint` : undefined;
+                  return (
+                    <div class={field.type === 'textarea' ? 'joinField joinFieldWide' : 'joinField'}>
+                      <label class="joinLabel" for={id}>
+                        {field.label}
+                        {!field.required && <span class="joinOptional">{copy.form.optionalLabel}</span>}
+                      </label>
+
+                      {field.type === 'textarea' && (
+                        <textarea
+                          class="joinControl"
+                          id={id}
+                          name={field.id}
+                          rows={field.rows ?? 5}
+                          required={field.required}
+                          aria-describedby={hintId}
+                        />
+                      )}
+
+                      {field.type === 'select' && (
+                        <select
+                          class="joinControl joinSelect"
+                          id={id}
+                          name={field.id}
+                          required={field.required}
+                          aria-describedby={hintId}
+                        >
+                          <option value="">{copy.form.selectPlaceholder}</option>
+                          {(field.options ?? []).map((option) => (
+                            <option value={option.value}>{option.label}</option>
+                          ))}
+                        </select>
+                      )}
+
+                      {field.type !== 'textarea' && field.type !== 'select' && (
+                        <input
+                          class="joinControl"
+                          id={id}
+                          name={field.id}
+                          type={field.type}
+                          autocomplete={field.autocomplete}
+                          inputmode={field.inputmode}
+                          required={field.required}
+                          aria-describedby={hintId}
+                        />
+                      )}
+
+                      {field.hint && (
+                        <p class="joinHint" id={hintId}>
+                          {field.hint}
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </fieldset>
+          ))
+        }
+
+        <button class="btnSolid joinSubmit" type="submit">{copy.form.submitLabel.toUpperCase()}</button>
+      </form>
+
+      <p class="todoNote">{copy.form.fieldsNote}</p>
+      <p class="todoNote">{copy.form.privacyNote}</p>
+    </div>
+  </section>
+
+  <style is:global>
+    /* Page-scoped patterns for /join, prefixed `join` so they cannot collide
+       with anything shared. */
+
+    /* The hero and the dark band are dark in BOTH themes, so they pin the two
+       tokens tuned for a cream page: the light theme's oxblood accent and its
+       near-black muted grey both fall under 4.5:1 on those surfaces. */
+    .joinHero, .joinDark { --accent:#d4704f; --muted:#96928c; }
+    .joinDark { --sub:#c7c3bd; --ink:#f4f2ee; --hair:#3a3a3e; }
+
+    .joinHead { padding-bottom:18px; }
+    .joinFormIntro { margin-top:26px; max-width:60ch; }
+
+    /* who we are looking for */
+    .joinDisciplines {
+      list-style:none; margin:34px 0 0; padding:0;
+      display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:32px 40px;
+    }
+    .joinDiscipline { border-top:1px solid var(--hair); padding-top:18px; }
+    .joinDisciplineName { font-size:17px; letter-spacing:3px; text-transform:uppercase; color:var(--ink); }
+    .joinDisciplineBody { margin-top:12px; font-size:16px; }
+    .joinDiscipline .todoNote { margin-top:14px; }
+    .joinDisciplineNote { margin-top:34px; font-size:15px; font-weight:300; line-height:1.7; color:var(--muted); max-width:60ch; text-wrap:pretty; }
+
+    /* application process */
+    .joinSteps { list-style:none; margin:34px 0 0; padding:0; display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:32px; }
+    .joinStep { border-top:1px solid var(--hair); padding-top:18px; }
+    .joinStepNum { display:block; font-size:11px; letter-spacing:3px; color:var(--accent); }
+    .joinStepName { display:block; margin-top:12px; font-size:17px; letter-spacing:2.5px; text-transform:uppercase; color:var(--ink); }
+
+    /* the form is switched off until a handler exists — said plainly, with the
+       working routes repeated inside the notice */
+    .joinNotice { margin-top:30px; border:1px solid var(--accent); padding:22px 24px; max-width:72ch; }
+    .joinNoticeTitle { font-size:13px; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent); }
+    .joinNoticeBody { margin-top:12px; font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); text-wrap:pretty; }
+    .joinNoticeLinks { margin-top:14px; font-size:16px; font-weight:300; display:flex; flex-wrap:wrap; gap:12px; align-items:baseline; }
+    .joinNoticeLinks a { color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
+    .joinNoticeLinks a:hover { color:var(--accent); }
+    .joinNoticeLinks span { color:var(--muted); }
+
+    /* the form itself */
+    .joinForm { margin-top:40px; max-width:960px; }
+    .joinGroup { border:0; margin:0; padding:0; }
+    .joinGroup + .joinGroup { margin-top:48px; }
+    .joinLegend {
+      padding:0 0 14px; font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--accent);
+      border-bottom:1px solid var(--hair); width:100%;
+    }
+    .joinFields { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:26px 40px; margin-top:26px; }
+    .joinField { display:flex; flex-direction:column; }
+    .joinFieldWide { grid-column:1 / -1; }
+    .joinLabel { font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--ink); }
+    .joinOptional { margin-left:10px; letter-spacing:2px; color:var(--muted); text-transform:none; font-size:11px; }
+    .joinControl {
+      margin-top:10px; width:100%;
+      background:var(--tileBg); color:var(--ink);
+      border:1px solid var(--ctrlBorder); border-radius:0;
+      /* 16px keeps iOS Safari from zooming the page on focus */
+      font-family:'Jost', sans-serif; font-size:16px; font-weight:300; line-height:1.5;
+      padding:13px 14px;
+    }
+    textarea.joinControl { resize:vertical; min-height:120px; }
+    /* the select keeps its native arrow: a hand-drawn one would have to be
+       redrawn for both themes, and the browser's already follows the text colour */
+    .joinSelect { padding-right:12px; }
+    .joinControl:hover { border-color:var(--ink); }
+    /* global.css only rings links, buttons and [tabindex]; form controls need
+       their own, and it must clear the field's own border */
+    .joinControl:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+    .joinHint { margin-top:8px; font-size:13px; font-weight:300; line-height:1.5; color:var(--muted); text-wrap:pretty; }
+    .joinSubmit { display:inline-block; margin-top:36px; border:0; cursor:pointer; font-family:'Jost', sans-serif; }
+
+    @media (max-width:1024px) {
+      .joinDisciplines { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+      .joinSteps { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:28px; }
+    }
+
+    @media (max-width:640px) {
+      .joinDisciplines { grid-template-columns:1fr; gap:26px; }
+      .joinSteps { grid-template-columns:1fr; gap:26px; }
+      .joinFields { grid-template-columns:1fr; gap:22px; }
+      .joinNotice { padding:18px; }
+      .joinForm { margin-top:32px; }
+      .joinSubmit { width:100%; text-align:center; }
+    }
+  </style>
+</Base>
