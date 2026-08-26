@@ -13,10 +13,16 @@ import copy from '../content/pages/spacts.json';
   footerLinks={copy.meta.footerLinks}
 >
   <!-- full-bleed hero: production stills fade -->
-  <header class="hero" style="position:relative; min-height:78vh; background:#101012; overflow:hidden;">
-    <div class="heroLayer" data-layer="0" style="position:absolute; inset:0; opacity:1; transition:opacity 1.8s ease; background-image:url(&quot;/uploads/w1280.webp&quot;); background-size:cover; background-position:center;"></div>
-    <div class="heroLayer" data-layer="1" style="position:absolute; inset:0; opacity:0; transition:opacity 1.8s ease; background-image:url(&quot;/uploads/_dfa3c099-9b6c-45ce-8c99-e24d9e51a891.webp&quot;); background-size:cover; background-position:center;"></div>
-    <div class="heroLayer" data-layer="2" style="position:absolute; inset:0; opacity:0; transition:opacity 1.8s ease; background-image:url(&quot;/uploads/lotr-s2-ut-230403-00131-r2-jpg-66f4b25127687.webp&quot;); background-size:cover; background-position:center;"></div>
+  <header class="hero" style="position:relative; min-height:var(--coverH); background:#101012; overflow:hidden;">
+    {/* only the first still is fetched eagerly; the rest are attached after page load (see script) */}
+    {copy.hero.slides.map((slide, i) => (
+      <div
+        class="heroLayer"
+        data-layer={String(i)}
+        data-src={i === 0 ? undefined : slide.image}
+        style={`position:absolute; inset:0; opacity:${i === 0 ? 1 : 0}; transition:opacity 1.8s ease;${i === 0 ? ` background-image:url("${slide.image}");` : ''} background-size:cover; background-position:center;`}
+      ></div>
+    ))}
     <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.15) 30%, rgba(20,20,22,0.15) 55%, rgba(20,20,22,0.8) 100%);"></div>
 
     <div class="heroPad" style="position:absolute; left:40px; right:40px; bottom:64px; z-index:2; color:#f4f2ee;">
@@ -24,7 +30,7 @@ import copy from '../content/pages/spacts.json';
       <h1 class="heroTitle" style="font-family:'Anton','Jost',sans-serif; font-size:clamp(48px, 6vw, 104px); font-weight:400; letter-spacing:4px; line-height:1.02; margin:18px 0 0; text-transform:uppercase;">{copy.hero.title}</h1>
       <p style="font-size:clamp(17px,1.6vw,22px); font-weight:300; letter-spacing:1px; margin:18px 0 0; max-width:640px; color:rgba(244,242,238,0.9); text-wrap:pretty;">{copy.hero.strapline}</p>
       <div class="heroCredit" style="position:absolute; right:0; bottom:-24px; z-index:2; text-align:right; color:rgba(244,242,238,0.75); font-size:11px; letter-spacing:3px;">
-        {copy.hero.creditLabel}<br /><span id="heroTitleTxt" style="font-size:20px; letter-spacing:5px; font-weight:300; color:#f4f2ee;">{copy.hero.creditTitle}</span>
+        {copy.hero.creditLabel}<br /><span id="heroTitleTxt" style="font-size:20px; letter-spacing:5px; font-weight:300; color:#f4f2ee;">{copy.hero.slides[0].production}</span>
       </div>
     </div>
   </header>
@@ -32,8 +38,8 @@ import copy from '../content/pages/spacts.json';
   <!-- what is a spact -->
   <section id="what" class="pad split" style="max-width:1280px; margin:0 auto; padding:96px 40px; display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start;">
     <div>
-      <h2 style="font-size:11px; letter-spacing:3px; color:var(--accent); font-weight:400; margin:0;">{copy.what.eyebrow}</h2>
-      <p class="dispXL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0;">{copy.what.heading}</p>
+      <p style="font-size:11px; letter-spacing:3px; color:var(--accent); font-weight:400; margin:0;">{copy.what.eyebrow}</p>
+      <h2 class="dispXL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0;">{copy.what.heading}</h2>
     </div>
     <div style="font-size:17px; font-weight:300; line-height:1.75; color:var(--sub); text-wrap:pretty;">
       <p style="margin:0;">{copy.what.paragraph}</p>
@@ -49,10 +55,10 @@ import copy from '../content/pages/spacts.json';
     </div>
     <ul class="disc" style="list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(3,1fr); column-gap:48px;">
       {copy.disciplines.items.map((item) => (
-        <li style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:#96928c;">{item.number}</span><span style="font-size:17px; letter-spacing:2px;">{item.title}</span></li>
+        <li style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:var(--muted);">{item.number}</span><span style="font-size:17px; letter-spacing:2px;">{item.title}</span></li>
       ))}
     </ul>
-    <p style="font-size:14px; font-weight:300; color:#96928c; line-height:1.6; margin:24px 0 0; max-width:720px; text-wrap:pretty;">{copy.disciplines.note}</p>
+    <p style="font-size:14px; font-weight:300; color:var(--muted); line-height:1.6; margin:24px 0 0; max-width:720px; text-wrap:pretty;">{copy.disciplines.note}</p>
   </section>
 
   <!-- for film and television -->
@@ -60,8 +66,8 @@ import copy from '../content/pages/spacts.json';
     <div class="pad" style="max-width:1280px; margin:0 auto; padding:88px 40px;">
       <div class="split" style="display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start;">
         <div>
-          <h2 style="font-size:11px; letter-spacing:3px; color:#96928c; font-weight:400; margin:0;">{copy.film.eyebrow}</h2>
-          <p class="dispXL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0;">{copy.film.heading}</p>
+          <p style="font-size:11px; letter-spacing:3px; color:var(--muted); font-weight:400; margin:0;">{copy.film.eyebrow}</p>
+          <h2 class="dispXL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0;">{copy.film.heading}</h2>
         </div>
         <p style="font-size:16px; font-weight:300; line-height:1.75; color:#c7c3bd; text-wrap:pretty; margin:0;">{copy.film.paragraph}</p>
       </div>
@@ -80,8 +86,8 @@ import copy from '../content/pages/spacts.json';
   <section class="pad" style="max-width:1280px; margin:0 auto; padding:88px 40px;">
     <div class="split" style="display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start;">
       <div>
-        <h2 style="font-size:11px; letter-spacing:3px; color:var(--accent); font-weight:400; margin:0;">{copy.commercial.eyebrow}</h2>
-        <p class="dispXL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0;">{copy.commercial.heading}</p>
+        <p style="font-size:11px; letter-spacing:3px; color:var(--accent); font-weight:400; margin:0;">{copy.commercial.eyebrow}</p>
+        <h2 class="dispXL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0;">{copy.commercial.heading}</h2>
       </div>
       <ul style="list-style:none; margin:0; padding:0; display:grid; row-gap:0; font-size:16px; font-weight:300; line-height:1.7; color:var(--sub);">
         {copy.commercial.items.map((item, i) => (
@@ -99,7 +105,7 @@ import copy from '../content/pages/spacts.json';
     <div class="why" style="display:grid; grid-template-columns:repeat(3,1fr); gap:48px;">
       {copy.why.cards.map((card) => (
         <div>
-          <div style="font-size:12px; letter-spacing:2px; color:#96928c;">{card.number}</div>
+          <div style="font-size:12px; letter-spacing:2px; color:var(--muted);">{card.number}</div>
           <h3 style="font-size:19px; letter-spacing:1px; margin:12px 0 0; font-weight:400;">{card.title}</h3>
           <p style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin:10px 0 0; text-wrap:pretty;">{card.body}</p>
         </div>
@@ -131,27 +137,46 @@ import copy from '../content/pages/spacts.json';
       .dispL { font-size:clamp(24px,7vw,34px) !important; }
       .dispXL { font-size:clamp(26px,8vw,40px) !important; }
       .secHead { flex-direction:column; align-items:flex-start !important; gap:10px; }
-      .hero { min-height:82vh !important; padding:0; }
+      .hero { min-height:var(--coverH) !important; padding:0; }
       .heroPad { bottom:44px !important; }
       .heroCredit { position:static !important; text-align:left !important; margin-top:24px; }
     }
   </style>
 
-  <script slot="scripts" is:inline>
+  <script slot="scripts" is:inline define:vars={{ SLIDES: copy.hero.slides }}>
     (function () {
       'use strict';
       var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       /* ---------- hero cross-fade rotator ---------- */
-      var titles = ['ANDOR', 'ODYSSEY', 'RINGS OF POWER'];
+      /* SLIDES (still image + production name) comes from
+         src/content/pages/spacts.json via define:vars above. */
       var layers = Array.prototype.slice.call(document.querySelectorAll('.heroLayer'));
       var titleEl = document.getElementById('heroTitleTxt');
       var idx = 0;
+
+      /* the first still is in the markup; attach the rest only once the page
+         itself has finished loading, so they never compete with it */
+      function attachDeferredStills() {
+        for (var k = 0; k < layers.length; k++) {
+          var src = layers[k].getAttribute('data-src');
+          if (src) {
+            layers[k].style.backgroundImage = 'url("' + src + '")';
+            layers[k].removeAttribute('data-src');
+          }
+        }
+      }
+      /* nothing rotates under reduced motion, so those stills are never seen */
+      if (!reduce) {
+        if (document.readyState === 'complete') attachDeferredStills();
+        else window.addEventListener('load', attachDeferredStills);
+      }
+
       if (!reduce && layers.length > 1) {
         setInterval(function () {
           idx = (idx + 1) % layers.length;
           for (var k = 0; k < layers.length; k++) layers[k].style.opacity = (k === idx) ? '1' : '0';
-          if (titleEl) titleEl.textContent = titles[idx] || '';
+          if (titleEl) titleEl.textContent = (SLIDES[idx] && SLIDES[idx].production) || '';
         }, 5000);
       }
     })();

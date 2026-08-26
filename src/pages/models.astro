@@ -10,7 +10,8 @@ import copy from '../content/pages/models.json';
   description={copy.meta.description}
   ogTitle={copy.meta.ogTitle}
   ogDescription={copy.meta.ogDescription}
-  ogImage="/assets/take3-logo.svg"
+  ogImage="/assets/og-default.jpg"
+  ogImageAlt={copy.meta.ogImageAlt}
   footerTitle={copy.meta.footerTitle}
   footerLinks={copy.meta.footerLinks}
 >
@@ -31,7 +32,7 @@ import copy from '../content/pages/models.json';
       </p>
     </div>
     <figure class="heroFig" style="margin:0;">
-      <div class="slot" style="aspect-ratio:2/3;"><span class="slotLabel">{copy.hero.figure.slotLabel}</span></div>
+      <div class="slot heroSlot" style="aspect-ratio:2/3;"><span class="slotLabel">{copy.hero.figure.slotLabel}</span></div>
       <figcaption class="figCap"><span>{copy.hero.figure.figNumber}</span><span>{copy.hero.figure.figNote}</span></figcaption>
     </figure>
   </section>
@@ -110,7 +111,7 @@ import copy from '../content/pages/models.json';
     *, *::before, *::after { box-sizing:inherit; }
     img { max-width:100%; }
 
-    a:hover { color:#96928c; }
+    a:hover { color:var(--muted); }
 
     :focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
 
@@ -118,20 +119,26 @@ import copy from '../content/pages/models.json';
 
     /* ---------- hero ---------- */
     /* position/min-height/background/overflow reset the homepage hero rules in global.css */
-    .hero { padding:48px 40px 0; display:grid; grid-template-columns:1.15fr 0.85fr; gap:56px; align-items:end; position:static; min-height:0; background:none; overflow:visible; }
+    /* same cover height as every other page, set by --coverH: the portrait
+       fits the cover rather than setting its height */
+    .heroSlot { height:calc(var(--coverH) - 200px); width:auto; margin-left:auto; }
+    .hero { padding:170px 40px 0; display:grid; grid-template-columns:1.15fr 0.85fr; gap:56px; align-items:end; position:static; min-height:var(--coverH); background:none; overflow:visible; }
     .heroCopy { padding-bottom:56px; position:static; left:auto; bottom:auto; z-index:auto; color:inherit; width:auto; max-width:none; }
-    .eyebrow6 { font-size:12px; letter-spacing:6px; color:#96928c; }
+    .eyebrow6 { font-size:12px; letter-spacing:6px; color:var(--muted); }
     .display { font-family:'Anton', sans-serif; font-size:clamp(72px, 11vw, 190px); line-height:0.92; letter-spacing:2px; margin:24px 0 0; text-transform:uppercase; font-weight:400; }
     .strapline { font-family:'Cormorant Garamond', serif; font-style:italic; font-size:clamp(24px,2.4vw,36px); font-weight:400; line-height:1.3; margin-top:28px; max-width:480px; color:var(--sub); text-wrap:pretty; }
-    .tagRow { display:flex; gap:36px; margin-top:44px; border-top:1px solid var(--hair); padding-top:20px; font-size:12px; letter-spacing:2px; color:#96928c; flex-wrap:wrap; }
+    .tagRow { display:flex; gap:36px; margin-top:44px; border-top:1px solid var(--hair); padding-top:20px; font-size:12px; letter-spacing:2px; color:var(--muted); flex-wrap:wrap; }
     .heroFig { display:grid; grid-template-columns:1fr; gap:0; }
-    .figCap { display:flex; justify-content:space-between; font-size:11px; letter-spacing:2px; color:#96928c; padding-top:10px; gap:16px; }
+    .figCap { display:flex; justify-content:space-between; font-size:11px; letter-spacing:2px; color:var(--muted); padding-top:10px; gap:16px; }
     .heroFig .figCap { padding-bottom:24px; }
 
     /* ---------- image slots ---------- */
     .slot { position:relative; background:var(--tileBg); overflow:hidden; display:flex; align-items:center; justify-content:center; }
-    .slot .slotLabel { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#96928c; text-align:center; padding:0 16px; }
+    .slot .slotLabel { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); text-align:center; padding:0 16px; }
     .slot--dark { background:#101012; }
+    /* .slot--dark's #101012 plate is the same in both themes, so its label keeps
+       the light-on-dark grey rather than the theme-aware token */
+    .slot--dark .slotLabel { color:#96928c; }
 
     /* ---------- what we supply ---------- */
     .band { border-top:1px solid var(--hair); }
@@ -139,7 +146,7 @@ import copy from '../content/pages/models.json';
     .eyebrow3 { font-size:11px; letter-spacing:3px; color:var(--accent); }
     .list { display:grid; grid-template-columns:1fr; margin-top:36px; border-bottom:1px solid var(--hair); }
     .listRow { border-top:1px solid var(--hair); padding:30px 0; display:grid; grid-template-columns:60px 1fr 1.1fr; gap:32px; align-items:baseline; }
-    .listNum { font-size:12px; letter-spacing:2px; color:#96928c; }
+    .listNum { font-size:12px; letter-spacing:2px; color:var(--muted); }
     .listTitle { text-transform:uppercase; font-size:clamp(19px,2vw,28px); font-weight:300; letter-spacing:3px; margin:0; }
     .listBody { font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); text-wrap:pretty; }
 
@@ -153,12 +160,16 @@ import copy from '../content/pages/models.json';
     .para { font-size:16px; font-weight:300; line-height:1.75; color:var(--sub); margin-top:28px; max-width:520px; text-wrap:pretty; }
 
     .filmBand { border-top:1px solid var(--hair); background:#1a1a1c; color:#f4f2ee; }
+    /* .filmBand is a permanently dark #1a1a1c band in both themes, so everything
+       inside it keeps a light-on-dark grey instead of var(--muted) */
     .filmBand .eyebrow3 { color:#96928c; }
+    .filmBand .figCap { color:#96928c; }
     .filmBand .para { color:#c7c3bd; }
     .filmBand a { color:#f4f2ee; }
     .defs { display:grid; row-gap:0; font-size:15px; font-weight:300; line-height:1.7; color:#c7c3bd; margin-top:36px; max-width:520px; }
     .defRow { border-top:1px solid #35353a; padding:16px 0; display:grid; grid-template-columns:150px 1fr; gap:24px; }
     .defRow:last-child { border-bottom:1px solid #35353a; }
+    /* .defs only ever render inside .filmBand — light-on-dark grey again */
     .defKey { font-size:12px; letter-spacing:2px; color:#96928c; padding-top:3px; }
 
     /* ---------- why ---------- */

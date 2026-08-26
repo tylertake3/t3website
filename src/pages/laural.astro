@@ -121,6 +121,9 @@ import copy from '../content/pages/laural.json';
   </section>
 
   <style is:global>
+    /* the discipline strip supplies its own bottom spacing, so the cover
+       still finishes at the shared height */
+    .lauralHero { padding-bottom:40px; }
     /* Page-scoped patterns for /laural. Prefixed `laural` so they cannot
        collide with anything shared; ready to be lifted into global.css if a
        second page ever needs them. */

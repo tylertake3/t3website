@@ -8,7 +8,8 @@ import copy from '../content/pages/stand-ins.json';
   description={copy.meta.description}
   ogTitle={copy.meta.ogTitle}
   ogDescription={copy.meta.ogDescription}
-  ogImage="/assets/take3-logo.svg"
+  ogImage="/assets/og-default.jpg"
+  ogImageAlt={copy.meta.ogImageAlt}
   footerTitle={copy.meta.footerTitle}
   footerLinks={copy.meta.footerLinks}
 >
@@ -111,7 +112,7 @@ import copy from '../content/pages/stand-ins.json';
     .wrap { max-width:1280px; margin:0 auto; }
 
     /* ---------- hero ---------- */
-    .hero { position:relative; min-height:78vh; background:var(--heroBg); overflow:hidden; display:flex; flex-direction:column; }
+    .hero { position:relative; min-height:var(--coverH); background:var(--heroBg); overflow:hidden; display:flex; flex-direction:column; }
     /* The hero photo is not yet supplied: the media layer degrades to the flat
        dark --heroBg colour and the gradient scrim stays applied on top. */
     .heroMedia { position:absolute; inset:0; background:var(--heroBg); }
@@ -125,6 +126,9 @@ import copy from '../content/pages/stand-ins.json';
 
     /* ---------- shared type ---------- */
     .eyebrow { font-size:11px; letter-spacing:3px; color:var(--accent); }
+    /* only used inside .band, whose --bandBg (#1a1a1c) is the same in both
+       themes — so it keeps the light-on-dark grey rather than var(--muted),
+       which would go near-black and disappear against that band */
     .eyebrowMuted { font-size:11px; letter-spacing:3px; color:#96928c; }
     .display { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0; }
     .sectionPad { padding:96px 40px; }
@@ -132,7 +136,7 @@ import copy from '../content/pages/stand-ins.json';
     /* ---------- the difference ---------- */
     .cards3 { display:grid; grid-template-columns:repeat(3,1fr); gap:48px; margin-top:56px; }
     .card { border-top:1px solid var(--hair); padding-top:24px; }
-    .cardNum { font-size:12px; letter-spacing:2px; color:#96928c; }
+    .cardNum { font-size:12px; letter-spacing:2px; color:var(--muted); }
     .cardTitle { font-size:clamp(22px,2vw,30px); font-weight:300; letter-spacing:2px; margin:12px 0 0; }
     .cardBody { font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:14px; text-wrap:pretty; }
 
@@ -150,7 +154,10 @@ import copy from '../content/pages/stand-ins.json';
     .rowsDark .row:last-child { border-bottom:1px solid #35353a; }
     .rowsLight .row { border-top:1px solid var(--hair); }
     .rowsLight .row:last-child { border-bottom:1px solid var(--hair); }
-    .rowLabel { font-size:12px; letter-spacing:2px; color:#96928c; padding-top:4px; }
+    .rowLabel { font-size:12px; letter-spacing:2px; color:var(--muted); padding-top:4px; }
+    /* .rowsDark sits on the permanently dark band, so it keeps the
+       light-on-dark grey instead of the theme-aware token */
+    .rowsDark .rowLabel { color:#96928c; }
 
     /* ---------- matching ---------- */
     .matchGrid { max-width:1280px; margin:0 auto; padding:96px 40px; display:grid; grid-template-columns:1.25fr 1fr; gap:72px; align-items:stretch; }
@@ -158,14 +165,16 @@ import copy from '../content/pages/stand-ins.json';
     .matchCol .display { max-width:520px; }
     .matchList { flex:1; display:flex; flex-direction:column; justify-content:center; margin-top:24px; border-bottom:1px solid var(--hair); }
     .matchItem { border-top:1px solid var(--hair); padding:18px 0; display:flex; align-items:baseline; gap:28px; }
-    .matchNum { font-size:12px; letter-spacing:2px; color:#96928c; width:28px; flex:0 0 28px; }
+    .matchNum { font-size:12px; letter-spacing:2px; color:var(--muted); width:28px; flex:0 0 28px; }
     .matchName { text-transform:uppercase; font-size:clamp(17px,1.8vw,24px); font-weight:300; letter-spacing:3px; }
-    .matchNote { font-size:14px; font-weight:300; color:#96928c; line-height:1.6; margin-top:28px; max-width:520px; text-wrap:pretty; }
+    .matchNote { font-size:14px; font-weight:300; color:var(--muted); line-height:1.6; margin-top:28px; max-width:520px; text-wrap:pretty; }
     .matchMedia { position:relative; background:var(--tileBg); min-height:560px; overflow:hidden; }
 
     /* unfilled photo placeholders */
     .slot { position:absolute; inset:0; background:var(--tileBg); display:flex; align-items:center; justify-content:center; text-align:center; padding:24px; }
-    .slot span { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:#96928c; font-weight:300; }
+    /* the plate itself is var(--tileBg), which follows the theme, so the label
+       follows it with var(--muted) */
+    .slot span { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); font-weight:300; }
 
     /* ---------- commercial & brand ---------- */
     .rule { border-top:1px solid var(--hair); }

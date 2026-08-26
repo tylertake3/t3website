@@ -24,6 +24,7 @@ export interface NavItem {
     categories keep their top-level paths. /what-is-a-spact stays out of the
     menu deliberately — it is a search landing page linked from /spacts. */
 export const navLinks: NavItem[] = [
+  { label: 'Home', href: '/' },
   {
     label: 'Artists',
     href: '/artists',
