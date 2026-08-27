@@ -57,8 +57,8 @@ const jsonLd = {
         {/* the line break comes from the \n in the copy + white-space:pre-line (the
             .heroTitle pattern in global.css), so textContent keeps the words apart —
             a <br /> alone renders "What isa SPACT?" to scrapers and share previews */}
-        <h1 class="h1Display" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(52px,7vw,120px); font-weight:400; letter-spacing:2px; line-height:1.02; margin:20px 0 0; white-space:pre-line;">{copy.hero.heading}</h1>
-        <p class="standfirst" style="font-size:clamp(18px,1.4vw,21px); font-weight:300; line-height:1.65; color:var(--sub); margin:36px 0 0; max-width:520px;">{copy.hero.standfirst}</p>
+        <h1 class="h1Display" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(52px,7vw,120px); font-weight:400; letter-spacing:0; line-height:1.02; margin:20px 0 0; white-space:pre-line;">{copy.hero.heading}</h1>
+        <p class="standfirst" style="font-size:clamp(18px,1.4vw,21px); font-weight:400; line-height:1.65; color:var(--sub); margin:36px 0 0; max-width:520px;">{copy.hero.standfirst}</p>
       </div>
       <!-- casting overlay -->
       <figure style="flex:1 1 460px; min-width:0; max-width:640px; margin:0;">
@@ -122,7 +122,7 @@ const jsonLd = {
     <div class="wrap pad secPad" style="padding-top:80px; padding-bottom:88px;">
       <p class="eyebrow" id="ch02">{copy.distinctions.eyebrow}</p>
       <h2 class="dispM">{copy.distinctions.heading}</h2>
-      <p style="font-size:16px; font-weight:300; line-height:1.75; color:#c7c3bd; margin:18px 0 0; max-width:760px;">{copy.distinctions.intro}</p>
+      <p style="font-size:16px; font-weight:400; line-height:1.75; color:#c7c3bd; margin:18px 0 0; max-width:760px;">{copy.distinctions.intro}</p>
       <p style="font-size:11px; letter-spacing:2.5px; color:var(--muted); margin:26px 0 0;">{copy.distinctions.selectPrompt}</p>
 
       <div class="roleGrid">
@@ -190,7 +190,7 @@ const jsonLd = {
         </div>
       </div>
 
-      <p style="font-size:14px; font-weight:300; color:var(--muted); line-height:1.7; margin:44px 0 0; max-width:760px;">{copy.distinctions.note}</p>
+      <p style="font-size:14px; font-weight:400; color:var(--muted); line-height:1.7; margin:44px 0 0; max-width:760px;">{copy.distinctions.note}</p>
     </div>
   </section>
 
@@ -261,8 +261,8 @@ p { text-wrap:pretty; }
 .onDark, .tannLabel { --accent:#d4704f; --muted:#96928c; }
 
 .eyebrow { font-size:12px; letter-spacing:3px; color:var(--accent); font-weight:400; margin:0; }
-.dispM { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(24px,2.4vw,36px); font-weight:400; letter-spacing:1px; line-height:1.2; margin:14px 0 0; }
-.body17 { font-size:17px; font-weight:300; line-height:1.8; color:var(--sub); }
+.dispM { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(24px,2.4vw,36px); font-weight:400; letter-spacing:0; line-height:1.2; margin:14px 0 0; }
+.body17 { font-size:17px; font-weight:400; line-height:1.8; color:var(--sub); }
 .body17 strong { font-weight:500; color:var(--ink); }
 
 /* ---------- title storyboard annotations (static cycle) ---------- */
@@ -277,7 +277,7 @@ p { text-wrap:pretty; }
 .roleCard--edge:hover { border-top-color:var(--muted); }
 .roleCard--spact:hover { background:color-mix(in srgb, var(--accent) 4%, transparent); }
 .roleTitle { font-size:15px; letter-spacing:3px; font-weight:500; color:#f4f2ee; transition:color .25s; }
-.roleBody { font-size:15px; font-weight:300; line-height:1.75; color:#c7c3bd; margin:14px 0 0; }
+.roleBody { font-size:15px; font-weight:400; line-height:1.75; color:#c7c3bd; margin:14px 0 0; }
 .roleFlag { font-size:10px; letter-spacing:2.5px; color:var(--accent); margin-top:14px; opacity:0; transition:opacity .25s; }
 
 /* ---------- annotated scene frame ---------- */
@@ -311,7 +311,7 @@ p { text-wrap:pretty; }
 .workRow { border-top:1px solid var(--hair); padding:18px 0; display:grid; grid-template-columns:220px 1fr; gap:24px; }
 .workRow:last-child { border-bottom:1px solid var(--hair); }
 .workKey { font-size:13px; letter-spacing:2px; color:var(--ink); }
-.workVal { font-size:15px; font-weight:300; color:var(--sub); line-height:1.7; }
+.workVal { font-size:15px; font-weight:400; color:var(--sub); line-height:1.7; }
 
 /* ---------- responsive: desktop rendering untouched above 1024px ---------- */
 @media (max-width:1024px) {

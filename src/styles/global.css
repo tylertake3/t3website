@@ -1,4 +1,4 @@
-:root { --bg:#161618; --ink:#f4f2ee; --sub:#c2beb6; --hair:#35353a; --tileBg:#232327; --accent:#d4704f; --heroBg:#101012; --heroInk:#f4f2ee; --heroInkSoft:rgba(244,242,238,0.7); --heroInkFaint:rgba(244,242,238,0.35); --heroLine:rgba(244,242,238,0.25); --heroBtnBorder:rgba(244,242,238,0.5); --heroScrim:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.18) 30%, rgba(20,20,22,0.18) 55%, rgba(20,20,22,0.8) 100%); --logoFilter:invert(1); --muted:#96928c; --ctrlBorder:#6f6f77; --revGap:56px; --coverH:clamp(440px, 46vw, 720px); }
+:root { --bg:#161618; --ink:#f4f2ee; --sub:#c2beb6; --hair:#35353a; --tileBg:#232327; --accent:#d4704f; --heroBg:#101012; --heroInk:#f4f2ee; --heroInkSoft:rgba(244,242,238,0.7); --heroInkFaint:rgba(244,242,238,0.35); --heroLine:rgba(244,242,238,0.25); --heroBtnBorder:rgba(244,242,238,0.5); --heroScrim:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.18) 30%, rgba(20,20,22,0.18) 55%, rgba(20,20,22,0.8) 100%); --logoFilter:invert(1); --muted:#96928c; --ctrlBorder:#6f6f77; --revGap:56px; --coverH:clamp(440px, 46vw, 720px); --coverPhotoH:clamp(440px, 56vw, 88vh); }
 [data-theme="light"] { --bg:#f4f2ee; --ink:#1a1a1c; --sub:#3a3632; --hair:#d9d6d1; --tileBg:#e2e0dc; --accent:#5d1f16; --muted:#605d57; --heroBg:#101012; --heroInk:#f4f2ee; --heroInkSoft:rgba(244,242,238,0.7); --heroInkFaint:rgba(244,242,238,0.35); --heroLine:rgba(244,242,238,0.25); --heroBtnBorder:rgba(244,242,238,0.5); --heroScrim:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.18) 30%, rgba(20,20,22,0.18) 55%, rgba(20,20,22,0.8) 100%); --logoFilter:none; --ctrlBorder:#8a8781; }
 * { box-sizing:border-box; }
 html, body { margin:0; background:#161618; font-family:'Jost', sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
@@ -31,7 +31,26 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline:2px so
 .nav { position:fixed; top:0; left:0; right:0; z-index:120; display:flex; justify-content:space-between; align-items:center; gap:24px; padding:16px 60px; background:rgba(22,22,24,0); }
 /* hero photography is unpredictable, so the header carries its own gradient
    to keep the controls above 4.5:1 whatever sits behind them */
-.nav::before { content:''; position:absolute; inset:0; z-index:-1; pointer-events:none; background:linear-gradient(180deg, rgba(14,14,16,0.82) 0%, rgba(14,14,16,0.5) 60%, rgba(14,14,16,0) 100%); transition:opacity 0.4s ease; }
+.nav::before {
+  /* bottom:-14% rather than -45%: the fade ran 206px deep, deeper than the
+     header it protects, which dimmed any face sitting in the upper third of a
+     banner photo. It now finishes just below the control row. */
+  content:''; position:absolute; left:0; right:0; top:0; bottom:-14%; z-index:-1; pointer-events:none;
+  /* many stops on an eased curve: a plain three-stop ramp leaves a visible
+     band where the fade stops, this one runs out with no edge at all */
+  background:linear-gradient(180deg,
+    rgba(14,14,16,0.80) 0%,
+    rgba(14,14,16,0.78) 12%,
+    rgba(14,14,16,0.71) 24%,
+    rgba(14,14,16,0.61) 36%,
+    rgba(14,14,16,0.48) 48%,
+    rgba(14,14,16,0.35) 60%,
+    rgba(14,14,16,0.22) 72%,
+    rgba(14,14,16,0.11) 84%,
+    rgba(14,14,16,0.04) 93%,
+    rgba(14,14,16,0) 100%);
+  transition:opacity 0.4s ease;
+}
 .nav.navOnLight::before, .nav.is-menuOpen::before { opacity:0; }
 .navLeft { display:flex; align-items:center; gap:26px; min-width:0; }
 .navLogoLink { flex:none; }
@@ -40,10 +59,19 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline:2px so
 .navRight a { color:var(--heroInk); }
 
 /* timecode slate — a production detail, not a control */
-.slate { display:flex; align-items:center; gap:10px; color:var(--heroInkSoft); font-size:11px; letter-spacing:2px; }
-.slateIcon { flex:none; }
-.slateCity { font-weight:400; }
-.slateTime { font-family:ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; font-variant-numeric:tabular-nums; font-feature-settings:'tnum' 1; letter-spacing:1px; width:11ch; text-align:left; color:var(--heroInk); }
+/* sits with the controls on the right, just ahead of the theme toggle.
+   it is a button (click cycles the city), so it resets the browser chrome */
+/* the reserved width sits on the slate as a whole and the row is right-aligned,
+   so a longer city name grows leftwards into the empty space instead of opening
+   a gap in front of the clock; nothing to its right ever moves */
+/* user-select:none matters: without it a click that lands on the digits and
+   drifts a pixel is treated as a text selection and never fires */
+.slate { display:flex; align-items:center; justify-content:flex-end; gap:10px; min-width:215px; background:none; border:0; padding:4px 0; margin:0; font:inherit; font-size:11px; letter-spacing:2px; color:var(--heroInkSoft); cursor:pointer; user-select:none; -webkit-user-select:none; touch-action:manipulation; -webkit-tap-highlight-color:transparent; transition:color 0.25s ease; }
+.slate:hover { color:var(--heroInk); }
+.slateIcon { flex:none; pointer-events:none; }
+.slateCity { font-weight:400; pointer-events:none; }
+
+.slateTime { pointer-events:none; font-family:ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; font-variant-numeric:tabular-nums; font-feature-settings:'tnum' 1; letter-spacing:1px; width:11ch; text-align:left; color:var(--heroInk); }
 
 .themeBtn { cursor:pointer; width:36px; height:36px; border:1px solid var(--heroInkSoft); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--heroInk); background:none; padding:0; }
 .themeBtn:hover { border-color:var(--heroInk); }
@@ -65,23 +93,65 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline:2px so
 .menuInner { max-width:1280px; margin:0 auto; padding:190px 60px 80px; display:grid; grid-template-columns:1.5fr 1fr; gap:72px; align-items:start; }
 .menuList { list-style:none; margin:0; padding:0; }
 .menuItem + .menuItem { margin-top:6px; }
-.menuLink { display:inline-block; font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(30px, 4vw, 58px); font-weight:400; letter-spacing:2px; line-height:1.12; color:var(--ink); }
+/* the list assembles rather than appearing all at once */
+.menuItem, .menuAside { opacity:0; transform:translateY(18px); transition:opacity 0.5s cubic-bezier(0.3, 0, 0.2, 1), transform 0.5s cubic-bezier(0.3, 0, 0.2, 1); }
+.menu.is-open .menuItem { opacity:1; transform:none; transition-delay:calc(120ms + var(--n) * 55ms); }
+.menu.is-open .menuAside { opacity:1; transform:none; transition-delay:340ms; }
+.menuLink { display:inline-flex; align-items:center; gap:12px; font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(30px, 4vw, 58px); font-weight:400; letter-spacing:0; line-height:1.12; color:var(--ink); transition:opacity 0.34s cubic-bezier(0.3, 0, 0.2, 1); }
 .menuLink:hover { color:var(--accent); }
+
+/* menu items react letter by letter — a short dash draws in ahead of the word,
+   the characters lift in sequence and an arrow follows the last one */
+.menuDash { display:block; flex:none; width:0; height:2px; margin-bottom:0.18em; background:var(--accent); opacity:0; transition:width 0.42s cubic-bezier(0.3, 0, 0.2, 1), opacity 0.42s cubic-bezier(0.3, 0, 0.2, 1); }
+.menuWord { position:relative; display:inline-flex; }
+.menuCh { display:inline-block; white-space:pre; transition:transform 0.34s cubic-bezier(0.3, 0, 0.2, 1), color 0.34s cubic-bezier(0.3, 0, 0.2, 1); transition-delay:calc(var(--i) * 26ms); }
+.menuArrow { flex:none; font-size:0.42em; color:var(--accent); opacity:0; transform:translateX(-14px); transition:transform 0.38s cubic-bezier(0.3, 0, 0.2, 1), opacity 0.38s cubic-bezier(0.3, 0, 0.2, 1); }
+/* colour wash that sweeps the word on the way out */
+.menuWipe { position:absolute; top:10%; bottom:10%; left:-4px; right:-4px; background:var(--accent); opacity:0.18; transform:scaleX(0); transform-origin:left center; transition:transform 0.45s cubic-bezier(0.3, 0, 0.2, 1); }
+
+.menuLink:hover .menuDash, .menuLink:focus-visible .menuDash, .menuLink.is-picked .menuDash { width:18px; opacity:1; }
+.menuLink:hover .menuCh, .menuLink:focus-visible .menuCh { transform:translateY(-9px); color:var(--accent); }
+.menuLink:hover .menuArrow, .menuLink:focus-visible .menuArrow, .menuLink.is-picked .menuArrow { opacity:1; transform:translateX(0); }
+
+/* the rest of the list steps back so the item under the cursor leads */
+.menuList:hover .menuLink:not(:hover) { opacity:0.42; }
+
+/* chosen item: the letters lift further and faster, the wash sweeps through,
+   everything else drops right back while the overlay closes */
+.menuLink.is-picked .menuCh { transform:translateY(-14px); color:var(--accent); transition-delay:calc(var(--i) * 18ms); }
+.menuLink.is-picked .menuWipe { transform:scaleX(1); }
+.menuList.is-picking .menuLink:not(.is-picked) { opacity:0.15; }
+.menuList.is-picking .menuSubLink { opacity:0.15; }
 .menuLinkPlain { color:var(--muted); }
 .menuLinkPlain:hover { color:var(--muted); }
 .menuLink[aria-current="page"] { color:var(--accent); }
 .menuSubList { list-style:none; margin:6px 0 18px; padding:0 0 0 clamp(16px, 2.4vw, 34px); border-left:1px solid var(--ctrlBorder); }
-.menuSubLink { display:block; padding:7px 0; font-size:clamp(14px, 1.2vw, 17px); letter-spacing:2px; text-transform:uppercase; color:var(--sub); }
+.menuSubLink { display:block; padding:7px 0; font-size:clamp(14px, 1.2vw, 17px); letter-spacing:2px; text-transform:uppercase; color:var(--sub); transition:transform 0.28s cubic-bezier(0.3, 0, 0.2, 1), color 0.28s cubic-bezier(0.3, 0, 0.2, 1), opacity 0.34s ease; }
 .menuSubLink:hover, .menuSubLink[aria-current="page"] { color:var(--accent); }
+.menuSubLink:hover, .menuSubLink:focus-visible { transform:translateX(10px); }
 
 .menuAside { display:flex; flex-direction:column; gap:44px; padding-top:14px; }
 .menuAsideLabel { font-size:11px; letter-spacing:3px; color:var(--muted); }
 .menuPerformers { border-top:1px solid var(--hair); padding-top:22px; }
-.menuJoinLink { display:inline-block; margin-top:14px; font-size:clamp(19px, 1.8vw, 24px); letter-spacing:2px; text-transform:uppercase; color:var(--ink); text-decoration:underline; text-underline-offset:4px; }
+/* "join the roster" carries a lighter version of the same movement:
+   the whole link steps right, the letters lift, and the underline is handed
+   over from the ink rule to an accent one that draws in from the left */
+.menuJoinLink { display:inline-flex; align-items:center; gap:8px; margin-top:14px; font-size:clamp(19px, 1.8vw, 24px); letter-spacing:2px; text-transform:uppercase; color:var(--ink); text-decoration:none; transition:transform 0.34s cubic-bezier(0.3, 0, 0.2, 1); }
 .menuJoinLink:hover, .menuJoinLink[aria-current="page"] { color:var(--accent); }
-.menuJoinNote { margin-top:12px; font-size:15px; font-weight:300; line-height:1.65; color:var(--sub); max-width:38ch; text-wrap:pretty; }
+.menuJoinWord { position:relative; display:inline-flex; padding-bottom:5px; }
+.menuJoinRule { position:absolute; left:0; right:0; bottom:0; height:1px; background:currentColor; transform-origin:right center; transition:transform 0.3s cubic-bezier(0.3, 0, 0.2, 1); }
+.menuJoinRuleAccent { position:absolute; left:0; right:0; bottom:0; height:1.5px; background:var(--accent); transform:scaleX(0); transform-origin:left center; transition:transform 0.36s cubic-bezier(0.3, 0, 0.2, 1); }
+.menuJoinArrow { font-size:15px; }
+.menuJoinLink .menuCh { transition-delay:calc(var(--i) * 18ms); }
+
+.menuJoinLink:hover, .menuJoinLink:focus-visible { transform:translateX(6px); }
+.menuJoinLink:hover .menuCh, .menuJoinLink:focus-visible .menuCh { transform:translateY(-5px); color:var(--accent); }
+.menuJoinLink:hover .menuJoinRule, .menuJoinLink:focus-visible .menuJoinRule { transform:scaleX(0); }
+.menuJoinLink:hover .menuJoinRuleAccent, .menuJoinLink:focus-visible .menuJoinRuleAccent { transform:scaleX(1); transition-delay:0.12s; }
+.menuJoinLink:hover .menuArrow, .menuJoinLink:focus-visible .menuArrow { opacity:1; transform:translateX(0); }
+.menuJoinNote { margin-top:12px; font-size:15px; font-weight:400; line-height:1.65; color:var(--sub); max-width:38ch; text-wrap:pretty; }
 .menuContact { border-top:1px solid var(--hair); padding-top:22px; }
-.menuContactLine { margin-top:12px; font-size:16px; font-weight:300; }
+.menuContactLine { margin-top:12px; font-size:16px; font-weight:400; }
 .menuContactLine a { color:var(--sub); text-decoration:underline; text-underline-offset:3px; }
 .menuContactLine a:hover { color:var(--ink); }
 
@@ -106,13 +176,26 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline:2px so
 body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 
 /* ---------- hero ---------- */
-/* every page's cover is the same height, set by --coverH */
-.hero { position:relative; min-height:var(--coverH); background:var(--heroBg); overflow:hidden; transition:background 0.5s ease; }
+/* Two cover heights: --coverH for the flat text-only covers (About, Credits,
+   Contact and friends), and the taller --coverPhotoH for covers carrying a
+   photo. The wide banner discards the top and bottom of any photo squarer
+   than itself, so the extra height keeps more of the frame; the text covers
+   stay shorter, or they read as empty space above the heading. Both share the
+   same 440px floor: on a phone the banner is already taller than it is wide,
+   so extra height there would only crop the photo further from the sides.
+
+   --coverPhotoH grows with the window rather than stopping at a fixed pixel
+   height. A fixed cap meant the banner stayed the same height while the screen
+   kept widening, so on a large desktop it turned into a thin letterbox that
+   discarded most of every photo. Its ceiling is now the window's own height
+   (88vh), which keeps the banner's proportions roughly steady at any width
+   while still leaving a sliver of the next section visible below the fold. */
+.hero { position:relative; min-height:var(--coverPhotoH); background:var(--heroBg); overflow:hidden; transition:background 0.5s ease; }
 .heroLayer { position:absolute; inset:0; opacity:0; transition:opacity 1.8s ease; background-size:cover; background-position:center 35%; background-repeat:no-repeat; filter:saturate(0.92) contrast(1.05) brightness(0.96); }
 .heroScrim { position:absolute; inset:0; background:var(--heroScrim); }
 .heroCopy { position:absolute; left:60px; bottom:110px; z-index:2; color:var(--heroInk); width:fit-content; max-width:calc(100vw - 400px); }
 .heroKicker { font-size:19px; letter-spacing:7px; font-weight:400; color:var(--heroInk); }
-.heroTitle { font-family:'Anton', 'Jost', sans-serif; font-size:clamp(44px, 5.4vw, 92px); font-weight:400; letter-spacing:2px; line-height:1.06; margin-top:18px; max-width:1000px; white-space:pre-line; text-transform:uppercase; }
+.heroTitle { font-family:'Anton', 'Jost', sans-serif; font-size:clamp(44px, 5.4vw, 92px); font-weight:400; letter-spacing:0; line-height:1.06; margin-top:18px; max-width:1000px; white-space:pre-line; text-transform:uppercase; }
 .heroProd { position:absolute; right:40px; bottom:104px; z-index:2; text-align:right; color:rgba(244,242,238,0.75); font-size:12px; letter-spacing:3px; white-space:nowrap; }
 .heroProdName { display:block; font-size:30px; letter-spacing:5px; font-weight:400; color:#f4f2ee; }
 .heroStrip { position:absolute; left:0; right:0; bottom:0; z-index:2; border-top:1px solid var(--heroLine); }
@@ -122,10 +205,14 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 
 /* ---------- about ---------- */
 .aboutWrap { padding:96px 0 48px; }
-.about { max-width:1280px; margin:0 auto; padding:0 40px 56px; display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start; }
+.about { max-width:1280px; margin:0 auto; padding:0 40px 56px; display:grid; grid-template-columns:1fr 1.4fr; gap:16px 72px; align-items:start; }
+/* row 1: kicker alone. row 2: heading beside the body copy, both starting level */
+.aboutKicker { grid-column:1; grid-row:1; }
+.about .aboutTitle { grid-column:1; grid-row:2; margin-top:0; }
+.aboutCol { grid-column:2; grid-row:2; }
 .kicker { font-size:12px; letter-spacing:3px; color:var(--accent); }
 .aboutTitle { font-family:'Jost', sans-serif; text-transform:uppercase; font-size:clamp(30px,3.2vw,46px); font-weight:400; letter-spacing:1px; line-height:1.18; margin-top:16px; text-wrap:pretty; }
-.aboutBody { font-size:18px; font-weight:300; line-height:1.75; color:var(--sub); text-wrap:pretty; }
+.aboutBody { font-size:18px; font-weight:400; line-height:1.75; color:var(--sub); text-wrap:pretty; }
 .aboutBody p + p { margin-top:18px; }
 /* prose links must not rely on colour alone (WCAG 1.4.1) */
 .aboutBody a, .clientsBody a, .footerIntro a { text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1px; }
@@ -145,7 +232,7 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .supply { padding:0 16px 48px; }
 .sectionHead { max-width:1280px; margin:0 auto; display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid var(--hair); }
 .supply .sectionHead { padding:0 24px 18px; margin-bottom:16px; }
-.sectionTitle { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(26px,3vw,40px); font-weight:400; letter-spacing:1px; }
+.sectionTitle { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(26px,3vw,40px); font-weight:400; letter-spacing:0; }
 .supplyScroll { display:flex; gap:16px; overflow-x:auto; scrollbar-width:none; cursor:grab; }
 .supplyScroll:active { cursor:grabbing; }
 .supplyScroll::-webkit-scrollbar { display:none; }
@@ -169,10 +256,10 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .revViewport { overflow:hidden; margin-top:40px; }
 .revTrack { display:flex; gap:var(--revGap); transition:transform 0.65s cubic-bezier(0.3, 0, 0.2, 1); }
 .revCard { flex:0 0 calc((100% - (var(--revGap) * 2)) / 3); min-width:0; }
-.revName { white-space:pre-line; font-family:'Bebas Neue', 'Jost', sans-serif; font-size:clamp(32px,3vw,48px); letter-spacing:2px; line-height:1.02; font-weight:400; }
+.revName { white-space:pre-line; font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(32px,3vw,48px); letter-spacing:0; line-height:1.02; font-weight:400; }
 .revRole { font-size:13px; letter-spacing:2px; font-weight:500; margin-top:14px; text-transform:uppercase; }
 .revCredits { min-height:2.8em; font-size:16px; font-weight:400; color:#f4f2ee; margin-top:6px; }
-.revQuote { font-size:17px; font-weight:300; line-height:1.8; color:#c7c3bd; margin:22px 0 0; white-space:pre-line; text-wrap:pretty; }
+.revQuote { font-size:17px; font-weight:400; line-height:1.8; color:#c7c3bd; margin:22px 0 0; white-space:pre-line; text-wrap:pretty; }
 .revFoot { display:flex; justify-content:space-between; align-items:center; margin-top:36px; border-top:1px solid #3a3a3e; padding-top:20px; gap:16px; }
 .revCount { font-size:13px; letter-spacing:3px; color:var(--muted); }
 .revDots { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:0; max-width:100%; }
@@ -187,7 +274,7 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 /* ---------- clients ---------- */
 .clients { padding:96px 0 96px; }
 .clients .sectionHead { padding:0 40px 18px; }
-.clientsBody { max-width:1280px; margin:24px auto 0; padding:0 40px; font-size:18px; font-weight:300; line-height:1.7; color:var(--sub); text-wrap:pretty; }
+.clientsBody { max-width:1280px; margin:24px auto 0; padding:0 40px; font-size:18px; font-weight:400; line-height:1.7; color:var(--sub); text-wrap:pretty; }
 .logoStack { max-width:1280px; margin:40px auto 0; padding:0 40px; position:relative; }
 .logoPage { top:0; left:40px; right:40px; opacity:0; transition:opacity 3s ease; display:grid; grid-template-columns:repeat(6, 1fr); column-gap:64px; row-gap:96px; place-items:center; }
 .logoPage.is-on { opacity:1; }
@@ -207,7 +294,7 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .footerTitle { font-family:'Jost', sans-serif; text-transform:uppercase; font-size:clamp(28px,3.6vw,50px); font-weight:400; letter-spacing:1px; line-height:1.05; }
 .footerContact { font-size:16px; margin-top:18px; }
 .footerBtns { display:flex; gap:12px; flex-wrap:wrap; justify-content:flex-end; margin-left:auto; }
-.footerIntro { font-size:17px; font-weight:300; line-height:1.65; color:var(--sub); margin-top:16px; max-width:46ch; text-wrap:pretty; }
+.footerIntro { font-size:17px; font-weight:400; line-height:1.65; color:var(--sub); margin-top:16px; max-width:46ch; text-wrap:pretty; }
 .btnGhost { border:1px solid var(--hair); padding:12px 22px; font-size:12px; letter-spacing:2px; }
 .btnGhost:hover { border-color:var(--ink); color:var(--ink); }
 .btnSolid { background:#5d1f16; color:#f4f2ee; padding:12px 22px; font-size:12px; letter-spacing:2px; }
@@ -237,6 +324,11 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   .heroCopy { left:32px; max-width:calc(100vw - 120px); }
   .heroProd { right:32px; }
   .about { grid-template-columns:1fr; gap:40px; }
+  /* stacked: let everything flow in source order again */
+  .aboutKicker, .about .aboutTitle, .aboutCol { grid-column:1; grid-row:auto; }
+  .about { gap:0; }
+  .about .aboutTitle { margin-top:16px; }
+  .aboutCol { margin-top:40px; }
   .logoPage { grid-template-columns:repeat(4, 1fr); column-gap:48px; row-gap:64px; }
   .posterGrid { grid-template-columns:repeat(3, minmax(0, 1fr)); }
   .revCard { flex:0 0 calc((100% - var(--revGap)) / 2); }
@@ -248,7 +340,7 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   .hero { display:flex; flex-direction:column; justify-content:flex-end; padding:130px 20px 96px; }
   .heroCopy { position:relative; left:auto; bottom:auto; max-width:100%; width:auto; }
   .heroKicker { font-size:clamp(11px,3.2vw,14px); letter-spacing:0.28em; }
-  .heroTitle { font-size:clamp(32px,9vw,50px); letter-spacing:1px; margin-top:14px; }
+  .heroTitle { font-size:clamp(32px,9vw,50px); letter-spacing:0; margin-top:14px; }
   .heroProd { position:relative; right:auto; bottom:auto; text-align:left; margin-top:26px; white-space:normal; }
   .heroProdName { font-size:clamp(20px,6.4vw,26px); letter-spacing:3px; }
   .heroStrip div { padding:14px 20px; font-size:11px; letter-spacing:2px; column-gap:10px; }
@@ -278,6 +370,13 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 
 @media (prefers-reduced-motion: reduce) {
   .heroLayer, .logoPage, .revTrack, .page, .hero, .menu, .menuBtnBars span { transition:none !important; }
+  /* the menu still reads the same, it just stops moving */
+  .menuItem, .menuAside, .menuCh, .menuDash, .menuArrow, .menuWipe, .menuSubLink,
+  .menuJoinLink, .menuJoinRule, .menuJoinRuleAccent { transition:none !important; }
+  .menuItem, .menuAside { opacity:1; transform:none; }
+  .menuLink:hover .menuCh, .menuLink.is-picked .menuCh,
+  .menuJoinLink:hover .menuCh { transform:none; }
+  .menuJoinLink:hover, .menuSubLink:hover { transform:none; }
   html { scroll-behavior:auto; }
 }
 
@@ -300,8 +399,10 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   .menuInner { padding:170px 32px 76px; gap:56px; }
 }
 @media (max-width:999px) {
-  /* the city label is the first thing to go; the clock itself stays */
+  /* the city label is the first thing to go; the clock itself stays, and the
+     reserved width goes with it so the clock closes up to the controls */
   .slateCity { display:none; }
+  .slate { min-width:0; }
 }
 @media (max-width:639px) {
   /* no room for the slate once the logo and controls need the width */
@@ -337,8 +438,8 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 /* text-led hero for pages without a full-bleed photograph */
 .pageHero { background:var(--heroBg); color:var(--heroInk); min-height:var(--coverH); display:flex; align-items:flex-end; padding:170px 0 64px; }
 .pageHeroInner { max-width:1280px; width:100%; margin:0 auto; padding:0 40px; }
-.pageHeroTitle { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(44px, 5.4vw, 92px); font-weight:400; letter-spacing:2px; line-height:1.06; margin-top:18px; }
-.pageHeroLede { font-size:clamp(17px, 1.6vw, 21px); font-weight:300; line-height:1.7; color:var(--heroInkSoft); margin-top:22px; max-width:56ch; text-wrap:pretty; }
+.pageHeroTitle { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(44px, 5.4vw, 92px); font-weight:400; letter-spacing:0; line-height:1.06; margin-top:18px; }
+.pageHeroLede { font-size:clamp(17px, 1.6vw, 21px); font-weight:400; line-height:1.7; color:var(--heroInkSoft); margin-top:22px; max-width:56ch; text-wrap:pretty; }
 .pageHero .kicker { color:var(--accent); }
 
 /* a standard content band */
@@ -346,9 +447,9 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .band + .band { padding-top:0; }
 .bandInner { max-width:1280px; margin:0 auto; padding:0 40px; }
 .bandSplit { display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start; }
-.bandBody { font-size:18px; font-weight:300; line-height:1.75; color:var(--sub); text-wrap:pretty; }
+.bandBody { font-size:18px; font-weight:400; line-height:1.75; color:var(--sub); text-wrap:pretty; }
 .bandBody p + p { margin-top:18px; }
-.displayTitle { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(30px, 3.6vw, 52px); font-weight:400; letter-spacing:1px; line-height:1.1; margin-top:16px; }
+.displayTitle { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(30px, 3.6vw, 52px); font-weight:400; letter-spacing:0; line-height:1.1; margin-top:16px; }
 
 /* the always-dark band, for a section that needs to sit apart */
 .bandDark { background:#1a1a1c; color:#f4f2ee; border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); padding:88px 0; }
@@ -365,7 +466,7 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .catLink:hover .catSlot { outline:1px solid var(--ctrlBorder); outline-offset:-1px; }
 .catName { display:block; margin-top:14px; font-size:17px; letter-spacing:3px; text-transform:uppercase; color:var(--ink); }
 .catLink:hover .catName { color:var(--accent); }
-.catDesc { margin-top:8px; font-size:15px; font-weight:300; line-height:1.6; color:var(--sub); text-wrap:pretty; }
+.catDesc { margin-top:8px; font-size:15px; font-weight:400; line-height:1.6; color:var(--sub); text-wrap:pretty; }
 
 /* copy still to be written, deliberately visible rather than quietly missing */
 .todoNote { margin-top:22px; font-size:13px; letter-spacing:1px; color:var(--accent); border-left:2px solid var(--accent); padding-left:12px; }

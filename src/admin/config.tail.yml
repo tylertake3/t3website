@@ -13,6 +13,19 @@
               - { name: title, label: Production name, widget: string }
               - { name: image, label: Photo, widget: image }
               - { name: alt, label: Photo description, widget: string, hint: 'Read aloud to visitors who cannot see the photo.' }
+              - name: focus
+                label: Which part of the photo to keep
+                widget: select
+                required: false
+                default: 'center 35%'
+                hint: 'The banner is wider than most photos, so the top and bottom get trimmed. Pick the part that must stay in frame.'
+                options:
+                  - { label: 'Top of the photo', value: 'center top' }
+                  - { label: 'Upper third — good for faces', value: 'center 25%' }
+                  - { label: 'Slightly high (default)', value: 'center 35%' }
+                  - { label: 'Dead centre', value: 'center center' }
+                  - { label: 'Slightly low', value: 'center 65%' }
+                  - { label: 'Bottom of the photo', value: 'center bottom' }
 
       - name: categories
         label: What we supply

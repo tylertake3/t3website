@@ -121,8 +121,8 @@ import copy from '../content/pages/stand-ins.json';
     /* padding-top clears the fixed site header at short viewport heights */
     .heroCopy { position:relative; z-index:2; margin-top:auto; padding:150px 40px 64px; color:#f4f2ee; pointer-events:none; }
     .heroEyebrow { font-size:12px; letter-spacing:6px; color:rgba(244,242,238,0.7); }
-    .heroTitle { font-family:'Anton',sans-serif; font-size:clamp(38px, 4.8vw, 84px); letter-spacing:3px; line-height:1.05; margin:18px 0 0; text-transform:uppercase; font-weight:400; max-width:none; white-space:normal; }
-    .heroLede { font-size:clamp(17px,1.6vw,22px); font-weight:300; letter-spacing:1px; margin-top:18px; max-width:680px; color:rgba(244,242,238,0.9); text-wrap:pretty; }
+    .heroTitle { font-family:'Anton',sans-serif; font-size:clamp(38px, 4.8vw, 84px); letter-spacing:0; line-height:1.05; margin:18px 0 0; text-transform:uppercase; font-weight:400; max-width:none; white-space:normal; }
+    .heroLede { font-size:clamp(17px,1.6vw,22px); font-weight:400; letter-spacing:1px; margin-top:18px; max-width:680px; color:rgba(244,242,238,0.9); text-wrap:pretty; }
 
     /* ---------- shared type ---------- */
     .eyebrow { font-size:11px; letter-spacing:3px; color:var(--accent); }
@@ -130,7 +130,7 @@ import copy from '../content/pages/stand-ins.json';
        themes — so it keeps the light-on-dark grey rather than var(--muted),
        which would go near-black and disappear against that band */
     .eyebrowMuted { font-size:11px; letter-spacing:3px; color:#96928c; }
-    .display { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0; }
+    .display { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:0; line-height:1.15; margin:16px 0 0; }
     .sectionPad { padding:96px 40px; }
 
     /* ---------- the difference ---------- */
@@ -138,7 +138,7 @@ import copy from '../content/pages/stand-ins.json';
     .card { border-top:1px solid var(--hair); padding-top:24px; }
     .cardNum { font-size:12px; letter-spacing:2px; color:var(--muted); }
     .cardTitle { font-size:clamp(22px,2vw,30px); font-weight:300; letter-spacing:2px; margin:12px 0 0; }
-    .cardBody { font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:14px; text-wrap:pretty; }
+    .cardBody { font-size:15px; font-weight:400; line-height:1.7; color:var(--sub); margin-top:14px; text-wrap:pretty; }
 
     /* ---------- why it matters band ---------- */
     .band { border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); background:var(--bandBg); color:#f4f2ee; }
@@ -146,7 +146,7 @@ import copy from '../content/pages/stand-ins.json';
     .bandMedia { position:relative; background:var(--heroBg); min-height:560px; overflow:hidden; }
     .bandCopy { padding:88px 0; }
     .bandCopy .display { max-width:520px; }
-    .rows { display:grid; row-gap:0; font-size:16px; font-weight:300; line-height:1.7; margin-top:36px; }
+    .rows { display:grid; row-gap:0; font-size:16px; font-weight:400; line-height:1.7; margin-top:36px; }
     .rowsDark { color:#c7c3bd; }
     .rowsLight { color:var(--sub); }
     .row { padding:20px 0; display:grid; grid-template-columns:170px 1fr; gap:24px; }
@@ -167,14 +167,14 @@ import copy from '../content/pages/stand-ins.json';
     .matchItem { border-top:1px solid var(--hair); padding:18px 0; display:flex; align-items:baseline; gap:28px; }
     .matchNum { font-size:12px; letter-spacing:2px; color:var(--muted); width:28px; flex:0 0 28px; }
     .matchName { text-transform:uppercase; font-size:clamp(17px,1.8vw,24px); font-weight:300; letter-spacing:3px; }
-    .matchNote { font-size:14px; font-weight:300; color:var(--muted); line-height:1.6; margin-top:28px; max-width:520px; text-wrap:pretty; }
+    .matchNote { font-size:14px; font-weight:400; color:var(--muted); line-height:1.6; margin-top:28px; max-width:520px; text-wrap:pretty; }
     .matchMedia { position:relative; background:var(--tileBg); min-height:560px; overflow:hidden; }
 
     /* unfilled photo placeholders */
     .slot { position:absolute; inset:0; background:var(--tileBg); display:flex; align-items:center; justify-content:center; text-align:center; padding:24px; }
     /* the plate itself is var(--tileBg), which follows the theme, so the label
        follows it with var(--muted) */
-    .slot span { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); font-weight:300; }
+    .slot span { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); font-weight:400; }
 
     /* ---------- commercial & brand ---------- */
     .rule { border-top:1px solid var(--hair); }
@@ -182,7 +182,7 @@ import copy from '../content/pages/stand-ins.json';
     .whyPad { max-width:1280px; margin:0 auto; padding:88px 40px 96px; }
     .why3 { display:grid; grid-template-columns:repeat(3,1fr); gap:48px; margin-top:40px; }
     .whyTitle { font-size:19px; letter-spacing:1px; margin:0; font-weight:400; }
-    .whyBody { font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:10px; text-wrap:pretty; }
+    .whyBody { font-size:15px; font-weight:400; line-height:1.7; color:var(--sub); margin-top:10px; text-wrap:pretty; }
 
     /* ---------- responsive (desktop rendering unchanged) ---------- */
     @media (max-width:1024px) {
@@ -202,7 +202,7 @@ import copy from '../content/pages/stand-ins.json';
       .hero { padding:0; }
       .heroCopy { padding:120px 20px 48px; }
       .heroEyebrow { letter-spacing:4px; font-size:11px; }
-      .heroTitle { font-size:clamp(30px, 9.5vw, 46px); letter-spacing:2px; }
+      .heroTitle { font-size:clamp(30px, 9.5vw, 46px); letter-spacing:0; }
       .heroLede { font-size:clamp(16px, 4.4vw, 19px); letter-spacing:0.5px; }
       .display { font-size:clamp(24px, 7.5vw, 34px); }
       .sectionPad { padding:64px 20px; }

@@ -9,7 +9,9 @@ import categoryData from '../data/categories.json';
 import clientData from '../data/clients.json';
 import copy from '../content/pages/index.json';
 
-const heroSlides = heroData.slides;
+/* `focus` is optional per slide: the point in the photo the wide banner holds
+   on to when it trims the top and bottom away. Unset falls back to global.css. */
+const heroSlides = heroData.slides as Array<{ title: string; alt: string; image: string; focus?: string }>;
 const categories = categoryData.categories;
 const clients = clientData.clients;
 
@@ -67,7 +69,7 @@ const organizationSchema = {
           role="img"
           aria-label={slide.alt}
           aria-hidden={i === 0 ? undefined : 'true'}
-          style={i === 0 ? `background-image:url("${slide.image}"); opacity:1;` : 'opacity:0;'}
+          style={`${i === 0 ? `background-image:url("${slide.image}"); opacity:1;` : 'opacity:0;'}${slide.focus ? ` background-position:${slide.focus};` : ''}`}
         />
       ))
     }
@@ -94,11 +96,11 @@ const organizationSchema = {
   <!-- who we are + what we supply -->
   <div class="aboutWrap">
     <section class="about" id="about" aria-labelledby="aboutTitle">
-      <div>
-        <p class="kicker">{copy.about.kicker}</p>
-        <h2 class="aboutTitle" id="aboutTitle">{copy.about.heading}</h2>
-      </div>
-      <div>
+      {/* the kicker sits on its own grid row so the heading and the body copy
+          below it start on exactly the same line */}
+      <p class="kicker aboutKicker">{copy.about.kicker}</p>
+      <h2 class="aboutTitle" id="aboutTitle">{copy.about.heading}</h2>
+      <div class="aboutCol">
         <div class="aboutBody">
           <p>
             {copy.about.paragraph1.before}<a href="/what-is-a-spact">{copy.about.paragraph1.linkText}</a>{copy.about.paragraph1.after}

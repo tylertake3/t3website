@@ -4,6 +4,48 @@ import copy from '../content/pages/dancers.json';
 
 /* "01", "02" … numbering for the genre accordion, derived from the list order */
 const twoDigit = (n: number) => String(n).padStart(2, '0');
+
+/* Hero photos. A slide's `wide` is the letterbox version of the shot, its
+   backdrop extended sideways so the banner has nothing to trim; `image` is the
+   upright original, used only for slides that have no wide version yet.
+
+   One file per slide at every screen size, deliberately: serving a different
+   frame of the same shoot to narrow windows made the photo appear to change
+   as the window was resized. `wideFocus` is the hold point that keeps the
+   performer in shot on whichever axis the banner has to crop — a narrow window
+   crops the sides, a very wide one the top and bottom. */
+type HeroSlide = {
+  image: string;
+  focus?: string;
+  wide?: string;
+  wideFocus?: string;
+  /* hold point for windows narrower than NARROW_UNTIL, where the banner is
+     close to square and the letterbox photo is cropped hard at the sides */
+  narrowFocus?: string;
+};
+const heroSlides = copy.hero.slides as HeroSlide[];
+const NARROW_UNTIL = 900;
+
+const layerRule = (i: number, src: string | null, position?: string) =>
+  `.heroLayer[data-hero="${i}"]{` +
+  (src ? `background-image:url("${encodeURI(src)}");` : '') +
+  (position ? `background-position:${position};` : '') +
+  '}';
+
+const narrowRules = heroSlides
+  .map((slide, i) => (slide.narrowFocus ? layerRule(i, null, slide.narrowFocus) : ''))
+  .filter(Boolean);
+
+const heroCss = [
+  ...heroSlides.map((slide, i) =>
+    layerRule(
+      i,
+      slide.wide ?? slide.image,
+      slide.wide ? slide.wideFocus ?? 'center center' : slide.focus,
+    ),
+  ),
+  ...(narrowRules.length ? [`@media (max-width:${NARROW_UNTIL - 1}px){${narrowRules.join('')}}`] : []),
+].join('\n');
 ---
 
 <Base
@@ -11,18 +53,16 @@ const twoDigit = (n: number) => String(n).padStart(2, '0');
   description={copy.meta.description}
   ogTitle={copy.meta.ogTitle}
   ogDescription={copy.meta.ogDescription}
-  ogImage="/uploads/Codex%20Image%2021%20Aug%202026,%2014_26_52-52b0f5dc.webp"
+  ogImage="/uploads/dancers-hero-02-wide.webp"
   footerTitle={copy.meta.footerTitle}
   footerLinks={copy.meta.footerLinks}
 >
 
-  <!-- full-bleed hero: dancer stills fade -->
+  <!-- full-bleed hero: one still per slide, cross-fading if there is more than
+       one. Currently a single photo, so the rotator below stays idle. -->
+  <style is:inline set:html={heroCss} />
   <header class="hero">
-    <div class="heroLayer on" style="background-image:url('/uploads/Codex%20Image%2021%20Aug%202026,%2014_26_52-52b0f5dc.webp');"></div>
-    <div class="heroLayer" style="background-image:url('/uploads/Codex%20Image%2021%20Aug%202026,%2014_20_03-91201516.webp');"></div>
-    <div class="heroLayer" style="background-image:url('/uploads/Codex%20Image%2021%20Aug%202026,%2014_24_58-1a219029.webp');"></div>
-    <div class="heroLayer" style="background-image:url('/uploads/Codex%20Image%2021%20Aug%202026,%2014_20_10-8028981e.webp');"></div>
-    <div class="heroLayer" style="background-image:url('/uploads/Codex%20Image%2021%20Aug%202026,%2014_33_18-06641d88.webp');"></div>
+    {heroSlides.map((_slide, i) => <div class={i === 0 ? 'heroLayer on' : 'heroLayer'} data-hero={i} />)}
     <div class="heroScrim"></div>
 
     <div class="heroCopy">
@@ -182,15 +222,21 @@ const twoDigit = (n: number) => String(n).padStart(2, '0');
 
     /* ---------- hero ---------- */
     /* display/padding/filter/width/max-width reset the homepage hero rules in global.css */
-    .hero { position:relative; min-height:var(--coverH); background:#101012; overflow:hidden; display:block; padding:0; }
-    .heroLayer { position:absolute; inset:0; opacity:0; transition:opacity 1.8s ease; background-size:cover; background-position:center; filter:none; }
+    .hero { position:relative; min-height:var(--coverPhotoH); background:#101012; overflow:hidden; display:block; padding:0; }
+    /* background-position is the default hold point for a photo with no `focus`
+       of its own; an inline focus from dancers.json overrides it */
+    .heroLayer { position:absolute; inset:0; opacity:0; transition:opacity 1.8s ease; background-size:cover; background-position:center 35%; filter:none; }
     .heroLayer.on { opacity:1; }
-    .heroScrim { position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.15) 30%, rgba(20,20,22,0.15) 55%, rgba(20,20,22,0.8) 100%); }
+    /* the top wash finishes high, at 16% rather than 30% of the banner, and is
+       lighter to begin with: the banner photos put a face in the upper third,
+       and a deep fade there dims it. The header carries its own gradient for
+       the controls' contrast, so this one does not need to reach as far. */
+    .heroScrim { position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,20,22,0.42) 0%, rgba(20,20,22,0.15) 16%, rgba(20,20,22,0.15) 55%, rgba(20,20,22,0.8) 100%); }
 
     .heroCopy { position:absolute; left:40px; right:40px; bottom:64px; z-index:2; color:#f4f2ee; width:auto; max-width:none; }
     .heroEyebrow { font-size:12px; letter-spacing:6px; color:rgba(244,242,238,0.7); }
-    .heroTitle { font-family:'Anton',sans-serif; font-size:clamp(48px, 6vw, 104px); letter-spacing:4px; line-height:1.02; margin:18px 0 0; font-weight:400; }
-    .heroLede { font-size:clamp(17px,1.6vw,22px); font-weight:300; letter-spacing:1px; margin-top:18px; max-width:640px; color:rgba(244,242,238,0.9); text-wrap:pretty; }
+    .heroTitle { font-family:'Anton',sans-serif; font-size:clamp(48px, 6vw, 104px); letter-spacing:0; line-height:1.02; margin:18px 0 0; font-weight:400; }
+    .heroLede { font-size:clamp(17px,1.6vw,22px); font-weight:400; letter-spacing:1px; margin-top:18px; max-width:640px; color:rgba(244,242,238,0.9); text-wrap:pretty; }
 
     /* ---------- what we supply ---------- */
     .supply { max-width:1280px; margin:0 auto; padding:96px 40px; display:grid; grid-template-columns:1.25fr 1fr; gap:72px; align-items:stretch; }
@@ -217,8 +263,8 @@ const twoDigit = (n: number) => String(n).padStart(2, '0');
     .genrePanel { display:grid; grid-template-rows:0fr; visibility:hidden; transition:grid-template-rows 0.35s ease, visibility 0.35s ease; }
     .genrePanel > div { overflow:hidden; }
     .genre.open .genrePanel { grid-template-rows:1fr; visibility:visible; }
-    .genreBlurb { font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); padding:14px 0 20px 56px; max-width:520px; text-wrap:pretty; }
-    .supplyNote { font-size:14px; font-weight:300; color:var(--muted); line-height:1.6; margin-top:28px; max-width:520px; text-wrap:pretty; }
+    .genreBlurb { font-size:15px; font-weight:400; line-height:1.7; color:var(--sub); padding:14px 0 20px 56px; max-width:520px; text-wrap:pretty; }
+    .supplyNote { font-size:14px; font-weight:400; color:var(--muted); line-height:1.6; margin-top:28px; max-width:520px; text-wrap:pretty; }
     .supplyStill { align-self:center; position:relative; }
     /* aspect-ratio matches the file's intrinsic 1366x2048, so the space is
        reserved before the image arrives and the page does not jump */
@@ -240,7 +286,7 @@ const twoDigit = (n: number) => String(n).padStart(2, '0');
       font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px);
       font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0; max-width:520px;
     }
-    .rows { display:grid; row-gap:0; font-size:16px; font-weight:300; line-height:1.7; margin-top:36px; }
+    .rows { display:grid; row-gap:0; font-size:16px; font-weight:400; line-height:1.7; margin-top:36px; }
     .rows--dark { color:#c7c3bd; }
     .rows--light { color:var(--sub); }
     .row { padding:20px 0; display:grid; grid-template-columns:170px 1fr; gap:24px; }
@@ -257,13 +303,13 @@ const twoDigit = (n: number) => String(n).padStart(2, '0');
     .choreo { border-top:1px solid var(--hair); }
     .choreoGrid { max-width:1280px; margin:0 auto; padding:88px 40px; display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start; }
     .choreoGrid .dispHead { max-width:none; }
-    .choreoBody { font-size:17px; font-weight:300; line-height:1.75; color:var(--sub); text-wrap:pretty; }
+    .choreoBody { font-size:17px; font-weight:400; line-height:1.75; color:var(--sub); text-wrap:pretty; }
 
     /* ---------- reviews carousel ---------- */
     .quotes { background:#1a1a1c; color:#f4f2ee; border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); }
     .quotesInner { max-width:1280px; width:100%; margin:0 auto; padding:56px 40px; }
     .quotesHead { display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid #3a3a3e; padding-bottom:18px; }
-    .quotesTitle { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(26px,3vw,40px); font-weight:400; letter-spacing:1px; margin:0; }
+    .quotesTitle { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(26px,3vw,40px); font-weight:400; letter-spacing:0; margin:0; }
     /* the .quotes band is #1a1a1c in both themes — light-on-dark grey stays */
     .quotesKicker { font-size:12px; letter-spacing:3px; color:#96928c; }
     .revTrack {
@@ -273,8 +319,8 @@ const twoDigit = (n: number) => String(n).padStart(2, '0');
       transition:transform 0.65s cubic-bezier(0.3, 0, 0.2, 1);
     }
     .revItem { flex:0 0 calc((100% - (var(--per) - 1) * var(--revgap)) / var(--per)); min-width:0; }
-    .revName { white-space:pre-line; font-family:'Bebas Neue','Jost',sans-serif; font-size:clamp(32px,3vw,48px); letter-spacing:2px; line-height:1.02; margin:0; font-weight:400; }
-    .revQuote { font-size:17px; font-weight:300; line-height:1.8; color:#c7c3bd; margin:22px 0 0; text-wrap:pretty; }
+    .revName { white-space:pre-line; font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(32px,3vw,48px); letter-spacing:0; line-height:1.02; margin:0; font-weight:400; }
+    .revQuote { font-size:17px; font-weight:400; line-height:1.8; color:#c7c3bd; margin:22px 0 0; text-wrap:pretty; }
     /* also on the always-dark #1a1a1c band */
     .revCounter { font-size:13px; letter-spacing:3px; color:#96928c; }
     /* WCAG 2.2 target size: the button is a 24x24 hit area, the 7.5px padding
@@ -299,7 +345,7 @@ const twoDigit = (n: number) => String(n).padStart(2, '0');
     .credits { border-top:1px solid var(--hair); padding:0; }
     .creditsInner { max-width:1280px; margin:0 auto; padding:88px 40px 96px; }
     .creditsHead { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:16px; margin-top:16px; }
-    .creditsNote { font-size:14px; font-weight:300; color:var(--sub); letter-spacing:1px; }
+    .creditsNote { font-size:14px; font-weight:400; color:var(--sub); letter-spacing:1px; }
     .creditsGrid { display:grid; grid-template-columns:repeat(2,1fr); gap:36px 24px; margin-top:44px; }
     .creditCard { display:grid; gap:10px; }
     .creditFrame { aspect-ratio:16/9; background:var(--tileBg); position:relative; overflow:hidden; }
@@ -324,7 +370,7 @@ const twoDigit = (n: number) => String(n).padStart(2, '0');
     @media (max-width:640px) {
       .heroCopy { left:20px; right:20px; bottom:36px; }
       .heroEyebrow { letter-spacing:4px; }
-      .heroTitle { font-size:clamp(40px, 13vw, 104px); letter-spacing:2px; }
+      .heroTitle { font-size:clamp(40px, 13vw, 104px); letter-spacing:0; }
       .heroLede { font-size:clamp(16px, 4.4vw, 22px); }
       .supply { padding:56px 20px; gap:36px; }
       .genreBtn { gap:16px; }
@@ -362,11 +408,38 @@ const twoDigit = (n: number) => String(n).padStart(2, '0');
       var layers = Array.prototype.slice.call(document.querySelectorAll('.heroLayer'));
       if (layers.length > 1 && !reduce.matches) {
         var hi = 0;
-        setInterval(function () {
+        var timer = null;
+        function advance() {
           layers[hi].classList.remove('on');
           hi = (hi + 1) % layers.length;
           layers[hi].classList.add('on');
-        }, 5000);
+        }
+        function start() {
+          if (timer) window.clearInterval(timer);
+          timer = window.setInterval(advance, 5000);
+        }
+        start();
+
+        /* The theme toggle runs a view transition, which freezes painting while
+           it animates. A cross-fade caught mid-flight keeps advancing behind
+           that freeze and snaps to its end state when painting resumes, which
+           reads as a flicker on the photo. So on a theme change: settle the
+           fade instantly, then restart the clock so the next one is a clean
+           five seconds away and cannot overlap the transition. */
+        document.addEventListener('t3:themechange', function () {
+          layers.forEach(function (layer) {
+            var wasOn = layer.classList.contains('on');
+            layer.style.transition = 'none';
+            layer.style.opacity = wasOn ? '1' : '0';
+          });
+          start();
+          window.setTimeout(function () {
+            layers.forEach(function (layer) {
+              layer.style.removeProperty('transition');
+              layer.style.removeProperty('opacity');
+            });
+          }, 1000);
+        });
       }
 
       /* ---------- genre accordion (single open) ---------- */

@@ -174,7 +174,7 @@ const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `ba
     .creditsGroup { margin-top:56px; }
     .creditsGroupName {
       font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-weight:400;
-      font-size:clamp(20px, 2vw, 28px); letter-spacing:2px;
+      font-size:clamp(20px, 2vw, 28px); letter-spacing:0;
       border-bottom:1px solid var(--hair); padding-bottom:12px;
     }
     .creditsPosters { list-style:none; margin:20px 0 0; padding:0; }
@@ -191,20 +191,20 @@ const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `ba
     }
     .creditsQuote { margin:0; display:flex; flex-direction:column; height:100%; }
     .creditsQuoteText {
-      margin:0; font-size:17px; font-weight:300; line-height:1.8; color:#c7c3bd;
+      margin:0; font-size:17px; font-weight:400; line-height:1.8; color:#c7c3bd;
       text-wrap:pretty; flex:1 1 auto;
     }
     .creditsQuote figcaption { margin-top:22px; border-top:1px solid #3a3a3e; padding-top:18px; }
     .creditsQuoteName {
       display:block; white-space:pre-line;
-      font-family:'Bebas Neue', 'Jost', sans-serif; font-size:clamp(26px, 2.4vw, 34px);
-      letter-spacing:2px; line-height:1.02; font-weight:400; color:#f4f2ee;
+      font-family:'Anton', 'Jost', sans-serif; font-size:clamp(26px, 2.4vw, 34px);
+      letter-spacing:0; line-height:1.02; font-weight:400; text-transform:uppercase; color:#f4f2ee;
     }
     .creditsQuoteRole {
       display:block; margin-top:10px; font-size:13px; letter-spacing:2px;
       font-weight:500; text-transform:uppercase; color:#f4f2ee;
     }
-    .creditsQuoteCredits { display:block; margin-top:6px; font-size:15px; font-weight:300; color:#c7c3bd; }
+    .creditsQuoteCredits { display:block; margin-top:6px; font-size:15px; font-weight:400; color:#c7c3bd; }
 
     @media (max-width:1024px) {
       .stats.creditsStats { grid-template-columns:repeat(3, minmax(0, 1fr)); }

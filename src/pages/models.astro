@@ -125,7 +125,7 @@ import copy from '../content/pages/models.json';
     .hero { padding:170px 40px 0; display:grid; grid-template-columns:1.15fr 0.85fr; gap:56px; align-items:end; position:static; min-height:var(--coverH); background:none; overflow:visible; }
     .heroCopy { padding-bottom:56px; position:static; left:auto; bottom:auto; z-index:auto; color:inherit; width:auto; max-width:none; }
     .eyebrow6 { font-size:12px; letter-spacing:6px; color:var(--muted); }
-    .display { font-family:'Anton', sans-serif; font-size:clamp(72px, 11vw, 190px); line-height:0.92; letter-spacing:2px; margin:24px 0 0; text-transform:uppercase; font-weight:400; }
+    .display { font-family:'Anton', sans-serif; font-size:clamp(72px, 11vw, 190px); line-height:0.92; letter-spacing:0; margin:24px 0 0; text-transform:uppercase; font-weight:400; }
     .strapline { font-family:'Cormorant Garamond', serif; font-style:italic; font-size:clamp(24px,2.4vw,36px); font-weight:400; line-height:1.3; margin-top:28px; max-width:480px; color:var(--sub); text-wrap:pretty; }
     .tagRow { display:flex; gap:36px; margin-top:44px; border-top:1px solid var(--hair); padding-top:20px; font-size:12px; letter-spacing:2px; color:var(--muted); flex-wrap:wrap; }
     .heroFig { display:grid; grid-template-columns:1fr; gap:0; }
@@ -148,16 +148,16 @@ import copy from '../content/pages/models.json';
     .listRow { border-top:1px solid var(--hair); padding:30px 0; display:grid; grid-template-columns:60px 1fr 1.1fr; gap:32px; align-items:baseline; }
     .listNum { font-size:12px; letter-spacing:2px; color:var(--muted); }
     .listTitle { text-transform:uppercase; font-size:clamp(19px,2vw,28px); font-weight:300; letter-spacing:3px; margin:0; }
-    .listBody { font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); text-wrap:pretty; }
+    .listBody { font-size:15px; font-weight:400; line-height:1.7; color:var(--sub); text-wrap:pretty; }
 
     /* ---------- split sections ---------- */
     .splitInner { padding:96px 40px; display:grid; gap:72px; align-items:start; }
     .split--brands { grid-template-columns:0.9fr 1.1fr; }
     .split--film { grid-template-columns:1.1fr 0.9fr; }
     .splitCopy { padding-top:12px; }
-    .h2Anton { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3.2vw,46px); font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0; max-width:520px; }
+    .h2Anton { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3.2vw,46px); font-weight:400; letter-spacing:0; line-height:1.15; margin:16px 0 0; max-width:520px; }
     .pullQuote { font-family:'Cormorant Garamond', serif; font-style:italic; font-size:clamp(20px,1.8vw,26px); line-height:1.5; color:var(--sub); margin:28px 0 0; max-width:520px; text-wrap:pretty; }
-    .para { font-size:16px; font-weight:300; line-height:1.75; color:var(--sub); margin-top:28px; max-width:520px; text-wrap:pretty; }
+    .para { font-size:16px; font-weight:400; line-height:1.75; color:var(--sub); margin-top:28px; max-width:520px; text-wrap:pretty; }
 
     .filmBand { border-top:1px solid var(--hair); background:#1a1a1c; color:#f4f2ee; }
     /* .filmBand is a permanently dark #1a1a1c band in both themes, so everything
@@ -166,7 +166,7 @@ import copy from '../content/pages/models.json';
     .filmBand .figCap { color:#96928c; }
     .filmBand .para { color:#c7c3bd; }
     .filmBand a { color:#f4f2ee; }
-    .defs { display:grid; row-gap:0; font-size:15px; font-weight:300; line-height:1.7; color:#c7c3bd; margin-top:36px; max-width:520px; }
+    .defs { display:grid; row-gap:0; font-size:15px; font-weight:400; line-height:1.7; color:#c7c3bd; margin-top:36px; max-width:520px; }
     .defRow { border-top:1px solid #35353a; padding:16px 0; display:grid; grid-template-columns:150px 1fr; gap:24px; }
     .defRow:last-child { border-bottom:1px solid #35353a; }
     /* .defs only ever render inside .filmBand — light-on-dark grey again */
@@ -176,7 +176,7 @@ import copy from '../content/pages/models.json';
     .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:48px; margin-top:40px; }
     .card { border-top:1px solid var(--hair); padding-top:24px; }
     .cardTitle { font-size:19px; letter-spacing:1px; margin:0; font-weight:400; }
-    .cardBody { font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:10px; text-wrap:pretty; }
+    .cardBody { font-size:15px; font-weight:400; line-height:1.7; color:var(--sub); margin-top:10px; text-wrap:pretty; }
 
     /* ---------- responsive: tablet ---------- */
     @media (max-width:1024px) {

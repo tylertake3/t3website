@@ -108,9 +108,32 @@ import NumberFlow from 'number-flow';
 
     menuBtn.addEventListener('click', function () { setMenu(!menuOpen); });
 
-    /* choosing anywhere in the menu closes it */
+    /* choosing anywhere in the menu closes it. A main menu item first plays its
+       own flourish — the letters lift, the wash sweeps the word and the rest of
+       the list steps back — then the page follows. */
+    var menuList = menu.querySelector('.menuList');
+    var picking = false;
+
     menu.addEventListener('click', function (e) {
-      if (e.target.closest('a')) setMenu(false);
+      var link = e.target.closest('a');
+      if (!link) return;
+
+      var main = link.classList.contains('menuLink');
+      var plainClick = e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey;
+      var samePage = link.getAttribute('aria-current') === 'page';
+
+      if (!main || !plainClick || samePage || lessMotion() || link.target === '_blank') {
+        setMenu(false);
+        return;
+      }
+
+      if (picking) { e.preventDefault(); return; }
+      picking = true;
+      e.preventDefault();
+      link.classList.add('is-picked');
+      if (menuList) menuList.classList.add('is-picking');
+
+      window.setTimeout(function () { window.location.href = link.href; }, 520);
     });
 
     document.addEventListener('keydown', function (e) {

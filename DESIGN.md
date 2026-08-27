@@ -9,7 +9,7 @@ The living implementation of these tokens is `src/styles/global.css`. When you c
 ## 1. Brand character
 
 - **Editorial, cinematic, high-contrast.** Dark by default, with a warm off-white ink and a single burnt-terracotta accent.
-- **Big condensed display type** (Anton) against **light, airy body text** (Jost 300).
+- **Big condensed display type** (Anton) against **clean, airy body text** (Jost 400).
 - **Generous whitespace, thin hairline rules**, wide letter-spacing on small labels.
 - Imagery does the heavy lifting; UI chrome stays quiet and restrained.
 
@@ -69,14 +69,13 @@ The hero is always dark, regardless of theme, so it has its own token set:
 ## 3. Typography
 
 ### Font families
-- **`'Jost', sans-serif`** — the default. Body, nav, labels, most headings. Weights loaded: 300, 400, 500, 600 (+ italics 300/400).
-- **`'Anton', 'Jost', sans-serif`** — condensed display. Hero title, section titles, big statements. Always `text-transform:uppercase`, weight 400.
-- **`'Bebas Neue', 'Jost', sans-serif`** — tall condensed, used for review/testimonial names.
+- **`'Jost', sans-serif`** — the default. Body, nav, labels, most headings. Weights loaded: 300, 400, 500, 600. **Body copy is 400** — 300 is reserved for large display figures (stat numbers) and large tracked display headings, never for reading text.
+- **`'Anton', 'Jost', sans-serif`** — condensed display. Hero title, section titles, review/testimonial names, big statements. Always `text-transform:uppercase`, weight 400, and **`letter-spacing:0`**.
 - **`'Cormorant Garamond', serif`** — editorial serif accent (currently used on the Models page). Reach for it only where an elegant serif is intentional.
 
 Load fonts once, in the document head:
 ```
-https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Anton&family=Bebas+Neue&display=swap
+https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Anton&display=swap
 ```
 
 ### Type scale & patterns
@@ -84,18 +83,18 @@ All display headings use `font-weight:400` (never bold) and fluid `clamp()` sizi
 
 | Role | Family | Size | Notes |
 |---|---|---|---|
-| Hero title | Anton | `clamp(44px, 5.4vw, 92px)` | uppercase, `letter-spacing:2px`, `line-height:1.06` |
+| Hero title | Anton | `clamp(44px, 5.4vw, 92px)` | uppercase, `letter-spacing:0`, `line-height:1.06` |
 | Hero kicker | Jost | `19px` | `letter-spacing:7px` |
-| Section title | Anton | `clamp(26px, 3vw, 40px)` | uppercase, `letter-spacing:1px` |
+| Section title | Anton | `clamp(26px, 3vw, 40px)` | uppercase, `letter-spacing:0` |
 | About title | Jost | `clamp(30px, 3.2vw, 46px)` | uppercase, `line-height:1.18` |
 | Footer title | Jost | `clamp(28px, 3.6vw, 50px)` | uppercase |
-| Body copy | Jost 300 | `18px` | `line-height:1.7–1.75`, colour `--sub` |
+| Body copy | Jost 400 | `18px` | `line-height:1.7–1.75`, colour `--sub` |
 | Stat number | Jost 300 | `clamp(30px, 3vw, 44px)` | colour `--accent`, `line-height:1` |
 | Kicker / eyebrow | Jost | `12px` | `letter-spacing:3px`, colour `--accent` |
 | Small label / meta | Jost | `11–13px` | `letter-spacing:2–3px`, colour `--muted`, often uppercase |
-| Review name | Bebas Neue | `clamp(32px, 3vw, 48px)` | `letter-spacing:2px` |
+| Review name | Anton | `clamp(32px, 3vw, 48px)` | uppercase, `letter-spacing:0` |
 
-**Rule of thumb:** the smaller the text, the wider the tracking. Body copy is normal tracking; labels get `2–3px`; the hero kicker goes to `7px`.
+**Rule of thumb:** the smaller the text, the wider the tracking. Anton display type is always `letter-spacing:0`; Jost body copy is normal tracking; small labels get `2–3px`; the hero kicker goes to `7px`.
 
 ---
 
