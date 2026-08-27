@@ -8,6 +8,11 @@ import sharp from 'sharp';
 const UPLOADS = 'public/uploads';
 const ARCHIVE = '_originals/uploads';
 const MAX_WIDTH = 2400;
+/* Full-bleed banner photos are the one place 2400px is not enough: the banner
+   spans the whole window, so on a large desktop at 2x it needs ~5000px across.
+   Files named *-wide are those letterbox banner versions and keep their width. */
+const WIDE_SUFFIX = /-wide$/;
+const WIDE_MAX_WIDTH = 4000;
 const QUALITY = 78;
 const CONVERTIBLE = new Set(['.png', '.jpg', '.jpeg', '.avif', '.webp']);
 
@@ -29,7 +34,8 @@ for (const file of files) {
 
   const image = sharp(src, { failOn: 'none' });
   const meta = await image.metadata();
-  const resized = meta.width > MAX_WIDTH ? image.resize({ width: MAX_WIDTH }) : image;
+  const cap = WIDE_SUFFIX.test(basename(file, extname(file))) ? WIDE_MAX_WIDTH : MAX_WIDTH;
+  const resized = meta.width > cap ? image.resize({ width: cap }) : image;
   const buffer = await resized.webp({ quality: QUALITY, effort: 5 }).toBuffer();
 
   /* keep the original if WebP somehow came out bigger */

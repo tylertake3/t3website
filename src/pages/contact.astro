@@ -246,18 +246,18 @@ const channels: Record<string, { value: string; href: string; external?: boolean
     .contactChannelLabel { display:block; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
     .contactChannelValue {
       display:inline-block; margin-top:12px; font-size:clamp(19px, 1.9vw, 26px);
-      font-weight:300; letter-spacing:1px; color:var(--ink);
+      font-weight:400; letter-spacing:1px; color:var(--ink);
       text-decoration:underline; text-underline-offset:5px; text-decoration-thickness:1px;
     }
     .contactChannelValue:hover { color:var(--accent); }
-    .contactChannelNote { display:block; margin-top:12px; font-size:15px; font-weight:300; line-height:1.6; color:var(--sub); text-wrap:pretty; }
+    .contactChannelNote { display:block; margin-top:12px; font-size:15px; font-weight:400; line-height:1.6; color:var(--sub); text-wrap:pretty; }
 
     /* the form is switched off until a handler exists — said plainly, with the
        working routes repeated inside the notice */
     .contactNotice { margin-top:30px; border:1px solid var(--accent); padding:22px 24px; max-width:72ch; }
     .contactNoticeTitle { font-size:13px; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent); }
-    .contactNoticeBody { margin-top:12px; font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); text-wrap:pretty; }
-    .contactNoticeLinks { margin-top:14px; font-size:16px; font-weight:300; display:flex; flex-wrap:wrap; gap:12px; align-items:baseline; }
+    .contactNoticeBody { margin-top:12px; font-size:15px; font-weight:400; line-height:1.7; color:var(--sub); text-wrap:pretty; }
+    .contactNoticeLinks { margin-top:14px; font-size:16px; font-weight:400; display:flex; flex-wrap:wrap; gap:12px; align-items:baseline; }
     .contactNoticeLinks a { color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
     .contactNoticeLinks a:hover { color:var(--accent); }
     .contactNoticeLinks span { color:var(--muted); }
@@ -280,7 +280,7 @@ const channels: Record<string, { value: string; href: string; external?: boolean
       background:var(--tileBg); color:var(--ink);
       border:1px solid var(--ctrlBorder); border-radius:0;
       /* 16px keeps iOS Safari from zooming the page on focus */
-      font-family:'Jost', sans-serif; font-size:16px; font-weight:300; line-height:1.5;
+      font-family:'Jost', sans-serif; font-size:16px; font-weight:400; line-height:1.5;
       padding:13px 14px;
     }
     textarea.contactControl { resize:vertical; min-height:132px; }
@@ -292,7 +292,7 @@ const channels: Record<string, { value: string; href: string; external?: boolean
        their own, and it must clear the field's own border */
     .contactControl:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
     .contactControl::placeholder { color:var(--muted); }
-    .contactHint { margin-top:8px; font-size:13px; font-weight:300; line-height:1.5; color:var(--muted); text-wrap:pretty; }
+    .contactHint { margin-top:8px; font-size:13px; font-weight:400; line-height:1.5; color:var(--muted); text-wrap:pretty; }
     .contactSubmit { display:inline-block; margin-top:36px; border:0; cursor:pointer; font-family:'Jost', sans-serif; }
 
     /* clients one way, performers the other */

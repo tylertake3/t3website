@@ -5,10 +5,17 @@ export const site = {
   phoneHref: '+442080882833',
   instagram: 'https://www.instagram.com/take3agency/',
   ctaLabel: 'GET IN TOUCH',
-  /** Where the timecode slate is clocked. */
+  /** Where the timecode slate is clocked. First entry is the default. */
   city: 'LONDON',
   timeZone: 'Europe/London',
 };
+
+/** Clicking the slate cycles through these, in order. */
+export const slateCities = [
+  { label: 'LONDON', timeZone: 'Europe/London' },
+  { label: 'LOS ANGELES', timeZone: 'America/Los_Angeles' },
+  { label: 'NEW YORK', timeZone: 'America/New_York' },
+] as const;
 
 /** The single "get in touch" link used by every call to action on the site. */
 export const contactHref = `mailto:${site.email}`;

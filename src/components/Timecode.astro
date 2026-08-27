@@ -1,35 +1,85 @@
 ---
-import { site } from '../data/site';
+import { slateCities } from '../data/site';
 ---
 
-{/* Decorative production detail: clapperboard, city, running timecode.
-    aria-hidden because a screen reader would otherwise announce it constantly. */}
-<div class="slate" aria-hidden="true">
-  <svg class="slateIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" focusable="false">
+{/* Production detail: clapperboard, city, running timecode. It is a button
+    because clicking it cycles the clock through the agency's cities — the
+    time itself stays aria-hidden so a screen reader is not read a ticking
+    number, while the button keeps an announced label. */}
+<button
+  class="slate"
+  id="slateBtn"
+  type="button"
+  data-cities={JSON.stringify(slateCities)}
+  title="Change city"
+  aria-label={`Clock: ${slateCities[0].label}. Change city`}
+>
+  <svg class="slateIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" focusable="false" aria-hidden="true">
     <rect x="2.5" y="9" width="19" height="12" rx="1"></rect>
     <path d="M2.9 9 5.4 4.2 22 6.1l-.6 2.9"></path>
     <path d="m9.1 4.6-2 4.3M13.7 5.1l-2 4.3M18.3 5.6l-2 4.3"></path>
   </svg>
-  <span class="slateCity">{site.city}</span>
-  <span class="slateTime" id="slateTime" data-timezone={site.timeZone}>00:00:00:00</span>
-</div>
+  <span class="slateCity" id="slateCity" aria-hidden="true">{slateCities[0].label}</span>
+  <span class="slateTime" id="slateTime" aria-hidden="true">00:00:00:00</span>
+</button>
 
 <script>
   /* Live HH:MM:SS:FF timecode at 24fps on the agency's clock, not the
      visitor's. Pauses in a background tab; falls back to a once-a-second
-     readout when the visitor has asked for reduced motion. */
+     readout when the visitor has asked for reduced motion. Clicking steps to
+     the next city and the choice is remembered for the visit. */
   const FPS = 24;
   const el = document.getElementById('slateTime');
+  const btn = document.getElementById('slateBtn');
+  const cityEl = document.getElementById('slateCity');
 
-  if (el) {
-    const timeZone = el.dataset.timezone || 'Europe/London';
-    const formatter = new Intl.DateTimeFormat('en-GB', {
-      timeZone,
-      hour12: false,
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    });
+  type City = { label: string; timeZone: string };
+
+  if (el && btn && cityEl) {
+    let cities: City[] = [];
+    try {
+      cities = JSON.parse(btn.dataset.cities || '[]');
+    } catch {
+      cities = [];
+    }
+    if (cities.length === 0) cities = [{ label: 'LONDON', timeZone: 'Europe/London' }];
+
+    const STORE_KEY = 'take3:slateCity';
+
+    /* remember the pick across pages, but never let a stale value break the clock */
+    const readStored = () => {
+      try {
+        const saved = window.localStorage.getItem(STORE_KEY);
+        const found = cities.findIndex((c) => c.label === saved);
+        return found === -1 ? 0 : found;
+      } catch {
+        return 0;
+      }
+    };
+
+    let index = readStored();
+    let formatter: Intl.DateTimeFormat;
+
+    const buildFormatter = () => {
+      const timeZone = cities[index].timeZone;
+      try {
+        formatter = new Intl.DateTimeFormat('en-GB', {
+          timeZone,
+          hour12: false,
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+        });
+      } catch {
+        /* an unknown zone would otherwise throw on every frame */
+        formatter = new Intl.DateTimeFormat('en-GB', {
+          hour12: false,
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+        });
+      }
+    };
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     const pad = (n: number) => String(n).padStart(2, '0');
@@ -81,11 +131,34 @@ import { site } from '../data/site';
       }
     };
 
+    const applyCity = () => {
+      const city = cities[index];
+      cityEl.textContent = city.label;
+      btn.setAttribute('aria-label', `Clock: ${city.label}. Change city`);
+      buildFormatter();
+      lastSecond = -1;
+      /* repaint at once so the numbers never lag a frame behind the new label */
+      if (reduce.matches) paintStill();
+    };
+
+    btn.addEventListener('click', () => {
+      index = (index + 1) % cities.length;
+      try {
+        window.localStorage.setItem(STORE_KEY, cities[index].label);
+      } catch {
+        /* private browsing — the pick simply does not persist */
+      }
+      applyCity();
+      start();
+    });
+
     document.addEventListener('visibilitychange', start);
     reduce.addEventListener('change', start);
     /* leave nothing running behind us, including across a client-side swap */
     window.addEventListener('pagehide', stop);
     document.addEventListener('astro:before-swap', stop);
+
+    applyCity();
     start();
   }
 </script>

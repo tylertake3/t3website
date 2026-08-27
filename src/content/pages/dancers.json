@@ -13,7 +13,23 @@
   "hero": {
     "eyebrow": "TAKE 3 AGENCY · DANCE",
     "title": "DANCERS",
-    "lede": "Trained dancers for film, television, commercial and live — every style, screen-ready."
+    "lede": "Trained dancers for film, television, commercial and live — every style, screen-ready.",
+    "slides": [
+      {
+        "image": "/uploads/Codex Image 21 Aug 2026, 14_20_03-91201516.webp",
+        "focus": "center 60%",
+        "wide": "/uploads/dancers-hero-02-wide.webp",
+        "wideFocus": "center center",
+        "narrowFocus": "72% center"
+      },
+      {
+        "image": "/uploads/Codex Image 21 Aug 2026, 14_20_10-8028981e.webp",
+        "focus": "center 75%",
+        "wide": "/uploads/dancers-hero-04-wide.webp",
+        "wideFocus": "70% center",
+        "narrowFocus": "85% center"
+      }
+    ]
   },
   "supply": {
     "heading": "WHAT WE SUPPLY",

@@ -251,7 +251,7 @@ const formConnected = copy.form.formAction.trim().length > 0;
     .joinDisciplineName { font-size:17px; letter-spacing:3px; text-transform:uppercase; color:var(--ink); }
     .joinDisciplineBody { margin-top:12px; font-size:16px; }
     .joinDiscipline .todoNote { margin-top:14px; }
-    .joinDisciplineNote { margin-top:34px; font-size:15px; font-weight:300; line-height:1.7; color:var(--muted); max-width:60ch; text-wrap:pretty; }
+    .joinDisciplineNote { margin-top:34px; font-size:15px; font-weight:400; line-height:1.7; color:var(--muted); max-width:60ch; text-wrap:pretty; }
 
     /* application process */
     .joinSteps { list-style:none; margin:34px 0 0; padding:0; display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:32px; }
@@ -263,8 +263,8 @@ const formConnected = copy.form.formAction.trim().length > 0;
        working routes repeated inside the notice */
     .joinNotice { margin-top:30px; border:1px solid var(--accent); padding:22px 24px; max-width:72ch; }
     .joinNoticeTitle { font-size:13px; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent); }
-    .joinNoticeBody { margin-top:12px; font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); text-wrap:pretty; }
-    .joinNoticeLinks { margin-top:14px; font-size:16px; font-weight:300; display:flex; flex-wrap:wrap; gap:12px; align-items:baseline; }
+    .joinNoticeBody { margin-top:12px; font-size:15px; font-weight:400; line-height:1.7; color:var(--sub); text-wrap:pretty; }
+    .joinNoticeLinks { margin-top:14px; font-size:16px; font-weight:400; display:flex; flex-wrap:wrap; gap:12px; align-items:baseline; }
     .joinNoticeLinks a { color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
     .joinNoticeLinks a:hover { color:var(--accent); }
     .joinNoticeLinks span { color:var(--muted); }
@@ -287,7 +287,7 @@ const formConnected = copy.form.formAction.trim().length > 0;
       background:var(--tileBg); color:var(--ink);
       border:1px solid var(--ctrlBorder); border-radius:0;
       /* 16px keeps iOS Safari from zooming the page on focus */
-      font-family:'Jost', sans-serif; font-size:16px; font-weight:300; line-height:1.5;
+      font-family:'Jost', sans-serif; font-size:16px; font-weight:400; line-height:1.5;
       padding:13px 14px;
     }
     textarea.joinControl { resize:vertical; min-height:120px; }
@@ -298,7 +298,7 @@ const formConnected = copy.form.formAction.trim().length > 0;
     /* global.css only rings links, buttons and [tabindex]; form controls need
        their own, and it must clear the field's own border */
     .joinControl:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
-    .joinHint { margin-top:8px; font-size:13px; font-weight:300; line-height:1.5; color:var(--muted); text-wrap:pretty; }
+    .joinHint { margin-top:8px; font-size:13px; font-weight:400; line-height:1.5; color:var(--muted); text-wrap:pretty; }
     .joinSubmit { display:inline-block; margin-top:36px; border:0; cursor:pointer; font-family:'Jost', sans-serif; }
 
     @media (max-width:1024px) {

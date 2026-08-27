@@ -1,6 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
 import copy from '../content/pages/spacts.json';
+
+/* `focus` is optional per slide: the point in the photo the wide banner holds
+   on to when it trims the top and bottom away. Unset falls back to center 35%. */
+const heroSlides = copy.hero.slides as Array<{ image: string; production: string; focus?: string }>;
 ---
 
 <Base
@@ -13,22 +17,22 @@ import copy from '../content/pages/spacts.json';
   footerLinks={copy.meta.footerLinks}
 >
   <!-- full-bleed hero: production stills fade -->
-  <header class="hero" style="position:relative; min-height:var(--coverH); background:#101012; overflow:hidden;">
+  <header class="hero" style="position:relative; min-height:var(--coverPhotoH); background:#101012; overflow:hidden;">
     {/* only the first still is fetched eagerly; the rest are attached after page load (see script) */}
-    {copy.hero.slides.map((slide, i) => (
+    {heroSlides.map((slide, i) => (
       <div
         class="heroLayer"
         data-layer={String(i)}
         data-src={i === 0 ? undefined : slide.image}
-        style={`position:absolute; inset:0; opacity:${i === 0 ? 1 : 0}; transition:opacity 1.8s ease;${i === 0 ? ` background-image:url("${slide.image}");` : ''} background-size:cover; background-position:center;`}
+        style={`position:absolute; inset:0; opacity:${i === 0 ? 1 : 0}; transition:opacity 1.8s ease;${i === 0 ? ` background-image:url("${slide.image}");` : ''} background-size:cover; background-position:${slide.focus || 'center 35%'};`}
       ></div>
     ))}
     <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.15) 30%, rgba(20,20,22,0.15) 55%, rgba(20,20,22,0.8) 100%);"></div>
 
     <div class="heroPad" style="position:absolute; left:40px; right:40px; bottom:64px; z-index:2; color:#f4f2ee;">
       <div style="font-size:12px; letter-spacing:6px; color:rgba(244,242,238,0.7);">{copy.hero.eyebrow}</div>
-      <h1 class="heroTitle" style="font-family:'Anton','Jost',sans-serif; font-size:clamp(48px, 6vw, 104px); font-weight:400; letter-spacing:4px; line-height:1.02; margin:18px 0 0; text-transform:uppercase;">{copy.hero.title}</h1>
-      <p style="font-size:clamp(17px,1.6vw,22px); font-weight:300; letter-spacing:1px; margin:18px 0 0; max-width:640px; color:rgba(244,242,238,0.9); text-wrap:pretty;">{copy.hero.strapline}</p>
+      <h1 class="heroTitle" style="font-family:'Anton','Jost',sans-serif; font-size:clamp(48px, 6vw, 104px); font-weight:400; letter-spacing:0; line-height:1.02; margin:18px 0 0; text-transform:uppercase;">{copy.hero.title}</h1>
+      <p style="font-size:clamp(17px,1.6vw,22px); font-weight:400; letter-spacing:1px; margin:18px 0 0; max-width:640px; color:rgba(244,242,238,0.9); text-wrap:pretty;">{copy.hero.strapline}</p>
       <div class="heroCredit" style="position:absolute; right:0; bottom:-24px; z-index:2; text-align:right; color:rgba(244,242,238,0.75); font-size:11px; letter-spacing:3px;">
         {copy.hero.creditLabel}<br /><span id="heroTitleTxt" style="font-size:20px; letter-spacing:5px; font-weight:300; color:#f4f2ee;">{copy.hero.slides[0].production}</span>
       </div>
@@ -39,9 +43,9 @@ import copy from '../content/pages/spacts.json';
   <section id="what" class="pad split" style="max-width:1280px; margin:0 auto; padding:96px 40px; display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start;">
     <div>
       <p style="font-size:11px; letter-spacing:3px; color:var(--accent); font-weight:400; margin:0;">{copy.what.eyebrow}</p>
-      <h2 class="dispXL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0;">{copy.what.heading}</h2>
+      <h2 class="dispXL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:0; line-height:1.15; margin:16px 0 0;">{copy.what.heading}</h2>
     </div>
-    <div style="font-size:17px; font-weight:300; line-height:1.75; color:var(--sub); text-wrap:pretty;">
+    <div style="font-size:17px; font-weight:400; line-height:1.75; color:var(--sub); text-wrap:pretty;">
       <p style="margin:0;">{copy.what.paragraph}</p>
       <a href={copy.what.linkHref} style="display:inline-block; margin-top:24px; font-size:12px; letter-spacing:2px; color:var(--accent);">{copy.what.linkLabel}</a>
     </div>
@@ -50,7 +54,7 @@ import copy from '../content/pages/spacts.json';
   <!-- disciplines grid -->
   <section id="disciplines" class="pad" style="max-width:1280px; margin:0 auto; padding:0 40px 96px;">
     <div class="secHead" style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid var(--hair); padding-bottom:18px; margin-bottom:8px;">
-      <h2 class="dispL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(26px,3vw,40px); font-weight:400; letter-spacing:1px; margin:0;">{copy.disciplines.heading}</h2>
+      <h2 class="dispL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(26px,3vw,40px); font-weight:400; letter-spacing:0; margin:0;">{copy.disciplines.heading}</h2>
       <div style="font-size:11px; letter-spacing:3px; color:var(--accent);">{copy.disciplines.kicker}</div>
     </div>
     <ul class="disc" style="list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(3,1fr); column-gap:48px;">
@@ -58,7 +62,7 @@ import copy from '../content/pages/spacts.json';
         <li style="border-bottom:1px solid var(--hair); padding:22px 0; display:flex; gap:18px; align-items:baseline;"><span style="font-size:12px; letter-spacing:2px; color:var(--muted);">{item.number}</span><span style="font-size:17px; letter-spacing:2px;">{item.title}</span></li>
       ))}
     </ul>
-    <p style="font-size:14px; font-weight:300; color:var(--muted); line-height:1.6; margin:24px 0 0; max-width:720px; text-wrap:pretty;">{copy.disciplines.note}</p>
+    <p style="font-size:14px; font-weight:400; color:var(--muted); line-height:1.6; margin:24px 0 0; max-width:720px; text-wrap:pretty;">{copy.disciplines.note}</p>
   </section>
 
   <!-- for film and television -->
@@ -67,9 +71,9 @@ import copy from '../content/pages/spacts.json';
       <div class="split" style="display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start;">
         <div>
           <p style="font-size:11px; letter-spacing:3px; color:var(--muted); font-weight:400; margin:0;">{copy.film.eyebrow}</p>
-          <h2 class="dispXL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0;">{copy.film.heading}</h2>
+          <h2 class="dispXL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:0; line-height:1.15; margin:16px 0 0;">{copy.film.heading}</h2>
         </div>
-        <p style="font-size:16px; font-weight:300; line-height:1.75; color:#c7c3bd; text-wrap:pretty; margin:0;">{copy.film.paragraph}</p>
+        <p style="font-size:16px; font-weight:400; line-height:1.75; color:#c7c3bd; text-wrap:pretty; margin:0;">{copy.film.paragraph}</p>
       </div>
       <div class="tiles" style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:48px;">
         {copy.film.tiles.map((tile) => (
@@ -87,9 +91,9 @@ import copy from '../content/pages/spacts.json';
     <div class="split" style="display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start;">
       <div>
         <p style="font-size:11px; letter-spacing:3px; color:var(--accent); font-weight:400; margin:0;">{copy.commercial.eyebrow}</p>
-        <h2 class="dispXL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0;">{copy.commercial.heading}</h2>
+        <h2 class="dispXL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:0; line-height:1.15; margin:16px 0 0;">{copy.commercial.heading}</h2>
       </div>
-      <ul style="list-style:none; margin:0; padding:0; display:grid; row-gap:0; font-size:16px; font-weight:300; line-height:1.7; color:var(--sub);">
+      <ul style="list-style:none; margin:0; padding:0; display:grid; row-gap:0; font-size:16px; font-weight:400; line-height:1.7; color:var(--sub);">
         {copy.commercial.items.map((item, i) => (
           <li style={i === copy.commercial.items.length - 1 ? 'padding:18px 0;' : 'border-bottom:1px solid var(--hair); padding:18px 0;'}>{item}</li>
         ))}
@@ -100,14 +104,14 @@ import copy from '../content/pages/spacts.json';
   <!-- why book through take 3 -->
   <section id="why" class="pad" style="max-width:1280px; margin:0 auto; padding:0 40px 96px;">
     <div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid var(--hair); padding-bottom:18px; margin-bottom:40px;">
-      <h2 class="dispL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(26px,3vw,40px); font-weight:400; letter-spacing:1px; margin:0;">{copy.why.heading}</h2>
+      <h2 class="dispL" style="font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(26px,3vw,40px); font-weight:400; letter-spacing:0; margin:0;">{copy.why.heading}</h2>
     </div>
     <div class="why" style="display:grid; grid-template-columns:repeat(3,1fr); gap:48px;">
       {copy.why.cards.map((card) => (
         <div>
           <div style="font-size:12px; letter-spacing:2px; color:var(--muted);">{card.number}</div>
           <h3 style="font-size:19px; letter-spacing:1px; margin:12px 0 0; font-weight:400;">{card.title}</h3>
-          <p style="font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin:10px 0 0; text-wrap:pretty;">{card.body}</p>
+          <p style="font-size:15px; font-weight:400; line-height:1.7; color:var(--sub); margin:10px 0 0; text-wrap:pretty;">{card.body}</p>
         </div>
       ))}
     </div>
@@ -137,7 +141,7 @@ import copy from '../content/pages/spacts.json';
       .dispL { font-size:clamp(24px,7vw,34px) !important; }
       .dispXL { font-size:clamp(26px,8vw,40px) !important; }
       .secHead { flex-direction:column; align-items:flex-start !important; gap:10px; }
-      .hero { min-height:var(--coverH) !important; padding:0; }
+      .hero { min-height:var(--coverPhotoH) !important; padding:0; }
       .heroPad { bottom:44px !important; }
       .heroCredit { position:static !important; text-align:left !important; margin-top:24px; }
     }

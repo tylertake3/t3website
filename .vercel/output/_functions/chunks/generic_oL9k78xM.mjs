@@ -342,7 +342,7 @@ var cssFitValues = [
 ];
 async function getConfiguredImageService() {
 	if (!globalThis?.astroAsset?.imageService) {
-		const { default: service } = await import("./sharp_IxWC4pQe.mjs").catch((e) => {
+		const { default: service } = await import("./sharp_lV5SKeJG.mjs").catch((e) => {
 			const error = new AstroError(InvalidImageService);
 			error.cause = e;
 			throw error;
@@ -523,7 +523,7 @@ var $$Image = createComponent(async ($$result, $$props, $$slots) => {
 		...image.attributes
 	};
 	return renderTemplate`${maybeRenderHead($$result)}<img${addAttribute(image.src, "src")}${spreadAttributes(attributes)}${addAttribute(className, "class")}>`;
-}, "/Users/tylerkennington/.odyn/take3-website/worktrees/erhe-vidar/node_modules/astro/components/Image.astro", void 0);
+}, "/Users/tylerkennington/.odyn/take3-website/worktrees/bk2v-hofvarpnir/node_modules/astro/components/Image.astro", void 0);
 //#endregion
 //#region node_modules/astro/components/Picture.astro
 createAstro("https://www.take3agency.com");
@@ -590,7 +590,7 @@ var $$Picture = createComponent(async ($$result, $$props, $$slots) => {
 		const srcsetAttribute = props.densities || !props.densities && !props.widths && !useResponsive ? `${image.src}${image.srcSet.values.length > 0 ? ", " + image.srcSet.attribute : ""}` : image.srcSet.attribute;
 		return renderTemplate`<source${addAttribute(srcsetAttribute, "srcset")}${addAttribute(mime.lookup(image.options.format ?? image.src) ?? `image/${image.options.format}`, "type")}${spreadAttributes(sourceAdditionalAttributes)}>`;
 	})}<img${addAttribute(fallbackImage.src, "src")}${spreadAttributes(attributes)}${addAttribute(className, "class")}></picture>`;
-}, "/Users/tylerkennington/.odyn/take3-website/worktrees/erhe-vidar/node_modules/astro/components/Picture.astro", void 0);
+}, "/Users/tylerkennington/.odyn/take3-website/worktrees/bk2v-hofvarpnir/node_modules/astro/components/Picture.astro", void 0);
 //#endregion
 //#region \0virtual:astro:assets/fonts/internal
 var componentDataByCssVariable = /* @__PURE__ */ new Map([]);
@@ -630,7 +630,7 @@ var $$Font = createComponent(($$result, $$props, $$slots) => {
 	});
 	const filteredPreloadData = filterPreloads(data.preloads, preload);
 	return renderTemplate`<style>${unescapeHTML(data.css)}</style>${filteredPreloadData?.map(({ url, type }) => renderTemplate`<link rel="preload"${addAttribute(url, "href")} as="font"${addAttribute(`font/${type}`, "type")} crossorigin>`)}`;
-}, "/Users/tylerkennington/.odyn/take3-website/worktrees/erhe-vidar/node_modules/astro/components/Font.astro", void 0);
+}, "/Users/tylerkennington/.odyn/take3-website/worktrees/bk2v-hofvarpnir/node_modules/astro/components/Font.astro", void 0);
 //#endregion
 //#region node_modules/astro/dist/assets/fonts/infra/ssr-runtime-font-file-url-resolver.js
 var SsrRuntimeFontFileUrlResolver = class {
