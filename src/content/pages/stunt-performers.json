@@ -1,0 +1,124 @@
+{
+  "meta": {
+    "title": "Stunt Performers & Stunt Doubles | Take 3 Agency",
+    "description": "Stunt performers, stunt doubles and action-trained talent for film, television and commercial productions. Take 3 Agency supplies registered stunt performers, matched doubles, fight-trained actors and drivers across the UK.",
+    "ogTitle": "Stunt Performers & Stunt Doubles | Take 3 Agency",
+    "ogDescription": "Registered stunt performers, matched doubles and action-trained talent for film, television and commercial productions.",
+    "ogImageAlt": "A stunt performer mid-fall against a rigged set, with crew watching from behind the safety line.",
+    "footerTitle": "Cast your action sequence"
+  },
+
+  "hero": {
+    "eyebrow": "SPECIALISTS · STUNTS",
+    "heading": "Stunt performers & stunt doubles",
+    "lede": "Action-trained talent for film, television and commercial — matched to your cast, cleared for the sequence, and safe on the day.",
+    "tags": ["STUNT PERFORMERS", "DOUBLES", "FIGHT", "DRIVING", "FALLS"]
+  },
+
+  "plate": {
+    "slotLabel": "Action still — 21:9",
+    "figNumber": "FIG. 01",
+    "figNote": "SHOT ON SET, NOT IN STUDIO"
+  },
+
+  "supply": {
+    "kicker": "WHAT WE SUPPLY",
+    "heading": "The people behind the sequence",
+    "items": [
+      {
+        "number": "01",
+        "title": "Stunt performers",
+        "body": "Registered performers for falls, fights, wire work, driving and body-hazard sequences, working to the stunt coordinator's brief."
+      },
+      {
+        "number": "02",
+        "title": "Stunt doubles",
+        "body": "Doubles matched to your lead on height, build, colouring and movement, so the cut holds when the action takes over."
+      },
+      {
+        "number": "03",
+        "title": "Fight-trained performers",
+        "body": "Actors and performers with genuine combat training — screen fighting, martial arts and weapons — who can act the scene as well as land it."
+      },
+      {
+        "number": "04",
+        "title": "Action extras & crowd",
+        "body": "Background who can take physical direction: reactions, falls, scrambles and crowd action that reads without endangering anyone."
+      }
+    ]
+  },
+
+  "approach": {
+    "kicker": "HOW WE WORK",
+    "heading": "Safety is the schedule",
+    "body": "Every stunt booking runs through your stunt coordinator, not around them. We supply people whose training, registration and recent experience match what the sequence actually asks for, we are straightforward about what a performer can and cannot do, and we would rather tell you a name is wrong than watch a day fall apart on the floor. Nobody on our books is put forward for action they are not cleared for.",
+    "points": [
+      {
+        "term": "MATCHED PROPERLY",
+        "description": "Height, build, colouring and movement checked against your cast before a name is sent, not after."
+      },
+      {
+        "term": "CLEARED FOR THE WORK",
+        "description": "Training, registration and recent credits confirmed for the specific sequence being cast."
+      },
+      {
+        "term": "COORDINATOR-LED",
+        "description": "We work to your stunt coordinator's brief and keep them in the loop from first name to call sheet."
+      }
+    ]
+  },
+
+  "briefs": {
+    "kicker": "ILLUSTRATIVE, NOT EXHAUSTIVE",
+    "heading": "The kind of brief this answers",
+    "items": [
+      "Stunt doubles",
+      "Screen fighting",
+      "Martial artists",
+      "Precision drivers",
+      "High falls",
+      "Wire and harness work",
+      "Fire and water work",
+      "Motorcycle riders",
+      "Horse riders"
+    ],
+    "note": "Categories, not a closed list — tell us the sequence."
+  },
+
+  "credits": {
+    "kicker": "SELECTED WORK",
+    "heading": "Sequences we have cast",
+    "todo": "TODO: copy — two or three genuine stunt bookings, with the production's permission. Needs real examples from the client. Nothing in this section may be invented."
+  },
+
+  "related": {
+    "kicker": "WHERE THE OVERLAP IS REAL",
+    "heading": "Related disciplines",
+    "items": [
+      {
+        "name": "SPACTs",
+        "href": "/spacts",
+        "description": "Real skills, delivered safely on camera — where a performer's ability is the point rather than the hazard.",
+        "linkLabel": "View SPACTs"
+      },
+      {
+        "name": "Stand-ins & picture doubles",
+        "href": "/stand-ins",
+        "description": "Accurate matches to your leads for lighting, blocking and continuity.",
+        "linkLabel": "View stand-ins"
+      },
+      {
+        "name": "Circus & physical performers",
+        "href": "/circus-artists",
+        "description": "Aerial, acrobatic and physical performers when the sequence needs skill rather than impact.",
+        "linkLabel": "View circus artists"
+      },
+      {
+        "name": "Specialists",
+        "href": "/specialists",
+        "description": "Anything sourced to brief, beyond the standing roster.",
+        "linkLabel": "View specialists"
+      }
+    ]
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "meta": {
+    "title": "Circus Artists & Physical Performers, London | Take 3 Agency",
+    "description": "Circus artists, aerialists, acrobats and physical performers for commercials, film, television and live events. Take 3 Agency supplies trained circus talent in London and across the UK.",
+    "ogTitle": "Circus Artists & Physical Performers | Take 3 Agency",
+    "ogDescription": "Aerialists, acrobats, contortionists and physical performers for commercials, film, television and live events.",
+    "ogImageAlt": "An aerialist mid-move on silks in a rigged studio space, lit from the side.",
+    "footerTitle": "Cast circus and physical talent"
+  },
+  "hero": {
+    "eyebrow": "SPECIALISTS · CIRCUS & PHYSICAL",
+    "heading": "Circus artists & physical performers",
+    "lede": "Aerial, acrobatic and physical talent for commercials, film, television and live — trained to performance standard, not to a party trick.",
+    "tags": [
+      "AERIAL",
+      "ACROBATIC",
+      "CONTORTION",
+      "BALANCE",
+      "CREATURE"
+    ],
+    "figure": {
+      "slotLabel": "Hero portrait — 2:3",
+      "figNumber": "FIG. 01",
+      "figNote": "AT HEIGHT, ON A RIG"
+    }
+  },
+  "supply": {
+    "kicker": "WHAT WE SUPPLY",
+    "heading": "Skills that hold up on camera",
+    "items": [
+      {
+        "number": "01",
+        "title": "Aerialists",
+        "body": "Silks, hoop, straps, rope and trapeze — performers who work at height to a rigger's brief and repeat the move take after take.",
+        "slotLabel": "Aerial still — 4:5"
+      },
+      {
+        "number": "02",
+        "title": "Acrobats & tumblers",
+        "body": "Hand-to-hand, tumbling, banquine and group acrobatics, from single moves in shot to full ensemble sequences.",
+        "slotLabel": "Acrobatic still — 4:5"
+      },
+      {
+        "number": "03",
+        "title": "Skill and object work",
+        "body": "Contortion, balance, juggling, cyr wheel, unicycle, fire and object manipulation — genuine skill, performed to camera.",
+        "slotLabel": "Skill still — 4:5"
+      },
+      {
+        "number": "04",
+        "title": "Creature & physical performers",
+        "body": "Movement-trained performers for suit, puppetry, mask and creature work, comfortable in costume for a full shoot day.",
+        "slotLabel": "Creature still — 4:5"
+      }
+    ]
+  },
+  "approach": {
+    "kicker": "HOW WE WORK",
+    "heading": "Trained performers, not a novelty booking",
+    "body": "Circus reads badly on camera when it is cast on the strength of a showreel alone. We put forward performers whose training and current practice match the specific skill in the brief, we are clear about what needs rigging, matting or a qualified rigger present, and we flag it early if what has been storyboarded is not safely repeatable. If a sequence needs a specialist alongside the performer, we will say so rather than let it land on the day.",
+    "points": [
+      {
+        "term": "SKILL CONFIRMED",
+        "description": "The specific discipline in the brief checked against current training and practice, not a general circus credit."
+      },
+      {
+        "term": "RIG AND SPACE",
+        "description": "Rigging, height, matting and floor requirements raised at brief stage so the location can actually take it."
+      },
+      {
+        "term": "REPEATABLE ON THE DAY",
+        "description": "Cast for performers who can hold the move across takes and coverage, not land it once."
+      }
+    ],
+    "pullQuote": "“If it cannot be repeated safely on take nine, it is not a shot — it is a stunt with a different name.”"
+  },
+  "briefs": {
+    "kicker": "ILLUSTRATIVE, NOT EXHAUSTIVE",
+    "heading": "The kind of brief this answers",
+    "items": [
+      "Aerial silks and hoop",
+      "Acrobats and tumblers",
+      "Contortionists",
+      "Jugglers",
+      "Fire performers",
+      "Stilt walkers",
+      "Cyr wheel and unicycle",
+      "Hand balancers",
+      "Creature and suit performers"
+    ],
+    "note": "Categories, not a closed list — tell us the shot."
+  },
+  "credits": {
+    "kicker": "SELECTED WORK",
+    "heading": "Where this has been booked",
+    "todo": "TODO: copy — two or three genuine circus bookings, with the client's and production's permission. Needs real examples. Nothing in this section may be invented."
+  },
+  "related": {
+    "kicker": "WHERE THE OVERLAP IS REAL",
+    "heading": "Related disciplines",
+    "items": [
+      {
+        "name": "Dancers",
+        "href": "/dancers",
+        "description": "Trained dancers for film, television, commercial and live — every style, screen-ready.",
+        "linkLabel": "View dancers"
+      },
+      {
+        "name": "SPACTs",
+        "href": "/spacts",
+        "description": "Real skills, delivered safely on camera.",
+        "linkLabel": "View SPACTs"
+      },
+      {
+        "name": "Stunt performers",
+        "href": "/stunt-performers",
+        "description": "Action-trained talent when the sequence carries genuine hazard.",
+        "linkLabel": "View stunts"
+      },
+      {
+        "name": "Specialists",
+        "href": "/specialists",
+        "description": "Anything sourced to brief, beyond the standing roster.",
+        "linkLabel": "View specialists"
+      }
+    ]
+  }
+}

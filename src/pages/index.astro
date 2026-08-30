@@ -20,6 +20,11 @@ const reviews = (await getCollection('reviews')).sort((a, b) => (a.data.order ??
 /* the marquee needs the roster twice so it can loop seamlessly */
 const marquee = [...categories, ...categories];
 
+/* the hero strip opens from the middle outwards, so a word's stagger step is
+   its distance from the centre of the row rather than its index */
+const stripMid = (copy.hero.strip.length - 1) / 2;
+const stripStagger = (i: number) => Math.abs(i - stripMid).toFixed(1);
+
 /* client logos cross-fade between two half-grids */
 const half = Math.ceil(clients.length / 2);
 const logoPages = [clients.slice(0, half), clients.slice(half)];
@@ -82,10 +87,18 @@ const organizationSchema = {
     <div class="heroStrip">
       <div>
         {
-          copy.hero.strip.map((word, i) => (
+          copy.hero.strip.map((item, i) => (
             <>
-              <span class={word.includes(' ') ? 'nw' : undefined}>{word}</span>
-              {i < copy.hero.strip.length - 1 && <span class="sep">/</span>}
+              <a
+                href={item.href}
+                class={item.label.includes(' ') ? 'genre nw' : 'genre'}
+                style={`--gi:${stripStagger(i)}`}
+              >
+                {item.label}
+              </a>
+              {i < copy.hero.strip.length - 1 && (
+                <span class="sep" style={`--gi:${stripStagger(i)}`}>/</span>
+              )}
             </>
           ))
         }

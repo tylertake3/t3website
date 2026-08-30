@@ -10,15 +10,16 @@
     "title": "The artists\nbehind the\nAction.",
     "seenOnLabel": "AS SEEN ON",
     "strip": [
-      "DANCERS",
-      "FIGHTERS",
-      "STUNT PERFORMERS",
-      "SPACTS",
-      "MODELS",
-      "CIRCUS ARTISTS",
-      "MILITARY",
-      "GYMNASTS",
-      "ATHLETES"
+      { "label": "DANCERS", "href": "/dancers" },
+      { "label": "FIGHTERS", "href": "/spacts" },
+      { "label": "STUNT PERFORMERS", "href": "/specialists" },
+      { "label": "SPACTS", "href": "/spacts" },
+      { "label": "MODELS", "href": "/models" },
+      { "label": "CIRCUS ARTISTS", "href": "/specialists" },
+      { "label": "MILITARY", "href": "/spacts" },
+      { "label": "STAND-INS", "href": "/stand-ins" },
+      { "label": "ATHLETES", "href": "/specialists" },
+      { "label": "INTIMACY", "href": "/intimacy" }
     ]
   },
   "about": {

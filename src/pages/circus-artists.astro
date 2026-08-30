@@ -1,0 +1,205 @@
+---
+/* /circus-artists — a standalone page, on purpose. See the note at the top of
+ * stunt-performers.astro: the specialist division pages deliberately do not
+ * share a template, so each can be developed by a different person without
+ * their changes landing on the others. Scoped with a `cir` prefix.
+ *
+ * Design direction for this one: vertical and airy. Circus work is about
+ * height and space, so the hero runs tall against a 2:3 portrait, the
+ * disciplines sit in generous tiles rather than a tight index, and the page
+ * breathes far more than the stunts page does. */
+import Base from '../layouts/Base.astro';
+import { pageExists } from '../lib/pages';
+import copy from '../content/pages/circus-artists.json';
+
+const related = copy.related.items.filter((item) => pageExists(item.href));
+---
+
+<Base
+  title={copy.meta.title}
+  description={copy.meta.description}
+  ogTitle={copy.meta.ogTitle}
+  ogDescription={copy.meta.ogDescription}
+  ogImageAlt={copy.meta.ogImageAlt}
+  footerTitle={copy.meta.footerTitle}
+>
+  <!-- hero: copy left, tall portrait right -->
+  <section class="pageHero cirHero" aria-labelledby="cirTitle">
+    <div class="pageHeroInner cirHeroInner">
+      <div class="cirHeroCopy">
+        <p class="kicker">{copy.hero.eyebrow}</p>
+        <h1 class="pageHeroTitle cirHeroTitle" id="cirTitle">{copy.hero.heading}</h1>
+        <p class="pageHeroLede">{copy.hero.lede}</p>
+        <ul class="cirTagRow">
+          {copy.hero.tags.map((tag) => <li>{tag}</li>)}
+        </ul>
+      </div>
+      <figure class="cirHeroFig">
+        <div class="slot cirHeroSlot"><span class="slotLabel">{copy.hero.figure.slotLabel}</span></div>
+        <figcaption class="cirCap">
+          <span>{copy.hero.figure.figNumber}</span><span>{copy.hero.figure.figNote}</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- disciplines: generous tiles, each with room for its own still -->
+  <section class="band" aria-labelledby="cirSupply">
+    <div class="bandInner">
+      <div class="sectionHead cirHead">
+        <h2 class="sectionTitle" id="cirSupply">{copy.supply.heading}</h2>
+        <p class="kicker">{copy.supply.kicker}</p>
+      </div>
+      <ul class="cirTiles">
+        {
+          copy.supply.items.map((item) => (
+            <li class="cirTile">
+              <div class="slot cirTileSlot"><span class="slotLabel">{item.slotLabel}</span></div>
+              <p class="cirTileNum">{item.number}</p>
+              <h3 class="cirTileTitle">{item.title}</h3>
+              <p class="cirTileBody">{item.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- how we work: quote-led rather than list-led -->
+  <section class="band bandDark cirDark" aria-labelledby="cirApproach">
+    <div class="bandInner cirApproachInner">
+      <div>
+        <p class="kicker">{copy.approach.kicker}</p>
+        <h2 class="sectionTitle cirApproachTitle" id="cirApproach">{copy.approach.heading}</h2>
+        <blockquote class="cirQuote">{copy.approach.pullQuote}</blockquote>
+      </div>
+      <div>
+        <p class="bandBody">{copy.approach.body}</p>
+        <dl class="cirPoints">
+          {
+            copy.approach.points.map((point) => (
+              <div class="cirPoint">
+                <dt class="cirPointTerm">{point.term}</dt>
+                <dd class="cirPointDesc">{point.description}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- briefs: read as a set of skills rather than a hairline index -->
+  <section class="band" aria-labelledby="cirBriefs">
+    <div class="bandInner">
+      <div class="sectionHead cirHead">
+        <h2 class="sectionTitle" id="cirBriefs">{copy.briefs.heading}</h2>
+        <p class="kicker">{copy.briefs.kicker}</p>
+      </div>
+      <ul class="cirChips">
+        {copy.briefs.items.map((item) => <li class="cirChip">{item}</li>)}
+      </ul>
+      <p class="cirBriefNote">{copy.briefs.note}</p>
+    </div>
+  </section>
+
+  <!-- credits -->
+  <section class="band" aria-labelledby="cirCredits">
+    <div class="bandInner bandSplit">
+      <div>
+        <p class="kicker">{copy.credits.kicker}</p>
+        <h2 class="sectionTitle" id="cirCredits">{copy.credits.heading}</h2>
+      </div>
+      <p class="todoNote">{copy.credits.todo}</p>
+    </div>
+  </section>
+
+  <!-- cross-links -->
+  {
+    related.length > 0 && (
+      <section class="band" aria-labelledby="cirRelated">
+        <div class="bandInner">
+          <div class="sectionHead cirHead">
+            <h2 class="sectionTitle" id="cirRelated">
+              {copy.related.heading}
+            </h2>
+            <p class="kicker">{copy.related.kicker}</p>
+          </div>
+          <ul class="cirRelated">
+            {related.map((item) => (
+              <li class="cirRelatedCard">
+                <h3 class="cirRelatedName">
+                  <a class="cirRelatedLink" href={item.href}>
+                    {item.name}
+                  </a>
+                </h3>
+                <p class="cirRelatedDesc">{item.description}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <style is:global>
+    .cirHero, .cirDark { --accent:#d4704f; --muted:#96928c; }
+    .cirDark { --sub:#c7c3bd; --ink:#f4f2ee; --hair:#3a3a3e; }
+
+    .cirHead { padding-bottom:18px; }
+    .cirCap { display:flex; justify-content:space-between; gap:20px; margin-top:12px; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); }
+
+    /* hero runs taller than the site default — height is the subject */
+    .cirHero { padding-top:200px; padding-bottom:86px; }
+    .cirHeroInner { display:grid; grid-template-columns:1.35fr 0.65fr; gap:72px; align-items:end; }
+    .cirHeroTitle { max-width:14ch; }
+    .cirHeroFig { margin:0; }
+    .cirHeroSlot { aspect-ratio:2/3; }
+
+    .cirTagRow { list-style:none; margin:30px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:10px 26px; }
+    .cirTagRow li { font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); }
+
+    /* tiles */
+    .cirTiles { list-style:none; margin:42px 0 0; padding:0; display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:64px 56px; }
+    .cirTile { display:flex; flex-direction:column; }
+    .cirTileSlot { aspect-ratio:4/5; }
+    .cirTileNum { margin:18px 0 0; font-size:11px; letter-spacing:3px; color:var(--accent); }
+    .cirTileTitle { margin:10px 0 0; font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(20px, 2vw, 27px); font-weight:400; letter-spacing:1px; color:var(--ink); }
+    .cirTileBody { margin:12px 0 0; font-size:16px; font-weight:300; line-height:1.7; color:var(--sub); max-width:44ch; text-wrap:pretty; }
+
+    /* approach */
+    .cirApproachInner { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:start; }
+    .cirApproachTitle { margin-top:14px; max-width:16ch; }
+    .cirQuote { margin:30px 0 0; padding-left:20px; border-left:2px solid var(--accent); font-size:clamp(18px, 1.9vw, 24px); font-weight:300; line-height:1.5; font-style:italic; color:var(--ink); max-width:32ch; text-wrap:pretty; }
+    .cirPoints { margin:40px 0 0; padding:0; display:grid; gap:24px; }
+    .cirPoint { border-top:1px solid var(--hair); padding-top:16px; }
+    .cirPointTerm { margin:0; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent); }
+    .cirPointDesc { margin:10px 0 0; font-size:15px; font-weight:300; line-height:1.6; color:var(--sub); text-wrap:pretty; }
+
+    /* chips */
+    .cirChips { list-style:none; margin:36px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:12px; }
+    .cirChip { border:1px solid var(--hair); border-radius:999px; padding:11px 20px; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--ink); }
+    .cirBriefNote { margin:26px 0 0; font-size:12px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); }
+
+    /* cross-links */
+    .cirRelated { list-style:none; margin:34px 0 0; padding:0; display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:32px; }
+    .cirRelatedCard { border-top:1px solid var(--hair); padding-top:20px; }
+    .cirRelatedName { margin:0; font-weight:400; }
+    .cirRelatedLink { font-size:14px; letter-spacing:2.5px; text-transform:uppercase; color:var(--ink); }
+    .cirRelatedLink:hover { color:var(--accent); }
+    .cirRelatedDesc { margin:10px 0 0; font-size:14px; font-weight:300; line-height:1.6; color:var(--sub); text-wrap:pretty; }
+
+    @media (max-width:1024px) {
+      .cirHeroInner, .cirApproachInner { grid-template-columns:1fr; gap:44px; }
+      .cirHeroFig { max-width:340px; }
+      .cirTiles { gap:48px 36px; }
+      .cirRelated { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width:640px) {
+      .cirHero { padding-top:170px; padding-bottom:60px; }
+      .cirTiles, .cirRelated { grid-template-columns:1fr; gap:40px; }
+      .cirHeroFig { max-width:none; }
+    }
+  </style>
+</Base>

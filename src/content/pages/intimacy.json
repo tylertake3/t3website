@@ -1,0 +1,107 @@
+{
+  "meta": {
+    "title": "Intimacy — Take 3 Agency",
+    "description": "Intimacy coordinators and intimacy-trained performers for film, television and commercial productions. Take 3 Agency supplies certified coordinators, trained doubles and performers who work intimate content safely, consensually and on schedule.",
+    "ogTitle": "Intimacy — Take 3 Agency",
+    "ogDescription": "Certified intimacy coordinators and intimacy-trained performers — intimate content handled safely, consensually and on schedule.",
+    "ogImageAlt": "Two performers rehearsing a close, choreographed sequence on a quiet set with a coordinator watching from the edge of frame.",
+    "footerTitle": "Book intimacy support for your production",
+    "footerLinks": [
+      { "label": "SPECIALISTS →", "href": "/specialists" },
+      { "label": "SPACTS →", "href": "/spacts" }
+    ]
+  },
+
+  "hero": {
+    "eyebrow": "TAKE 3 AGENCY · No. 07",
+    "title": "Intimacy",
+    "strapline": "Intimate content, choreographed and consented — the same care a fight gets, given to a love scene.",
+    "tags": ["COORDINATION", "CHOREOGRAPHY", "DOUBLES", "TRAINING"],
+    "figure": {
+      "slotLabel": "Hero portrait — 2:3",
+      "figNumber": "FIG. 01",
+      "figNote": "REHEARSED, NOT IMPROVISED"
+    }
+  },
+
+  "supply": {
+    "heading": "WHAT WE SUPPLY",
+    "items": [
+      {
+        "number": "01",
+        "title": "Intimacy coordinators",
+        "body": "Certified coordinators who run consent, choreography and closed-set protocol from prep through to the final take."
+      },
+      {
+        "number": "02",
+        "title": "Intimacy-trained performers",
+        "body": "Performers who have trained in intimate work — clear on boundaries, comfortable with repetition and reliable in close-up."
+      },
+      {
+        "number": "03",
+        "title": "Body doubles",
+        "body": "Matched doubles for intimate and partial-nudity sequences, cast to build, marking and continuity with agreements in place first."
+      },
+      {
+        "number": "04",
+        "title": "Rehearsal & workshops",
+        "body": "Pre-shoot rehearsal and cast workshops so the scene is built, agreed and blocked before a camera is anywhere near it."
+      }
+    ]
+  },
+
+  "brands": {
+    "figure": {
+      "slotLabel": "Rehearsal still — closed set",
+      "figNumber": "FIG. 02",
+      "figNote": "PREP, REHEARSAL, AGREEMENT"
+    },
+    "eyebrow": "HOW IT WORKS",
+    "heading": "Consent first, choreography second, camera last.",
+    "pullQuote": "“A love scene is a stunt with different stakes — you rehearse it, you agree it, and nobody improvises on the day.”",
+    "paragraph": "We start with the script and the boundaries, not the schedule. The coordinator meets the production and the cast, agrees what is and is not on the table in writing, choreographs the sequence to that agreement, and stays through the shoot so anything that changes is renegotiated rather than assumed. It protects the cast, and it protects the day."
+  },
+
+  "film": {
+    "eyebrow": "FOR FILM & TELEVISION",
+    "heading": "Safe, compliant and quick on the floor.",
+    "paragraph": "Intimacy coordination is now standard practice across UK broadcast and streaming, and productions are expected to evidence it. We supply coordinators who know the guidance, work comfortably alongside ADs, stunts and costume, and keep the closed-set process tight enough that it costs you time rather than losing you a day.",
+    "definitions": [
+      {
+        "term": "CONSENT & AGREEMENTS",
+        "description": "Boundaries captured in writing before the scene is blocked, and revisited if anything changes."
+      },
+      {
+        "term": "CLOSED SET",
+        "description": "Room protocol, monitor discipline and minimum crew, run without slowing the schedule."
+      },
+      {
+        "term": "MODESTY & KIT",
+        "description": "Garments, barriers and cover coordinated with costume so nothing is improvised on the floor."
+      }
+    ],
+    "figure": {
+      "slotLabel": "On-set portrait — coordinator at monitor",
+      "figNumber": "FIG. 03",
+      "figNote": "ON SET, IN PROCESS"
+    }
+  },
+
+  "why": {
+    "heading": "WHY BOOK THROUGH TAKE 3",
+    "cards": [
+      {
+        "title": "Certified & current",
+        "body": "Coordinators trained and accredited to recognised industry standards, with current production experience behind them."
+      },
+      {
+        "title": "One roster",
+        "body": "Coordinators, trained performers and matched doubles from the same roster — cast and covered in a single conversation."
+      },
+      {
+        "title": "Admin handled",
+        "body": "Agreements, contracts, fees and coordination through one point of contact, documented for your production file."
+      }
+    ]
+  }
+}

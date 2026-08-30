@@ -29,7 +29,14 @@ export interface NavItem {
 
 /** Client-facing navigation. Menu hierarchy and URL structure are independent:
     categories keep their top-level paths. /what-is-a-spact stays out of the
-    menu deliberately — it is a search landing page linked from /spacts. */
+    menu deliberately — it is a search landing page linked from /spacts.
+
+    Two tiers on purpose. Artists lists the disciplines with a standing
+    roster; Specialists lists the divisions clients arrive searching for by
+    name ("stunt double", "circus artist London", "intimacy coordinator"),
+    each with its own page so the search lands on the subject rather than on a
+    mention of it. /specialists stays the hub above them and keeps the
+    catch-all promise for briefs with no page of their own. */
 export const navLinks: NavItem[] = [
   { label: 'Home', href: '/' },
   {
@@ -42,7 +49,16 @@ export const navLinks: NavItem[] = [
       { label: 'Stand-ins & Picture Doubles', href: '/stand-ins' },
     ],
   },
-  { label: 'Specialists', href: '/specialists' },
+  {
+    label: 'Specialists',
+    href: '/specialists',
+    children: [
+      { label: 'Stunt Performers & Doubles', href: '/stunt-performers' },
+      { label: 'Circus & Physical', href: '/circus-artists' },
+      { label: 'Unique Talent', href: '/unique-talent' },
+      { label: 'Intimacy', href: '/intimacy' },
+    ],
+  },
   { label: 'Laural', href: '/laural' },
   { label: 'Who We Are', href: '/about' },
   { label: 'Credits', href: '/credits' },

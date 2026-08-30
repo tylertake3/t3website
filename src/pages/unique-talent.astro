@@ -1,0 +1,212 @@
+---
+/* /unique-talent — a standalone page, on purpose. See the note at the top of
+ * stunt-performers.astro: the specialist division pages deliberately do not
+ * share a template, so each can be developed by a different person without
+ * their changes landing on the others. Scoped with a `uni` prefix.
+ *
+ * Design direction for this one: editorial and portrait-led. This page is
+ * about people rather than sequences or skills, so the faces carry it — a row
+ * of portraits sits high up, the disciplines are set as a quiet two-column
+ * read, and the section on how these performers are represented is given
+ * proper room rather than being a footnote. Restraint is the point here: the
+ * moment this page starts shouting, it reads as a novelty act. */
+import Base from '../layouts/Base.astro';
+import { pageExists } from '../lib/pages';
+import copy from '../content/pages/unique-talent.json';
+
+const related = copy.related.items.filter((item) => pageExists(item.href));
+---
+
+<Base
+  title={copy.meta.title}
+  description={copy.meta.description}
+  ogTitle={copy.meta.ogTitle}
+  ogDescription={copy.meta.ogDescription}
+  ogImageAlt={copy.meta.ogImageAlt}
+  footerTitle={copy.meta.footerTitle}
+>
+  <!-- hero -->
+  <section class="pageHero uniHero" aria-labelledby="uniTitle">
+    <div class="pageHeroInner">
+      <p class="kicker">{copy.hero.eyebrow}</p>
+      <h1 class="pageHeroTitle uniHeroTitle" id="uniTitle">{copy.hero.heading}</h1>
+      <p class="pageHeroLede">{copy.hero.lede}</p>
+    </div>
+  </section>
+
+  <!-- portrait row: faces first, before any explanation of them -->
+  <section class="band uniPortraitBand" aria-labelledby="uniRange">
+    <div class="bandInner">
+      <div class="sectionHead uniHead">
+        <h2 class="sectionTitle" id="uniRange">{copy.portraits.heading}</h2>
+        <p class="kicker">{copy.portraits.kicker}</p>
+      </div>
+      <ul class="uniPortraits">
+        {
+          copy.portraits.items.map((item) => (
+            <li class="uniPortrait">
+              <div class="slot uniPortraitSlot"><span class="slotLabel">{item.slotLabel}</span></div>
+              <p class="uniPortraitCap">{item.caption}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="todoNote uniPortraitNote">{copy.portraits.todo}</p>
+    </div>
+  </section>
+
+  <!-- what we supply: a quiet two-column read -->
+  <section class="band" aria-labelledby="uniSupply">
+    <div class="bandInner">
+      <div class="sectionHead uniHead">
+        <h2 class="sectionTitle" id="uniSupply">{copy.supply.heading}</h2>
+        <p class="kicker">{copy.supply.kicker}</p>
+      </div>
+      <ul class="uniSupply">
+        {
+          copy.supply.items.map((item) => (
+            <li class="uniSupplyRow">
+              <h3 class="uniSupplyTitle">
+                <span class="uniSupplyNum">{item.number}</span>
+                {item.title}
+              </h3>
+              <p class="uniSupplyBody">{item.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- how we work: the most important section on this page -->
+  <section class="band bandDark uniDark" aria-labelledby="uniApproach">
+    <div class="bandInner">
+      <p class="kicker">{copy.approach.kicker}</p>
+      <h2 class="uniApproachTitle" id="uniApproach">{copy.approach.heading}</h2>
+      <p class="bandBody uniApproachBody">{copy.approach.body}</p>
+      <dl class="uniPoints">
+        {
+          copy.approach.points.map((point) => (
+            <div class="uniPoint">
+              <dt class="uniPointTerm">{point.term}</dt>
+              <dd class="uniPointDesc">{point.description}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <!-- briefs -->
+  <section class="band" aria-labelledby="uniBriefs">
+    <div class="bandInner">
+      <div class="sectionHead uniHead">
+        <h2 class="sectionTitle" id="uniBriefs">{copy.briefs.heading}</h2>
+        <p class="kicker">{copy.briefs.kicker}</p>
+      </div>
+      <ul class="uniBriefGrid">
+        {copy.briefs.items.map((item) => <li class="uniBriefItem">{item}</li>)}
+      </ul>
+      <p class="uniBriefNote">{copy.briefs.note}</p>
+    </div>
+  </section>
+
+  <!-- credits -->
+  <section class="band" aria-labelledby="uniCredits">
+    <div class="bandInner bandSplit">
+      <div>
+        <p class="kicker">{copy.credits.kicker}</p>
+        <h2 class="sectionTitle" id="uniCredits">{copy.credits.heading}</h2>
+      </div>
+      <p class="todoNote">{copy.credits.todo}</p>
+    </div>
+  </section>
+
+  <!-- cross-links -->
+  {
+    related.length > 0 && (
+      <section class="band" aria-labelledby="uniRelated">
+        <div class="bandInner">
+          <div class="sectionHead uniHead">
+            <h2 class="sectionTitle" id="uniRelated">
+              {copy.related.heading}
+            </h2>
+            <p class="kicker">{copy.related.kicker}</p>
+          </div>
+          <ul class="uniRelated">
+            {related.map((item) => (
+              <li class="uniRelatedCard">
+                <h3 class="uniRelatedName">
+                  <a class="uniRelatedLink" href={item.href}>
+                    {item.name}
+                  </a>
+                </h3>
+                <p class="uniRelatedDesc">{item.description}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <style is:global>
+    .uniHero, .uniDark { --accent:#d4704f; --muted:#96928c; }
+    .uniDark { --sub:#c7c3bd; --ink:#f4f2ee; --hair:#3a3a3e; }
+
+    .uniHead { padding-bottom:18px; }
+    .uniHeroTitle { max-width:12ch; }
+
+    /* portraits */
+    .uniPortraitBand { padding-top:96px; }
+    .uniPortraits { list-style:none; margin:34px 0 0; padding:0; display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:28px; }
+    .uniPortrait { margin:0; }
+    .uniPortraitSlot { aspect-ratio:2/3; }
+    .uniPortraitCap { margin:12px 0 0; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); }
+    .uniPortraitNote { max-width:70ch; }
+
+    /* supply — deliberately understated */
+    .uniSupply { list-style:none; margin:34px 0 0; padding:0; }
+    .uniSupplyRow { display:grid; grid-template-columns:minmax(0, 26ch) minmax(0, 1fr); gap:0 56px; align-items:baseline; border-top:1px solid var(--hair); padding:26px 0; }
+    .uniSupplyRow:last-child { border-bottom:1px solid var(--hair); }
+    .uniSupplyTitle { margin:0; font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(19px, 1.9vw, 25px); font-weight:400; letter-spacing:1px; color:var(--ink); }
+    .uniSupplyNum { display:block; margin-bottom:8px; font-family:'Jost', sans-serif; font-size:11px; letter-spacing:3px; color:var(--accent); }
+    .uniSupplyBody { margin:0; font-size:16px; font-weight:300; line-height:1.75; color:var(--sub); max-width:56ch; text-wrap:pretty; }
+
+    /* how we work */
+    .uniApproachTitle { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(30px, 4vw, 56px); font-weight:400; letter-spacing:1px; line-height:1.06; margin-top:16px; max-width:20ch; }
+    .uniApproachBody { max-width:68ch; margin-top:26px; }
+    .uniPoints { margin:48px 0 0; padding:0; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:36px; }
+    .uniPoint { border-top:1px solid var(--hair); padding-top:18px; }
+    .uniPointTerm { margin:0; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent); }
+    .uniPointDesc { margin:12px 0 0; font-size:15px; font-weight:300; line-height:1.6; color:var(--sub); text-wrap:pretty; }
+
+    /* briefs */
+    .uniBriefGrid { list-style:none; margin:34px 0 0; padding:0; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:0 48px; }
+    .uniBriefItem { border-top:1px solid var(--hair); padding:16px 0; font-size:16px; letter-spacing:1.5px; color:var(--ink); }
+    .uniBriefNote { margin:22px 0 0; font-size:12px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); }
+
+    /* cross-links */
+    .uniRelated { list-style:none; margin:34px 0 0; padding:0; display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:32px; }
+    .uniRelatedCard { border-top:1px solid var(--hair); padding-top:20px; }
+    .uniRelatedName { margin:0; font-weight:400; }
+    .uniRelatedLink { font-size:14px; letter-spacing:2.5px; text-transform:uppercase; color:var(--ink); }
+    .uniRelatedLink:hover { color:var(--accent); }
+    .uniRelatedDesc { margin:10px 0 0; font-size:14px; font-weight:300; line-height:1.6; color:var(--sub); text-wrap:pretty; }
+
+    @media (max-width:1024px) {
+      .uniPortraits { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+      .uniSupplyRow { grid-template-columns:1fr; gap:0; }
+      .uniSupplyBody { margin-top:12px; }
+      .uniPoints { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:28px; }
+      .uniBriefGrid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:0 32px; }
+      .uniRelated { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width:640px) {
+      .uniPortraits { grid-template-columns:1fr; gap:32px; }
+      .uniPoints, .uniBriefGrid, .uniRelated { grid-template-columns:1fr; gap:26px; }
+      .uniBriefGrid { gap:0; }
+    }
+  </style>
+</Base>

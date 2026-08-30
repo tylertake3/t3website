@@ -68,7 +68,7 @@ import NumberFlow from 'number-flow';
 
     var focusables = function () {
       var all = document.querySelectorAll(
-        '#siteNav a[href], #siteNav button:not([disabled]), #menuOverlay a[href]'
+        '#siteNav a[href], #siteNav button:not([disabled]), #menuOverlay a[href], #menuOverlay button:not([disabled])'
       );
       return Array.prototype.filter.call(all, function (el) {
         return el.offsetWidth > 0 || el.offsetHeight > 0 || el === document.activeElement;
@@ -113,6 +113,28 @@ import NumberFlow from 'number-flow';
        the list steps back — then the page follows. */
     var menuList = menu.querySelector('.menuList');
     var picking = false;
+
+    /* Sub-lists open on demand rather than sitting open. */
+    var toggles = menu.querySelectorAll('.menuToggle');
+    Array.prototype.forEach.call(toggles, function (toggle) {
+      toggle.addEventListener('click', function () {
+        var sub = document.getElementById(toggle.getAttribute('aria-controls'));
+        if (!sub) return;
+        var opening = toggle.getAttribute('aria-expanded') !== 'true';
+
+        if (opening) {
+          Array.prototype.forEach.call(toggles, function (other) {
+            if (other === toggle) return;
+            var otherSub = document.getElementById(other.getAttribute('aria-controls'));
+            other.setAttribute('aria-expanded', 'false');
+            if (otherSub) otherSub.hidden = true;
+          });
+        }
+
+        toggle.setAttribute('aria-expanded', opening ? 'true' : 'false');
+        sub.hidden = !opening;
+      });
+    });
 
     menu.addEventListener('click', function (e) {
       var link = e.target.closest('a');
