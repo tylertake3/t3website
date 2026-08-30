@@ -22,8 +22,24 @@ const chars = (label: string) => Array.from(label);
 
 const menuItems = navLinks
   .filter((item) => exists(item.href) || item.children?.some((c) => exists(c.href)))
-  .map((item) => ({ ...item, children: item.children?.filter((c) => exists(c.href)) }));
+  .map((item) => {
+    const children = item.children?.filter((c) => exists(c.href)) ?? [];
+    /* The group heading toggles its list open rather than navigating, so the
+       parent page would otherwise be unreachable from the menu. Put it back
+       as the first entry in the list it heads. */
+    const withOverview =
+      children.length > 0 && exists(item.href)
+        ? [{ label: `All ${item.label.toLowerCase()}`, href: item.href }, ...children]
+        : children;
+    return { ...item, children: withOverview };
+  });
 const showPerformerLink = exists(performerLink.href);
+
+/* Sub-lists start closed, except the one holding the page you are on — so
+   arriving on /models from search, the menu shows you where you are. */
+const groupId = (label: string) => `menuGroup-${label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+const isOpenGroup = (item: (typeof menuItems)[number]) =>
+  isCurrent(item.href) || item.children.some((c) => isCurrent(c.href));
 ---
 
 <header class={overDark ? 'nav' : 'nav navOnLight'} id="siteNav">
@@ -55,30 +71,28 @@ const showPerformerLink = exists(performerLink.href);
     <nav class="menuPrimary" aria-label="Primary">
       <ul class="menuList">
         {
-          menuItems.map((item, ni) => (
-            <li class="menuItem" style={`--n:${ni}`}>
-              {exists(item.href) ? (
-                <a
-                  class="menuLink"
-                  href={item.href}
-                  aria-label={item.label}
-                  aria-current={isCurrent(item.href) ? 'page' : undefined}
+          menuItems.map((item, ni) =>
+            item.children.length > 0 ? (
+              /* A group: the heading opens its list instead of navigating, and
+                 the parent page sits inside the list as "All …". */
+              <li class="menuItem menuItemGroup" style={`--n:${ni}`}>
+                <button
+                  class="menuLink menuToggle"
+                  type="button"
+                  aria-expanded={isOpenGroup(item) ? 'true' : 'false'}
+                  aria-controls={groupId(item.label)}
                 >
-                  <span class="menuDash" aria-hidden="true" />
-                  <span class="menuWord" aria-hidden="true">
-                    <span class="menuWipe" />
-                    {chars(item.label).map((ch, ci) => (
-                      <span class="menuCh" style={`--i:${ci}`}>{ch === ' ' ? ' ' : ch}</span>
-                    ))}
-                  </span>
-                  <span class="menuArrow" aria-hidden="true">↗</span>
-                </a>
-              ) : (
-                /* parent page not built yet — the label still groups its children */
-                <span class="menuLink menuLinkPlain">{item.label}</span>
-              )}
-              {item.children && item.children.length > 0 && (
-                <ul class="menuSubList">
+                  <span class="menuToggleLabel">{item.label}</span>
+                  {/* The same arrow the other menu items use, turned to point
+                      down — these headings open a list rather than going
+                      somewhere, so it must not read as "this navigates". It
+                      turns through 180° to point up while the list is open.
+                      Deliberately its own class rather than .menuArrow: that
+                      one is revealed on hover, and a group's sign has to be
+                      visible before you touch it. */}
+                  <span class="menuGroupArrow" aria-hidden="true">↗</span>
+                </button>
+                <ul class="menuSubList" id={groupId(item.label)} hidden={!isOpenGroup(item)}>
                   {item.children.map((child) => (
                     <li>
                       <a class="menuSubLink" href={child.href} aria-current={isCurrent(child.href) ? 'page' : undefined}>
@@ -87,9 +101,27 @@ const showPerformerLink = exists(performerLink.href);
                     </li>
                   ))}
                 </ul>
-              )}
-            </li>
-          ))
+              </li>
+            ) : (
+              <li class="menuItem" style={`--n:${ni}`}>
+                {exists(item.href) ? (
+                  <a class="menuLink" href={item.href} aria-label={item.label} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                    <span class="menuDash" aria-hidden="true" />
+                    <span class="menuWord" aria-hidden="true">
+                      <span class="menuWipe" />
+                      {chars(item.label).map((ch, ci) => (
+                        <span class="menuCh" style={`--i:${ci}`}>{ch === ' ' ? ' ' : ch}</span>
+                      ))}
+                    </span>
+                    <span class="menuArrow" aria-hidden="true">↗</span>
+                  </a>
+                ) : (
+                  /* parent page not built yet — the label still groups its children */
+                  <span class="menuLink menuLinkPlain">{item.label}</span>
+                )}
+              </li>
+            )
+          )
         }
       </ul>
     </nav>

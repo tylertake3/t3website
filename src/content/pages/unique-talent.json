@@ -1,0 +1,130 @@
+{
+  "meta": {
+    "title": "Unique Talent & Distinctive Casting | Take 3 Agency",
+    "description": "Distinctive casting for film, television and commercial — very tall and short performers, twins, unusual features and memorable faces. Take 3 Agency represents performers whose look is the reason they are cast.",
+    "ogTitle": "Unique Talent | Take 3 Agency",
+    "ogDescription": "Performers whose look is the reason they are cast — height, stature, features and faces that hold a frame.",
+    "ogImageAlt": "A performer photographed in profile against a plain backdrop, lit to hold the character of the face.",
+    "footerTitle": "Cast a face that holds the frame"
+  },
+
+  "hero": {
+    "eyebrow": "SPECIALISTS · UNIQUE TALENT",
+    "heading": "Unique talent",
+    "lede": "Performers whose look is the reason they are cast — and who can act, take direction and carry a scene once they are.",
+    "tags": ["HEIGHT", "STATURE", "TWINS", "FEATURES", "CHARACTER"]
+  },
+
+  "portraits": {
+    "kicker": "THE RANGE",
+    "heading": "Some of the people on this roster",
+    "items": [
+      { "slotLabel": "Portrait — 2:3", "caption": "FIG. 01" },
+      { "slotLabel": "Portrait — 2:3", "caption": "FIG. 02" },
+      { "slotLabel": "Portrait — 2:3", "caption": "FIG. 03" },
+      { "slotLabel": "Portrait — 2:3", "caption": "FIG. 04" }
+    ],
+    "todo": "TODO: photography and captions — four portraits, chosen with each performer and used with their permission. Caption each with the performer's name rather than their measurement or feature; how someone is described here is theirs to decide."
+  },
+
+  "supply": {
+    "kicker": "WHAT WE SUPPLY",
+    "heading": "When the look is the brief",
+    "items": [
+      {
+        "number": "01",
+        "title": "Height and stature",
+        "body": "Performers at the far ends of the range — from very tall to very short — cast for roles written around their height, and represented as actors rather than as a measurement."
+      },
+      {
+        "number": "02",
+        "title": "Twins and lookalikes",
+        "body": "Identical and non-identical twins, close matches and doubles for continuity, split-screen, time-jump and multiple-role work."
+      },
+      {
+        "number": "03",
+        "title": "Distinctive features",
+        "body": "Faces and figures that stay with an audience — striking bone structure, natural hair, tattoos, scarring, and looks a standard casting call rarely reaches."
+      },
+      {
+        "number": "04",
+        "title": "Character and real people",
+        "body": "Faces with a life behind them, for productions and brands that want believable over polished, and memorable over neutral."
+      }
+    ]
+  },
+
+  "approach": {
+    "kicker": "HOW WE WORK",
+    "heading": "Performers first, description second",
+    "body": "Everyone on this roster is here as a professional performer. We cast them for what a brief actually needs, we ask before we describe anyone in a particular way, and we do not put people forward for work that trades on their appearance at their expense. If a role is written badly or a treatment is heading somewhere we would not be comfortable sending someone into, we will raise it with you early rather than quietly decline. It has never cost a good production anything to be asked.",
+    "points": [
+      {
+        "term": "REPRESENTED PROPERLY",
+        "description": "Billed and briefed as performers, with the same credits, rates and conditions as any other booking."
+      },
+      {
+        "term": "DESCRIBED THEIR WAY",
+        "description": "How someone is described in a submission is agreed with them, not assumed by us or by a brief."
+      },
+      {
+        "term": "HONEST ABOUT FIT",
+        "description": "If a role is wrong for the person or the person is wrong for the role, you will hear it from us first."
+      }
+    ]
+  },
+
+  "briefs": {
+    "kicker": "ILLUSTRATIVE, NOT EXHAUSTIVE",
+    "heading": "The kind of brief this answers",
+    "items": [
+      "Very tall performers",
+      "Short-statured performers",
+      "Identical twins",
+      "Specific builds",
+      "Memorable faces",
+      "Heavily tattooed",
+      "Natural and distinctive hair",
+      "Older character faces",
+      "Real-people casting"
+    ],
+    "note": "Categories, not a closed list — describe the role, not the label."
+  },
+
+  "credits": {
+    "kicker": "SELECTED WORK",
+    "heading": "Where this has been booked",
+    "todo": "TODO: copy — two or three genuine bookings, cleared with both the performer and the production. Performer consent matters more than usual on this page. Nothing here may be invented."
+  },
+
+  "related": {
+    "kicker": "WHERE THE OVERLAP IS REAL",
+    "heading": "Related disciplines",
+    "items": [
+      {
+        "name": "Models",
+        "href": "/models",
+        "description": "Faces for campaigns, character and camera — cast from a working roster, not a lookbook.",
+        "linkLabel": "View models"
+      },
+      {
+        "name": "Stand-ins & picture doubles",
+        "href": "/stand-ins",
+        "description": "Accurate matches to your leads, experienced on set.",
+        "linkLabel": "View stand-ins"
+      },
+      {
+        "name": "SPACTs",
+        "href": "/spacts",
+        "description": "Real skills, delivered safely on camera.",
+        "linkLabel": "View SPACTs"
+      },
+      {
+        "name": "Specialists",
+        "href": "/specialists",
+        "description": "Anything sourced to brief, beyond the standing roster.",
+        "linkLabel": "View specialists"
+      }
+    ]
+  }
+}

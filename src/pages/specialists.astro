@@ -23,6 +23,12 @@ const builtFromRoot = (href: string) => {
 };
 
 const related = copy.related.items.filter((item) => pageExists(item.href) || builtFromRoot(item.href));
+
+/* The divisions clients search for by name, each with a page of its own.
+   Same build-time guard: a division only appears here once its page exists,
+   so the hub can be extended a division at a time without ever showing a
+   client a link to nothing. */
+const divisions = copy.divisions.items.filter((item) => pageExists(item.href) || builtFromRoot(item.href));
 ---
 
 <Base
@@ -51,6 +57,37 @@ const related = copy.related.items.filter((item) => pageExists(item.href) || bui
       <p class="todoNote">{copy.promise.body}</p>
     </div>
   </section>
+
+  <!-- the divisions: the specialist briefs that come in by name -->
+  {
+    divisions.length > 0 && (
+      <section class="band" aria-labelledby="divisionsTitle">
+        <div class="bandInner">
+          <div class="sectionHead specHead">
+            <h2 class="sectionTitle" id="divisionsTitle">
+              {copy.divisions.heading}
+            </h2>
+            <p class="kicker">{copy.divisions.kicker}</p>
+          </div>
+          <ul class="specDivisions">
+            {divisions.map((item) => (
+              <li class="specDivisionCard">
+                <h3 class="specDivisionName">
+                  <a class="specDivisionLink" href={item.href}>
+                    {item.name}
+                  </a>
+                </h3>
+                <p class="specDivisionDesc">{item.description}</p>
+                <a class="specDivisionGo" href={item.href}>
+                  {item.linkLabel.toUpperCase()}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
 
   <!-- examples: illustrative rather than exhaustive -->
   <section class="band" aria-labelledby="examplesTitle">
@@ -151,6 +188,18 @@ const related = copy.related.items.filter((item) => pageExists(item.href) || bui
     .specHead { padding-bottom:18px; }
     .specHeroTodo { max-width:56ch; }
 
+    /* the divisions — the hub's main job. Given more weight than the
+       cross-links at the foot of the page: this is what most visitors have
+       come for, and it is the route into the pages that carry the search. */
+    .specDivisions { list-style:none; margin:34px 0 0; padding:0; display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:36px 48px; }
+    .specDivisionCard { border-top:1px solid var(--hair); padding-top:22px; }
+    .specDivisionName { margin:0; font-weight:400; }
+    .specDivisionLink { font-size:20px; letter-spacing:2.5px; text-transform:uppercase; color:var(--ink); }
+    .specDivisionLink:hover { color:var(--accent); }
+    .specDivisionDesc { margin:12px 0 0; font-size:16px; font-weight:300; line-height:1.6; color:var(--sub); text-wrap:pretty; }
+    .specDivisionGo { display:inline-block; margin-top:16px; font-size:11px; letter-spacing:2.5px; color:var(--accent); }
+    .specDivisionGo:hover { color:var(--ink); }
+
     /* examples: a plain hairline list, so it reads as categories rather than
        as a claim about who has been booked */
     .specExampleGrid { list-style:none; margin:34px 0 0; padding:0; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:0 48px; }
@@ -184,7 +233,7 @@ const related = copy.related.items.filter((item) => pageExists(item.href) || bui
 
     @media (max-width:640px) {
       .specExampleGrid { grid-template-columns:1fr; }
-      .specSteps, .specRelated { grid-template-columns:1fr; gap:26px; }
+      .specSteps, .specRelated, .specDivisions { grid-template-columns:1fr; gap:26px; }
       .specSpecifics { margin-top:40px; }
     }
   </style>

@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Specialist Casting for Film, TV & Commercial | Take 3 Agency",
-    "description": "When a brief calls for a skill or a look beyond the standing roster, Take 3 sources it: footballers, circus artists, stunt performers, motion capture and more.",
+    "description": "Specialist casting from Take 3 Agency: stunt performers and doubles, circus and physical artists, unique talent and intimacy coordinators — plus anything else a brief calls for beyond the standing roster.",
     "ogTitle": "Specialists | Take 3 Agency",
     "ogDescription": "When a brief calls for a skill or a look beyond the standing roster, Take 3 sources it.",
     "footerTitle": "Tell us what you need"
@@ -14,26 +14,57 @@
   "promise": {
     "kicker": "THE PROMISE",
     "heading": "Sourcing beyond the standing roster",
-    "body": "TODO: copy — what actually happens when a brief asks for something unusual. Should make clear that Specialists is the flexible tier rather than a fifth discipline, and that it is where the crossover between the other categories resolves itself."
+    "body": "TODO: copy — what actually happens when a brief asks for something unusual. Should introduce the divisions below as the things Take 3 is asked for by name, while making clear that Specialists remains the flexible tier: a brief that fits none of them is still welcome, and this is where crossover between the categories resolves itself."
   },
+  "divisions": {
+    "kicker": "THE DIVISIONS",
+    "heading": "Where clients come to us by name",
+    "items": [
+      {
+        "name": "Stunt performers & doubles",
+        "href": "/stunt-performers",
+        "description": "Action-trained talent and matched doubles — cleared for the sequence and safe on the day.",
+        "linkLabel": "View stunts"
+      },
+      {
+        "name": "Circus & physical",
+        "href": "/circus-artists",
+        "description": "Aerialists, acrobats and physical performers, trained to performance standard.",
+        "linkLabel": "View circus artists"
+      },
+      {
+        "name": "Unique talent",
+        "href": "/unique-talent",
+        "description": "Performers whose look is the reason they are cast — height, stature, twins and memorable faces.",
+        "linkLabel": "View unique talent"
+      },
+      {
+        "name": "Intimacy",
+        "href": "/intimacy",
+        "description": "Certified coordinators and intimacy-trained performers, for content handled properly.",
+        "linkLabel": "View intimacy"
+      }
+    ]
+  },
+
   "examples": {
     "kicker": "ILLUSTRATIVE, NOT EXHAUSTIVE",
-    "heading": "The kind of thing this covers",
+    "heading": "And everything without a page of its own",
     "items": [
       "Footballers",
-      "Circus artists",
-      "Stunt performers",
       "Skateboarders",
-      "Creature performers",
-      "Martial artists",
       "Athletes",
+      "Martial artists",
+      "Creature performers",
       "Motion capture",
-      "Military and armed police"
+      "Military and armed police",
+      "Drivers and riders",
+      "Musicians"
     ],
     "note": "Categories, not a closed list.",
     "specifics": {
-      "heading": "Physical and character specifics",
-      "body": "A brief calling for a 6ft 9 actor, an identical twin, a particular build or a distinctive face is a specialist requirement, not a separate division."
+      "heading": "If it is not listed, ask anyway",
+      "body": "The divisions above are the briefs we get most often, not the limit of what we source. A brief nobody has asked for before is still a brief — tell us what the scene needs and we will go and find it."
     }
   },
   "process": {

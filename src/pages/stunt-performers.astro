@@ -1,0 +1,209 @@
+---
+/* /stunt-performers — a standalone page, on purpose.
+ *
+ * The three specialist division pages deliberately do NOT share a template:
+ * each is being built out by a different person, and a shared component would
+ * mean one person's design change landing on the other two. Everything here is
+ * scoped with a `stu` prefix so it cannot leak, and the only shared pieces are
+ * the global tokens and the band/hero primitives in global.css.
+ *
+ * Design direction for this one: technical and index-like. Hard rules, an
+ * ordered list that reads like a call sheet, the safety band given the most
+ * weight on the page. Sequences before faces. */
+import Base from '../layouts/Base.astro';
+import { pageExists } from '../lib/pages';
+import copy from '../content/pages/stunt-performers.json';
+
+const related = copy.related.items.filter((item) => pageExists(item.href));
+---
+
+<Base
+  title={copy.meta.title}
+  description={copy.meta.description}
+  ogTitle={copy.meta.ogTitle}
+  ogDescription={copy.meta.ogDescription}
+  ogImageAlt={copy.meta.ogImageAlt}
+  footerTitle={copy.meta.footerTitle}
+>
+  <!-- hero -->
+  <section class="pageHero stuHero" aria-labelledby="stuTitle">
+    <div class="pageHeroInner">
+      <p class="kicker">{copy.hero.eyebrow}</p>
+      <h1 class="pageHeroTitle" id="stuTitle">{copy.hero.heading}</h1>
+      <p class="pageHeroLede">{copy.hero.lede}</p>
+      <ul class="stuTagRow">
+        {copy.hero.tags.map((tag) => <li>{tag}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- wide action still, sitting hard under the hero -->
+  <section class="stuPlateBand" aria-label={copy.plate.figNote}>
+    <figure class="stuPlate">
+      <div class="slot stuPlateSlot"><span class="slotLabel">{copy.plate.slotLabel}</span></div>
+      <figcaption class="stuPlateCap">
+        <span>{copy.plate.figNumber}</span><span>{copy.plate.figNote}</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- what we supply: an ordered index rather than cards -->
+  <section class="band" aria-labelledby="stuSupply">
+    <div class="bandInner">
+      <div class="sectionHead stuHead">
+        <h2 class="sectionTitle" id="stuSupply">{copy.supply.heading}</h2>
+        <p class="kicker">{copy.supply.kicker}</p>
+      </div>
+      <ol class="stuIndex">
+        {
+          copy.supply.items.map((item) => (
+            <li class="stuIndexRow">
+              <span class="stuIndexNum">{item.number}</span>
+              <h3 class="stuIndexTitle">{item.title}</h3>
+              <p class="stuIndexBody">{item.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- safety: the heaviest band on the page, by design -->
+  <section class="band bandDark stuDark" aria-labelledby="stuApproach">
+    <div class="bandInner">
+      <p class="kicker">{copy.approach.kicker}</p>
+      <h2 class="stuApproachTitle" id="stuApproach">{copy.approach.heading}</h2>
+      <p class="bandBody stuApproachBody">{copy.approach.body}</p>
+      <dl class="stuPoints">
+        {
+          copy.approach.points.map((point) => (
+            <div class="stuPoint">
+              <dt class="stuPointTerm">{point.term}</dt>
+              <dd class="stuPointDesc">{point.description}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <!-- the kind of brief this answers -->
+  <section class="band" aria-labelledby="stuBriefs">
+    <div class="bandInner">
+      <div class="sectionHead stuHead">
+        <h2 class="sectionTitle" id="stuBriefs">{copy.briefs.heading}</h2>
+        <p class="kicker">{copy.briefs.kicker}</p>
+      </div>
+      <ul class="stuBriefGrid">
+        {copy.briefs.items.map((item) => <li class="stuBriefItem">{item}</li>)}
+      </ul>
+      <p class="stuBriefNote">{copy.briefs.note}</p>
+    </div>
+  </section>
+
+  <!-- credits: needs the client's own booking history -->
+  <section class="band" aria-labelledby="stuCredits">
+    <div class="bandInner bandSplit">
+      <div>
+        <p class="kicker">{copy.credits.kicker}</p>
+        <h2 class="sectionTitle" id="stuCredits">{copy.credits.heading}</h2>
+      </div>
+      <p class="todoNote">{copy.credits.todo}</p>
+    </div>
+  </section>
+
+  <!-- cross-links -->
+  {
+    related.length > 0 && (
+      <section class="band" aria-labelledby="stuRelated">
+        <div class="bandInner">
+          <div class="sectionHead stuHead">
+            <h2 class="sectionTitle" id="stuRelated">
+              {copy.related.heading}
+            </h2>
+            <p class="kicker">{copy.related.kicker}</p>
+          </div>
+          <ul class="stuRelated">
+            {related.map((item) => (
+              <li class="stuRelatedCard">
+                <h3 class="stuRelatedName">
+                  <a class="stuRelatedLink" href={item.href}>
+                    {item.name}
+                  </a>
+                </h3>
+                <p class="stuRelatedDesc">{item.description}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <style is:global>
+    /* Dark in both themes, so pin the two tokens tuned for a cream page. */
+    .stuHero, .stuDark { --accent:#d4704f; --muted:#96928c; }
+    .stuDark { --sub:#c7c3bd; --ink:#f4f2ee; --hair:#3a3a3e; }
+
+    .stuHead { padding-bottom:18px; }
+
+    .stuTagRow { list-style:none; margin:30px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:0; }
+    .stuTagRow li { font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); padding:0 18px; border-left:1px solid var(--hair); }
+    .stuTagRow li:first-child { padding-left:0; border-left:0; }
+
+    /* wide plate */
+    .stuPlateBand { padding:0 0 96px; }
+    .stuPlate { max-width:1280px; margin:0 auto; padding:0 40px; }
+    .stuPlateSlot { aspect-ratio:21/9; }
+    .stuPlateCap { display:flex; justify-content:space-between; gap:24px; margin-top:12px; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); }
+
+    /* index */
+    .stuIndex { list-style:none; margin:34px 0 0; padding:0; counter-reset:none; }
+    .stuIndexRow { display:grid; grid-template-columns:78px minmax(0, 24ch) minmax(0, 1fr); gap:0 36px; align-items:start; border-top:1px solid var(--hair); padding:26px 0; }
+    .stuIndexRow:last-child { border-bottom:1px solid var(--hair); }
+    .stuIndexNum { font-family:'Anton', 'Jost', sans-serif; font-size:26px; letter-spacing:1px; color:var(--accent); line-height:1; padding-top:2px; }
+    .stuIndexTitle { margin:0; font-size:17px; letter-spacing:2px; text-transform:uppercase; font-weight:400; color:var(--ink); }
+    .stuIndexBody { margin:0; font-size:15px; font-weight:300; line-height:1.65; color:var(--sub); text-wrap:pretty; }
+
+    /* safety band */
+    .stuApproachTitle { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(32px, 4.4vw, 62px); font-weight:400; letter-spacing:1px; line-height:1.05; margin-top:16px; max-width:18ch; }
+    .stuApproachBody { max-width:66ch; margin-top:26px; }
+    .stuPoints { margin:52px 0 0; padding:0; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:36px; }
+    .stuPoint { border-top:2px solid var(--accent); padding-top:18px; }
+    .stuPointTerm { margin:0; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent); }
+    .stuPointDesc { margin:12px 0 0; font-size:15px; font-weight:300; line-height:1.6; color:var(--sub); text-wrap:pretty; }
+
+    /* briefs */
+    .stuBriefGrid { list-style:none; margin:34px 0 0; padding:0; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:0 48px; }
+    .stuBriefItem { border-top:1px solid var(--hair); padding:16px 0; font-size:16px; letter-spacing:1.5px; color:var(--ink); }
+    .stuBriefNote { margin:22px 0 0; font-size:12px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); }
+
+    /* cross-links */
+    .stuRelated { list-style:none; margin:34px 0 0; padding:0; display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:32px; }
+    .stuRelatedCard { border-top:1px solid var(--hair); padding-top:20px; }
+    .stuRelatedName { margin:0; font-weight:400; }
+    .stuRelatedLink { font-size:14px; letter-spacing:2.5px; text-transform:uppercase; color:var(--ink); }
+    .stuRelatedLink:hover { color:var(--accent); }
+    .stuRelatedDesc { margin:10px 0 0; font-size:14px; font-weight:300; line-height:1.6; color:var(--sub); text-wrap:pretty; }
+
+    @media (max-width:1024px) {
+      .stuIndexRow { grid-template-columns:60px minmax(0, 1fr); gap:0 24px; }
+      .stuIndexBody { grid-column:2; margin-top:10px; }
+      .stuPoints { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:28px; }
+      .stuBriefGrid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:0 32px; }
+      .stuRelated { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width:640px) {
+      .stuPlateBand { padding-bottom:64px; }
+      .stuPlate { padding:0 20px; }
+      .stuPlateSlot { aspect-ratio:16/10; }
+      .stuIndexRow { grid-template-columns:1fr; padding:22px 0; }
+      .stuIndexTitle { margin-top:10px; }
+      .stuIndexBody { grid-column:1; }
+      .stuPoints, .stuBriefGrid, .stuRelated { grid-template-columns:1fr; gap:26px; }
+      .stuBriefGrid { gap:0; }
+      .stuTagRow li { padding:0 12px; }
+    }
+  </style>
+</Base>

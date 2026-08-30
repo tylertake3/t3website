@@ -125,8 +125,50 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline:2px so
 .menuLinkPlain { color:var(--muted); }
 .menuLinkPlain:hover { color:var(--muted); }
 .menuLink[aria-current="page"] { color:var(--accent); }
+
+/* group headings open their own list rather than navigating — the parent page
+   is the first entry inside it. Reset the button back to the link's look so
+   ARTISTS and SPECIALISTS sit level with HOME and CREDITS. */
+.menuToggle { display:flex; align-items:center; gap:clamp(10px, 1.2vw, 20px); width:100%; background:none; border:0; padding:0; margin:0; text-align:left; cursor:pointer; -webkit-appearance:none; appearance:none; }
+.menuToggleLabel { display:inline-block; }
+/* ↗ turned to point down (135° from its drawn angle), and up when the group is
+   open. Same glyph as the arrow on the navigating items, so the menu keeps one
+   arrow language, but pointing at the list it opens rather than off the page. */
+.menuGroupArrow {
+  flex:none;
+  display:inline-block;
+  font-size:clamp(20px, 1.9vw, 30px);
+  line-height:1;
+  color:var(--muted);
+  transform:rotate(135deg);
+  transition:transform 0.34s cubic-bezier(0.3, 0, 0.2, 1), color 0.2s ease;
+}
+.menuToggle:hover .menuGroupArrow, .menuToggle[aria-expanded="true"] .menuGroupArrow { color:var(--accent); }
+.menuToggle[aria-expanded="true"] .menuGroupArrow { transform:rotate(315deg); }
+@media (prefers-reduced-motion:reduce) { .menuGroupArrow { transition:none; } }
+
 .menuSubList { list-style:none; margin:6px 0 18px; padding:0 0 0 clamp(16px, 2.4vw, 34px); border-left:1px solid var(--ctrlBorder); }
 .menuSubLink { display:block; padding:7px 0; font-size:clamp(14px, 1.2vw, 17px); letter-spacing:2px; text-transform:uppercase; color:var(--sub); transition:transform 0.28s cubic-bezier(0.3, 0, 0.2, 1), color 0.28s cubic-bezier(0.3, 0, 0.2, 1), opacity 0.34s ease; }
+.menuSubList[hidden] { display:none; }
+
+/* Opening a group reveals its entries in sequence, same easing and roughly the
+   same step as the genre strip on the homepage — the menu should move like the
+   rest of the site rather than snapping open. `hidden` flips display, so the
+   run restarts each time a group is opened. */
+.menuSubList:not([hidden]) li {
+  opacity:0;
+  translate:0 -4px;
+  animation:menuSubIn 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.menuSubList:not([hidden]) li:nth-child(1) { animation-delay:0.02s; }
+.menuSubList:not([hidden]) li:nth-child(2) { animation-delay:0.07s; }
+.menuSubList:not([hidden]) li:nth-child(3) { animation-delay:0.12s; }
+.menuSubList:not([hidden]) li:nth-child(4) { animation-delay:0.17s; }
+.menuSubList:not([hidden]) li:nth-child(5) { animation-delay:0.22s; }
+.menuSubList:not([hidden]) li:nth-child(n+6) { animation-delay:0.27s; }
+@keyframes menuSubIn {
+  to { opacity:1; translate:0 0; }
+}
 .menuSubLink:hover, .menuSubLink[aria-current="page"] { color:var(--accent); }
 .menuSubLink:hover, .menuSubLink:focus-visible { transform:translateX(10px); }
 
@@ -201,6 +243,37 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .heroStrip { position:absolute; left:0; right:0; bottom:0; z-index:2; border-top:1px solid var(--heroLine); }
 .heroStrip div { display:flex; flex-wrap:wrap; justify-content:center; column-gap:14px; row-gap:8px; padding:20px 40px; font-size:13px; letter-spacing:3px; color:var(--heroInkSoft); }
 .heroStrip .sep { color:var(--heroInkFaint); }
+
+/* genre strip: opens from the centre of the row outwards, gentle lift on hover.
+   --gi is the word's distance from the middle, not its index */
+.heroStrip .genre {
+  opacity:0;
+  scale:0.86;
+  translate:0 6px;
+  animation:genreIn 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay:calc(0.45s + var(--gi, 0) * 0.09s);
+}
+.heroStrip .sep {
+  opacity:0;
+  animation:genreSepIn 0.5s ease forwards;
+  animation-delay:calc(0.55s + var(--gi, 0) * 0.09s);
+}
+.heroStrip .genre {
+  display:inline-block;
+  color:var(--heroInkSoft);
+  text-decoration:none;
+  transition:color 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.heroStrip div:hover .genre { color:var(--heroInkFaint); }
+.heroStrip div:hover .genre:hover { color:var(--heroInk); transform:translateY(-2px); }
+
+@keyframes genreIn {
+  from { opacity:0; scale:0.86; translate:0 6px; }
+  to   { opacity:1; scale:1; translate:0 0; }
+}
+@keyframes genreSepIn {
+  to { opacity:1; }
+}
 .nw { white-space:nowrap; }
 
 /* ---------- about ---------- */
@@ -377,6 +450,12 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   .menuLink:hover .menuCh, .menuLink.is-picked .menuCh,
   .menuJoinLink:hover .menuCh { transform:none; }
   .menuJoinLink:hover, .menuSubLink:hover { transform:none; }
+  .heroStrip .genre, .heroStrip .sep, .menuSubList:not([hidden]) li {
+    animation:none !important;
+    opacity:1;
+    translate:none;
+    scale:none;
+  }
   html { scroll-behavior:auto; }
 }
 
