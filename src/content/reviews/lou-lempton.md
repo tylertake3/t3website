@@ -2,6 +2,7 @@
 name: "Lou\nLempton"
 role: "Intimacy Coordinator"
 credits: "This ends meat"
+showOnHomepage: false
 order: 17
 ---
 

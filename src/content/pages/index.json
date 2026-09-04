@@ -10,16 +10,46 @@
     "title": "The artists\nbehind the\nAction.",
     "seenOnLabel": "AS SEEN ON",
     "strip": [
-      { "label": "DANCERS", "href": "/dancers" },
-      { "label": "FIGHTERS", "href": "/spacts" },
-      { "label": "STUNT PERFORMERS", "href": "/specialists" },
-      { "label": "SPACTS", "href": "/spacts" },
-      { "label": "MODELS", "href": "/models" },
-      { "label": "CIRCUS ARTISTS", "href": "/specialists" },
-      { "label": "MILITARY", "href": "/spacts" },
-      { "label": "STAND-INS", "href": "/stand-ins" },
-      { "label": "ATHLETES", "href": "/specialists" },
-      { "label": "INTIMACY", "href": "/intimacy" }
+      {
+        "label": "DANCERS",
+        "href": "/dancers"
+      },
+      {
+        "label": "FIGHTERS",
+        "href": "/spacts"
+      },
+      {
+        "label": "STUNT PERFORMERS",
+        "href": "/specialists"
+      },
+      {
+        "label": "SPACTS",
+        "href": "/spacts"
+      },
+      {
+        "label": "MODELS",
+        "href": "/models"
+      },
+      {
+        "label": "CIRCUS ARTISTS",
+        "href": "/specialists"
+      },
+      {
+        "label": "MILITARY",
+        "href": "/spacts"
+      },
+      {
+        "label": "STAND-INS",
+        "href": "/stand-ins"
+      },
+      {
+        "label": "ATHLETES",
+        "href": "/specialists"
+      },
+      {
+        "label": "INTIMACY",
+        "href": "/intimacy"
+      }
     ]
   },
   "about": {
@@ -60,7 +90,8 @@
   "clients": {
     "heading": "Who we've supplied",
     "kicker": "FILM · TV · ADVERTISING",
-    "body": "The companies we've supplied artists for — seventy-five of the world's biggest names across film, TV and advertising."
+    "body": "The companies we've supplied artists for — seventy-five of the world's biggest names across film, TV and advertising.",
+    "turnHint": "Click the wall for more"
   },
   "credits": {
     "heading": "Our credits",

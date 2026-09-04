@@ -1,82 +1,118 @@
 {
   "categories": [
     {
-      "label": "Dancers",
-      "name": "DANCERS",
-      "image": "",
+      "label": "Circus",
+      "name": "CIRCUS",
+      "image": "/uploads/supply-circus.webp",
+      "href": "/circus-artists"
+    },
+    {
+      "label": "Dance",
+      "name": "DANCE",
+      "image": "/uploads/supply-dance.webp",
       "href": "/dancers"
     },
     {
       "label": "BMX",
       "name": "BMX",
-      "image": "",
+      "image": "/uploads/supply-bmx.webp",
       "href": "/spacts"
     },
     {
       "label": "Fighters",
       "name": "FIGHTERS",
-      "image": "",
+      "image": "/uploads/supply-fighters.webp",
       "href": "/spacts"
     },
     {
-      "label": "Gymnasts",
-      "name": "GYMNASTS",
-      "image": "",
-      "href": "/spacts"
-    },
-    {
-      "label": "Models",
-      "name": "MODELS",
-      "image": "",
-      "href": "/models"
-    },
-    {
-      "label": "Skateboard",
-      "name": "SKATEBOARD",
-      "image": "",
+      "label": "Military",
+      "name": "MILITARY",
+      "image": "/uploads/supply-military.webp",
       "href": "/spacts"
     },
     {
       "label": "Intimacy",
       "name": "INTIMACY",
-      "image": "",
+      "image": "/uploads/supply-intimacy.webp",
       "href": "/intimacy"
     },
     {
-      "label": "Skaters",
-      "name": "SKATERS",
-      "image": "",
-      "href": "/spacts"
-    },
-    {
-      "label": "Contortion",
-      "name": "CONTORTION",
-      "image": "",
-      "href": "/spacts"
-    },
-    {
-      "label": "Circus",
-      "name": "CIRCUS",
-      "image": "",
+      "label": "Gymnasts",
+      "name": "GYMNASTS",
+      "image": "/uploads/supply-gymnasts.webp",
       "href": "/spacts"
     },
     {
       "label": "Unique",
       "name": "UNIQUE",
-      "image": "",
+      "image": "/uploads/supply-unique.webp",
+      "href": "/unique-talent"
+    },
+    {
+      "label": "Skateboard",
+      "name": "SKATEBOARD",
+      "image": "/uploads/supply-skateboard.webp",
+      "href": "/spacts"
+    },
+    {
+      "label": "Models",
+      "name": "MODELS",
+      "image": "/uploads/supply-models.webp",
+      "href": "/models"
+    },
+    {
+      "label": "Skating",
+      "name": "SKATING",
+      "image": "/uploads/supply-skaters.webp",
       "href": "/spacts"
     },
     {
       "label": "Firearms",
       "name": "FIREARMS",
-      "image": "",
+      "image": "/uploads/supply-firearms.webp",
       "href": "/spacts"
+    },
+    {
+      "label": "Contortion",
+      "name": "CONTORTION",
+      "image": "/uploads/supply-contortion.webp",
+      "href": "/spacts"
+    },
+    {
+      "label": "Dance",
+      "name": "DANCE",
+      "image": "/uploads/supply-dance-2.webp",
+      "href": "/dancers"
+    },
+    {
+      "label": "Breakdance",
+      "name": "BREAKDANCE",
+      "image": "/uploads/supply-breakdance.webp",
+      "href": "/dancers"
     },
     {
       "label": "Fitness",
       "name": "FITNESS",
-      "image": "",
+      "image": "/uploads/supply-fitness.webp",
       "href": "/spacts"
+    },
+    {
+      "label": "Intimacy",
+      "name": "INTIMACY",
+      "image": "/uploads/supply-intimacy-2.webp",
+      "href": "/intimacy"
+    },
+    {
+      "label": "Firearms",
+      "name": "FIREARMS",
+      "image": "/uploads/supply-firearms-2.webp",
+      "href": "/spacts"
+    },
+    {
+      "label": "Unique",
+      "name": "UNIQUE",
+      "image": "/uploads/supply-unique-2.webp",
+      "href": "/unique-talent"
     }
   ]
 }

@@ -1,364 +1,364 @@
 {
   "clients": [
     {
-      "height": 50,
-      "light": "/assets/logos/s3-r4c5.png",
-      "dark": "/assets/logos/s3-r4c5-c.png"
+      "height": 58,
+      "light": "/assets/logos/20th-century-fox.png",
+      "dark": "/assets/logos/20th-century-fox-c.png"
     },
     {
-      "height": 50,
-      "light": "/assets/logos/s3-r1c2.png",
-      "dark": "/assets/logos/s3-r1c2-c.png"
+      "height": 58,
+      "light": "/assets/logos/absolut-vodka.svg",
+      "dark": "/assets/logos/absolut-vodka-c.svg"
+    },
+    {
+      "height": 48,
+      "light": "/assets/logos/aesop.svg",
+      "dark": "/assets/logos/aesop-c.svg"
+    },
+    {
+      "height": 32,
+      "light": "/assets/logos/annabels.svg",
+      "dark": "/assets/logos/annabels-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/barclays.svg",
+      "dark": "/assets/logos/barclays-c.svg"
+    },
+    {
+      "height": 26,
+      "light": "/assets/logos/betfair.svg",
+      "dark": "/assets/logos/betfair-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/channel-4.svg",
+      "dark": "/assets/logos/channel-4-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/chelsea-fc.png",
+      "dark": "/assets/logos/chelsea-fc-c.png"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/coors.svg",
+      "dark": "/assets/logos/coors-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/dc.svg",
+      "dark": "/assets/logos/dc-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/disney-plus.svg",
+      "dark": "/assets/logos/disney-plus-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/ea-sports.svg",
+      "dark": "/assets/logos/ea-sports-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/england-rugby.png",
+      "dark": "/assets/logos/england-rugby-c.png"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/fx.svg",
+      "dark": "/assets/logos/fx-c.svg"
+    },
+    {
+      "height": 26,
+      "light": "/assets/logos/gucci.svg",
+      "dark": "/assets/logos/gucci-c.svg"
+    },
+    {
+      "height": 36,
+      "light": "/assets/logos/heineken.svg",
+      "dark": "/assets/logos/heineken-c.svg"
     },
     {
       "height": 34,
-      "light": "/assets/logos/s3-r2c4.png",
-      "dark": "/assets/logos/s3-r2c4-c.png"
+      "light": "/assets/logos/iceland.svg",
+      "dark": "/assets/logos/iceland-c.svg"
     },
     {
-      "height": 50,
-      "light": "/assets/logos/s3-r2c2.png",
-      "dark": "/assets/logos/s3-r2c2-c.png"
+      "height": 35,
+      "light": "/assets/logos/john-frieda.png",
+      "dark": "/assets/logos/john-frieda-c.png"
     },
     {
-      "height": 50,
-      "light": "/assets/logos/s2-r1c5.png",
-      "dark": "/assets/logos/s2-r1c5-c.png"
+      "height": 58,
+      "light": "/assets/logos/lionsgate.svg",
+      "dark": "/assets/logos/lionsgate-c.svg"
     },
     {
-      "height": 50,
-      "light": "/assets/logos/s2-r4c1.png",
-      "dark": "/assets/logos/s2-r4c1-c.png"
+      "height": 41,
+      "light": "/assets/logos/magnum.svg",
+      "dark": "/assets/logos/magnum-c.svg"
     },
     {
-      "height": 50,
-      "light": "/assets/logos/s2-r4c3.png",
-      "dark": "/assets/logos/s2-r4c3-c.png"
+      "height": 34,
+      "light": "/assets/logos/marvel-studios.png",
+      "dark": "/assets/logos/marvel-studios-c.png"
     },
     {
-      "height": 50,
-      "light": "/assets/logos/s3-r4c3.png",
-      "dark": "/assets/logos/s3-r4c3-c.png"
-    },
-    {
-      "height": 31,
-      "light": "/assets/logos/s1-r1c2.png",
-      "dark": "/assets/logos/s1-r1c2-c.png"
-    },
-    {
-      "height": 37,
-      "light": "/assets/logos/s1-r1c3.png",
-      "dark": "/assets/logos/s1-r1c3-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s3-r2c1.png",
-      "dark": "/assets/logos/s3-r2c1-c.png"
-    },
-    {
-      "height": 62,
-      "light": "/assets/logos/s1-r2c2.png",
-      "dark": "/assets/logos/s1-r2c2-c.png"
-    },
-    {
-      "height": 53,
-      "light": "/assets/logos/s1-r2c3.png",
-      "dark": "/assets/logos/s1-r2c3-c.png"
-    },
-    {
-      "height": 53,
-      "light": "/assets/logos/s2-r5c2.png",
-      "dark": "/assets/logos/s2-r5c2-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s2-r4c2.png",
-      "dark": "/assets/logos/s2-r4c2-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s3-r1c3.png",
-      "dark": "/assets/logos/s3-r1c3-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s2-r4c4.png",
-      "dark": "/assets/logos/s2-r4c4-c.png"
-    },
-    {
-      "height": 37,
-      "light": "/assets/logos/s2-r5c5.png",
-      "dark": "/assets/logos/s2-r5c5-c.png"
-    },
-    {
-      "height": 43,
-      "light": "/assets/logos/s1-r5c4.png",
-      "dark": "/assets/logos/s1-r5c4-c.png"
+      "height": 38,
+      "light": "/assets/logos/mercedes-benz.svg",
+      "dark": "/assets/logos/mercedes-benz-c.svg"
     },
     {
       "height": 28,
-      "light": "/assets/logos/s3-r1c4.png",
-      "dark": "/assets/logos/s3-r1c4-c.png"
+      "light": "/assets/logos/monzo.svg",
+      "dark": "/assets/logos/monzo-c.svg"
     },
     {
-      "height": 31,
-      "light": "/assets/logos/s2-r2c1.png",
-      "dark": "/assets/logos/s2-r2c1-c.png"
+      "height": 58,
+      "light": "/assets/logos/new-line-cinema.svg",
+      "dark": "/assets/logos/new-line-cinema-c.svg"
+    },
+    {
+      "height": 39,
+      "light": "/assets/logos/nutella.png",
+      "dark": "/assets/logos/nutella-c.png"
+    },
+    {
+      "height": 55,
+      "light": "/assets/logos/ocado.svg",
+      "dark": "/assets/logos/ocado-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/paramount-pictures.svg",
+      "dark": "/assets/logos/paramount-pictures-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/pepsi.png",
+      "dark": "/assets/logos/pepsi-c.png"
+    },
+    {
+      "height": 38,
+      "light": "/assets/logos/reebok.svg",
+      "dark": "/assets/logos/reebok-c.svg"
+    },
+    {
+      "height": 26,
+      "light": "/assets/logos/samsung.svg",
+      "dark": "/assets/logos/samsung-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/sky.png",
+      "dark": "/assets/logos/sky-c.png"
+    },
+    {
+      "height": 35,
+      "light": "/assets/logos/starz.svg",
+      "dark": "/assets/logos/starz-c.svg"
     },
     {
       "height": 43,
-      "light": "/assets/logos/s2-r3c3.png",
-      "dark": "/assets/logos/s2-r3c3-c.png"
+      "light": "/assets/logos/tesco.svg",
+      "dark": "/assets/logos/tesco-c.svg"
+    },
+    {
+      "height": 26,
+      "light": "/assets/logos/toyota.svg",
+      "dark": "/assets/logos/toyota-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/universal-pictures.svg",
+      "dark": "/assets/logos/universal-pictures-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/warner-bros-pictures.svg",
+      "dark": "/assets/logos/warner-bros-pictures-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/a24.svg",
+      "dark": "/assets/logos/a24-c.svg"
     },
     {
       "height": 50,
-      "light": "/assets/logos/s2-r1c3.png",
-      "dark": "/assets/logos/s2-r1c3-c.png"
+      "light": "/assets/logos/adidas.svg",
+      "dark": "/assets/logos/adidas-c.svg"
     },
     {
-      "height": 50,
-      "light": "/assets/logos/s3-r1c1.png",
-      "dark": "/assets/logos/s3-r1c1-c.png"
+      "height": 58,
+      "light": "/assets/logos/aldi.png",
+      "dark": "/assets/logos/aldi-c.png"
     },
     {
-      "height": 37,
-      "light": "/assets/logos/s1-r4c5.png",
-      "dark": "/assets/logos/s1-r4c5-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s3-r2c3.png",
-      "dark": "/assets/logos/s3-r2c3-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s1-r4c3.png",
-      "dark": "/assets/logos/s1-r4c3-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s3-r3c4.png",
-      "dark": "/assets/logos/s3-r3c4-c.png"
+      "height": 58,
+      "light": "/assets/logos/apple-tv.svg",
+      "dark": "/assets/logos/apple-tv-c.svg"
     },
     {
       "height": 43,
-      "light": "/assets/logos/s2-r1c1.png",
-      "dark": "/assets/logos/s2-r1c1-c.png"
+      "light": "/assets/logos/bbc.svg",
+      "dark": "/assets/logos/bbc-c.svg"
     },
     {
-      "height": 40,
-      "light": "/assets/logos/s1-r1c5.png",
-      "dark": "/assets/logos/s1-r1c5-c.png"
-    },
-    {
-      "height": 31,
-      "light": "/assets/logos/s2-r2c5.png",
-      "dark": "/assets/logos/s2-r2c5-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s1-r3c4.png",
-      "dark": "/assets/logos/s1-r3c4-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s1-r5c3.png",
-      "dark": "/assets/logos/s1-r5c3-c.png"
-    },
-    {
-      "height": 37,
-      "light": "/assets/logos/s1-r3c2.png",
-      "dark": "/assets/logos/s1-r3c2-c.png"
-    },
-    {
-      "height": 59,
-      "light": "/assets/logos/s3-r5c5.png",
-      "dark": "/assets/logos/s3-r5c5-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s2-r3c5.png",
-      "dark": "/assets/logos/s2-r3c5-c.png"
-    },
-    {
-      "height": 34,
-      "light": "/assets/logos/s1-r3c3.png",
-      "dark": "/assets/logos/s1-r3c3-c.png"
-    },
-    {
-      "height": 34,
-      "light": "/assets/logos/s1-r5c5.png",
-      "dark": "/assets/logos/s1-r5c5-c.png"
-    },
-    {
-      "height": 40,
-      "light": "/assets/logos/s3-r3c5.png",
-      "dark": "/assets/logos/s3-r3c5-c.png"
-    },
-    {
-      "height": 53,
-      "light": "/assets/logos/s2-r3c1.png",
-      "dark": "/assets/logos/s2-r3c1-c.png"
-    },
-    {
-      "height": 40,
-      "light": "/assets/logos/s1-r5c2.png",
-      "dark": "/assets/logos/s1-r5c2-c.png"
-    },
-    {
-      "height": 40,
-      "light": "/assets/logos/s2-r1c4.png",
-      "dark": "/assets/logos/s2-r1c4-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s2-r4c5.png",
-      "dark": "/assets/logos/s2-r4c5-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s2-r5c1.png",
-      "dark": "/assets/logos/s2-r5c1-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s3-r2c5.png",
-      "dark": "/assets/logos/s3-r2c5-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s3-r5c2.png",
-      "dark": "/assets/logos/s3-r5c2-c.png"
-    },
-    {
-      "height": 68,
-      "light": "/assets/logos/s2-r2c2.png",
-      "dark": "/assets/logos/s2-r2c2-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s2-r1c2.png",
-      "dark": "/assets/logos/s2-r1c2-c.png"
-    },
-    {
-      "height": 53,
-      "light": "/assets/logos/s1-r1c4.png",
-      "dark": "/assets/logos/s1-r1c4-c.png"
-    },
-    {
-      "height": 47,
-      "light": "/assets/logos/s1-r4c4.png",
-      "dark": "/assets/logos/s1-r4c4-c.png"
-    },
-    {
-      "height": 47,
-      "light": "/assets/logos/s2-r5c3.png",
-      "dark": "/assets/logos/s2-r5c3-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s2-r2c3.png",
-      "dark": "/assets/logos/s2-r2c3-c.png"
+      "height": 26,
+      "light": "/assets/logos/burberry.svg",
+      "dark": "/assets/logos/burberry-c.svg"
     },
     {
       "height": 28,
-      "light": "/assets/logos/s1-r2c4.png",
-      "dark": "/assets/logos/s1-r2c4-c.png"
-    },
-    {
-      "height": 47,
-      "light": "/assets/logos/s2-r3c4.png",
-      "dark": "/assets/logos/s2-r3c4-c.png"
-    },
-    {
-      "height": 34,
-      "light": "/assets/logos/s1-r3c5.png",
-      "dark": "/assets/logos/s1-r3c5-c.png"
-    },
-    {
-      "height": 37,
-      "light": "/assets/logos/s1-r4c1.png",
-      "dark": "/assets/logos/s1-r4c1-c.png"
-    },
-    {
-      "height": 53,
-      "light": "/assets/logos/s2-r5c4.png",
-      "dark": "/assets/logos/s2-r5c4-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s3-r4c4.png",
-      "dark": "/assets/logos/s3-r4c4-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s3-r4c2.png",
-      "dark": "/assets/logos/s3-r4c2-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s3-r4c1.png",
-      "dark": "/assets/logos/s3-r4c1-c.png"
-    },
-    {
-      "height": 37,
-      "light": "/assets/logos/s1-r2c5.png",
-      "dark": "/assets/logos/s1-r2c5-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s1-r4c2.png",
-      "dark": "/assets/logos/s1-r4c2-c.png"
-    },
-    {
-      "height": 25,
-      "light": "/assets/logos/s3-r3c3.png",
-      "dark": "/assets/logos/s3-r3c3-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s3-r3c1.png",
-      "dark": "/assets/logos/s3-r3c1-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s2-r2c4.png",
-      "dark": "/assets/logos/s2-r2c4-c.png"
-    },
-    {
-      "height": 53,
-      "light": "/assets/logos/s1-r2c1.png",
-      "dark": "/assets/logos/s1-r2c1-c.png"
-    },
-    {
-      "height": 31,
-      "light": "/assets/logos/s3-r1c5.png",
-      "dark": "/assets/logos/s3-r1c5-c.png"
-    },
-    {
-      "height": 50,
-      "light": "/assets/logos/s2-r3c2.png",
-      "dark": "/assets/logos/s2-r3c2-c.png"
+      "light": "/assets/logos/chase.svg",
+      "dark": "/assets/logos/chase-c.svg"
     },
     {
       "height": 40,
-      "light": "/assets/logos/s1-r5c1.png",
-      "dark": "/assets/logos/s1-r5c1-c.png"
+      "light": "/assets/logos/columbia-pictures.svg",
+      "dark": "/assets/logos/columbia-pictures-c.svg"
     },
     {
-      "height": 25,
-      "light": "/assets/logos/s1-r3c1.png",
-      "dark": "/assets/logos/s1-r3c1-c.png"
+      "height": 26,
+      "light": "/assets/logos/credit-karma.svg",
+      "dark": "/assets/logos/credit-karma-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/disney.svg",
+      "dark": "/assets/logos/disney-c.svg"
+    },
+    {
+      "height": 57,
+      "light": "/assets/logos/dove.svg",
+      "dark": "/assets/logos/dove-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/ee.svg",
+      "dark": "/assets/logos/ee-c.svg"
     },
     {
       "height": 50,
-      "light": "/assets/logos/s3-r3c2.png",
-      "dark": "/assets/logos/s3-r3c2-c.png"
+      "light": "/assets/logos/fifa.svg",
+      "dark": "/assets/logos/fifa-c.svg"
     },
     {
-      "height": 62,
-      "light": "/assets/logos/s1-r1c1.png",
-      "dark": "/assets/logos/s1-r1c1-c.png"
+      "height": 58,
+      "light": "/assets/logos/grey-goose.svg",
+      "dark": "/assets/logos/grey-goose-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/hbo.svg",
+      "dark": "/assets/logos/hbo-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/hermes.svg",
+      "dark": "/assets/logos/hermes-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/itv.png",
+      "dark": "/assets/logos/itv-c.png"
+    },
+    {
+      "height": 47,
+      "light": "/assets/logos/kfc.svg",
+      "dark": "/assets/logos/kfc-c.svg"
+    },
+    {
+      "height": 49,
+      "light": "/assets/logos/lucasfilm.svg",
+      "dark": "/assets/logos/lucasfilm-c.svg"
+    },
+    {
+      "height": 57,
+      "light": "/assets/logos/marks-and-spencer.svg",
+      "dark": "/assets/logos/marks-and-spencer-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/mcdonalds.png",
+      "dark": "/assets/logos/mcdonalds-c.png"
+    },
+    {
+      "height": 36,
+      "light": "/assets/logos/mgm.svg",
+      "dark": "/assets/logos/mgm-c.svg"
+    },
+    {
+      "height": 41,
+      "light": "/assets/logos/netflix.svg",
+      "dark": "/assets/logos/netflix-c.svg"
+    },
+    {
+      "height": 53,
+      "light": "/assets/logos/nike.svg",
+      "dark": "/assets/logos/nike-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/o2.svg",
+      "dark": "/assets/logos/o2-c.svg"
+    },
+    {
+      "height": 28,
+      "light": "/assets/logos/paddy-power.png",
+      "dark": "/assets/logos/paddy-power-c.png"
+    },
+    {
+      "height": 35,
+      "light": "/assets/logos/paramount-plus.svg",
+      "dark": "/assets/logos/paramount-plus-c.svg"
+    },
+    {
+      "height": 47,
+      "light": "/assets/logos/prime-video.svg",
+      "dark": "/assets/logos/prime-video-c.svg"
+    },
+    {
+      "height": 44,
+      "light": "/assets/logos/rimowa.svg",
+      "dark": "/assets/logos/rimowa-c.svg"
+    },
+    {
+      "height": 26,
+      "light": "/assets/logos/santander.svg",
+      "dark": "/assets/logos/santander-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/sony-pictures.png",
+      "dark": "/assets/logos/sony-pictures-c.png"
+    },
+    {
+      "height": 38,
+      "light": "/assets/logos/syncopy.svg",
+      "dark": "/assets/logos/syncopy-c.svg"
+    },
+    {
+      "height": 44,
+      "light": "/assets/logos/tiktok.svg",
+      "dark": "/assets/logos/tiktok-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/under-armour.svg",
+      "dark": "/assets/logos/under-armour-c.svg"
+    },
+    {
+      "height": 31,
+      "light": "/assets/logos/waitrose.svg",
+      "dark": "/assets/logos/waitrose-c.svg"
+    },
+    {
+      "height": 58,
+      "light": "/assets/logos/xbox.svg",
+      "dark": "/assets/logos/xbox-c.svg"
     }
   ]
 }

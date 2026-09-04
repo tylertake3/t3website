@@ -1,6 +1,4 @@
 ---
-import { existsSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 import { contactHref, site } from '../data/site';
@@ -8,6 +6,8 @@ import heroData from '../data/hero.json';
 import categoryData from '../data/categories.json';
 import clientData from '../data/clients.json';
 import copy from '../content/pages/index.json';
+import { featuredCredit } from '../lib/productionLogos';
+import { hasLogo } from '../lib/clientLogos';
 
 /* `focus` is optional per slide: the point in the photo the wide banner holds
    on to when it trims the top and bottom away. Unset falls back to global.css. */
@@ -15,10 +15,16 @@ const heroSlides = heroData.slides as Array<{ title: string; alt: string; image:
 const categories = categoryData.categories;
 const clients = clientData.clients;
 
-const reviews = (await getCollection('reviews')).sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+/* Reviews switched off for the homepage still live in the collection — they are
+   kept for use on other pages rather than deleted. */
+const reviews = (await getCollection('reviews'))
+  .filter((review) => review.data.showOnHomepage !== false)
+  .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
 
-/* the marquee needs the roster twice so it can loop seamlessly */
-const marquee = [...categories, ...categories];
+/* The marquee runs the roster three times so it can loop endlessly in both
+   directions: the viewport parks on the middle copy, and the script slides it
+   back by exactly one copy whenever it crosses into a neighbour. */
+const marquee = [...categories, ...categories, ...categories];
 
 /* the hero strip opens from the middle outwards, so a word's stagger step is
    its distance from the centre of the row rather than its index */
@@ -29,10 +35,6 @@ const stripStagger = (i: number) => Math.abs(i - stripMid).toFixed(1);
 const half = Math.ceil(clients.length / 2);
 const logoPages = [clients.slice(0, half), clients.slice(half)];
 
-/* Client logo artwork hasn't all been supplied yet. A cell whose file is missing
-   renders as an empty plate rather than firing a 404 for a picture that isn't there. */
-const hasLogo = (cell: { dark?: string; light?: string }) =>
-  Boolean(cell.dark) && existsSync(fileURLToPath(new URL('../../public' + cell.dark, import.meta.url)));
 
 const posterCount = 15;
 
@@ -116,7 +118,7 @@ const organizationSchema = {
       <div class="aboutCol">
         <div class="aboutBody">
           <p>
-            {copy.about.paragraph1.before}<a href="/what-is-a-spact">{copy.about.paragraph1.linkText}</a>{copy.about.paragraph1.after}
+            {copy.about.paragraph1.before} {copy.about.paragraph1.linkText}{copy.about.paragraph1.after}
           </p>
           <p>
             {copy.about.paragraph2}
@@ -201,7 +203,17 @@ const organizationSchema = {
               <article class="revCard">
                 <h3 class="revName">{r.data.name}</h3>
                 <p class="revRole">{r.data.role}</p>
-                <p class="revCredits">{r.data.credits}</p>
+                <div class="revCredits">
+                  {(() => {
+                    const c = featuredCredit(r.data.credits, r.data.feature);
+                    if (!c) return null;
+                    return (
+                      <span class={c.onDark ? 'revCredit revCreditLogo' : 'revCredit'}>
+                        {c.onDark ? <img src={c.onDark} alt={c.title} loading="lazy" /> : c.title}
+                      </span>
+                    );
+                  })()}
+                </div>
                 <blockquote class="revQuote">{r.body?.trim()}</blockquote>
               </article>
             ))
@@ -252,6 +264,7 @@ const organizationSchema = {
         ))
       }
     </div>
+    <p class="logoHint" aria-hidden="true">{copy.clients.turnHint}</p>
   </section>
 
   <!-- our credits: poster grid -->
@@ -346,28 +359,60 @@ const organizationSchema = {
         var el = document.getElementById('supplyScroll');
         if (!el) return;
         var dragging = false, hover = false, focused = false, paused = false, moved = false;
-        var startX = 0, startScroll = 0, raf = null;
+        var lastX = 0, raf = null;
+
+        /* The row holds three identical copies of the roster. `cycle` is the
+           width of one copy, measured from the markup so the gap between tiles
+           is included exactly; the view is kept parked on the middle copy, and
+           crossing into a neighbour slides it back by one whole copy. Because
+           the copies are identical that shift is invisible, so the row reads as
+           one endless loop in either direction. */
+        var tiles = Array.prototype.slice.call(el.querySelectorAll('.supplyTile'));
+        var perSet = Math.round(tiles.length / 3);
+        var cycle = 0, loopable = false;
+        function measure() {
+          cycle = tiles.length > perSet ? tiles[perSet].offsetLeft - tiles[0].offsetLeft : 0;
+          /* one copy has to be at least a screenful, otherwise there is nothing
+             to scroll into and the row simply behaves as a plain scroller */
+          loopable = cycle > 0 && el.scrollWidth - el.clientWidth >= cycle * 2;
+        }
+        function normalise() {
+          if (!loopable) return;
+          while (el.scrollLeft >= cycle * 2) el.scrollLeft -= cycle;
+          while (el.scrollLeft < cycle) el.scrollLeft += cycle;
+        }
+        function reset() {
+          measure();
+          if (loopable) { el.scrollLeft = cycle; }
+        }
+        reset();
+        /* fonts and lazy images can change the tile widths after first paint */
+        window.addEventListener('load', reset);
+        var rz = null;
+        window.addEventListener('resize', function () {
+          window.clearTimeout(rz);
+          rz = window.setTimeout(reset, 150);
+        });
+        /* wheel, trackpad and keyboard scrolling all land here */
+        el.addEventListener('scroll', normalise, { passive: true });
+
         el.addEventListener('mouseenter', function () { hover = true; });
         el.addEventListener('mouseleave', function () { hover = false; });
         /* keyboard users tabbing through the tiles get the same reprieve as the cursor */
         el.addEventListener('focusin', function () { focused = true; });
         el.addEventListener('focusout', function () { focused = false; });
         el.addEventListener('pointerdown', function (e) {
-          dragging = true; moved = false; startX = e.clientX; startScroll = el.scrollLeft;
+          dragging = true; moved = false; lastX = e.clientX;
         });
         window.addEventListener('pointermove', function (e) {
           if (!dragging) return;
-          var dx = e.clientX - startX;
-          if (Math.abs(dx) > 6) {
-            moved = true;
-            var half = el.scrollWidth / 2;
-            var target = startScroll - dx;
-            if (half > el.clientWidth) {
-              if (target < 0) { target += half; startX = e.clientX; startScroll = target; }
-              else if (target > half) { target -= half; startX = e.clientX; startScroll = target; }
-            }
-            el.scrollLeft = target;
-          }
+          var dx = e.clientX - lastX;
+          if (!moved && Math.abs(dx) <= 6) return;
+          moved = true;
+          lastX = e.clientX;
+          /* moved one step at a time, so a wrap mid-drag cannot snap the row back */
+          el.scrollLeft -= dx;
+          normalise();
         }, { passive: true });
         window.addEventListener('pointerup', function () { dragging = false; });
         window.addEventListener('pointercancel', function () { dragging = false; });
@@ -382,8 +427,7 @@ const organizationSchema = {
             drift += 0.4;
             if (drift >= 1) { el.scrollLeft += Math.floor(drift); drift -= Math.floor(drift); }
           }
-          var half = el.scrollWidth / 2;
-          if (half > el.clientWidth && el.scrollLeft >= half) el.scrollLeft -= half;
+          normalise();
           raf = window.requestAnimationFrame(step);
         }
         function startAuto() { if (!lessMotion() && raf === null) raf = window.requestAnimationFrame(step); }
@@ -472,22 +516,71 @@ const organizationSchema = {
         measure(); buildDots(); paint();
       })();
 
-      /* ---------------- client logo half cross-fade (8s) ---------------- */
+      /* ---------------- client logo wall: cascade ----------------
+         The wall turns over one mark at a time along a diagonal, top-left
+         first. It does it on its own every 8s, and immediately whenever the
+         wall is clicked — a click restarts the clock so it never turns over
+         twice in quick succession. */
       (function () {
+        var stack = document.getElementById('logoStack');
         var pagesEls = Array.prototype.slice.call(document.querySelectorAll('.logoPage'));
-        if (pagesEls.length < 2) return;
-        var i = 0, t = null;
-        function start() {
-          window.clearInterval(t);
-          if (lessMotion()) return;
-          t = window.setInterval(function () {
-            i = (i + 1) % pagesEls.length;
-            for (var k = 0; k < pagesEls.length; k++) pagesEls[k].classList.toggle('is-on', k === i);
-          }, 8000);
+        if (!stack || pagesEls.length < 2) return;
+
+        var STEP = 55;      /* how far apart in the diagonal two marks turn */
+        var SETTLE = 1200;  /* longest a turn can take, delay included */
+        var i = 0, timer = null, turning = false;
+
+        /* The stagger is per cell and depends on the grid, which reflows at
+           each breakpoint, so the column count is read back from the layout
+           rather than assumed. */
+        function stagger() {
+          for (var p = 0; p < pagesEls.length; p++) {
+            var cols = window.getComputedStyle(pagesEls[p]).gridTemplateColumns.split(' ').length || 1;
+            var cells = pagesEls[p].children;
+            for (var c = 0; c < cells.length; c++) {
+              var delay = (Math.floor(c / cols) + (c % cols)) * STEP;
+              cells[c].style.setProperty('--d', delay + 'ms');
+            }
+          }
         }
+
+        function turn() {
+          if (turning) return;
+          turning = true;
+          var from = pagesEls[i];
+          i = (i + 1) % pagesEls.length;
+          var to = pagesEls[i];
+          from.classList.remove('is-on');
+          from.classList.add('is-out');
+          to.classList.add('is-on');
+          window.setTimeout(function () {
+            /* park the spent half back below without animating it there */
+            from.classList.add('is-reset');
+            from.classList.remove('is-out');
+            void from.offsetWidth;
+            from.classList.remove('is-reset');
+            turning = false;
+          }, SETTLE);
+        }
+
+        function start() {
+          window.clearInterval(timer);
+          if (lessMotion()) return;
+          timer = window.setInterval(turn, 8000);
+        }
+
+        stack.addEventListener('click', function () { turn(); start(); });
+
+        var rzt = null;
+        window.addEventListener('resize', function () {
+          window.clearTimeout(rzt);
+          rzt = window.setTimeout(stagger, 150);
+        });
+
+        stagger();
         start();
         if (reduce.addEventListener) reduce.addEventListener('change', start);
-        window.addEventListener('pagehide', function () { window.clearInterval(t); });
+        window.addEventListener('pagehide', function () { window.clearInterval(timer); });
       })();
 
       window.addEventListener('pagehide', function () { clearInterval(heroTimer); });

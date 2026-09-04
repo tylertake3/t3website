@@ -2,6 +2,7 @@
 name: "James\nCousins"
 role: "Choreographer"
 credits: "James Cousins Company"
+showOnHomepage: false
 order: 4
 ---
 
