@@ -73,6 +73,7 @@
         - { name: heading, label: Section heading, widget: string }
         - { name: kicker, label: Small label beside the heading, widget: string }
         - { name: body, label: Introduction paragraph, widget: text }
+        - { name: turnHint, label: Note under the wall, widget: string, hint: "The wall turns over on its own, and again whenever a visitor clicks it. This line tells them they can." }
     - name: credits
       label: Our credits
       widget: object

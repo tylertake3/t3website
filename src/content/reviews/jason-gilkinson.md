@@ -2,6 +2,7 @@
 name: "Jason\nGilkinson"
 role: "Creative Director & Choreographer"
 credits: "Strictly Come Dancing & Burn The Floor"
+showOnHomepage: false
 order: 18
 ---
 

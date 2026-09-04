@@ -1,0 +1,238 @@
+{
+  "logos": [
+    {
+      "title": "Gangs of London",
+      "logoOnDark": "/assets/production-logos/gangs-of-london-c.png",
+      "logoOnLight": "/assets/production-logos/gangs-of-london.png",
+      "aliases": ""
+    },
+    {
+      "title": "The Gentlemen",
+      "logoOnDark": "/assets/production-logos/the-gentlemen-c.png",
+      "logoOnLight": "/assets/production-logos/the-gentlemen.png",
+      "aliases": "Gentlemen"
+    },
+    {
+      "title": "Alien: Earth",
+      "logoOnDark": "/assets/production-logos/alien-earth-c.png",
+      "logoOnLight": "/assets/production-logos/alien-earth.png",
+      "aliases": "Alien Earth"
+    },
+    {
+      "title": "The Odyssey",
+      "logoOnDark": "/assets/production-logos/the-odyssey-c.png",
+      "logoOnLight": "/assets/production-logos/the-odyssey.png",
+      "aliases": "The Odyessey, The Odyessy"
+    },
+    {
+      "title": "Tenet",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "Oppenheimer",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "Slow Horses",
+      "logoOnDark": "/assets/production-logos/slow-horses-c.png",
+      "logoOnLight": "/assets/production-logos/slow-horses.png",
+      "aliases": ""
+    },
+    {
+      "title": "Deadpool & Wolverine",
+      "logoOnDark": "/assets/production-logos/deadpool-wolverine-c.png",
+      "logoOnLight": "/assets/production-logos/deadpool-wolverine.png",
+      "aliases": ""
+    },
+    {
+      "title": "Harry Potter",
+      "logoOnDark": "/assets/production-logos/harry-potter-c.png",
+      "logoOnLight": "/assets/production-logos/harry-potter.png",
+      "aliases": "Harry Potter (TV Series)"
+    },
+    {
+      "title": "The Lord of the Rings: The Rings of Power",
+      "logoOnDark": "/assets/production-logos/rings-of-power-c.png",
+      "logoOnLight": "/assets/production-logos/rings-of-power.png",
+      "aliases": "The Rings of Power"
+    },
+    {
+      "title": "The Witcher",
+      "logoOnDark": "/assets/production-logos/the-witcher-c.png",
+      "logoOnLight": "/assets/production-logos/the-witcher.png",
+      "aliases": ""
+    },
+    {
+      "title": "Andor",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "3 Body Problem",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "Black Doves",
+      "logoOnDark": "/assets/production-logos/black-doves-c.png",
+      "logoOnLight": "/assets/production-logos/black-doves.png",
+      "aliases": ""
+    },
+    {
+      "title": "Heartstopper",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": "Hearttstopper"
+    },
+    {
+      "title": "Vision Quest",
+      "logoOnDark": "/assets/production-logos/vision-quest-c.png",
+      "logoOnLight": "/assets/production-logos/vision-quest.png",
+      "aliases": "Vison, Vision"
+    },
+    {
+      "title": "Mobland",
+      "logoOnDark": "/assets/production-logos/mobland-c.png",
+      "logoOnLight": "/assets/production-logos/mobland.png",
+      "aliases": ""
+    },
+    {
+      "title": "Pennyworth",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "We Live In Time",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "Supacell",
+      "logoOnDark": "/assets/production-logos/supacell-c.png",
+      "logoOnLight": "/assets/production-logos/supacell.png",
+      "aliases": ""
+    },
+    {
+      "title": "My Fault: London",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "Your Fault: London",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "Heads of State",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "Neuromancer",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "Werwulf",
+      "logoOnDark": "/assets/production-logos/werwulf-c.png",
+      "logoOnLight": "/assets/production-logos/werwulf.png",
+      "aliases": "Werewulf"
+    },
+    {
+      "title": "Elden Ring",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "Pistol",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "Geek Girl",
+      "logoOnDark": "/assets/production-logos/geek-girl-c.png",
+      "logoOnLight": "/assets/production-logos/geek-girl.png",
+      "aliases": ""
+    },
+    {
+      "title": "One Day",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "Havoc",
+      "logoOnDark": "/assets/production-logos/havoc-c.png",
+      "logoOnLight": "/assets/production-logos/havoc.png",
+      "aliases": ""
+    },
+    {
+      "title": "Hedda",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "A Colt Is My Passport",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "10 Dance",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "Strictly Come Dancing",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "Burn The Floor",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "James Cousins Company",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "Magnum",
+      "logoOnDark": "/assets/production-logos/magnum-c.png",
+      "logoOnLight": "/assets/production-logos/magnum.png",
+      "aliases": ""
+    },
+    {
+      "title": "KFC",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "Emirates",
+      "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    }
+  ]
+}

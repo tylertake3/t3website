@@ -18,6 +18,28 @@ display_url: https://www.take3agency.com
 logo_url: /assets/take3-logo.svg
 
 collections:
+  - name: production-logos
+    label: Production logos
+    files:
+      - name: production-logos
+        label: Production logos
+        file: src/data/production-logos.json
+        description: >-
+          The logo for each production named in a review. Upload a logo once here
+          and every review mentioning that production shows it automatically.
+          A production with no logo yet shows its name in type instead.
+        fields:
+          - name: logos
+            label: Productions
+            widget: list
+            label_singular: Production
+            summary: '{{fields.title}}'
+            fields:
+              - { name: title, label: Production name, widget: string, hint: 'Spelled exactly as it should appear on the site.' }
+              - { name: logoOnDark, label: Logo for dark backgrounds, widget: image, required: false, hint: 'The white version. This is the one the reviews section uses.' }
+              - { name: logoOnLight, label: Logo for light backgrounds, widget: image, required: false, hint: 'The near-black version, for anywhere a logo sits on the cream background.' }
+              - { name: aliases, label: Also written as, widget: string, required: false, hint: 'Other spellings used in reviews, separated by commas. Leave empty unless a review spells it differently.' }
+
   - name: reviews
     label: Reviews
     label_singular: Review
@@ -31,5 +53,7 @@ collections:
       - { name: name, label: Name, widget: string, hint: 'Use a line break to split the name across two lines.' }
       - { name: role, label: Job title, widget: string }
       - { name: credits, label: Productions, widget: string, required: false }
+      - { name: feature, label: Logo to show, widget: string, required: false, hint: 'One production name — the logo shown beside this review. Leave empty to use the first one with a logo. Type "none" to show no logo at all.' }
+      - { name: showOnHomepage, label: Show in the homepage reviews slider, widget: boolean, default: true, hint: 'Switch off to keep the review for use elsewhere without showing it on the homepage.' }
       - { name: order, label: Position in the slider, widget: number, value_type: int, default: 99 }
       - { name: body, label: What they said, widget: text }

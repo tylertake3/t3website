@@ -1,24 +1,20 @@
 ---
-import { existsSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import clientData from '../data/clients.json';
 import copy from '../content/pages/credits.json';
+import { featuredCredit } from '../lib/productionLogos';
+import { hasLogo } from '../lib/clientLogos';
 
 const clients = clientData.clients;
-
-/* Client logo artwork hasn't been supplied yet. A cell whose file is missing
-   renders as an empty plate rather than firing a 404 for a picture that isn't
-   there — the same rule the homepage logo wall follows. */
-const hasLogo = (cell: { dark?: string; light?: string }) =>
-  Boolean(cell.dark) && existsSync(fileURLToPath(new URL('../../public' + cell.dark, import.meta.url)));
 
 const anyLogoSupplied = clients.some(hasLogo);
 
 /* Testimonials are editable content, not page copy: they live in
    src/content/reviews and are managed under Reviews in the editor. */
-const reviews = (await getCollection('reviews')).sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+const reviews = (await getCollection('reviews'))
+  .filter((review) => !(review.body ?? '').trimStart().startsWith('TODO:'))
+  .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
 
 /* Copy still to be written is styled as a visible note rather than passed off as
    body text. The moment real wording replaces it, it reads as body text again. */
@@ -139,7 +135,17 @@ const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `ba
                     <figcaption>
                       <span class="creditsQuoteName">{review.data.name}</span>
                       <span class="creditsQuoteRole">{review.data.role}</span>
-                      {review.data.credits && <span class="creditsQuoteCredits">{review.data.credits}</span>}
+                      {(() => {
+                        const c = featuredCredit(review.data.credits, review.data.feature);
+                        if (!c) return null;
+                        return (
+                          <span class="creditsQuoteCredits">
+                            <span class={c.onDark ? 'revCredit revCreditLogo' : 'revCredit'}>
+                              {c.onDark ? <img src={c.onDark} alt={c.title} loading="lazy" /> : c.title}
+                            </span>
+                          </span>
+                        );
+                      })()}
                     </figcaption>
                   </figure>
                 </li>
@@ -204,7 +210,12 @@ const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `ba
       display:block; margin-top:10px; font-size:13px; letter-spacing:2px;
       font-weight:500; text-transform:uppercase; color:#f4f2ee;
     }
-    .creditsQuoteCredits { display:block; margin-top:6px; font-size:15px; font-weight:400; color:#c7c3bd; }
+    /* same production-logo row as the homepage reviews, at a quieter size to
+       suit the tighter quote grid */
+    .creditsQuoteCredits { display:flex; flex-wrap:wrap; align-items:center; gap:8px 18px; margin-top:10px; font-size:15px; font-weight:400; color:#c7c3bd; }
+    .creditsQuoteCredits .revCredit { animation:none; font-size:13px; }
+    .creditsQuoteCredits .revCredit img { height:28px; max-width:140px; }
+    .creditsQuote:hover .revCredit { opacity:1; }
 
     @media (max-width:1024px) {
       .stats.creditsStats { grid-template-columns:repeat(3, minmax(0, 1fr)); }

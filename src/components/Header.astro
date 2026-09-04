@@ -79,10 +79,16 @@ const isOpenGroup = (item: (typeof menuItems)[number]) =>
                 <button
                   class="menuLink menuToggle"
                   type="button"
+                  aria-label={item.label}
                   aria-expanded={isOpenGroup(item) ? 'true' : 'false'}
                   aria-controls={groupId(item.label)}
                 >
-                  <span class="menuToggleLabel">{item.label}</span>
+                  <span class="menuDash" aria-hidden="true" />
+                  <span class="menuWord" aria-hidden="true">
+                    {chars(item.label).map((ch, ci) => (
+                      <span class="menuCh" style={`--i:${ci}`}>{ch === ' ' ? ' ' : ch}</span>
+                    ))}
+                  </span>
                   {/* The same arrow the other menu items use, turned to point
                       down — these headings open a list rather than going
                       somewhere, so it must not read as "this navigates". It

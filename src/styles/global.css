@@ -97,24 +97,29 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline:2px so
 .menuItem, .menuAside { opacity:0; transform:translateY(18px); transition:opacity 0.5s cubic-bezier(0.3, 0, 0.2, 1), transform 0.5s cubic-bezier(0.3, 0, 0.2, 1); }
 .menu.is-open .menuItem { opacity:1; transform:none; transition-delay:calc(120ms + var(--n) * 55ms); }
 .menu.is-open .menuAside { opacity:1; transform:none; transition-delay:340ms; }
-.menuLink { display:inline-flex; align-items:center; gap:12px; font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(30px, 4vw, 58px); font-weight:400; letter-spacing:0; line-height:1.12; color:var(--ink); transition:opacity 0.34s cubic-bezier(0.3, 0, 0.2, 1); }
+.menuLink { display:inline-flex; align-items:center; gap:0; font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(30px, 4vw, 58px); font-weight:400; letter-spacing:0; line-height:1.12; color:var(--ink); transition:opacity 0.34s cubic-bezier(0.3, 0, 0.2, 1); }
 .menuLink:hover { color:var(--accent); }
 
 /* menu items react letter by letter — a short dash draws in ahead of the word,
    the characters lift in sequence and an arrow follows the last one */
-.menuDash { display:block; flex:none; width:0; height:2px; margin-bottom:0.18em; background:var(--accent); opacity:0; transition:width 0.42s cubic-bezier(0.3, 0, 0.2, 1), opacity 0.42s cubic-bezier(0.3, 0, 0.2, 1); }
+/* The dash is zero-wide at rest and must take up no room at all, or every
+   navigating item sits shifted right of the group headings — which is what put
+   the ragged left edge in the list. Spacing rides on the dash's own margin so
+   the words all start on the same line. */
+.menuDash { display:block; flex:none; width:0; height:2px; margin-bottom:0.18em; margin-right:0; background:var(--accent); opacity:0; transition:width 0.42s cubic-bezier(0.3, 0, 0.2, 1), margin-right 0.42s cubic-bezier(0.3, 0, 0.2, 1), opacity 0.42s cubic-bezier(0.3, 0, 0.2, 1); }
 .menuWord { position:relative; display:inline-flex; }
 .menuCh { display:inline-block; white-space:pre; transition:transform 0.34s cubic-bezier(0.3, 0, 0.2, 1), color 0.34s cubic-bezier(0.3, 0, 0.2, 1); transition-delay:calc(var(--i) * 26ms); }
-.menuArrow { flex:none; font-size:0.42em; color:var(--accent); opacity:0; transform:translateX(-14px); transition:transform 0.38s cubic-bezier(0.3, 0, 0.2, 1), opacity 0.38s cubic-bezier(0.3, 0, 0.2, 1); }
+.menuArrow { flex:none; margin-left:12px; font-size:0.42em; color:var(--accent); opacity:0; transform:translateX(-14px); transition:transform 0.38s cubic-bezier(0.3, 0, 0.2, 1), opacity 0.38s cubic-bezier(0.3, 0, 0.2, 1); }
 /* colour wash that sweeps the word on the way out */
 .menuWipe { position:absolute; top:10%; bottom:10%; left:-4px; right:-4px; background:var(--accent); opacity:0.18; transform:scaleX(0); transform-origin:left center; transition:transform 0.45s cubic-bezier(0.3, 0, 0.2, 1); }
 
-.menuLink:hover .menuDash, .menuLink:focus-visible .menuDash, .menuLink.is-picked .menuDash { width:18px; opacity:1; }
+.menuLink:hover .menuDash, .menuLink:focus-visible .menuDash, .menuLink.is-picked .menuDash { width:18px; margin-right:12px; opacity:1; }
 .menuLink:hover .menuCh, .menuLink:focus-visible .menuCh { transform:translateY(-9px); color:var(--accent); }
 .menuLink:hover .menuArrow, .menuLink:focus-visible .menuArrow, .menuLink.is-picked .menuArrow { opacity:1; transform:translateX(0); }
 
-/* the rest of the list steps back so the item under the cursor leads */
-.menuList:hover .menuLink:not(:hover) { opacity:0.42; }
+/* The rest of the list deliberately stays at full strength while you hover.
+   Dimming the others read as a spotlight and made the menu feel murky — the
+   item under the cursor already leads through its own colour and movement. */
 
 /* chosen item: the letters lift further and faster, the wash sweeps through,
    everything else drops right back while the overlay closes */
@@ -129,14 +134,14 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline:2px so
 /* group headings open their own list rather than navigating — the parent page
    is the first entry inside it. Reset the button back to the link's look so
    ARTISTS and SPECIALISTS sit level with HOME and CREDITS. */
-.menuToggle { display:flex; align-items:center; gap:clamp(10px, 1.2vw, 20px); width:100%; background:none; border:0; padding:0; margin:0; text-align:left; cursor:pointer; -webkit-appearance:none; appearance:none; }
-.menuToggleLabel { display:inline-block; }
+.menuToggle { display:flex; align-items:center; justify-content:flex-start; gap:0; width:auto; background:none; border:0; padding:0; margin:0; text-align:left; cursor:pointer; -webkit-appearance:none; appearance:none; }
 /* ↗ turned to point down (135° from its drawn angle), and up when the group is
    open. Same glyph as the arrow on the navigating items, so the menu keeps one
    arrow language, but pointing at the list it opens rather than off the page. */
 .menuGroupArrow {
   flex:none;
   display:inline-block;
+  margin-left:clamp(10px, 1.2vw, 20px);
   font-size:clamp(20px, 1.9vw, 30px);
   line-height:1;
   color:var(--muted);
@@ -330,8 +335,30 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .revTrack { display:flex; gap:var(--revGap); transition:transform 0.65s cubic-bezier(0.3, 0, 0.2, 1); }
 .revCard { flex:0 0 calc((100% - (var(--revGap) * 2)) / 3); min-width:0; }
 .revName { white-space:pre-line; font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(32px,3vw,48px); letter-spacing:0; line-height:1.02; font-weight:400; }
-.revRole { font-size:13px; letter-spacing:2px; font-weight:500; margin-top:14px; text-transform:uppercase; }
-.revCredits { min-height:2.8em; font-size:16px; font-weight:400; color:#f4f2ee; margin-top:6px; }
+/* The line holds its height even when a job title hasn't been confirmed yet, so
+   a card without one still lines up with the two beside it. */
+.revRole { min-height:1.15em; font-size:13px; letter-spacing:2px; font-weight:500; margin-top:14px; text-transform:uppercase; }
+/* the productions a reviewer worked with us on — the strongest thing in the
+   section, so they read as artwork rather than as a grey line of text */
+/* One production per review, so the row only ever needs the height of a single
+   logo. Held whether or not a given reviewer has one, so the three quotes in
+   view always start on the same line. */
+.revCredits { min-height:48px; display:flex; align-items:center; margin-top:12px; }
+/* a production with no logo uploaded yet keeps its name in type, so the row
+   never has a hole in it while artwork is still being gathered */
+.revCredit { display:inline-flex; align-items:center; font-size:15px; font-weight:500; letter-spacing:1px; text-transform:uppercase; color:#f4f2ee; opacity:0.62; transition:opacity 0.4s cubic-bezier(0.3, 0, 0.2, 1); }
+/* Each logo is supplied on a canvas of one fixed height with the artwork
+   optically sized inside it, so a single height here is all it takes to keep a
+   fat wordmark and a finely letterspaced one reading at the same weight. */
+.revCredit img { height:38px; width:auto; max-width:190px; object-fit:contain; object-position:left center; }
+/* arrives just after its card settles */
+.revCredit { animation:revCreditIn 0.5s cubic-bezier(0.3, 0, 0.2, 1) both; animation-delay:140ms; }
+@keyframes revCreditIn { from { opacity:0; transform:translateY(10px); } to { opacity:0.62; transform:none; } }
+.revCreditLogo { opacity:0.78; }
+@keyframes revCreditLogoIn { from { opacity:0; transform:translateY(10px); } to { opacity:0.78; transform:none; } }
+.revCreditLogo { animation-name:revCreditLogoIn; }
+/* pointing at the card brings the whole row up to full strength */
+.revCard:hover .revCredit { opacity:1; }
 .revQuote { font-size:17px; font-weight:400; line-height:1.8; color:#c7c3bd; margin:22px 0 0; white-space:pre-line; text-wrap:pretty; }
 .revFoot { display:flex; justify-content:space-between; align-items:center; margin-top:36px; border-top:1px solid #3a3a3e; padding-top:20px; gap:16px; }
 .revCount { font-size:13px; letter-spacing:3px; color:var(--muted); }
@@ -349,9 +376,34 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .clients .sectionHead { padding:0 40px 18px; }
 .clientsBody { max-width:1280px; margin:24px auto 0; padding:0 40px; font-size:18px; font-weight:400; line-height:1.7; color:var(--sub); text-wrap:pretty; }
 .logoStack { max-width:1280px; margin:40px auto 0; padding:0 40px; position:relative; }
-.logoPage { top:0; left:40px; right:40px; opacity:0; transition:opacity 3s ease; display:grid; grid-template-columns:repeat(6, 1fr); column-gap:64px; row-gap:96px; place-items:center; }
-.logoPage.is-on { opacity:1; }
-.logoCell { width:100%; max-width:200px; background-color:var(--tileBg); background-size:contain; background-position:center; background-repeat:no-repeat; }
+.logoPage { top:0; left:40px; right:40px; display:grid; grid-template-columns:repeat(6, 1fr); column-gap:64px; row-gap:96px; place-items:center; }
+/* The wall turns over a mark at a time on a diagonal rather than dissolving as
+   one sheet: the half on show lifts away top-left first while the half coming
+   in rises into the same slots behind it. --d is the cell's place in that
+   diagonal, set in script because the column count changes with the viewport. */
+.logoPage:not(.is-on) { pointer-events:none; }
+.logoCell {
+  opacity:0; transform:translateY(14px); filter:blur(6px);
+  transition:opacity 0.5s ease, transform 0.5s cubic-bezier(0.3, 0, 0.2, 1), filter 0.5s ease;
+  transition-delay:var(--d, 0ms);
+}
+.logoPage.is-on .logoCell { opacity:1; transform:none; filter:blur(0); }
+/* the half on its way out leaves upward, so the two never look like the same
+   move played twice */
+.logoPage.is-out .logoCell { opacity:0; transform:translateY(-14px); filter:blur(6px); }
+/* returning a spent half to its waiting position must not animate */
+.logoPage.is-reset .logoCell { transition:none; }
+/* the homepage wall turns over on a click; the credits wall shows everything at
+   once and has nothing to turn to */
+.clients .logoStack { cursor:pointer; }
+.logoHint {
+  max-width:1280px; margin:34px auto 0; padding:0 40px; text-align:right;
+  font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--muted);
+}
+.logoCell { width:100%; max-width:200px; background-size:contain; background-position:center; background-repeat:no-repeat; }
+/* A cell still waiting on artwork keeps its holding plate; one with a logo sits
+   straight on the page so the wall reads as marks, not tiles. */
+.logoCell:not([data-dark]) { background-color:var(--tileBg); }
 
 /* ---------- credits ---------- */
 .credits { padding:0 0 72px; }
@@ -432,6 +484,7 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   .clients .sectionHead { padding:0 20px 14px; }
   .clientsBody { padding:0 20px; font-size:16px; }
   .logoStack { padding:0 20px; margin-top:28px; }
+  .logoHint { padding:0 20px; margin-top:24px; }
   .logoPage { left:20px; right:20px; grid-template-columns:repeat(3, 1fr); column-gap:24px; row-gap:40px; }
   .credits .sectionHead { padding:0 20px 14px; }
   .posterGrid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
@@ -442,7 +495,11 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .heroLayer, .logoPage, .revTrack, .page, .hero, .menu, .menuBtnBars span { transition:none !important; }
+  .heroLayer, .logoPage, .logoCell, .revTrack, .page, .hero, .menu, .menuBtnBars span { transition:none !important; }
+  /* the wall still turns over on a click, it just does it in one step */
+  .logoCell { transform:none !important; filter:none !important; }
+  /* production logos stay put and stay visible */
+  .revCredit { animation:none !important; transform:none; }
   /* the menu still reads the same, it just stops moving */
   .menuItem, .menuAside, .menuCh, .menuDash, .menuArrow, .menuWipe, .menuSubLink,
   .menuJoinLink, .menuJoinRule, .menuJoinRuleAccent { transition:none !important; }
