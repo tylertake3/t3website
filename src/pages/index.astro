@@ -8,6 +8,7 @@ import clientData from '../data/clients.json';
 import copy from '../content/pages/index.json';
 import { featuredCredit } from '../lib/productionLogos';
 import { hasLogo } from '../lib/clientLogos';
+import { featuredPosters, posterLabel } from '../lib/posters';
 
 /* `focus` is optional per slide: the point in the photo the wide banner holds
    on to when it trims the top and bottom away. Unset falls back to global.css. */
@@ -35,8 +36,6 @@ const stripStagger = (i: number) => Math.abs(i - stripMid).toFixed(1);
 const half = Math.ceil(clients.length / 2);
 const logoPages = [clients.slice(0, half), clients.slice(half)];
 
-
-const posterCount = 15;
 
 /* Organization schema — absolute URLs, sourced from src/data/site.ts */
 const abs = (path: string) => new URL(path, Astro.site ?? Astro.url).toString();
@@ -276,15 +275,27 @@ const organizationSchema = {
         <div class="creditsCountLabel">{copy.credits.countLabel}</div>
       </div>
     </div>
-    <div class="posterGrid">
+    <ul class="posterGrid">
       {
-        Array.from({ length: posterCount }).map(() => (
-          <div class="slot posterSlot" style="aspect-ratio:2/3;">
-            <span class="slotLabel">{copy.credits.posterPlaceholder}</span>
-          </div>
+        featuredPosters.map((poster, i) => (
+          <li class="posterCell">
+            <img
+              class="posterImg"
+              src={poster.src}
+              alt={`${posterLabel(poster)} poster`}
+              width="500"
+              height="750"
+              loading={i < 5 ? 'eager' : 'lazy'}
+              decoding="async"
+            />
+            <span class="posterName">{posterLabel(poster)}</span>
+          </li>
         ))
       }
-    </div>
+    </ul>
+    <p class="posterMore">
+      <a href="/credits">{copy.credits.moreLabel}<span aria-hidden="true"> &rarr;</span></a>
+    </p>
   </section>
 
   <style is:global>

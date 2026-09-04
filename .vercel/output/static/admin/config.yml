@@ -146,7 +146,7 @@ collections:
               - { name: heading, label: Section heading, widget: string }
               - { name: countNumber, label: Headline figure, widget: string }
               - { name: countLabel, label: Caption under the figure, widget: string }
-              - { name: posterPlaceholder, label: Placeholder text on empty poster tiles, widget: string, hint: Shown on each poster space until real artwork is added. }
+              - { name: moreLabel, label: Link text under the posters, widget: string, hint: Takes visitors to the full credits page. }
       - name: page-artists
         label: Artists page text
         file: src/content/pages/artists.json
@@ -432,7 +432,7 @@ collections:
           - name: productions
             label: Production credits
             widget: object
-            hint: Grouped by film, television and commercial. No title goes on this page until it has been cleared.
+            hint: The wall of posters below this copy is built from the artwork in the site's poster folder, so it is not edited here.
             fields:
               - { name: kicker, label: Small label beside the heading, widget: string }
               - { name: heading, label: Heading, widget: string }
@@ -440,18 +440,7 @@ collections:
               - name: clearanceNote
                 label: Clearance warning
                 widget: text
-                hint: Shown on the page in the highlight style until it is cleared out. Delete it only once permission and embargo checks are signed off.
-              - name: groups
-                label: Groups
-                label_singular: Group
-                widget: list
-                hint: One group per format. Film, television and commercial.
-                fields:
-                  - { name: id, label: Short code, widget: string, hint: 'Lowercase, no spaces. Used to join the heading to its list, for example film.' }
-                  - { name: name, label: Group name, widget: string }
-                  - { name: slotLabel, label: Placeholder caption, widget: string, hint: Shown on each empty picture plate until artwork is added. }
-                  - { name: plates, label: How many empty plates, widget: number, value_type: int }
-                  - { name: todo, label: Note about what is still needed, widget: text }
+                hint: Shown on the page in the highlight style until it is cleared out. Delete it once permission and embargo checks are signed off.
           - name: clients
             label: Client logos
             widget: object

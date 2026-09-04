@@ -15,39 +15,25 @@
     "kicker": "BY THE NUMBERS",
     "heading": "The work so far",
     "items": [
-      { "number": "500+", "label": "Productions supplied" },
-      { "number": "1,500+", "label": "Artists represented" },
-      { "number": "2019", "label": "Trading since" }
+      {
+        "number": "500+",
+        "label": "Productions supplied"
+      },
+      {
+        "number": "1,500+",
+        "label": "Artists represented"
+      },
+      {
+        "number": "2019",
+        "label": "Trading since"
+      }
     ]
   },
   "productions": {
     "kicker": "PRODUCTION CREDITS",
     "heading": "Film, television and commercial",
-    "intro": "TODO: copy — a short line framing the credits list. Two or three sentences at most, since the titles themselves do the work.",
-    "clearanceNote": "TODO: clearance — no title appears on this page until it has been checked against what Take 3 is contractually permitted to name, and until the embargo status of every unreleased title has been confirmed. Nothing here goes live before both checks are signed off.",
-    "groups": [
-      {
-        "id": "film",
-        "name": "Film",
-        "slotLabel": "Title to come",
-        "plates": 5,
-        "todo": "TODO: content — feature film titles, once cleared. Include the year and, where it helps, what Take 3 supplied."
-      },
-      {
-        "id": "television",
-        "name": "Television",
-        "slotLabel": "Title to come",
-        "plates": 5,
-        "todo": "TODO: content — television titles, once cleared. Include the broadcaster or platform where naming it is permitted."
-      },
-      {
-        "id": "commercial",
-        "name": "Commercial",
-        "slotLabel": "Brand to come",
-        "plates": 5,
-        "todo": "TODO: content — commercial work, once cleared. Brand and agency, where both are permitted to be named."
-      }
-    ]
+    "intro": "Every production below has been supplied by Take 3 since 2019, across film, television and commercial. The titles speak for themselves.",
+    "clearanceNote": "TODO: clearance — check any new title against what Take 3 is contractually permitted to name, and confirm the embargo status of anything unreleased, before it is added to this wall."
   },
   "clients": {
     "kicker": "WHO WE WORK WITH",

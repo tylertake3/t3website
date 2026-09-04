@@ -81,4 +81,4 @@
         - { name: heading, label: Section heading, widget: string }
         - { name: countNumber, label: Headline figure, widget: string }
         - { name: countLabel, label: Caption under the figure, widget: string }
-        - { name: posterPlaceholder, label: Placeholder text on empty poster tiles, widget: string, hint: Shown on each poster space until real artwork is added. }
+        - { name: moreLabel, label: Link text under the posters, widget: string, hint: Takes visitors to the full credits page. }

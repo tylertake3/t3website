@@ -411,7 +411,36 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .creditsCount { display:flex; align-items:baseline; gap:14px; }
 .creditsCountNum { font-size:clamp(26px,3vw,40px); font-weight:300; letter-spacing:1px; line-height:1; color:var(--accent); }
 .creditsCountLabel { font-size:12px; letter-spacing:3px; color:var(--muted); }
-.posterGrid { display:grid; grid-template-columns:repeat(5, minmax(0, 1fr)); gap:4px; margin-top:28px; }
+.posterGrid { display:grid; grid-template-columns:repeat(5, minmax(0, 1fr)); gap:4px; margin-top:28px; list-style:none; padding:0; }
+
+/* a poster in the wall. The title sits underneath the artwork on a plate, so
+   the row still reads as a list of productions when a plate fails to load */
+.posterCell { position:relative; background:var(--tileBg); overflow:hidden; }
+.posterImg {
+  /* height:auto keeps the width/height attributes from pinning the plate to the
+     file's own pixel height — they are there to reserve space, not to size it */
+  display:block; width:100%; height:auto; aspect-ratio:2/3; object-fit:cover;
+  transition:transform .5s ease, opacity .4s ease;
+}
+.posterCell:hover .posterImg, .posterCell:focus-within .posterImg { transform:scale(1.04); opacity:.82; }
+.posterName {
+  position:absolute; left:0; right:0; bottom:0; padding:26px 12px 10px;
+  font-size:11px; letter-spacing:1.4px; text-transform:uppercase; font-weight:500;
+  color:#f4f2ee; text-align:center; line-height:1.35;
+  background:linear-gradient(to top, rgba(12,12,14,.88), rgba(12,12,14,0));
+  opacity:0; transition:opacity .28s ease;
+}
+.posterCell:hover .posterName, .posterCell:focus-within .posterName { opacity:1; }
+@media (prefers-reduced-motion: reduce) {
+  .posterImg, .posterName { transition:none; }
+  .posterCell:hover .posterImg, .posterCell:focus-within .posterImg { transform:none; }
+}
+/* touch has no hover, so the title stays put rather than never appearing */
+@media (hover: none) { .posterName { opacity:1; } }
+
+.posterMore { padding:22px 40px 0; font-size:13px; letter-spacing:2px; text-transform:uppercase; }
+.posterMore a { color:var(--accent); text-decoration:none; border-bottom:1px solid transparent; }
+.posterMore a:hover { border-bottom-color:currentColor; }
 
 /* ---------- footer ---------- */
 .footer { border-top:1px solid var(--hair); }

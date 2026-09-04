@@ -5,6 +5,7 @@ import clientData from '../data/clients.json';
 import copy from '../content/pages/credits.json';
 import { featuredCredit } from '../lib/productionLogos';
 import { hasLogo } from '../lib/clientLogos';
+import { posterLabel, posterWall } from '../lib/posters';
 
 const clients = clientData.clients;
 
@@ -68,21 +69,24 @@ const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `ba
       <p class={bodyClass(copy.productions.intro, 'creditsIntro')}>{copy.productions.intro}</p>
       <p class="todoNote">{copy.productions.clearanceNote}</p>
 
-      {
-        copy.productions.groups.map((group) => (
-          <div class="creditsGroup">
-            <h3 class="creditsGroupName" id={`credits-${group.id}`}>{group.name}</h3>
-            <ul class="posterGrid creditsPosters" aria-labelledby={`credits-${group.id}`}>
-              {Array.from({ length: group.plates }).map(() => (
-                <li class="slot creditsPlate" style="aspect-ratio:2/3;">
-                  <span class="slotLabel">{group.slotLabel}</span>
-                </li>
-              ))}
-            </ul>
-            <p class="todoNote">{group.todo}</p>
-          </div>
-        ))
-      }
+      <ul class="posterGrid creditsPosters">
+        {
+          posterWall.map((poster, i) => (
+            <li class="posterCell">
+              <img
+                class="posterImg"
+                src={poster.src}
+                alt={`${posterLabel(poster)} poster`}
+                width="500"
+                height="750"
+                loading={i < 10 ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+              <span class="posterName">{posterLabel(poster)}</span>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </section>
 
@@ -176,15 +180,12 @@ const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `ba
     .bandDark .todoNote { color:#d4704f; }
     .bandDark .todoNote { border-left-color:#d4704f; }
 
-    /* one group per format: film, television, commercial */
-    .creditsGroup { margin-top:56px; }
-    .creditsGroupName {
-      font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-weight:400;
-      font-size:clamp(20px, 2vw, 28px); letter-spacing:0;
-      border-bottom:1px solid var(--hair); padding-bottom:12px;
-    }
-    .creditsPosters { list-style:none; margin:20px 0 0; padding:0; }
-    .creditsPlate { text-align:center; padding:10px; }
+    /* the full wall of productions. It runs long, so it holds six to a row and
+       the plates sit tighter than the homepage's five */
+    .creditsPosters { margin:36px 0 0; grid-template-columns:repeat(auto-fill, minmax(116px, 1fr)); gap:6px; }
+    .creditsPosters .posterName { padding:18px 6px 7px; font-size:9px; letter-spacing:.8px; }
+    @media (max-width:1024px) { .creditsPosters { grid-template-columns:repeat(auto-fill, minmax(104px, 1fr)); } }
+    @media (max-width:640px) { .creditsPosters { grid-template-columns:repeat(auto-fill, minmax(88px, 1fr)); gap:4px; } }
 
     /* the wall runs long, so it breathes less than the homepage's two half-grids */
     .creditsLogoWall { margin-top:44px; }
