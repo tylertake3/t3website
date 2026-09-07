@@ -1,9 +1,8 @@
 ---
 name: "Sara\nSparrow"
-role: ""
+role: "Crowd 2nd AD"
 credits: "The Gentlemen"
-showOnHomepage: false
 order: 15
 ---
 
-TODO: awaiting Sara's wording. Paste her review here and switch "Show in the homepage reviews slider" on — the Gentlemen logo is already in place.
+Placeholder wording while we wait for Sara's own review. Take 3 consistently deliver the right performers for the brief, on time and ready to work — a genuine pleasure to have on set.

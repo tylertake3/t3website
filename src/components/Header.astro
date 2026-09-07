@@ -83,20 +83,16 @@ const isOpenGroup = (item: (typeof menuItems)[number]) =>
                   aria-expanded={isOpenGroup(item) ? 'true' : 'false'}
                   aria-controls={groupId(item.label)}
                 >
-                  <span class="menuDash" aria-hidden="true" />
+                  {/* Group headings take the same short line the navigating
+                      items draw in on hover, crossed into a plus — the sign
+                      that there is more folded away here. Pressing the heading
+                      opens the list and the plus closes back to a minus. */}
+                  <span class="menuPlus" aria-hidden="true"><span /><span /></span>
                   <span class="menuWord" aria-hidden="true">
                     {chars(item.label).map((ch, ci) => (
                       <span class="menuCh" style={`--i:${ci}`}>{ch === ' ' ? ' ' : ch}</span>
                     ))}
                   </span>
-                  {/* The same arrow the other menu items use, turned to point
-                      down — these headings open a list rather than going
-                      somewhere, so it must not read as "this navigates". It
-                      turns through 180° to point up while the list is open.
-                      Deliberately its own class rather than .menuArrow: that
-                      one is revealed on hover, and a group's sign has to be
-                      visible before you touch it. */}
-                  <span class="menuGroupArrow" aria-hidden="true">↗</span>
                 </button>
                 <ul class="menuSubList" id={groupId(item.label)} hidden={!isOpenGroup(item)}>
                   {item.children.map((child) => (
@@ -119,7 +115,6 @@ const isOpenGroup = (item: (typeof menuItems)[number]) =>
                         <span class="menuCh" style={`--i:${ci}`}>{ch === ' ' ? ' ' : ch}</span>
                       ))}
                     </span>
-                    <span class="menuArrow" aria-hidden="true">↗</span>
                   </a>
                 ) : (
                   /* parent page not built yet — the label still groups its children */

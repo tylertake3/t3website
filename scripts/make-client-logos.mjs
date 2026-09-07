@@ -31,9 +31,40 @@ const LIGHT_INK = '#f4f2ee'; // the mark as it appears on the dark site
    into a solid block with the mark gone, so they are traced from their artwork
    instead: the plate becomes ink and the mark stays the gap it always was. */
 const KNOCKOUT = new Set([
-  '20th-century-fox', 'aldi', 'chelsea-fc', 'england-rugby', 'itv',
-  'marvel-studios', 'mcdonalds', 'nutella', 'pepsi', 'sky', 'sony-pictures',
+  '20th-century-fox', 'aldi', 'arsenal-fc', 'axa', 'canal-plus', 'chelsea-fc',
+  'england-rugby', 'itv', 'marv', 'marvel-studios', 'mcdonalds', 'nhs',
+  'nutella', 'pepsi', 'sega', 'sky', 'sony-pictures', 'studiocanal',
 ]);
+
+/* Artwork delivered pale on a solid backdrop that is the artboard rather than
+   part of the mark — Marv's dice sit on a black square nobody asked for. The
+   backdrop is dropped, and what is left is read by where the artwork covers
+   rather than by how dark it is, because after the drop the mark is white and
+   reading darkness would find nothing at all. */
+const PLATE = new Set(['marv']);
+
+/* The backdrop itself: a rectangle, drawn as a <rect> or as a four-sided path,
+   filling the whole frame. Only a shape that covers the frame qualifies — a
+   panel behind part of a logo is left where it is. */
+const dropBackdrop = (svg) => {
+  const box = svg.match(/viewBox="([\d.\-\s,]+)"/i);
+  if (!box) return svg;
+  const [, , vw, vh] = box[1].trim().split(/[\s,]+/).map(Number);
+  if (!vw || !vh) return svg;
+  const covers = (w, h) => Math.abs(w) >= vw * 0.98 && Math.abs(h) >= vh * 0.98;
+
+  let out = svg.replace(/<rect\b[^>]*\/?>/gi, (tag) => {
+    const w = tag.match(/\bwidth="([\d.]+)"/i);
+    const h = tag.match(/\bheight="([\d.]+)"/i);
+    return w && h && covers(+w[1], +h[1]) ? '' : tag;
+  });
+  /* the same rectangle written as a path: move, across, down, back, close */
+  out = out.replace(/<path\b[^>]*\bd="([^"]+)"[^>]*\/?>/gi, (tag, d) => {
+    const rect = d.trim().match(/^m-?[\d.]+[\s,-]+-?[\d.]+h(-?[\d.]+)v(-?[\d.]+)h-?[\d.]+z$/i);
+    return rect && covers(+rect[1], +rect[2]) ? '' : tag;
+  });
+  return out;
+};
 
 if (!existsSync(SRC)) {
   console.error(`No artwork found at ${SRC}`);
@@ -73,6 +104,70 @@ const recolourSvg = (svg, ink) => {
 
 const hexToRgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
 
+/* Where a drawing actually puts its ink, measured by rendering it. Everything
+   the wall does with an SVG — how wide it is, how tall to make its cell,
+   whether its frame needs pulling in — is decided from this rather than from
+   the numbers in the file, which are frequently wrong. */
+const inkBox = async (svg) => {
+  const { data, info } = await sharp(Buffer.from(svg), { density: 200, limitInputPixels: false })
+    .resize({ width: 600, height: 600, fit: 'inside' })
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  let left = info.width, top = info.height, right = -1, bottom = -1;
+  for (let y = 0; y < info.height; y++) {
+    for (let x = 0; x < info.width; x++) {
+      if (data[(y * info.width + x) * info.channels + 3] <= 10) continue;
+      if (x < left) left = x;
+      if (x > right) right = x;
+      if (y < top) top = y;
+      if (y > bottom) bottom = y;
+    }
+  }
+  if (right < left || bottom < top) return null;
+
+  const width = right - left + 1;
+  const height = bottom - top + 1;
+  return {
+    left, top, width, height,
+    frameW: info.width, frameH: info.height,
+    fills: Math.min(width / info.width, height / info.height),
+    ratio: width / height,
+  };
+};
+
+/* A width and height on the root that disagree with the viewBox — Michael Kors
+   ships a 212×20 wordmark labelled 16×16. A browser sizing a background image
+   believes the label, not the drawing, and fits the wordmark into a square
+   where it lands as a speck. Dropping them lets the drawing speak for itself. */
+const stripSize = (svg) =>
+  /viewBox=/i.test(svg)
+    ? svg.replace(/<svg\b[^>]*>/i, (tag) => tag.replace(/\s(width|height)=("[^"]*"|'[^']*')/gi, ''))
+    : svg;
+
+/* Pulls the frame in to meet the drawing. Brands export against all sorts of
+   artboards — Represent fills under half of its frame, Rimowa barely half its
+   height — and because the wall sizes each mark against its frame, that
+   whitespace would show up as that brand being mysteriously smaller than its
+   neighbours. The traced logos further down get this for free: cropping to
+   their ink is part of being traced. */
+const trimFrame = (svg, ink) => {
+  const box = svg.match(/viewBox="([\d.\-\s,]+)"/i);
+  if (!box || !ink) return svg;
+  const [vx, vy, vw, vh] = box[1].trim().split(/[\s,]+/).map(Number);
+  if (!vw || !vh) return svg;
+
+  const round = (n) => Number(n.toFixed(3));
+  const frame = [
+    round(vx + (ink.left / ink.frameW) * vw),
+    round(vy + (ink.top / ink.frameH) * vh),
+    round((ink.width / ink.frameW) * vw),
+    round((ink.height / ink.frameH) * vh),
+  ].join(' ');
+  return svg.replace(/viewBox="[\d.\-\s,]+"/i, `viewBox="${frame}"`);
+};
+
 const traced = [];
 const logos = [];
 
@@ -84,30 +179,45 @@ for (const file of files) {
   /* An SVG that is really a photograph in a wrapper can't be repainted either. */
   if (svg.includes('<image') || KNOCKOUT.has(name)) { traced.push(file); continue; }
 
+  const baseline = recolourSvg(svg, DARK_INK);
+  const asDrawn = await inkBox(baseline);
+
+  /* Tightening the frame is offered, not assumed. Artwork built out of clipped
+     references — Barclays draws its wordmark through a clip path on an A4
+     artboard — renders differently here than it does in a browser, and a frame
+     computed from a rendering that disagrees would crop the logo to a couple of
+     letters. So the tightened version is rendered too, and only kept if the
+     mark still comes out the same shape and now fills its frame. Anything that
+     fails the check keeps the frame it arrived with. */
+  let chosen = baseline;
+  let ratio = asDrawn ? asDrawn.ratio : null;
+  if (asDrawn && asDrawn.fills < 0.98) {
+    const candidate = trimFrame(stripSize(baseline), await inkBox(stripSize(baseline)));
+    const trimmed = await inkBox(candidate);
+    const sameShape = trimmed && Math.abs(trimmed.ratio - asDrawn.ratio) <= asDrawn.ratio * 0.04;
+    if (trimmed && sameShape && trimmed.fills > 0.96) {
+      chosen = candidate;
+      ratio = trimmed.ratio;
+    }
+  }
+
   /* Brand SVGs arrive carrying editor cruft and unused clip paths — several
      times the weight of the drawing itself on a page that loads 72 of them. */
-  const tidy = (ink) => optimize(recolourSvg(svg, ink), { multipass: true }).data;
-  writeFileSync(join(OUT, `${name}.svg`), tidy(DARK_INK));
-  writeFileSync(join(OUT, `${name}-c.svg`), tidy(LIGHT_INK));
+  const tidy = (source) => optimize(source, { multipass: true }).data;
+  writeFileSync(join(OUT, `${name}.svg`), tidy(chosen));
+  writeFileSync(join(OUT, `${name}-c.svg`), tidy(chosen.split(DARK_INK).join(LIGHT_INK)));
 
-  const viewBox = svg.match(/viewBox="([\d.\-\s,]+)"/i);
-  let ratio = null;
-  if (viewBox) {
-    const n = viewBox[1].trim().split(/[\s,]+/).map(Number);
-    if (n[3]) ratio = n[2] / n[3];
-  }
-  if (!ratio) {
-    const w = svg.match(/width="([\d.]+)/i);
-    const h = svg.match(/height="([\d.]+)/i);
-    if (w && h) ratio = Number(w[1]) / Number(h[1]);
-  }
   logos.push({ name, ext: 'svg', ratio: ratio || 3 });
 }
 
 for (const file of traced) {
   const name = basename(file, extname(file));
   const isSvg = extname(file).toLowerCase() === '.svg';
-  const source = isSvg ? Buffer.from(readFileSync(file, 'utf8')) : file;
+  const onPlate = PLATE.has(name);
+  const artwork = isSvg
+    ? (onPlate ? dropBackdrop(readFileSync(file, 'utf8')) : readFileSync(file, 'utf8'))
+    : null;
+  const source = isSvg ? Buffer.from(artwork) : file;
   const flattened = await sharp(source, { density: 400, limitInputPixels: false }).png().toBuffer();
   const meta = await sharp(flattened).metadata();
   const { data, info } = await sharp(flattened)
@@ -124,7 +234,7 @@ for (const file of traced) {
     const [r, g, b] = [data[i], data[i + 1], data[i + 2]];
     const opacity = info.channels === 4 ? data[i + 3] : 255;
     const brightness = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-    ink[p] = Math.round(opacity * Math.max(0, 1 - brightness));
+    ink[p] = onPlate ? opacity : Math.round(opacity * Math.max(0, 1 - brightness));
   }
 
   /* Anything that was clearly artwork goes to full strength and anything that
@@ -178,11 +288,22 @@ for (const file of traced) {
 
 logos.sort((a, b) => a.name.localeCompare(b.name));
 
-/* One height per logo, worked back from its shape, so a wide wordmark and a
-   square mark carry the same weight on the wall. */
-const heightFor = (ratio) => Math.max(26, Math.min(58, Math.round(150 / ratio)));
+/* One height per logo, worked back from its shape. Every mark gets one column
+   and no more, so each row holds the same number of names and the wall keeps
+   its grid — and every mark is drawn as large as that column will carry it,
+   which is either the full width of the column or the full height of the row,
+   whichever it runs out of first.
+
+   TRACK is how wide a column is on the desktop wall, worked out from the
+   stylesheet: the 1280px stack, less its 40px of padding either side, less the
+   five 48px gaps between six columns. CAP is the row height. Keep the two in
+   step with global.css — the numbers here decide how tall a mark is asked to
+   be, and the stylesheet decides how much room it actually gets. */
+const TRACK = 160;
+const CAP = 56;
+const clamp = (low, high, value) => Math.max(low, Math.min(high, Math.round(value)));
 const rows = logos.map((logo) => ({
-  height: heightFor(logo.ratio),
+  height: clamp(15, CAP, TRACK / logo.ratio),
   light: `/assets/logos/${logo.name}.${logo.ext}`,
   dark: `/assets/logos/${logo.name}-c.${logo.ext}`,
 }));
