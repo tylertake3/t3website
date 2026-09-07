@@ -6,7 +6,7 @@
    commas and ampersands: "Deadpool & Wolverine" is one production, and no split
    rule can tell that apart from "Vison & Slow Horses". Longest titles are
    matched first so "The Witcher" can never swallow a longer title containing it. */
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import logoData from '../data/production-logos.json';
@@ -19,7 +19,15 @@ export type LogoEntry = {
   logoOnLight?: string;
   aliases?: string;
 };
-export type CreditItem = { title: string; onDark?: string; onLight?: string };
+export type CreditItem = {
+  title: string;
+  onDark?: string;
+  onLight?: string;
+  /* The size the artwork should be drawn at, in px, so every production reads at
+     a matching weight beside a review. See opticalSize below. */
+  logoWidth?: number;
+  logoHeight?: number;
+};
 
 /* A logo referenced in the library but not yet uploaded renders as its title in
    type instead of firing a 404 for artwork that isn't there — the same rule the
@@ -35,6 +43,68 @@ const fileSupplied = (path?: string) => {
     fileURLToPath(new URL('../../public' + path, import.meta.url)),
   ];
   return candidates.some((candidate) => existsSync(candidate));
+};
+
+/* The first file that exists for a given path, so measurements and the
+   existence check agree on which copy on disk they are talking about. */
+const locate = (path?: string) => {
+  if (!path) return undefined;
+  const candidates = [
+    resolve(process.cwd(), 'public' + path),
+    fileURLToPath(new URL('../../public' + path, import.meta.url)),
+  ];
+  return candidates.find((candidate) => existsSync(candidate));
+};
+
+/* Reads a PNG's own width and height straight out of its header — no image
+   library needed, and only the first 24 bytes are ever looked at. */
+const pngSize = (file: string): { width: number; height: number } | null => {
+  try {
+    const head = readFileSync(file).subarray(0, 24);
+    if (head.length < 24 || head.readUInt32BE(0) !== 0x89504e47) return null;
+    return { width: head.readUInt32BE(16), height: head.readUInt32BE(20) };
+  } catch {
+    return null;
+  }
+};
+
+/* Production logos are wildly different shapes: a tall stacked mark next to a
+   long single-line wordmark. Drawing them all at one height makes the long ones
+   tower over the page and the compact ones look lost, so instead each is scaled
+   to cover roughly the same amount of the page as the others — the eye reads
+   "same size" from area far more than from height.
+   The limits stop the very longest wordmarks from running away with the row and
+   the squarest marks from towering over it, and the files are trimmed of their
+   export padding first (scripts/trim-production-logos.mjs) so these shapes are
+   measured from the artwork itself. */
+const TARGET_AREA = 4100;
+const MIN_HEIGHT = 18;
+const MAX_HEIGHT = 42;
+const MAX_WIDTH = 215;
+
+const sizeCache = new Map<string, { logoWidth: number; logoHeight: number } | undefined>();
+
+const opticalSize = (path?: string) => {
+  if (!path) return undefined;
+  if (sizeCache.has(path)) return sizeCache.get(path);
+
+  let result: { logoWidth: number; logoHeight: number } | undefined;
+  const file = locate(path);
+  const size = file ? pngSize(file) : null;
+  if (size && size.width > 0 && size.height > 0) {
+    const ratio = size.width / size.height;
+    let height = Math.sqrt(TARGET_AREA / ratio);
+    height = Math.min(MAX_HEIGHT, Math.max(MIN_HEIGHT, height));
+    let width = height * ratio;
+    if (width > MAX_WIDTH) {
+      width = MAX_WIDTH;
+      height = width / ratio;
+    }
+    result = { logoWidth: Math.round(width), logoHeight: Math.round(height) };
+  }
+
+  sizeCache.set(path, result);
+  return result;
 };
 
 const library: LogoEntry[] = (logoData.logos ?? []) as LogoEntry[];
@@ -76,11 +146,16 @@ export function resolveCredits(credits: string | undefined): CreditItem[] {
 
   taken.sort((a, b) => a.start - b.start);
 
-  const matched: CreditItem[] = taken.map(({ entry }) => ({
-    title: entry.title,
-    onDark: fileSupplied(entry.logoOnDark) ? entry.logoOnDark : undefined,
-    onLight: fileSupplied(entry.logoOnLight) ? entry.logoOnLight : undefined,
-  }));
+  const matched: CreditItem[] = taken.map(({ entry }) => {
+    const onDark = fileSupplied(entry.logoOnDark) ? entry.logoOnDark : undefined;
+    const onLight = fileSupplied(entry.logoOnLight) ? entry.logoOnLight : undefined;
+    return {
+      title: entry.title,
+      onDark,
+      onLight,
+      ...(opticalSize(onDark ?? onLight) ?? {}),
+    };
+  });
 
   /* Anything the library doesn't know about yet still gets named, so a new
      production appears on the page the moment it is typed into a review. */

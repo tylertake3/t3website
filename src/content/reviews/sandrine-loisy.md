@@ -1,6 +1,6 @@
 ---
 name: "Sandrine\nLoisy"
-role: ""
+role: "Crowd 2nd AD"
 credits: "Alien: Earth"
 order: 13
 ---

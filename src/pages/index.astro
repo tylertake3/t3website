@@ -32,9 +32,31 @@ const marquee = [...categories, ...categories, ...categories];
 const stripMid = (copy.hero.strip.length - 1) / 2;
 const stripStagger = (i: number) => Math.abs(i - stripMid).toFixed(1);
 
-/* client logos cross-fade between two half-grids */
-const half = Math.ceil(clients.length / 2);
-const logoPages = [clients.slice(0, half), clients.slice(half)];
+/* The homepage shows a four-row window on the roster rather than the whole
+   wall, and turns the marks over in place so the window keeps moving through
+   the list. Six columns is the desktop grid, so twenty-four cells are rendered
+   up front; the script resizes that to whatever the breakpoint's column count
+   makes four rows, and hands each cell its next logo from the list below.
+
+   The list is walked in a fixed stride rather than in order, because clients
+   are stored alphabetically and reading straight through would put every A on
+   the wall at once and every W together twenty minutes later. A stride with no
+   factor in common with the roster length still reaches every mark exactly
+   once per lap, so nothing is dropped and nothing repeats early — it just
+   arrives mixed. It is worked out at build time, so the wall is the same on
+   every visit and the markup matches what the script goes on to do. */
+const LOGO_ROWS = 4;
+const supplied = clients.filter(hasLogo);
+const stride = (n: number) => {
+  for (let s = Math.floor(n / 2.3); s > 1; s--) {
+    const gcd = (a: number, b: number): number => (b ? gcd(b, a % b) : a);
+    if (gcd(s, n) === 1) return s;
+  }
+  return 1;
+};
+const step = stride(supplied.length);
+const logoRoster = supplied.map((_, i) => supplied[(i * step) % supplied.length]);
+const logoWindow = logoRoster.slice(0, LOGO_ROWS * 6);
 
 
 /* Organization schema — absolute URLs, sourced from src/data/site.ts */
@@ -208,7 +230,18 @@ const organizationSchema = {
                     if (!c) return null;
                     return (
                       <span class={c.onDark ? 'revCredit revCreditLogo' : 'revCredit'}>
-                        {c.onDark ? <img src={c.onDark} alt={c.title} loading="lazy" /> : c.title}
+                        {c.onDark ? (
+                          <img
+                            src={c.onDark}
+                            alt={c.title}
+                            loading="lazy"
+                            width={c.logoWidth}
+                            height={c.logoHeight}
+                            style={c.logoHeight ? `--logo-h:${c.logoHeight};--logo-w:${c.logoWidth}` : undefined}
+                          />
+                        ) : (
+                          c.title
+                        )}
                       </span>
                     );
                   })()}
@@ -244,25 +277,25 @@ const organizationSchema = {
       {copy.clients.body}
     </p>
     <div class="logoStack" id="logoStack">
-      {
-        logoPages.map((page, pi) => (
+      <div class="logoPage is-on" id="logoWall" aria-hidden="true">
+        {logoWindow.map((cell) => (
           <div
-            class={pi === 0 ? 'logoPage is-on' : 'logoPage'}
-            style={pi === 0 ? 'position:relative;' : 'position:absolute;'}
-            aria-hidden="true"
-          >
-            {page.map((cell) => (
-              <div
-                class="logoCell"
-                style={hasLogo(cell) ? `height:${cell.height}px; background-image:url("${cell.dark}");` : `height:${cell.height}px;`}
-                data-light={hasLogo(cell) ? cell.light : undefined}
-                data-dark={hasLogo(cell) ? cell.dark : undefined}
-              />
-            ))}
-          </div>
-        ))
-      }
+            class="logoCell"
+            style={hasLogo(cell) ? `height:${cell.height}px; background-image:url("${cell.dark}");` : `height:${cell.height}px;`}
+            data-light={hasLogo(cell) ? cell.light : undefined}
+            data-dark={hasLogo(cell) ? cell.dark : undefined}
+          />
+        ))}
+      </div>
     </div>
+    <script
+      type="application/json"
+      id="logoRoster"
+      set:html={JSON.stringify({
+        from: logoWindow.length,
+        logos: logoRoster.map((c) => ({ h: c.height, l: c.light, d: c.dark })),
+      })}
+    />
     <p class="logoHint" aria-hidden="true">{copy.clients.turnHint}</p>
   </section>
 
@@ -528,50 +561,115 @@ const organizationSchema = {
       })();
 
       /* ---------------- client logo wall: cascade ----------------
-         The wall turns over one mark at a time along a diagonal, top-left
-         first. It does it on its own every 8s, and immediately whenever the
-         wall is clicked — a click restarts the clock so it never turns over
-         twice in quick succession. */
+         The wall is a four-row window on a roster far longer than it, and it
+         moves through that roster rather than flipping between two fixed
+         halves — with a hundred-odd marks, two halves would mean each one only
+         ever appearing in the same slot next to the same neighbours.
+
+         Each cell turns over where it stands: it lifts away, takes on the next
+         mark in the list, and settles back. The turns run along a diagonal from
+         the top left, so the wall reads as changing rather than blinking. It
+         goes on its own every 8s, and immediately when clicked — a click
+         restarts the clock so it never turns twice in quick succession. */
       (function () {
         var stack = document.getElementById('logoStack');
-        var pagesEls = Array.prototype.slice.call(document.querySelectorAll('.logoPage'));
-        if (!stack || pagesEls.length < 2) return;
+        var wall = document.getElementById('logoWall');
+        var source = document.getElementById('logoRoster');
+        if (!stack || !wall || !source) return;
 
-        var STEP = 55;      /* how far apart in the diagonal two marks turn */
-        var SETTLE = 1200;  /* longest a turn can take, delay included */
-        var i = 0, timer = null, turning = false;
+        var data = null;
+        try { data = JSON.parse(source.textContent || 'null'); } catch (err) { data = null; }
+        var roster = (data && data.logos) || [];
+        if (roster.length < 2) return;
 
-        /* The stagger is per cell and depends on the grid, which reflows at
-           each breakpoint, so the column count is read back from the layout
-           rather than assumed. */
+        var ROWS = 4;
+        var SPREAD = 480; /* how long the diagonal takes to cross the whole wall */
+        var LIFT = 520;   /* how long a mark takes to lift away or settle back */
+        /* picks up where the marks already on the page left off, so the first
+           turn carries on through the list rather than doubling back */
+        var next = data.from || 0;
+        var timer = null, turning = false, pending = [];
+
+        function darkTheme() {
+          return document.documentElement.getAttribute('data-theme') !== 'light';
+        }
+
+        /* The mark a cell carries, kept on the element as well as painted, so
+           the theme toggle in site.js can repaint the wall on its own. */
+        function dress(cell, logo) {
+          cell.style.height = logo.h + 'px';
+          cell.setAttribute('data-light', logo.l);
+          cell.setAttribute('data-dark', logo.d);
+          cell.style.backgroundImage = 'url("' + (darkTheme() ? logo.d : logo.l) + '")';
+        }
+
+        function columns() {
+          var tracks = window.getComputedStyle(wall).gridTemplateColumns.split(' ').length;
+          return tracks > 0 ? tracks : 1;
+        }
+
+        /* Every mark takes exactly one column, so four full rows is simply four
+           times the column count — which the stylesheet changes as the page
+           narrows, and which is therefore read back from the layout. */
+        function fit() {
+          var want = columns() * ROWS;
+          while (wall.children.length > want) wall.removeChild(wall.lastElementChild);
+          while (wall.children.length < want) {
+            var cell = document.createElement('div');
+            cell.className = 'logoCell';
+            dress(cell, roster[next % roster.length]);
+            next++;
+            wall.appendChild(cell);
+          }
+          stagger();
+        }
+
+        /* Each cell's place in the diagonal, measured from where it actually
+           sits rather than counted off its position in the list — a wordmark
+           taking two columns pushes everything after it along, so an index can
+           no longer say which column a cell is in. */
         function stagger() {
-          for (var p = 0; p < pagesEls.length; p++) {
-            var cols = window.getComputedStyle(pagesEls[p]).gridTemplateColumns.split(' ').length || 1;
-            var cells = pagesEls[p].children;
-            for (var c = 0; c < cells.length; c++) {
-              var delay = (Math.floor(c / cols) + (c % cols)) * STEP;
-              cells[c].style.setProperty('--d', delay + 'ms');
-            }
+          var width = wall.offsetWidth || 1;
+          var height = wall.offsetHeight || 1;
+          var cells = wall.children;
+          for (var c = 0; c < cells.length; c++) {
+            var across = cells[c].offsetLeft / width + cells[c].offsetTop / height;
+            cells[c].style.setProperty('--d', Math.round(across * SPREAD) + 'ms');
           }
         }
 
+        function clearPending() {
+          for (var i = 0; i < pending.length; i++) window.clearTimeout(pending[i]);
+          pending = [];
+        }
+
+        function hide(on) {
+          var cells = wall.children;
+          for (var c = 0; c < cells.length; c++) {
+            if (on) cells[c].classList.add('is-turning');
+            else cells[c].classList.remove('is-turning');
+          }
+        }
+
+        /* The wall clears on the diagonal, changes over while nothing is on
+           show, then refills on the same diagonal. */
         function turn() {
           if (turning) return;
           turning = true;
-          var from = pagesEls[i];
-          i = (i + 1) % pagesEls.length;
-          var to = pagesEls[i];
-          from.classList.remove('is-on');
-          from.classList.add('is-out');
-          to.classList.add('is-on');
-          window.setTimeout(function () {
-            /* park the spent half back below without animating it there */
-            from.classList.add('is-reset');
-            from.classList.remove('is-out');
-            void from.offsetWidth;
-            from.classList.remove('is-reset');
-            turning = false;
-          }, SETTLE);
+          hide(true);
+
+          pending.push(window.setTimeout(function () {
+            var cells = wall.children;
+            for (var c = 0; c < cells.length; c++) {
+              dress(cells[c], roster[next % roster.length]);
+              next++;
+            }
+            fit();
+            hide(true);        /* any cell just added starts out of sight too */
+            void wall.offsetWidth;
+            hide(false);
+            pending.push(window.setTimeout(function () { turning = false; }, SPREAD + LIFT));
+          }, SPREAD + LIFT));
         }
 
         function start() {
@@ -585,13 +683,16 @@ const organizationSchema = {
         var rzt = null;
         window.addEventListener('resize', function () {
           window.clearTimeout(rzt);
-          rzt = window.setTimeout(stagger, 150);
+          rzt = window.setTimeout(fit, 150);
         });
 
-        stagger();
+        fit();
         start();
         if (reduce.addEventListener) reduce.addEventListener('change', start);
-        window.addEventListener('pagehide', function () { window.clearInterval(timer); });
+        window.addEventListener('pagehide', function () {
+          window.clearInterval(timer);
+          clearPending();
+        });
       })();
 
       window.addEventListener('pagehide', function () { clearInterval(heroTimer); });

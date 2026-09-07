@@ -114,25 +114,79 @@ import NumberFlow from 'number-flow';
     var menuList = menu.querySelector('.menuList');
     var picking = false;
 
-    /* Sub-lists open on demand rather than sitting open. */
+    /* Sub-lists open on demand rather than sitting open. Height is measured and
+       set in pixels so opening and closing both glide — a plain hidden flip made
+       the words below jump, which read as a glitch rather than a movement. */
     var toggles = menu.querySelectorAll('.menuToggle');
+    var stillMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function setGroup(toggle, open) {
+      var sub = document.getElementById(toggle.getAttribute('aria-controls'));
+      if (!sub) return;
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+
+      if (stillMotion) {
+        sub.hidden = !open;
+        sub.classList.toggle('is-open', open);
+        sub.classList.remove('is-closing');
+        sub.style.height = open ? 'auto' : '';
+        return;
+      }
+
+      if (sub._menuEnd) sub.removeEventListener('transitionend', sub._menuEnd);
+
+      if (open) {
+        sub.hidden = false;
+        sub.classList.remove('is-closing');
+        sub.style.height = 'auto';
+        var full = sub.scrollHeight;
+        sub.style.height = '0px';
+        void sub.offsetHeight; /* start from closed so the ease is seen */
+        sub.classList.add('is-open');
+        sub.style.height = full + 'px';
+        sub._menuEnd = function (e) {
+          if (e.target !== sub || e.propertyName !== 'height') return;
+          sub.style.height = 'auto'; /* let it grow if the window resizes */
+          sub.removeEventListener('transitionend', sub._menuEnd);
+        };
+      } else {
+        if (sub.hidden) return;
+        sub.style.height = sub.scrollHeight + 'px';
+        void sub.offsetHeight;
+        sub.classList.add('is-closing');
+        sub.classList.remove('is-open');
+        sub.style.height = '0px';
+        sub._menuEnd = function (e) {
+          if (e.target !== sub || e.propertyName !== 'height') return;
+          sub.hidden = true;
+          sub.classList.remove('is-closing');
+          sub.style.height = '';
+          sub.removeEventListener('transitionend', sub._menuEnd);
+        };
+      }
+      sub.addEventListener('transitionend', sub._menuEnd);
+    }
+
     Array.prototype.forEach.call(toggles, function (toggle) {
+      /* a group the current page belongs to arrives already open */
+      if (toggle.getAttribute('aria-expanded') === 'true') {
+        var openSub = document.getElementById(toggle.getAttribute('aria-controls'));
+        if (openSub) {
+          openSub.classList.add('is-open');
+          openSub.style.height = 'auto';
+        }
+      }
+
       toggle.addEventListener('click', function () {
-        var sub = document.getElementById(toggle.getAttribute('aria-controls'));
-        if (!sub) return;
         var opening = toggle.getAttribute('aria-expanded') !== 'true';
 
         if (opening) {
           Array.prototype.forEach.call(toggles, function (other) {
-            if (other === toggle) return;
-            var otherSub = document.getElementById(other.getAttribute('aria-controls'));
-            other.setAttribute('aria-expanded', 'false');
-            if (otherSub) otherSub.hidden = true;
+            if (other !== toggle) setGroup(other, false);
           });
         }
 
-        toggle.setAttribute('aria-expanded', opening ? 'true' : 'false');
-        sub.hidden = !opening;
+        setGroup(toggle, opening);
       });
     });
 

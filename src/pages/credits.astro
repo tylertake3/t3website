@@ -101,7 +101,7 @@ const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `ba
       {!anyLogoSupplied && <p class="todoNote">{copy.clients.artworkNote}</p>}
     </div>
     <div class="logoStack creditsLogoWall">
-      <div class="logoPage is-on" style="position:relative;" aria-hidden="true">
+      <div class="logoPage is-on" aria-hidden="true">
         {
           clients.map((cell) => (
             <div
@@ -145,7 +145,18 @@ const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `ba
                         return (
                           <span class="creditsQuoteCredits">
                             <span class={c.onDark ? 'revCredit revCreditLogo' : 'revCredit'}>
-                              {c.onDark ? <img src={c.onDark} alt={c.title} loading="lazy" /> : c.title}
+                              {c.onDark ? (
+                                <img
+                                  src={c.onDark}
+                                  alt={c.title}
+                                  loading="lazy"
+                                  width={c.logoWidth}
+                                  height={c.logoHeight}
+                                  style={c.logoHeight ? `--logo-h:${c.logoHeight};--logo-w:${c.logoWidth}` : undefined}
+                                />
+                              ) : (
+                                c.title
+                              )}
                             </span>
                           </span>
                         );
@@ -215,7 +226,7 @@ const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `ba
        suit the tighter quote grid */
     .creditsQuoteCredits { display:flex; flex-wrap:wrap; align-items:center; gap:8px 18px; margin-top:10px; font-size:15px; font-weight:400; color:#c7c3bd; }
     .creditsQuoteCredits .revCredit { animation:none; font-size:13px; }
-    .creditsQuoteCredits .revCredit img { height:28px; max-width:140px; }
+    .creditsQuoteCredits .revCredit img { --logo-scale:0.74; }
     .creditsQuote:hover .revCredit { opacity:1; }
 
     @media (max-width:1024px) {
