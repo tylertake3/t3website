@@ -1,6 +1,6 @@
 import { t as __exportAll } from "./rolldown-runtime_D7D4PA-g.mjs";
 import { A as ExpectedNotESMImage, H as InvalidImageService, J as MissingGetFontFileRequestUrl, L as ImageMissingAlt, O as ExpectedImage, R as IncompatibleDescriptorOptions, U as LocalImageUsedWrongly, Y as MissingImageDimension, _ as inferRemoteSize$1, _t as AstroError, b as isRemoteAllowed, c as isRemotePath, ct as RemoteImageNotAllowed, f as removeQueryString, ht as UnsupportedImageFormat, j as FontFamilyNotFound, k as ExpectedImageOptions, l as joinPaths, mt as UnsupportedImageConversion, v as fetchWithRedirects, z as InvalidComponentArgs } from "./path_Cdi6L2qr.mjs";
-import { S as createAstro, b as unescapeHTML, f as renderTemplate, i as spreadAttributes, m as addAttribute, p as maybeRenderHead, t as createConsoleLogger } from "./console_D6lw_DWn.mjs";
+import { d as addAttribute, g as unescapeHTML, l as renderTemplate, t as spreadAttributes, u as maybeRenderHead, v as createAstro } from "./server_DUKa_a0b.mjs";
 import * as mime from "mrmime";
 //#region node_modules/astro/dist/assets/utils/imageKind.js
 function isESMImportedImage(src) {
@@ -48,9 +48,6 @@ function createComponent(arg1, moduleId, propagation) {
 	if (typeof arg1 === "function") return baseCreateComponent(arg1, moduleId, propagation);
 	else return createComponentWithOptions(arg1);
 }
-//#endregion
-//#region \0virtual:astro:logger
-var level = "info";
 var VALID_SUPPORTED_FORMATS = [
 	"jpeg",
 	"jpg",
@@ -345,7 +342,7 @@ var cssFitValues = [
 ];
 async function getConfiguredImageService() {
 	if (!globalThis?.astroAsset?.imageService) {
-		const { default: service } = await import("./sharp_CciIKCpa.mjs").catch((e) => {
+		const { default: service } = await import("./sharp_CtEl2G67.mjs").catch((e) => {
 			const error = new AstroError(InvalidImageService);
 			error.cause = e;
 			throw error;
@@ -356,7 +353,7 @@ async function getConfiguredImageService() {
 	}
 	return globalThis.astroAsset.imageService;
 }
-async function getImage$1(options, imageConfig, logger) {
+async function getImage$1(options, imageConfig) {
 	if (!options || typeof options !== "object") throw new AstroError({
 		...ExpectedImageOptions,
 		message: ExpectedImageOptions.message(JSON.stringify(options))
@@ -380,7 +377,7 @@ async function getImage$1(options, imageConfig, logger) {
 				...RemoteImageNotAllowed,
 				message: RemoteImageNotAllowed.message(resolvedOptions.src)
 			});
-			const getRemoteSize = (url) => service.getRemoteSize?.(url, imageConfig, logger) ?? inferRemoteSize$1(url, imageConfig);
+			const getRemoteSize = (url) => service.getRemoteSize?.(url, imageConfig) ?? inferRemoteSize$1(url, imageConfig);
 			const result = await getRemoteSize(resolvedOptions.src);
 			resolvedOptions.width ??= result.width;
 			resolvedOptions.height ??= result.height;
@@ -432,20 +429,20 @@ async function getImage$1(options, imageConfig, logger) {
 		if (resolvedOptions.fit && cssFitValues.includes(resolvedOptions.fit)) resolvedOptions["data-astro-image-fit"] = resolvedOptions.fit;
 		resolvedOptions["data-astro-image-pos"] = (resolvedOptions.position || "center").replace(/\s+/g, "-");
 	}
-	const validatedOptions = service.validateOptions ? await service.validateOptions(resolvedOptions, imageConfig, logger) : resolvedOptions;
-	validatedOptions.format ??= await peekRemoteFormatForStaticEmit(validatedOptions, imageConfig, service, logger);
-	const srcSetTransforms = service.getSrcSet ? await service.getSrcSet(validatedOptions, imageConfig, logger) : [];
+	const validatedOptions = service.validateOptions ? await service.validateOptions(resolvedOptions, imageConfig) : resolvedOptions;
+	validatedOptions.format ??= await peekRemoteFormatForStaticEmit(validatedOptions, imageConfig, service);
+	const srcSetTransforms = service.getSrcSet ? await service.getSrcSet(validatedOptions, imageConfig) : [];
 	const lazyImageURLFactory = (getValue) => {
 		let cached = null;
 		return () => cached ??= getValue();
 	};
-	const initialImageURL = await service.getURL(validatedOptions, imageConfig, logger);
+	const initialImageURL = await service.getURL(validatedOptions, imageConfig);
 	let lazyImageURL = lazyImageURLFactory(() => initialImageURL);
 	const matchesValidatedTransform = (transform) => transform.width === validatedOptions.width && transform.height === validatedOptions.height && transform.format === validatedOptions.format;
 	let srcSets = await Promise.all(srcSetTransforms.map(async (srcSet) => {
 		return {
 			transform: srcSet.transform,
-			url: matchesValidatedTransform(srcSet.transform) ? initialImageURL : await service.getURL(srcSet.transform, imageConfig, logger),
+			url: matchesValidatedTransform(srcSet.transform) ? initialImageURL : await service.getURL(srcSet.transform, imageConfig),
 			descriptor: srcSet.descriptor,
 			attributes: srcSet.attributes
 		};
@@ -488,13 +485,13 @@ async function getImage$1(options, imageConfig, logger) {
 			values: srcSets,
 			attribute: srcSets.map((srcSet) => `${srcSet.url} ${srcSet.descriptor}`).join(", ")
 		},
-		attributes: service.getHTMLAttributes !== void 0 ? await service.getHTMLAttributes(validatedOptions, imageConfig, logger) : {}
+		attributes: service.getHTMLAttributes !== void 0 ? await service.getHTMLAttributes(validatedOptions, imageConfig) : {}
 	};
 }
-async function peekRemoteFormatForStaticEmit(options, imageConfig, service, logger) {
+async function peekRemoteFormatForStaticEmit(options, imageConfig, service) {
 	if (!isRemoteImage(options.src) || !isRemoteAllowed(options.src, imageConfig) || !globalThis.astroAsset?.addStaticImage || !isLocalService(service) || !service.getRemoteSize) return;
 	try {
-		return resolveDefaultOutputFormat((await service.getRemoteSize(options.src, imageConfig, logger)).format);
+		return resolveDefaultOutputFormat((await service.getRemoteSize(options.src, imageConfig)).format);
 	} catch {
 		return;
 	}
@@ -526,7 +523,7 @@ var $$Image = createComponent(async ($$result, $$props, $$slots) => {
 		...image.attributes
 	};
 	return renderTemplate`${maybeRenderHead($$result)}<img${addAttribute(image.src, "src")}${spreadAttributes(attributes)}${addAttribute(className, "class")}>`;
-}, "/Users/tylerkennington/.odyn/take3-website/worktrees/ci2e-lindworm/node_modules/astro/components/Image.astro", void 0);
+}, "/Users/tylerkennington/.odyn/take3-website/worktrees/ynuk-gjallarbru/node_modules/astro/components/Image.astro", void 0);
 //#endregion
 //#region node_modules/astro/components/Picture.astro
 createAstro("https://www.take3agency.com");
@@ -593,7 +590,7 @@ var $$Picture = createComponent(async ($$result, $$props, $$slots) => {
 		const srcsetAttribute = props.densities || !props.densities && !props.widths && !useResponsive ? `${image.src}${image.srcSet.values.length > 0 ? ", " + image.srcSet.attribute : ""}` : image.srcSet.attribute;
 		return renderTemplate`<source${addAttribute(srcsetAttribute, "srcset")}${addAttribute(mime.lookup(image.options.format ?? image.src) ?? `image/${image.options.format}`, "type")}${spreadAttributes(sourceAdditionalAttributes)}>`;
 	})}<img${addAttribute(fallbackImage.src, "src")}${spreadAttributes(attributes)}${addAttribute(className, "class")}></picture>`;
-}, "/Users/tylerkennington/.odyn/take3-website/worktrees/ci2e-lindworm/node_modules/astro/components/Picture.astro", void 0);
+}, "/Users/tylerkennington/.odyn/take3-website/worktrees/ynuk-gjallarbru/node_modules/astro/components/Picture.astro", void 0);
 //#endregion
 //#region \0virtual:astro:assets/fonts/internal
 var componentDataByCssVariable = /* @__PURE__ */ new Map([]);
@@ -633,7 +630,7 @@ var $$Font = createComponent(($$result, $$props, $$slots) => {
 	});
 	const filteredPreloadData = filterPreloads(data.preloads, preload);
 	return renderTemplate`<style>${unescapeHTML(data.css)}</style>${filteredPreloadData?.map(({ url, type }) => renderTemplate`<link rel="preload"${addAttribute(url, "href")} as="font"${addAttribute(`font/${type}`, "type")} crossorigin>`)}`;
-}, "/Users/tylerkennington/.odyn/take3-website/worktrees/ci2e-lindworm/node_modules/astro/components/Font.astro", void 0);
+}, "/Users/tylerkennington/.odyn/take3-website/worktrees/ynuk-gjallarbru/node_modules/astro/components/Font.astro", void 0);
 //#endregion
 //#region node_modules/astro/dist/assets/fonts/infra/ssr-runtime-font-file-url-resolver.js
 var SsrRuntimeFontFileUrlResolver = class {
@@ -651,12 +648,6 @@ var SsrRuntimeFontFileUrlResolver = class {
 new SsrRuntimeFontFileUrlResolver({ urls: /* @__PURE__ */ new Set([]) });
 //#endregion
 //#region \0astro:assets
-var _astroLogger = createConsoleLogger({ level });
-var _runtimeLogger = {
-	info: (message) => _astroLogger.info(null, message),
-	warn: (message) => _astroLogger.warn(null, message),
-	error: (message) => _astroLogger.error(null, message)
-};
 var assetQueryParams = void 0;
 var imageConfig = {
 	"endpoint": { "route": "/_image" },
@@ -675,9 +666,9 @@ Object.defineProperty(imageConfig, "assetQueryParams", {
 	configurable: true
 });
 var inferRemoteSize = async (url) => {
-	return (await getConfiguredImageService()).getRemoteSize?.(url, imageConfig, _runtimeLogger) ?? inferRemoteSize$1(url, imageConfig);
+	return (await getConfiguredImageService()).getRemoteSize?.(url, imageConfig) ?? inferRemoteSize$1(url, imageConfig);
 };
-var getImage = async (options) => await getImage$1(options, imageConfig, _runtimeLogger);
+var getImage = async (options) => await getImage$1(options, imageConfig);
 //#endregion
 //#region node_modules/astro/dist/assets/utils/etag.js
 var fnv1a52 = (str) => {
@@ -723,12 +714,12 @@ async function loadImage(src, headers, imageConfig, isRemote, fetchFn) {
 //#endregion
 //#region node_modules/astro/dist/assets/endpoint/generic.js
 var generic_exports = /* @__PURE__ */ __exportAll({ GET: () => GET });
-var GET = async ({ request, logger }) => {
+var GET = async ({ request }) => {
 	try {
 		const imageService = await getConfiguredImageService();
 		if (!("transform" in imageService)) throw new Error("Configured image service is not a local service");
 		const url = new URL(request.url);
-		const transform = await imageService.parseURL(url, imageConfig, logger);
+		const transform = await imageService.parseURL(url, imageConfig);
 		if (!transform?.src) throw new Error("Incorrect transform returned by `parseURL`");
 		let inputBuffer = void 0;
 		const isRemoteImage = isRemotePath(transform.src);
@@ -737,7 +728,7 @@ var GET = async ({ request, logger }) => {
 		if (!isRemoteImage && sourceUrl.origin !== url.origin) return new Response("Forbidden", { status: 403 });
 		inputBuffer = await loadImage(sourceUrl, isRemoteImage ? new Headers() : request.headers, imageConfig, isRemoteImage);
 		if (!inputBuffer) return new Response("Not Found", { status: 404 });
-		const { data, format } = await imageService.transform(new Uint8Array(inputBuffer), transform, imageConfig, logger);
+		const { data, format } = await imageService.transform(new Uint8Array(inputBuffer), transform, imageConfig);
 		return new Response(data, {
 			status: 200,
 			headers: {
@@ -748,7 +739,7 @@ var GET = async ({ request, logger }) => {
 			}
 		});
 	} catch (err) {
-		logger.error(`Could not process image request: ${err}`);
+		console.error("Could not process image request:", err);
 		return new Response("Internal Server Error", { status: 500 });
 	}
 };

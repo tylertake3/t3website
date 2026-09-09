@@ -6,6 +6,7 @@ import copy from '../content/pages/credits.json';
 import { featuredCredit } from '../lib/productionLogos';
 import { hasLogo } from '../lib/clientLogos';
 import { posterLabel, posterWall } from '../lib/posters';
+import WhereWeWork from '../components/WhereWeWork.astro';
 
 const clients = clientData.clients;
 
@@ -119,6 +120,14 @@ const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `ba
       </div>
     </div>
   </section>
+
+  <!-- where we have worked -->
+  <WhereWeWork
+    kicker={copy.where.kicker}
+    heading={copy.where.heading}
+    body={copy.where.body}
+    countLabel={copy.where.countLabel}
+  />
 
   <!-- testimonials -->
   <section class="band bandDark" aria-labelledby="testimonialsTitle">
