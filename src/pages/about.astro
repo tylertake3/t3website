@@ -1,15 +1,32 @@
 ---
 import Base from '../layouts/Base.astro';
-import { pageExists } from '../lib/pages';
 import copy from '../content/pages/about.json';
-import WhereWeWork from '../components/WhereWeWork.astro';
+import { featuredCredit } from '../lib/productionLogos';
 
-const lauralBuilt = pageExists(copy.laural.href);
+const hero = copy.hero as { eyebrow: string; heading: string; lede: string; image?: string; focus?: string };
+const heroImage = hero.image?.trim() || '';
+const heroFocus = hero.focus?.trim() || '';
+
+interface Member {
+  name: string;
+  role: string;
+  email?: string;
+  bio?: string;
+  image?: string;
+  alt?: string;
+  dog?: boolean;
+}
+const members = copy.team.members as Member[];
+
+const story = copy.story as { kicker?: string; image?: string; imageAlt?: string; caption?: string; paragraphs: string[] };
+const storyImage = story.image?.trim() || '';
+const quotesPending = copy.quotes.slots.some((quote) => !quote.text?.trim());
 
 /* Copy still to be written is styled as a visible note rather than passed off as
    body text. The moment real wording replaces it, it reads as body text again. */
 const isTodo = (text: string) => text.trimStart().startsWith('TODO:');
-const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `bandBody ${extra}`.trim());
+
+const team = copy.team as typeof copy.team & { bioPending: string; emailLabel: string };
 ---
 
 <Base
@@ -17,190 +34,538 @@ const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `ba
   description={copy.meta.description}
   ogTitle={copy.meta.ogTitle}
   ogDescription={copy.meta.ogDescription}
+  ogImage={heroImage || undefined}
+  ogImageAlt="The Take 3 Agency office lounge, with the neon Take 3 sign on the wall"
   footerTitle={copy.meta.footerTitle}
+  footerIntro={copy.meta.footerIntro}
+  footerLinks={[{ label: 'CONTACT US', href: '/contact' }]}
 >
-  <!-- hero -->
-  <section class="pageHero" aria-labelledby="aboutTitle">
-    <div class="pageHeroInner">
-      <p class="kicker">{copy.hero.eyebrow}</p>
-      <h1 class="pageHeroTitle" id="aboutTitle">{copy.hero.heading}</h1>
-      <p class="pageHeroLede">{copy.hero.lede}</p>
+  <!-- hero: the office photo sits behind the headline, with a scrim so the
+       text keeps its contrast in both themes -->
+  <section class="hero aboutHero" aria-labelledby="aboutTitle">
+    {
+      heroImage && (
+        <>
+          <div
+            class="aboutHeroPhoto"
+            style={`background-image:url("${encodeURI(heroImage)}");${heroFocus ? ` background-position:${heroFocus};` : ''}`}
+          />
+          <div class="aboutHeroScrim" />
+        </>
+      )
+    }
+    <!-- same copy block as the home page banner, so the headline lands in
+         exactly the same place -->
+    <div class="heroCopy">
+      <p class="heroKicker" data-hero-line>{copy.hero.eyebrow}</p>
+      <h1 class="heroTitle" id="aboutTitle" data-hero-line>{copy.hero.heading}</h1>
+      <!-- the intro line is kept in the content but not shown: the headline
+           stands alone over the photo -->
     </div>
   </section>
 
-  <!-- the story since 2019 -->
-  <section class="band" aria-labelledby="storyTitle">
-    <div class="bandInner bandSplit">
-      <div>
-        <p class="kicker">{copy.story.kicker}</p>
-        <h2 class="sectionTitle" id="storyTitle">{copy.story.heading}</h2>
-      </div>
-      <div>
-        <p class={bodyClass(copy.story.body)}>{copy.story.body}</p>
-        <div class="stats">
-          {
-            copy.story.stats.map((stat) => (
-              <div class="stat">
-                {/* a figure made of words, like "UK & Europe", takes a smaller
-                    size so it holds one line beside the numbers */}
-                <div class={/\d/.test(stat.number) ? 'statNum' : 'statNum statNumText'} data-countup>
-                  {stat.number}
-                </div>
-                <div class="statLabel">{stat.label}</div>
-              </div>
-            ))
-          }
+  <!-- the story, laid out like a bio: a portrait plate on the left, the
+       paragraphs at body size on the right, the first one a touch larger -->
+  <section class="band aboutStory" aria-label="About the agency">
+    <div class="bandInner aboutStoryInner">
+      <figure class="aboutStoryPhoto">
+        {
+          storyImage ? (
+            <img src={storyImage} alt={story.imageAlt || ''} loading="lazy" decoding="async" />
+          ) : (
+            <span class="slot aboutStorySlot">
+              <span class="slotLabel">{copy.team.slotLabel}</span>
+            </span>
+          )
+        }
+        {storyImage && story.caption?.trim() && <figcaption class="aboutStoryCaption">{story.caption}</figcaption>}
+      </figure>
+      <div class="aboutStoryText">
+        {story.kicker?.trim() && <p class="kicker" data-reveal>{story.kicker}</p>}
+        <div class="bandBody aboutStoryBody">
+          {story.paragraphs.map((para) => <p class={isTodo(para) ? 'todoNote' : undefined}>{para}</p>)}
         </div>
       </div>
     </div>
   </section>
 
-  <!-- how the agency works -->
-  <section class="band" aria-labelledby="operationsTitle">
-    <div class="bandInner">
-      <div class="sectionHead">
-        <h2 class="sectionTitle" id="operationsTitle">{copy.operations.heading}</h2>
-        <p class="kicker">{copy.operations.kicker}</p>
-      </div>
-      <p class={bodyClass(copy.operations.body, 'aboutIntro')}>{copy.operations.body}</p>
-      <ul class="aboutOpsList">
-        {
-          copy.operations.items.map((item) => (
-            <li class="aboutOp">
-              <h3 class="aboutOpName">{item.name}</h3>
-              <p class={isTodo(item.detail) ? 'todoNote aboutOpDetail' : 'aboutOpDetail'}>{item.detail}</p>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
-
-  <!-- where we have worked -->
-  <WhereWeWork
-    kicker={copy.where.kicker}
-    heading={copy.where.heading}
-    body={copy.where.body}
-    countLabel={copy.where.countLabel}
-  />
-
-  <!-- the team -->
+  <!-- the team: the point of the page, so it runs wide and plays the dog
+       completely straight alongside the six people -->
   <section class="band" aria-labelledby="teamTitle">
     <div class="bandInner">
-      <div class="sectionHead">
+      <div class="sectionHead" data-reveal-head>
         <h2 class="sectionTitle" id="teamTitle">{copy.team.heading}</h2>
         <p class="kicker">{copy.team.kicker}</p>
       </div>
-      <p class={bodyClass(copy.team.body, 'aboutIntro')}>{copy.team.body}</p>
-      <ul class="aboutTeam">
+      <p class="aboutLede" data-reveal>{copy.team.body}</p>
+      <div class="aboutTeamScroller">
+      <ul class="aboutTeam" id="aboutTeam" aria-label="Team members">
         {
-          Array.from({ length: copy.team.plates }).map(() => (
-            <li>
-              <span class="slot aboutTeamSlot" style="aspect-ratio:4/5;">
-                <span class="slotLabel">{copy.team.slotLabel}</span>
-              </span>
-            </li>
-          ))
+          members.map((member, i) => {
+            const bio = member.bio?.trim() || '';
+            const bioId = `teamBio${i}`;
+            return (
+              <li class={member.dog ? 'aboutMember aboutMemberDog' : 'aboutMember'} data-reveal-item>
+                {/* the photo is a button: hovering reveals the bio, and so
+                    does tapping or focusing it, for touch and keyboard */}
+                <button class="aboutMemberCard" type="button" aria-expanded="false" aria-controls={bioId}>
+                  {member.image?.trim() ? (
+                    <img class="aboutMemberPhoto" src={member.image} alt={member.alt || member.name} loading="lazy" decoding="async" />
+                  ) : (
+                    <span class="slot aboutTeamSlot">
+                      <span class="slotLabel">{team.slotLabel}</span>
+                    </span>
+                  )}
+                  <span class="aboutMemberBio" id={bioId}>
+                    <span class={bio ? 'aboutMemberBioText' : 'aboutMemberBioText aboutMemberBioPending'}>{bio || team.bioPending}</span>
+                  </span>
+                </button>
+                <p class={member.name.trim() ? 'aboutMemberName' : 'aboutMemberName aboutMemberNamePending'}>
+                  {member.name.trim() || team.namePending}
+                </p>
+                {member.role.trim() && <p class="aboutMemberRole">{member.role}</p>}
+                {member.email?.trim() && (
+                  <p class="aboutMemberEmail">
+                    <span class="srOnly">{team.emailLabel}: </span>
+                    <a href={`mailto:${member.email.trim()}`}>{member.email.trim()}</a>
+                  </p>
+                )}
+              </li>
+            );
+          })
         }
       </ul>
-      <p class="todoNote">{copy.team.todo}</p>
+      </div>
+      <div class="aboutTeamNav">
+        <button class="aboutTeamBtn" id="teamPrev" type="button" aria-label="Previous team members">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+        </button>
+        <button class="aboutTeamBtn" id="teamNext" type="button" aria-label="Next team members">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+        </button>
+      </div>
     </div>
   </section>
 
-  <!-- what the agency stands for, shown through examples -->
-  <section class="band" aria-labelledby="principlesTitle">
+  <!-- what we believe: four short lines rather than a paragraph, so the
+       section can be read at a glance -->
+  <section class="band bandDark aboutValuesBand" aria-labelledby="valuesTitle">
     <div class="bandInner">
-      <div class="sectionHead">
-        <h2 class="sectionTitle" id="principlesTitle">{copy.principles.heading}</h2>
-        <p class="kicker">{copy.principles.kicker}</p>
+      <div class="sectionHead" data-reveal-head>
+        <h2 class="sectionTitle" id="valuesTitle">{copy.values.heading}</h2>
+        <p class="kicker">{copy.values.kicker}</p>
       </div>
-      <p class={bodyClass(copy.principles.body, 'aboutIntro')}>{copy.principles.body}</p>
-      <ul class="aboutExamples">
+      <ol class="aboutValues">
         {
-          copy.principles.examples.map((example) => (
-            <li>
-              <span class="slot aboutExampleSlot" style="aspect-ratio:3/2;">
-                <span class="slotLabel">{example.slotLabel}</span>
-              </span>
+          copy.values.items.map((item, i) => (
+            <li class="aboutValue">
+              <span class="aboutValueNum" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="aboutValueTitle">{item.title}</h3>
+              <p class={isTodo(item.detail) ? 'todoNote' : 'aboutValueDetail'}>{item.detail}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- quotes about the team, held empty until real ones are supplied -->
+  <section class="band" aria-labelledby="quotesTitle">
+    <div class="bandInner">
+      <div class="sectionHead" data-reveal-head>
+        <h2 class="sectionTitle" id="quotesTitle">{copy.quotes.heading}</h2>
+        <p class="kicker">{copy.quotes.kicker}</p>
+      </div>
+      <div class="aboutQuotesScroller">
+      <ul class="aboutQuotes" id="aboutQuotes" aria-label="Quotes about the team">
+        {
+          copy.quotes.slots.map((slot) => (
+            <li data-reveal-item>
+              {slot.text?.trim() ? (
+                <figure class="aboutQuote">
+                  <figcaption>
+                    {slot.name?.trim() && (
+                      <span class="aboutQuoteName">
+                        {/* first name on its own line, surname beneath, as on the home page */}
+                        {slot.name.trim().split(' ')[0]}
+                        <br />
+                        {slot.name.trim().split(' ').slice(1).join(' ')}
+                      </span>
+                    )}
+                    {slot.role?.trim() && <span class="aboutQuoteRole">{slot.role}</span>}
+                    {(() => {
+                      const c = featuredCredit((slot as { credits?: string }).credits);
+                      /* the logo row is always there, even empty, so every quote
+                         starts on the same line */
+                      if (!c) return <span class="aboutQuoteCredit" />;
+                      return (
+                        <span class="aboutQuoteCredit">
+                          <span class={c.onDark ? 'revCredit revCreditLogo' : 'revCredit'}>
+                            {c.onDark ? (
+                              <img
+                                src={c.onDark}
+                                alt={c.title}
+                                loading="lazy"
+                                width={c.logoWidth}
+                                height={c.logoHeight}
+                                style={c.logoHeight ? `--logo-h:${c.logoHeight};--logo-w:${c.logoWidth}` : undefined}
+                              />
+                            ) : (
+                              c.title
+                            )}
+                          </span>
+                        </span>
+                      );
+                    })()}
+                  </figcaption>
+                  <blockquote>{slot.text}</blockquote>
+                </figure>
+              ) : (
+                <span class="slot aboutQuoteSlot">
+                  <span class="slotLabel">{slot.slotLabel}</span>
+                </span>
+              )}
             </li>
           ))
         }
       </ul>
-      <p class="todoNote">{copy.principles.todo}</p>
-    </div>
-  </section>
-
-  <!-- a light link through to Laural -->
-  <section class="band bandDark" aria-labelledby="lauralTitle">
-    <div class="bandInner bandSplit">
-      <div>
-        <p class="kicker">{copy.laural.kicker}</p>
-        <h2 class="displayTitle" id="lauralTitle">{copy.laural.heading}</h2>
       </div>
-      <div>
-        <p class="bandBody">{copy.laural.body}</p>
-        {
-          lauralBuilt ? (
-            <a class="aboutLauralLink" href={copy.laural.href}>
-              {copy.laural.linkLabel} <span aria-hidden="true">&rarr;</span>
-            </a>
-          ) : (
-            <p class="todoNote">{copy.laural.pendingNote}</p>
-          )
-        }
+      <div class="aboutTeamNav">
+        <button class="aboutTeamBtn" id="quotesPrev" type="button" aria-label="Previous quotes">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+        </button>
+        <button class="aboutTeamBtn" id="quotesNext" type="button" aria-label="Next quotes">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+        </button>
       </div>
+      {quotesPending && <p class="todoNote">{copy.quotes.todo}</p>}
     </div>
   </section>
 
   <style is:global>
-    .aboutIntro { margin-top:26px; max-width:64ch; }
+    /* a single quiet line under a section heading, shorter than body copy */
+    .aboutLede { margin-top:26px; max-width:52ch; font-size:18px; font-weight:400; line-height:1.7; color:var(--sub); }
 
-    /* the operational difference: one row per thing Take 3 takes off the production */
-    .aboutOpsList {
-      list-style:none; margin:40px 0 0; padding:0;
-      display:grid; grid-template-columns:repeat(5, minmax(0, 1fr)); gap:28px;
+    /* the story: a bio spread. The photo plate stays put while the copy
+       scrolls past it on wide screens. */
+    .band.aboutStory { padding:104px 0 96px; }
+    /* the photo runs exactly the height of the copy beside it: the picture
+       crops (from the top and bottom, keeping the people) rather than the
+       columns ending at different heights */
+    .aboutStoryInner { display:grid; grid-template-columns:minmax(0, 0.8fr) minmax(0, 1.2fr); gap:64px 96px; align-items:stretch; }
+    .aboutStoryPhoto { margin:0; position:relative; min-height:360px; }
+    .aboutStoryPhoto img { position:absolute; inset:0; }
+    /* the caption hangs below the row, so the picture itself lines up with
+       the bottom of the copy */
+    .aboutStoryCaption { position:absolute; top:100%; left:0; right:0; margin-top:14px; font-size:13px; line-height:1.6; letter-spacing:0.3px; color:var(--muted); }
+    .aboutStoryPhoto img, .aboutStorySlot { display:flex; align-items:center; justify-content:center; width:100%; height:100%; object-fit:cover; object-position:50% 40%; }
+    .aboutStorySlot { aspect-ratio:4/5; }
+    .aboutStoryText { max-width:60ch; }
+    .aboutStoryBody { margin-top:22px; color:var(--ink); font-size:19px; line-height:1.75; }
+    /* the section title, in the display face like every other section title */
+    /* Motion. Everything below only hides once the script has confirmed it can
+       bring it back (the page gets .is-armed), so with no JavaScript, or with
+       reduced motion, the page is simply all there. */
+    .is-armed .aboutStoryBody p,
+    .is-armed [data-reveal],
+    .is-armed [data-reveal-item],
+    .is-armed .aboutValue { opacity:0; transform:translateY(16px); }
+    .is-armed [data-hero-line] { opacity:0; transform:translateY(0.5em); }
+    /* section headings: the title rises, then the rule under it draws across */
+    [data-reveal-head] { position:relative; }
+    .is-armed [data-reveal-head] { border-bottom-color:transparent; }
+    .is-armed [data-reveal-head] > * { opacity:0; transform:translateY(12px); }
+    .is-armed [data-reveal-head]::after {
+      content:''; position:absolute; left:0; right:0; bottom:-1px; height:1px;
+      background:var(--hair); transform-origin:left center; transform:scaleX(0);
+      transition:transform 1s cubic-bezier(0.3, 0, 0.2, 1) 0.15s;
     }
-    .aboutOp { border-top:1px solid var(--hair); padding-top:18px; }
-    .aboutOpName { font-size:15px; letter-spacing:3px; text-transform:uppercase; font-weight:400; color:var(--ink); }
-    .aboutOpDetail { margin-top:14px; font-size:15px; font-weight:400; line-height:1.6; color:var(--sub); text-wrap:pretty; }
-    .todoNote.aboutOpDetail { font-size:13px; color:var(--accent); }
+    .is-armed [data-reveal-head].is-ruled::after { transform:scaleX(1); }
+    .is-armed .aboutStoryPhoto img { opacity:0; }
+    /* the banner photograph settles in from a touch closer, then drifts as the
+       page scrolls so the copy appears to sit in front of it */
+    .aboutHeroPhoto { will-change:transform; }
+    /* the arrows give a small press */
+    .aboutTeamBtn { transition:border-color 0.3s ease, transform 0.25s cubic-bezier(0.3, 0, 0.2, 1); }
+    .aboutTeamBtn:active { transform:scale(0.92); }
 
-    /* the hero and the dark band are dark in both themes, so they keep the dark
-       accent: the light theme's oxblood falls below 4.5:1 on either surface */
-    .pageHero .kicker,
-    .bandDark .kicker,
-    .bandDark .todoNote { color:#d4704f; }
-    .bandDark .todoNote { border-left-color:#d4704f; }
+    /* the banner photo, held behind the copy; the scrim matches the one used
+       on the photo banners elsewhere so the headline stays legible over it */
+    .aboutHeroPhoto { position:absolute; inset:0; background-size:cover; background-position:center; }
+    .aboutHeroScrim { position:absolute; inset:0; background:var(--heroScrim); }
 
-    /* team plates: a placeholder count, not a headcount */
+
+    /* team: one row you swipe or scroll through, snapping card by card, with
+       a pair of arrows for anyone without a swipe or trackpad. The row bleeds
+       to the right edge of the window so it reads as continuing. */
+    .aboutTeamScroller { margin:40px -40px 0 0; }
     .aboutTeam {
-      list-style:none; margin:36px 0 0; padding:0;
-      display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:24px;
+      --teamGap:24px; --teamCols:4;
+      list-style:none; margin:0; padding:0 40px 8px 0;
+      display:flex; gap:var(--teamGap); overflow-x:auto; overscroll-behavior-x:contain;
+      scroll-snap-type:x mandatory; scrollbar-width:none; -webkit-overflow-scrolling:touch;
     }
-    .aboutTeamSlot { display:flex; align-items:center; justify-content:center; }
+    .aboutTeam::-webkit-scrollbar { display:none; }
+    .aboutMember {
+      margin:0; flex:0 0 calc((100% - 40px - var(--teamGap) * (var(--teamCols) - 1)) / var(--teamCols));
+      min-width:0; scroll-snap-align:start;
+    }
+    .aboutTeamNav { display:flex; gap:12px; margin-top:28px; }
+    .aboutTeamBtn {
+      width:44px; height:44px; border:1px solid var(--ctrlBorder); border-radius:50%;
+      display:flex; align-items:center; justify-content:center; cursor:pointer;
+      color:var(--ink); background:none; padding:0; transition:border-color 0.3s ease, opacity 0.3s ease;
+    }
+    .aboutTeamBtn:hover { border-color:var(--ink); }
+    .aboutTeamBtn:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+    @media (prefers-reduced-motion: reduce) { .aboutTeam { scroll-behavior:auto; } .aboutTeamBtn { transition:none; } }
+    .aboutTeamSlot, .aboutMemberPhoto { aspect-ratio:4/5; width:100%; object-fit:cover; display:flex; align-items:center; justify-content:center; }
+    /* the photo card: the bio slides up over the picture on hover, focus or
+       tap. Reduced motion swaps the slide for a plain fade. */
+    .aboutMemberCard {
+      display:block; width:100%; position:relative; overflow:hidden; padding:0; margin:0;
+      border:0; background:none; color:inherit; font:inherit; text-align:left; cursor:pointer;
+    }
+    .aboutMemberCard:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+    .aboutMemberBio {
+      position:absolute; inset:0; display:flex; align-items:flex-end; padding:22px 20px;
+      background:linear-gradient(180deg, rgba(20,20,22,0) 0%, rgba(20,20,22,0.55) 35%, rgba(20,20,22,0.9) 100%);
+      color:#f4f2ee; opacity:0; transform:translateY(12px);
+      transition:opacity 0.4s ease, transform 0.4s cubic-bezier(0.3, 0, 0.2, 1);
+    }
+    .aboutMemberBioText { font-size:15px; line-height:1.6; text-wrap:pretty; }
+    .aboutMemberBioPending { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:#96928c; }
+    .aboutMemberCard:hover .aboutMemberBio,
+    .aboutMemberCard:focus-visible .aboutMemberBio,
+    .aboutMemberCard[aria-expanded="true"] .aboutMemberBio { opacity:1; transform:none; }
+    .aboutMemberPhoto { transition:transform 0.6s cubic-bezier(0.3, 0, 0.2, 1); }
+    .aboutMemberCard:hover .aboutMemberPhoto,
+    .aboutMemberCard[aria-expanded="true"] .aboutMemberPhoto { transform:scale(1.04); }
+    @media (prefers-reduced-motion: reduce) {
+      .aboutMemberBio, .aboutMemberPhoto { transition:none; transform:none; }
+    }
+    .srOnly { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+    .aboutMemberEmail { margin-top:4px; font-size:14px; color:var(--sub); overflow-wrap:anywhere; }
+    /* the link is padded to a comfortable tap height without looking any different */
+    .aboutMemberEmail a { display:inline-flex; align-items:center; min-height:44px; text-decoration:underline; text-underline-offset:3px; }
+    .aboutMemberName {
+      font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; letter-spacing:0;
+      font-size:clamp(18px, 1.7vw, 24px); font-weight:400; color:var(--ink); margin-top:18px;
+    }
+    .aboutMemberNamePending { font-family:'Jost', sans-serif; text-transform:uppercase; font-size:11px; letter-spacing:3px; color:var(--muted); }
+    .aboutMemberRole { margin-top:8px; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
 
-    /* examples of what the agency stands for, empty until the real ones arrive */
-    .aboutExamples {
-      list-style:none; margin:36px 0 0; padding:0;
-      display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:24px;
+    /* our values: three columns side by side under the section rule. The
+       heading already carries a hairline, so the columns do not draw another. */
+    .band.aboutValuesBand { padding-top:88px; }
+    .aboutValues {
+      list-style:none; margin:48px 0 0; padding:0;
+      display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:44px 56px;
     }
-    .aboutExampleSlot { display:flex; align-items:center; justify-content:center; }
+    .aboutValue { margin:0; }
+    .aboutValueNum { display:block; font-size:13px; letter-spacing:3px; color:var(--accent); }
+    .aboutValueTitle {
+      font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; letter-spacing:0;
+      font-size:clamp(22px, 2.2vw, 30px); font-weight:400; line-height:1.1; margin-top:14px; text-wrap:balance;
+    }
+    .aboutValueDetail { margin-top:14px; font-size:17px; font-weight:400; line-height:1.7; color:var(--sub); text-wrap:pretty; max-width:40ch; }
 
-    .aboutLauralLink {
-      display:inline-block; margin-top:26px; font-size:13px; letter-spacing:2px;
-      text-transform:uppercase; color:#f4f2ee;
-      border-bottom:1px solid rgba(244,242,238,0.5); padding-bottom:4px;
+    /* quotes, laid out like the reviews on the home page: the name large at
+       the top, the role under it, then the quote, with a wide gutter between
+       the two so each reads as its own card */
+    /* two quotes per view, swiped or stepped through with the arrows, the
+       same way as the team row. Each pair snaps into place. */
+    .aboutQuotesScroller { margin:48px -40px 0 0; }
+    .aboutQuotes {
+      --quoteGap:120px;
+      list-style:none; margin:0; padding:0 40px 8px 0;
+      display:flex; gap:var(--quoteGap); overflow-x:auto; overscroll-behavior-x:contain;
+      scroll-snap-type:x mandatory; scrollbar-width:none;
     }
-    .aboutLauralLink:hover { border-bottom-color:#f4f2ee; }
+    .aboutQuotes::-webkit-scrollbar { display:none; }
+    .aboutQuotes > li { flex:0 0 calc((100% - 40px - var(--quoteGap)) / 2); min-width:0; scroll-snap-align:start; }
+    .aboutQuotes > li { display:flex; }
+    .aboutQuoteSlot { aspect-ratio:16/7; width:100%; }
+    .aboutQuote { margin:0; width:100%; }
+    .aboutQuote figcaption { display:block; }
+    .aboutQuoteName {
+      display:block; font-family:'Anton', 'Jost', sans-serif; font-size:clamp(32px, 3vw, 48px);
+      letter-spacing:0; line-height:1.02; font-weight:400; text-transform:uppercase; color:var(--ink);
+      /* held to two lines' height whether the name wraps or not, so the role,
+         logo and quote line up across the pair */
+      min-height:2.04em;
+    }
+    /* the role is held to two lines' height, so a long title that wraps does
+       not push its quote lower than its neighbour's */
+    .aboutQuoteRole { display:block; margin-top:14px; font-size:13px; line-height:1.45; min-height:2.9em; letter-spacing:2px; font-weight:500; text-transform:uppercase; color:var(--ink); }
+    /* the production logo under the role, as on the home page reviews */
+    .aboutQuoteCredit { display:flex; align-items:center; height:48px; margin-top:12px; overflow:visible; }
+    .aboutQuoteCredit .revCredit { animation:none; color:var(--ink); }
+    .aboutQuote:hover .revCredit { opacity:1; }
+    /* hovering the logo brings it up to full strength and a touch larger */
+    .aboutQuoteCredit img { transition:transform 0.45s cubic-bezier(0.3, 0, 0.2, 1); transform-origin:left center; }
+    .aboutQuoteCredit:hover img { transform:scale(1.12); }
+    @media (prefers-reduced-motion: reduce) { .aboutQuoteCredit img { transition:none; } .aboutQuoteCredit:hover img { transform:none; } }
+    /* only light-ink logos exist for these, so in the light look they are
+       inverted to dark ink rather than vanishing into the cream background */
+    [data-theme="light"] .aboutQuoteCredit img { filter:invert(1) brightness(0.3); }
+    .aboutQuote blockquote {
+      margin:28px 0 0; font-size:16px; font-weight:400; line-height:1.8; color:var(--sub);
+      text-wrap:pretty; max-width:48ch;
+    }
 
     @media (max-width:1024px) {
-      .aboutOpsList { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:24px; }
-      .aboutTeam, .aboutExamples { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+      .aboutStoryInner { grid-template-columns:1fr; gap:40px; }
+      .aboutStoryPhoto { max-width:420px; min-height:0; }
+      .aboutStoryPhoto img { position:static; aspect-ratio:4/5; height:auto; }
+      .aboutStoryCaption { position:static; }
+      .aboutStoryText { max-width:none; }
+      .aboutTeamScroller { margin-right:-32px; }
+      .aboutTeam { --teamCols:2.5; padding-right:32px; }
+      .aboutMember { flex-basis:calc((100% - 32px - var(--teamGap) * 2) / var(--teamCols)); }
+      .aboutValues { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:36px 40px; }
+      .aboutQuotesScroller { margin-right:-32px; }
+      .aboutQuotes { --quoteGap:48px; padding-right:32px; }
+      .aboutQuotes > li { flex-basis:calc((100% - 32px - var(--quoteGap)) / 2); }
     }
 
     @media (max-width:640px) {
-      .aboutOpsList { grid-template-columns:1fr; gap:20px; }
-      .aboutTeam, .aboutExamples { grid-template-columns:1fr; gap:28px; }
+      /* the page's own band paddings come down with the global ladder */
+      .band.aboutStory { padding:64px 0 56px; }
+      .band.aboutValuesBand { padding-top:56px; }
+      .aboutStoryBody { font-size:17px; line-height:1.7; }
+      .aboutStoryPhoto { max-width:none; }
+      .aboutLede { font-size:16px; margin-top:20px; }
+      /* team cards a little wider on a phone so a two-sentence bio fits over
+         the photo; the bio text steps down and can scroll if it must */
+      .aboutTeamScroller { margin-right:-20px; }
+      .aboutTeam { --teamCols:1.2; }
+      .aboutMemberBio { padding:16px 14px; overflow:auto; }
+      .aboutMemberBioText { font-size:13px; line-height:1.5; }
+      .aboutMemberName { margin-top:14px; }
+      .aboutValueDetail { font-size:16px; }
+      .aboutQuotesScroller { margin-top:32px; }
+      .aboutQuoteName { font-size:30px; }
+      .aboutQuote blockquote { font-size:15px; margin-top:22px; }
+      .aboutTeamNav { margin-top:24px; }
+      .aboutTeam { --teamGap:16px; padding-right:20px; }
+      .aboutMember { flex-basis:calc((100% - 20px - var(--teamGap)) / var(--teamCols)); }
+      .aboutQuotesScroller { margin-right:-20px; }
+      .aboutQuotes { --quoteGap:24px; padding-right:20px; }
+      .aboutQuotes > li { flex-basis:calc(100% - 20px); }
+      .aboutValues { grid-template-columns:1fr; gap:32px; margin-top:32px; }
+    }
+
+    @media (max-width:360px) {
+      .aboutTeam { --teamCols:1.1; }
+      .aboutQuoteName { font-size:26px; }
     }
   </style>
+
+  <script>
+    import { animate, inView, scroll, stagger } from 'motion';
+
+    /* Motion pass. One easing and one duration family throughout, so the page
+       feels like one thing moving rather than many. Reduced motion, or no
+       script, leaves everything simply on the page. */
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const page = document.querySelector<HTMLElement>('main') ?? document.body;
+    const EASE: [number, number, number, number] = [0.3, 0, 0.2, 1];
+
+    if (!reduce.matches) {
+      page.classList.add('is-armed');
+
+      const rise = (els: Element[] | NodeListOf<Element>, gap = 0.1, startDelay = 0, duration = 0.8) =>
+        animate(
+          Array.from(els) as HTMLElement[],
+          { opacity: [0, 1], transform: ['translateY(16px)', 'translateY(0)'] },
+          { duration, delay: stagger(gap, { startDelay }), ease: EASE }
+        );
+
+      /* banner: label then headline rise in; the photo settles from a touch
+         closer to its final size, and then drifts up slower than the page as
+         you scroll, which makes the headline feel like it sits in front */
+      rise(document.querySelectorAll('[data-hero-line]'), 0.14, 0.15, 0.9);
+      const heroPhoto = document.querySelector<HTMLElement>('.aboutHeroPhoto');
+      const hero = document.querySelector<HTMLElement>('.aboutHero');
+      if (heroPhoto && hero) {
+        animate(heroPhoto, { scale: [1.06, 1] }, { duration: 2.4, ease: [0.2, 0, 0.1, 1] });
+        scroll((progress: number) => { heroPhoto.style.translate = `0 ${Math.round(progress * 100)}px`; }, {
+          target: hero,
+          offset: ['start start', 'end start'],
+        });
+      }
+
+      /* single lines */
+      document.querySelectorAll('[data-reveal]').forEach((el) => inView(el, () => { rise([el]); }, { amount: 0.4 }));
+
+      /* section headings: title and label rise, then the rule draws across */
+      document.querySelectorAll<HTMLElement>('[data-reveal-head]').forEach((head) =>
+        inView(head, () => { rise(Array.from(head.children), 0.08); head.classList.add('is-ruled'); }, { amount: 0.6 })
+      );
+
+      /* the story: the photograph settles in, the paragraphs follow */
+      const photo = document.querySelector<HTMLElement>('.aboutStoryPhoto img');
+      if (photo) inView(photo, () => { animate(photo, { opacity: [0, 1], scale: [1.04, 1] }, { duration: 1.2, ease: EASE }); }, { amount: 0.25 });
+      const body = document.querySelector('.aboutStoryBody');
+      if (body) inView(body, () => { rise(body.querySelectorAll('p'), 0.16, 0.1); }, { amount: 0.2 });
+
+      /* rows of cards: team, values, quotes, each card a beat after the last */
+      const groups: Array<[string, string]> = [
+        ['#aboutTeam', '[data-reveal-item]'],
+        ['.aboutValues', '.aboutValue'],
+        ['#aboutQuotes', '[data-reveal-item]'],
+      ];
+      groups.forEach(([groupSel, itemSel]) => {
+        const group = document.querySelector(groupSel);
+        if (group) inView(group, () => { rise(group.querySelectorAll(itemSel), 0.09); }, { amount: 0.15 });
+      });
+    }
+
+    /* Team bios: on touch screens there is no hover, so tapping a photo opens
+       its bio and tapping again (or tapping elsewhere) closes it. */
+    const cards = Array.from(document.querySelectorAll<HTMLButtonElement>('.aboutMemberCard'));
+    const closeAll = (except?: HTMLButtonElement) =>
+      cards.forEach((c) => c !== except && c.setAttribute('aria-expanded', 'false'));
+    cards.forEach((card) => {
+      card.addEventListener('click', () => {
+        const open = card.getAttribute('aria-expanded') === 'true';
+        closeAll(card);
+        card.setAttribute('aria-expanded', open ? 'false' : 'true');
+      });
+    });
+    document.addEventListener('click', (e) => {
+      if (!(e.target as Element).closest('.aboutMemberCard')) closeAll();
+    });
+    document.addEventListener('keydown', (e) => e.key === 'Escape' && closeAll());
+
+    /* Arrows move a row one card at a time; they dim at either end. The team
+       and the quotes share this. */
+    const wireRow = (rowId: string, prevId: string, nextId: string, perStep: number) => {
+      const row = document.getElementById(rowId);
+      const prev = document.getElementById(prevId) as HTMLButtonElement | null;
+      const next = document.getElementById(nextId) as HTMLButtonElement | null;
+      if (!row || !prev || !next) return;
+      const step = () => {
+        const first = row.firstElementChild as HTMLElement | null;
+        const gap = parseFloat(getComputedStyle(row).gap || '24');
+        return first ? (first.getBoundingClientRect().width + gap) * perStep : 300;
+      };
+      const smooth = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+      const atEnd = () => row.scrollLeft + row.clientWidth >= row.scrollWidth - 2;
+      const atStart = () => row.scrollLeft <= 2;
+      /* past the last card, next wraps round to the first; before the first,
+         previous wraps round to the last */
+      next.addEventListener('click', () =>
+        atEnd() ? row.scrollTo({ left: 0, behavior: smooth }) : row.scrollBy({ left: step(), behavior: smooth })
+      );
+      prev.addEventListener('click', () =>
+        atStart() ? row.scrollTo({ left: row.scrollWidth, behavior: smooth }) : row.scrollBy({ left: -step(), behavior: smooth })
+      );
+    };
+    wireRow('aboutTeam', 'teamPrev', 'teamNext', 1);
+    /* quotes move a pair at a time on wide screens, one on phones */
+    wireRow('aboutQuotes', 'quotesPrev', 'quotesNext', window.matchMedia('(max-width: 640px)').matches ? 1 : 2);
+
+  </script>
 </Base>

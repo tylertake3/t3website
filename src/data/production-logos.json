@@ -68,7 +68,7 @@
     },
     {
       "title": "Andor",
-      "logoOnDark": "",
+      "logoOnDark": "/assets/production-logos/andor-c.png",
       "logoOnLight": "",
       "aliases": ""
     },
@@ -140,7 +140,7 @@
     },
     {
       "title": "Neuromancer",
-      "logoOnDark": "",
+      "logoOnDark": "/assets/production-logos/neuromancer-c.png",
       "logoOnLight": "",
       "aliases": ""
     },
@@ -200,7 +200,7 @@
     },
     {
       "title": "Strictly Come Dancing",
-      "logoOnDark": "",
+      "logoOnDark": "/assets/production-logos/strictly-come-dancing-c.png",
       "logoOnLight": "",
       "aliases": ""
     },
@@ -231,6 +231,18 @@
     {
       "title": "Emirates",
       "logoOnDark": "",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "Practical Magic 2",
+      "logoOnDark": "/assets/production-logos/practical-magic-2-c.png",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "Black Mirror",
+      "logoOnDark": "/assets/production-logos/black-mirror-c.png",
       "logoOnLight": "",
       "aliases": ""
     }

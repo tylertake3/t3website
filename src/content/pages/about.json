@@ -1,103 +1,163 @@
 {
   "meta": {
     "title": "Who We Are | Specialist Talent Agency | Take 3 Agency",
-    "description": "Take 3 has supplied specialist talent to film, television and commercial productions since 2019. Contracts, fees, overtime and coordination handled by us.",
+    "description": "The people behind Take 3 Agency — how the team came together, how we work, and who you deal with when you book with us.",
     "ogTitle": "Who We Are | Take 3 Agency",
-    "ogDescription": "Take 3 Agency has supplied specialist talent to film, television and commercial productions since 2019.",
-    "footerTitle": "Start a conversation"
+    "ogDescription": "The people behind Take 3 Agency: how the team came together, how we work, and who you deal with.",
+    "footerTitle": "Come and say hello",
+    "footerIntro": "Whether you are casting a production or looking for representation, you will be talking to one of the people above."
   },
   "hero": {
     "eyebrow": "TAKE 3 AGENCY",
     "heading": "Who we are",
-    "lede": "A specialist talent agency working with film, television and commercial productions across the UK and Europe, trading since 2019."
+    "lede": "Take 3 was built around a simple idea: great talent deserves great representation, and great booking comes from knowing your people.",
+    "image": "/uploads/about-hero-wide.webp",
+    "focus": "center 55%"
   },
   "story": {
-    "kicker": "SINCE 2019",
-    "heading": "The story so far",
-    "body": "TODO: copy, the story since 2019. How Take 3 started, what it set out to do differently, and how the roster grew to its present size. Facts only, and nothing that cannot be evidenced.",
-    "stats": [
-      {
-        "number": "2019",
-        "label": "Trading since"
-      },
-      {
-        "number": "500+",
-        "label": "Productions supplied"
-      },
-      {
-        "number": "1,500+",
-        "label": "Artists"
-      },
-      {
-        "number": "UK & Europe",
-        "label": "Where we work"
-      }
+    "kicker": "OUR STORY",
+    "image": "/uploads/about-story-crew.webp",
+    "imageAlt": "Three of the Take 3 team in a white studio: two in black Crew t-shirts carrying a camera rig and a reflector, one in workout gear",
+    "caption": "Tyler hosting our first training session back in early 2019.",
+    "paragraphs": [
+      "Our team brings together experience from across performance, production and the wider creative industries, giving us an understanding of both sides of the booking process. We know what our artists need, we understand what our clients are looking for, and we know how to bring the two together.",
+      "As a close-knit team, we share knowledge, communicate quickly and adapt to the demands of an industry that rarely stands still. Every artist in our books is met by us in person, meaning our bookers know the talent they’re putting forward - their skills, their experience and, importantly, who they are.",
+      "It’s a personal approach to talent management, backed by industry knowledge and a team that knows how to get things done."
     ]
-  },
-  "operations": {
-    "kicker": "HOW WE WORK",
-    "heading": "The operational difference",
-    "body": "Contracts, fees, overtime, buyouts and coordination are handled by Take 3, not left with the production to chase.",
-    "items": [
-      {
-        "name": "Contracts",
-        "detail": "TODO: copy, one line on how contracting is handled and what the production does not have to do."
-      },
-      {
-        "name": "Fees",
-        "detail": "TODO: copy, one line on how fees are agreed and settled."
-      },
-      {
-        "name": "Overtime",
-        "detail": "TODO: copy, one line on how overtime is tracked and paid."
-      },
-      {
-        "name": "Buyouts",
-        "detail": "TODO: copy, one line on how usage and buyouts are handled."
-      },
-      {
-        "name": "Coordination",
-        "detail": "TODO: copy, one line on what Take 3 coordinates between the production and the artists."
-      }
-    ]
-  },
-  "where": {
-    "kicker": "WHERE WE HAVE WORKED",
-    "heading": "On location, wherever the shoot goes",
-    "body": "TODO: copy, a line or two on travelling with productions, and what the agency handles when artists work away.",
-    "countLabel": "countries worked in"
   },
   "team": {
     "kicker": "THE TEAM",
-    "heading": "The people you deal with",
-    "body": "TODO: copy, a short introduction to the team, written once the list below is confirmed.",
+    "heading": "Meet the team",
+    "body": "Six people. One office dog. A shared way of working.",
     "slotLabel": "Photograph to come",
-    "plates": 3,
-    "todo": "TODO: content. No team members have been listed. Supply each person's name, job title and photograph, and correct the number of plates below: three is a placeholder, not a headcount."
+    "namePending": "Name to come",
+    "members": [
+      {
+        "name": "Tyler Kennington",
+        "role": "Founder & Director",
+        "email": "tyler@take3agency.com",
+        "bio": "",
+        "image": "/uploads/team-tyler.webp",
+        "alt": "Tyler as a toddler, fast asleep in a denim shirt with his head resting on his hand"
+      },
+      {
+        "name": "Chanel Mian",
+        "role": "Head Booker",
+        "email": "chanel@take3agency.com",
+        "bio": "",
+        "image": "/uploads/team-chanel.webp",
+        "alt": "Chanel as a baby, arms in the air, sitting on someone’s lap in a denim dress"
+      },
+      {
+        "name": "Mia Hammersley",
+        "role": "Project Manager",
+        "email": "mia@take3agency.com",
+        "bio": "",
+        "image": "/uploads/team-mia.webp",
+        "alt": "Mia as a young girl in a white nightdress, barefoot in a garden, head thrown back mid-song"
+      },
+      {
+        "name": "Elly Robertson-Lindsay",
+        "role": "Project Manager",
+        "email": "elly@take3agency.com",
+        "bio": "",
+        "image": "/uploads/team-elly.webp",
+        "alt": "Elly as a young girl in a school play, wearing a paper animal mask on her head and smiling up at the camera"
+      },
+      {
+        "name": "Becky Freund",
+        "role": "Junior Booker",
+        "email": "becky@take3agency.com",
+        "bio": "",
+        "image": "/uploads/team-becky.webp",
+        "alt": "Becky as a baby, laughing and holding a daisy, sitting on a white sheet"
+      },
+      {
+        "name": "Zoë Healey",
+        "role": "Junior Booker",
+        "email": "zoe@take3agency.com",
+        "bio": "",
+        "image": "/uploads/team-zoe.webp",
+        "alt": "Zoë as a young girl, smiling broadly in a floral dress with trees behind her"
+      },
+      {
+        "name": "Teddy “Theodore”",
+        "role": "HR",
+        "email": "castings@take3agency.com",
+        "bio": "Part of Take 3 since the beginning, with a great understanding of talent. And I completely agree: Cats was one of the worst films ever made.",
+        "image": "/uploads/team-teddy.webp",
+        "alt": "Teddy as a puppy, sitting up in his bed and looking at the camera",
+        "dog": true
+      }
+    ],
+    "bioPending": "Bio to come",
+    "emailLabel": "Email"
   },
-  "principles": {
+  "values": {
     "kicker": "WHAT WE STAND FOR",
-    "heading": "Shown, not stated",
-    "body": "TODO: copy, one short paragraph setting up the examples below, without claiming anything the examples do not prove.",
-    "todo": "TODO: content, three real examples of the agency living up to what it stands for. Each needs a short title and two or three sentences. Anything invented here defeats the point of the section, so leave the plates empty until genuine examples are supplied.",
-    "examples": [
+    "heading": "Our values",
+    "items": [
       {
-        "slotLabel": "Example one"
+        "title": "We know our talent",
+        "detail": "We’ve met the artists, we understand their abilities beyond a list of credits, and can confidently recommend the right person for the brief."
       },
       {
-        "slotLabel": "Example two"
+        "title": "We understand the brief",
+        "detail": "We understand production, performance and specialist skills, and what you actually need - including when the answer isn’t immediately obvious."
       },
       {
-        "slotLabel": "Example three"
+        "title": "We make it happen",
+        "detail": "A small, connected team means quick communication, flexibility and problem-solving. When briefs change, numbers increase or production needs someone at short notice, we can respond."
       }
     ]
   },
-  "laural": {
-    "kicker": "THE PLATFORM",
-    "heading": "Every booking runs on Laural",
-    "body": "The roster is only half the job. Everything around a booking runs on Laural, the platform Take 3 works from.",
-    "linkLabel": "About Laural",
-    "href": "/laural",
-    "pendingNote": "TODO: link. The Laural page is still to be built, so this link is held back until it exists."
+  "quotes": {
+    "kicker": "IN THEIR WORDS",
+    "heading": "What clients say about the team",
+    "todo": "Words from the people who know our team — coming soon.",
+    "slots": [
+      {
+        "slotLabel": "Quote one",
+        "text": "Nothing seems to phase Tyler and his team whenever I message them with a random request, at weekends or at 11pm at night when my brain is on one and I have an idea about the type of person I want to find.",
+        "name": "Annie Hitchcock",
+        "role": "Crowd 2nd AD",
+        "credits": "Neuromancer"
+      },
+      {
+        "slotLabel": "Quote two",
+        "text": "The best thing though is that Tyler and Chanel understand instantly not only the type of talent I’m looking for but always connect me to artists who really enhance the creative process. This type of instinct doesn’t come along very often in our industry.",
+        "name": "Jason Gilkinson",
+        "role": "Creative Director & Choreographer",
+        "credits": "Strictly Come Dancing"
+      },
+      {
+        "slotLabel": "Quote three",
+        "text": "Every production that I’m lucky enough to have Take 3 on board, I am honestly enamoured by their professionalism. I trust Tyler, Chanel and the team implicitly, and for that I am eternally grateful.",
+        "name": "Rhiannon Mobbs",
+        "role": "Crowd 2nd AD",
+        "credits": "Practical Magic 2"
+      },
+      {
+        "slotLabel": "Quote four",
+        "text": "Take 3’s artists always manage to deliver. Punctual, friendly and always happy to get stuck in on set. And Chanel and Tyler are always there to help with even the trickiest briefs. What more could you ask for?",
+        "name": "Katie Hodgson",
+        "role": "Crowd 2nd AD",
+        "credits": "Vision Quest"
+      },
+      {
+        "slotLabel": "Quote five",
+        "text": "The team at Take 3 have been by my side on many weird and wonderful casting adventures since 2023, and honestly, I don’t know how I’d do it without them. No matter how big, small, or slightly unhinged the request, I know I can rely on Take 3.",
+        "name": "Stephanie Bradshaw",
+        "role": "Crowd 2nd AD",
+        "credits": "Black Mirror"
+      },
+      {
+        "slotLabel": "Quote six",
+        "text": "Having worked with Tyler and his team for the past five years, I can confidently attest to the care they take in casting performers who are perfectly suited to each brief.",
+        "name": "Camilla Southwell",
+        "role": "Crowd 2nd AD",
+        "credits": "Andor"
+      }
+    ]
   }
 }
