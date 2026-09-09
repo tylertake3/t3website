@@ -31,7 +31,7 @@
         "note": "Recent work, and the fastest way to see who is on the books."
       }
     ],
-    "hoursNote": "TODO: copy — the hours the phone is answered, and who to contact outside them if there is an out-of-hours route."
+    "hoursNote": "TODO: copy, the hours the phone is answered, and who to contact outside them if there is an out-of-hours route."
   },
   "form": {
     "kicker": "GENERAL ENQUIRY",
@@ -40,11 +40,11 @@
     "formAction": "",
     "method": "post",
     "notConnectedTitle": "This form is not connected yet",
-    "notConnectedBody": "TODO: setup — no form handler has been chosen, so nothing typed below would reach us. The form is switched off until one is in place. Please email or phone us in the meantime.",
+    "notConnectedBody": "TODO: setup. No form handler has been chosen, so nothing typed below would reach us. The form is switched off until one is in place. Please email or phone us in the meantime.",
     "optionalLabel": "Optional",
     "selectPlaceholder": "Please choose",
     "submitLabel": "Send enquiry",
-    "privacyNote": "TODO: copy — one line on what happens to the details sent through this form, and a link to the privacy policy once it exists.",
+    "privacyNote": "TODO: copy, one line on what happens to the details sent through this form, and a link to the privacy policy once it exists.",
     "groups": [
       {
         "legend": "About you",
@@ -154,6 +154,6 @@
   "company": {
     "kicker": "COMPANY DETAILS",
     "heading": "The legal bit",
-    "todo": "TODO: copy — registered company name, company number, registered address, and the VAT number if the company is registered for VAT. None of this can be guessed, so it needs to come from the client before the page goes live."
+    "todo": "TODO: copy, registered company name, company number, registered address, and the VAT number if the company is registered for VAT. None of this can be guessed, so it needs to come from the client before the page goes live."
   }
 }

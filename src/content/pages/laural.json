@@ -11,11 +11,11 @@
     "heading": "Take 3 runs on Laural",
     "lede": "Every booking runs on it, from the first shortlist to the final figure.",
     "markSlotLabel": "Laural mark",
-    "markSlotNote": "TODO: artwork — the Laural mark, supplied at the right size for a dark background.",
+    "markSlotNote": "TODO: artwork. The Laural mark, supplied at the right size for a dark background.",
     "disciplines": ["SPACTs", "Dancers", "Stunt", "Models", "Actors"],
     "disciplinesLabel": "Used across"
   },
-  "publishNote": "TODO: publishing — this page must not go live before Laural is genuinely live for productions. Remove this note only when that is true.",
+  "publishNote": "TODO: publishing. This page must not go live before Laural is genuinely live for productions. Remove this note only when that is true.",
   "why": {
     "kicker": "WHY IT EXISTS",
     "heading": "The roster is only half the job",
@@ -37,8 +37,8 @@
         "body": "Department choices tracked live, greenlit by consensus."
       }
     ],
-    "shotLabel": "Screenshot — dummy data needed",
-    "shotNote": "TODO: artwork — a lookbook screenshot using dummy names, faces and figures only."
+    "shotLabel": "Screenshot (dummy data needed)",
+    "shotNote": "TODO: artwork. A lookbook screenshot using dummy names, faces and figures only."
   },
   "onset": {
     "kicker": "ON SET",
@@ -71,7 +71,7 @@
         "body": "Itemised, approve or deny."
       }
     ],
-    "shotLabel": "Screenshot — dummy data needed",
-    "shotNote": "TODO: artwork — a cost dashboard screenshot using dummy figures only."
+    "shotLabel": "Screenshot (dummy data needed)",
+    "shotNote": "TODO: artwork. A cost dashboard screenshot using dummy figures only."
   }
 }

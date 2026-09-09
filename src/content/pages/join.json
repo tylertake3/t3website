@@ -17,23 +17,23 @@
     "items": [
       {
         "name": "SPACTs",
-        "looksFor": "TODO: copy — what Take 3 looks for in a SPACT, and which skills are in demand."
+        "looksFor": "TODO: copy, what Take 3 looks for in a SPACT, and which skills are in demand."
       },
       {
         "name": "Dancers",
-        "looksFor": "TODO: copy — what Take 3 looks for in a dancer, and which styles are in demand."
+        "looksFor": "TODO: copy, what Take 3 looks for in a dancer, and which styles are in demand."
       },
       {
         "name": "Models",
-        "looksFor": "TODO: copy — what Take 3 looks for in a model, and the kind of work it leads to."
+        "looksFor": "TODO: copy, what Take 3 looks for in a model, and the kind of work it leads to."
       },
       {
         "name": "Stand-ins & picture doubles",
-        "looksFor": "TODO: copy — what Take 3 looks for in a stand-in or picture double."
+        "looksFor": "TODO: copy, what Take 3 looks for in a stand-in or picture double."
       },
       {
         "name": "Specialists",
-        "looksFor": "TODO: copy — what counts as a specialist skill worth applying with."
+        "looksFor": "TODO: copy, what counts as a specialist skill worth applying with."
       }
     ],
     "note": "Every artist is assessed and interviewed by the Take 3 team before joining."
@@ -41,13 +41,13 @@
   "offer": {
     "kicker": "WHAT WE OFFER",
     "heading": "What representation gives you",
-    "todo": "TODO: copy — what Take 3 actually does for an artist on the books. Only the client can set this out, since it decides what the agency is committing to. Do not describe fees, rates or payment terms here without sign-off."
+    "todo": "TODO: copy, what Take 3 actually does for an artist on the books. Only the client can set this out, since it decides what the agency is committing to. Do not describe fees, rates or payment terms here without sign-off."
   },
   "requirements": {
     "kicker": "REQUIREMENTS",
     "heading": "Experience we expect",
-    "todo": "TODO: copy — the minimum experience expected, any training, union or licence requirements, and what an applicant needs to have ready before applying.",
-    "standInsNote": "TODO: content — the stand-ins recruitment criteria belong in this section. Nothing recruitment-facing was found on /stand-ins in the current build, so the original wording needs to be supplied before this section is written."
+    "todo": "TODO: copy, the minimum experience expected, any training, union or licence requirements, and what an applicant needs to have ready before applying.",
+    "standInsNote": "TODO: content, the stand-ins recruitment criteria belong in this section. Nothing recruitment-facing was found on /stand-ins in the current build, so the original wording needs to be supplied before this section is written."
   },
   "process": {
     "kicker": "HOW IT WORKS",
@@ -58,7 +58,7 @@
       { "number": "03", "name": "Interview" },
       { "number": "04", "name": "Decision" }
     ],
-    "todo": "TODO: copy — one short line under each step, and what happens after a decision is made. The only part already on record is that every artist is assessed and interviewed before joining."
+    "todo": "TODO: copy, one short line under each step, and what happens after a decision is made. The only part already on record is that every artist is assessed and interviewed before joining."
   },
   "form": {
     "kicker": "APPLICATION",
@@ -67,12 +67,12 @@
     "formAction": "",
     "method": "post",
     "notConnectedTitle": "This form is not connected yet",
-    "notConnectedBody": "TODO: setup — no form handler has been chosen, so nothing typed below would reach us. The form is switched off until one is in place. Please email your application in the meantime.",
+    "notConnectedBody": "TODO: setup, no form handler has been chosen, so nothing typed below would reach us. The form is switched off until one is in place. Please email your application in the meantime.",
     "optionalLabel": "Optional",
     "selectPlaceholder": "Please choose",
     "submitLabel": "Send application",
-    "privacyNote": "TODO: copy — one line on what happens to an application once it is sent, how long details are kept, and a link to the privacy policy once it exists.",
-    "fieldsNote": "TODO: sign-off — this field list is a proposal, not the client's. It deliberately asks for nothing sensitive: no date of birth, no health, and nothing else that counts as special category data under UK GDPR.",
+    "privacyNote": "TODO: copy, one line on what happens to an application once it is sent, how long details are kept, and a link to the privacy policy once it exists.",
+    "fieldsNote": "TODO: sign-off, this field list is a proposal, not the client's. It deliberately asks for nothing sensitive: no date of birth, no health, and nothing else that counts as special category data under UK GDPR.",
     "groups": [
       {
         "legend": "About you",
@@ -151,6 +151,6 @@
   "honest": {
     "kicker": "BEFORE YOU APPLY",
     "heading": "An honest note",
-    "todo": "TODO: copy — how long applicants should expect to wait for a reply, whether everyone is replied to, and that the roster is selective so not every applicant is taken on. Only the client can state any of this, and it should not be guessed at."
+    "todo": "TODO: copy, how long applicants should expect to wait for a reply, whether everyone is replied to, and that the roster is selective so not every applicant is taken on. Only the client can state any of this, and it should not be guessed at."
   }
 }

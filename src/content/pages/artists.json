@@ -9,12 +9,12 @@
   "hero": {
     "eyebrow": "TAKE 3 AGENCY",
     "heading": "Our artists",
-    "lede": "TODO: copy — one or two sentences establishing the breadth of the roster, without favouring any single discipline."
+    "lede": "TODO: copy, one or two sentences establishing the breadth of the roster, without favouring any single discipline."
   },
   "range": {
     "kicker": "THE FULL RANGE",
     "heading": "What we supply across the board",
-    "body": "TODO: copy — a short, balanced introduction to what Take 3 supplies. No single discipline should dominate the reading."
+    "body": "TODO: copy, a short, balanced introduction to what Take 3 supplies. No single discipline should dominate the reading."
   },
   "categories": {
     "kicker": "FOUR CORE ROUTES",
@@ -23,25 +23,25 @@
       {
         "name": "SPACTs",
         "href": "/spacts",
-        "description": "TODO: copy — one line on who SPACTs are for.",
+        "description": "TODO: copy, one line on who SPACTs are for.",
         "slotLabel": "SPACTs"
       },
       {
         "name": "Dancers",
         "href": "/dancers",
-        "description": "TODO: copy — one line on who dancers are for.",
+        "description": "TODO: copy, one line on who dancers are for.",
         "slotLabel": "Dancers"
       },
       {
         "name": "Models",
         "href": "/models",
-        "description": "TODO: copy — one line on who models are for.",
+        "description": "TODO: copy, one line on who models are for.",
         "slotLabel": "Models"
       },
       {
         "name": "Stand-ins & Picture Doubles",
         "href": "/stand-ins",
-        "description": "TODO: copy — one line on who stand-ins and picture doubles are for.",
+        "description": "TODO: copy, one line on who stand-ins and picture doubles are for.",
         "slotLabel": "Stand-ins"
       }
     ]
@@ -49,10 +49,10 @@
   "specialists": {
     "kicker": "BEYOND THE FOUR",
     "heading": "Whatever the brief needs, we will find it",
-    "body": "TODO: copy — the flexible tier. What happens when a brief asks for something the four core categories do not cover, and how the crossover between disciplines is handled.",
+    "body": "TODO: copy, the flexible tier. What happens when a brief asks for something the four core categories do not cover, and how the crossover between disciplines is handled.",
     "linkLabel": "Specialists",
     "href": "/specialists",
-    "pendingNote": "TODO: link — this page is still to be built."
+    "pendingNote": "TODO: link. This page is still to be built."
   },
   "represented": {
     "kicker": "REPRESENTED, NOT LISTED",
@@ -65,6 +65,6 @@
   "clients": {
     "kicker": "WHO WE WORK WITH",
     "heading": "Film, television and commercial",
-    "body": "TODO: copy — productions and brands, briefly, with a light line covering film, television and commercial so no single format dominates."
+    "body": "TODO: copy, productions and brands, briefly, with a light line covering film, television and commercial so no single format dominates."
   }
 }

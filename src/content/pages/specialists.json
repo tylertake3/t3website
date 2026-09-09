@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Specialist Casting for Film, TV & Commercial | Take 3 Agency",
-    "description": "Specialist casting from Take 3 Agency: stunt performers and doubles, circus and physical artists, unique talent and intimacy coordinators — plus anything else a brief calls for beyond the standing roster.",
+    "description": "Specialist casting from Take 3 Agency: stunt performers and doubles, circus and physical artists, unique talent and intimacy coordinators, plus anything else a brief calls for beyond the standing roster.",
     "ogTitle": "Specialists | Take 3 Agency",
     "ogDescription": "When a brief calls for a skill or a look beyond the standing roster, Take 3 sources it.",
     "footerTitle": "Tell us what you need"
@@ -9,12 +9,12 @@
   "hero": {
     "eyebrow": "SPECIALISTS",
     "heading": "If the scene needs it, we'll find it",
-    "lede": "TODO: copy — one or two sentences opening the specialist offer. This is the strongest sell on the site, so it needs the client's own words rather than a placeholder."
+    "lede": "TODO: copy. One or two sentences opening the specialist offer. This is the strongest sell on the site, so it needs the client's own words rather than a placeholder."
   },
   "promise": {
     "kicker": "THE PROMISE",
     "heading": "Sourcing beyond the standing roster",
-    "body": "TODO: copy — what actually happens when a brief asks for something unusual. Should introduce the divisions below as the things Take 3 is asked for by name, while making clear that Specialists remains the flexible tier: a brief that fits none of them is still welcome, and this is where crossover between the categories resolves itself."
+    "body": "TODO: copy. What actually happens when a brief asks for something unusual. Should introduce the divisions below as the things Take 3 is asked for by name, while making clear that Specialists remains the flexible tier: a brief that fits none of them is still welcome, and this is where crossover between the categories resolves itself."
   },
   "divisions": {
     "kicker": "THE DIVISIONS",
@@ -23,7 +23,7 @@
       {
         "name": "Stunt performers & doubles",
         "href": "/stunt-performers",
-        "description": "Action-trained talent and matched doubles — cleared for the sequence and safe on the day.",
+        "description": "Action-trained talent and matched doubles, cleared for the sequence and safe on the day.",
         "linkLabel": "View stunts"
       },
       {
@@ -35,7 +35,7 @@
       {
         "name": "Unique talent",
         "href": "/unique-talent",
-        "description": "Performers whose look is the reason they are cast — height, stature, twins and memorable faces.",
+        "description": "Performers whose look is the reason they are cast: height, stature, twins and memorable faces.",
         "linkLabel": "View unique talent"
       },
       {
@@ -64,7 +64,7 @@
     "note": "Categories, not a closed list.",
     "specifics": {
       "heading": "If it is not listed, ask anyway",
-      "body": "The divisions above are the briefs we get most often, not the limit of what we source. A brief nobody has asked for before is still a brief — tell us what the scene needs and we will go and find it."
+      "body": "The divisions above are the briefs we get most often, not the limit of what we source. A brief nobody has asked for before is still a brief. Tell us what the scene needs and we will go and find it."
     }
   },
   "process": {
@@ -76,12 +76,12 @@
       { "number": "03", "name": "Vetting" },
       { "number": "04", "name": "Options presented" }
     ],
-    "todo": "TODO: copy — one short line under each of the four steps. Keep it brief: the point is that there is a process, not a lecture on it."
+    "todo": "TODO: copy. One short line under each of the four steps. Keep it brief: the point is that there is a process, not a lecture on it."
   },
   "worked": {
     "kicker": "A WORKED EXAMPLE",
     "heading": "An unusual brief, start to finish",
-    "todo": "TODO: copy — one or two genuine unusual briefs Take 3 has filled, with the production's permission. Needs real examples gathered from the client first. Nothing in this section may be invented."
+    "todo": "TODO: copy. One or two genuine unusual briefs Take 3 has filled, with the production's permission. Needs real examples gathered from the client first. Nothing in this section may be invented."
   },
   "related": {
     "kicker": "WHERE THE OVERLAP IS REAL",

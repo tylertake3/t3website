@@ -1,0 +1,44 @@
+{
+  "meta": {
+    "title": "Insights | Advice for Performers | Take 3 Agency",
+    "description": "Practical advice for dancers, SPACTs, models and specialist performers: self-tapes, first days on set, paperwork, and what a production is really asking for.",
+    "ogTitle": "Insights | Take 3 Agency",
+    "ogDescription": "Practical advice for performers from the agency that books the work: self-tapes, set etiquette, paperwork and briefs.",
+    "footerTitle": "Questions we haven't answered?"
+  },
+  "hero": {
+    "eyebrow": "INSIGHTS",
+    "heading": "Advice for the artists behind the action.",
+    "lede": "Practical guidance from the desk that books the work: self-tapes, set etiquette, paperwork, and what a production is really asking for. Written for our artists, useful to anyone casting them."
+  },
+  "listing": {
+    "heading": "Latest",
+    "filterLabel": "Filter articles by topic",
+    "allLabel": "All",
+    "emptyNote": "Nothing here yet. The first articles are being written.",
+    "readLabel": "Read the article"
+  },
+  "topics": [
+    { "id": "on-set", "label": "On set" },
+    { "id": "auditions", "label": "Auditions & self-tapes" },
+    { "id": "profile", "label": "Your profile" },
+    { "id": "paperwork", "label": "Rates & paperwork" },
+    { "id": "productions", "label": "For productions" }
+  ],
+  "signup": {
+    "kicker": "STAY IN THE LOOP",
+    "heading": "New advice, once a month.",
+    "body": "One email a month for artists on our roster and anyone thinking of joining: the newest guidance, open calls we can talk about, and reminders to keep your details current.",
+    "buttonLabel": "Email us to sign up",
+    "note": "We never share your details, and you can stop the emails any time."
+  },
+  "article": {
+    "backLabel": "Insights",
+    "relatedHeading": "Related advice",
+    "moreHeading": "More insights",
+    "allLabel": "All articles",
+    "joinHeading": "Not on the roster yet?",
+    "joinBody": "We take submissions from professional performers all year round.",
+    "joinLabel": "Join the roster"
+  }
+}

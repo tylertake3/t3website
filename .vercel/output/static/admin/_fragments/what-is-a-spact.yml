@@ -60,62 +60,23 @@
             - { name: after, label: Text after the bold words, widget: text, hint: 'Usually starts with the full stop or comma that follows the bold words.' }
         - { name: paragraph2, label: Second paragraph, widget: text }
 
-    - name: distinctions
-      label: 02 · SPACT, stunt performer, supporting artist
+    - name: seeFrame
+      label: Pointer to the frame on the SPACTs page
       widget: object
-      hint: 'The dark section with the three clickable role cards and the annotated production frame.'
+      hint: 'The short block sending readers to the interactive comparison, which lives on the SPACTs page.'
       fields:
-        - { name: eyebrow, label: Small numbered line above the heading, widget: string, hint: 'Written in capitals, e.g. 02 · THE DISTINCTIONS.' }
+        - { name: eyebrow, label: Small line above the heading, widget: string, hint: 'The short orange line, written in capitals, e.g. SEE IT IN A FRAME.' }
         - { name: heading, label: Section heading, widget: string, hint: 'Always shown in capitals.' }
-        - { name: intro, label: Introduction paragraph, widget: text, hint: 'The paragraph directly under the heading.' }
-        - { name: selectPrompt, label: Instruction above the cards, widget: string, hint: 'The small grey line telling visitors they can click a role. Written in capitals.' }
-        - { name: roleFlagLabel, label: "\"In frame\" flag on the chosen card", widget: string, hint: 'Appears under whichever role card is currently selected. The same wording is used on all three cards.' }
-        - name: roles
-          label: Role cards
-          widget: list
-          hint: 'The three cards side by side. Keep them in this order — supporting artist, SPACT, stunt performer — so they line up with the frame below.'
-          fields:
-            - { name: role, label: Which role this card is, widget: string, hint: 'Must be exactly sa, spact or stunt. This links the card to the matching outlines in the photo below, so do not change it unless you know what it does.' }
-            - { name: title, label: Card title, widget: string, hint: 'Written in capitals.' }
-            - { name: body, label: Card description, widget: text }
-        - { name: frameAlt, label: Production frame description for screen readers, widget: text, hint: 'Describes the large annotated photo for visitors who cannot see it. Not shown on screen.' }
-        - name: scenes
-          label: Annotated scenes
-          widget: list
-          hint: 'The photos behind the role cards. Visitors move through them with the NEXT SCENE button, and the page loops back to the first one at the end. The first scene here is the one that shows when the page loads.'
-          fields:
-            - { name: image, label: Scene photo, widget: string, hint: 'The path to the photo, e.g. /uploads/my-photo.png.' }
-            - { name: title, label: Scene caption, widget: string, hint: 'The small grey line under the photo, e.g. SC. 12 — THE SIEGE · ONE FRAME, THREE ROLES.' }
-            - name: spots
-              label: Outlined people in this photo
-              widget: list
-              hint: 'One entry per person marked out with a box and a label. The position settings decide where the box sits, so change those only if the photo itself changes.'
-              fields:
-                - { name: role, label: Which role this person is, widget: string, hint: 'Must be exactly sa, spact or stunt. This decides the outline colour and which role card reveals them.' }
-                - { name: label, label: Label text, widget: string, hint: 'The wording in the little box beside the person. Keep it short so it fits in the frame.' }
-                - { name: side, label: Label position, widget: string, hint: 'Type above to hang the label over the box, or below to drop it underneath.' }
-                - { name: left, label: 'Position: distance from left edge (%)', widget: number, hint: 'Percentage across the photo, 0 at the left edge and 100 at the right.' }
-                - { name: top, label: 'Position: distance from top edge (%)', widget: number, hint: 'Percentage down the photo, 0 at the top and 100 at the bottom.' }
-                - { name: width, label: 'Position: box width (%)', widget: number, hint: 'Percentage of the photo width.' }
-                - { name: height, label: 'Position: box height (%)', widget: number, hint: 'Percentage of the photo height.' }
-                - { name: delay, label: 'Timing: seconds before this label appears', widget: number, hint: 'Staggers the labels so they do not all pop up at once.' }
-        - name: legend
-          label: Key under the photo
-          widget: object
-          hint: 'The small buttons under the photo that filter the frame down to one role.'
-          fields:
-            - { name: stunt, label: Stunt button text, widget: string, hint: 'The coloured dash before the word is added automatically.' }
-            - { name: spact, label: SPACT button text, widget: string, hint: 'The pale dash before the word is added automatically.' }
-            - { name: sa, label: Supporting artist button text, widget: string, hint: 'The dotted dash before the word is added automatically.' }
-            - { name: nextButton, label: Next scene button text, widget: string, hint: 'The outlined button that moves to the next photo. The arrow → is part of the text.' }
-        - { name: note, label: Closing note, widget: text, hint: 'The small grey paragraph at the end of this section.' }
+        - { name: body, label: Paragraph, widget: text, hint: 'A sentence or two explaining what is on the other page.' }
+        - { name: linkLabel, label: Link text, widget: string, hint: 'The arrow → is part of the text.' }
+        - { name: linkHref, label: Page the link opens, widget: string, hint: 'Currently /spacts#distinctions, which drops the reader straight onto the frame.' }
 
     - name: work
-      label: 03 · What SPACTs are booked to do
+      label: 02 · What SPACTs are booked to do
       widget: object
       hint: 'The section with the two-column table of skill types.'
       fields:
-        - { name: eyebrow, label: Small numbered line above the heading, widget: string, hint: 'Written in capitals, e.g. 03 · THE WORK.' }
+        - { name: eyebrow, label: Small numbered line above the heading, widget: string, hint: 'Written in capitals, e.g. 02 · THE WORK.' }
         - { name: heading, label: Section heading, widget: string, hint: 'Always shown in capitals.' }
         - { name: intro, label: Introduction line, widget: text, hint: 'The sentence that leads into the table.' }
         - name: rows
@@ -125,6 +86,28 @@
           fields:
             - { name: term, label: Left-hand label, widget: string, hint: 'The short skill name in the left column. Written in capitals.' }
             - { name: description, label: Explanation, widget: text, hint: 'The sentence in the right column.' }
+
+    - name: practice
+      label: 03 · Where SPACTs actually get used
+      widget: object
+      hint: 'The real-world use cases, and the strip of production credits under them.'
+      fields:
+        - { name: eyebrow, label: Small numbered line above the heading, widget: string, hint: 'Written in capitals, e.g. 03 · IN PRACTICE.' }
+        - { name: heading, label: Section heading, widget: string, hint: 'Always shown in capitals.' }
+        - { name: intro, label: Introduction line, widget: text, hint: 'The sentence that leads into the four use cases.' }
+        - name: cases
+          label: Use cases
+          widget: list
+          hint: 'Add, reorder or remove use cases here. Four fills the grid neatly.'
+          fields:
+            - { name: kicker, label: Type of production, widget: string, hint: 'The small orange line above the title. Written in capitals.' }
+            - { name: title, label: Use case title, widget: string, hint: 'One short line naming the kind of scene.' }
+            - { name: body, label: Explanation, widget: text, hint: 'Two sentences at most on what the SPACTs actually do.' }
+        - { name: creditsLabel, label: Credits strip label, widget: string, hint: 'The small orange line above the production names. Written in capitals.' }
+        - { name: credits, label: Production names, widget: list, hint: 'One entry per production. Only name titles Take 3 is cleared to name.' }
+        - { name: creditsNote, label: Note under the credits, widget: text, hint: 'The small grey line under the production names.' }
+        - { name: linkLabel, label: Link text, widget: string, hint: 'The arrow → is part of the text.' }
+        - { name: linkHref, label: Page the link opens, widget: string, hint: 'A path on this site, such as /credits.' }
 
     - name: booking
       label: 04 · How SPACTs are booked

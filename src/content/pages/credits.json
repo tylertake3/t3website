@@ -33,18 +33,18 @@
     "kicker": "PRODUCTION CREDITS",
     "heading": "Film, television and commercial",
     "intro": "Every production below has been supplied by Take 3 since 2019, across film, television and commercial. The titles speak for themselves.",
-    "clearanceNote": "TODO: clearance — check any new title against what Take 3 is contractually permitted to name, and confirm the embargo status of anything unreleased, before it is added to this wall."
+    "clearanceNote": "TODO: clearance. Check any new title against what Take 3 is contractually permitted to name, and confirm the embargo status of anything unreleased, before it is added to this wall."
   },
   "clients": {
     "kicker": "WHO WE WORK WITH",
     "heading": "Client logos",
-    "body": "TODO: copy — one short paragraph introducing the wall of clients. Keep it factual and let the marks speak.",
-    "artworkNote": "TODO: artwork — logo files have not been supplied yet, so every cell renders as an empty plate. Drop the artwork into public/assets/logos and each mark appears in place."
+    "body": "TODO: copy, one short paragraph introducing the wall of clients. Keep it factual and let the marks speak.",
+    "artworkNote": "TODO: artwork. Logo files have not been supplied yet, so every cell renders as an empty plate. Drop the artwork into public/assets/logos and each mark appears in place."
   },
   "testimonials": {
     "kicker": "IN THEIR WORDS",
     "heading": "What production teams say",
     "intro": "The people below have worked with Take 3 on set. Their words are reproduced as given.",
-    "emptyNote": "TODO: content — no testimonials have been added yet. Add them under Reviews in the editor and they appear here."
+    "emptyNote": "TODO: content. No testimonials have been added yet. Add them under Reviews in the editor and they appear here."
   }
 }

@@ -13,7 +13,7 @@ const bySlug = new Map(posters.map((p) => [p.slug, p]));
 
 /* The label under the artwork: a series carries its series number, a film
    stands on its title alone. */
-export const posterLabel = (p: Poster) => (p.season ? `${p.title} — Series ${p.season}` : p.title);
+export const posterLabel = (p: Poster) => (p.season ? `${p.title}, Series ${p.season}` : p.title);
 
 /* The four titles that lead the homepage. They hold the top row, so they are
    the first thing anyone sees under the heading. */

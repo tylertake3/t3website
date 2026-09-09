@@ -1,9 +1,9 @@
 {
   "meta": {
-    "title": "Dancers — Take 3 Agency",
-    "description": "Trained dancers for film, television, commercial and live — every style, screen-ready. Take 3 Agency supplies contemporary, commercial, period, ballroom, street and ensemble dancers, from solo artists to full ensembles.",
-    "ogTitle": "Dancers — Take 3 Agency",
-    "ogDescription": "Trained dancers for film, television, commercial and live — every style, screen-ready.",
+    "title": "Dancers | Take 3 Agency",
+    "description": "Trained dancers for film, television, commercial and live: every style, screen-ready. Take 3 Agency supplies contemporary, commercial, period, ballroom, street and ensemble dancers, from solo artists to full ensembles.",
+    "ogTitle": "Dancers | Take 3 Agency",
+    "ogDescription": "Trained dancers for film, television, commercial and live: every style, screen-ready.",
     "footerTitle": "Book dancers for your production",
     "footerLinks": [
       { "label": "SPACTS →", "href": "/spacts" },
@@ -13,7 +13,7 @@
   "hero": {
     "eyebrow": "TAKE 3 AGENCY · DANCE",
     "title": "DANCERS",
-    "lede": "Trained dancers for film, television, commercial and live — every style, screen-ready.",
+    "lede": "Trained dancers for film, television, commercial and live: every style, screen-ready.",
     "slides": [
       {
         "image": "/uploads/Codex Image 21 Aug 2026, 14_20_03-91201516.webp",
@@ -36,11 +36,11 @@
     "genres": [
       {
         "name": "Contemporary",
-        "blurb": "Technically trained contemporary artists for narrative and abstract movement — floor work, partnering and release-based styles, comfortable improvising to direction on set."
+        "blurb": "Technically trained contemporary artists for narrative and abstract movement: floor work, partnering and release-based styles, comfortable improvising to direction on set."
       },
       {
         "name": "Commercial",
-        "blurb": "Sharp, camera-ready commercial dancers for promos, campaigns and live performance — fast with choreography and consistent take to take."
+        "blurb": "Sharp, camera-ready commercial dancers for promos, campaigns and live performance, fast with choreography and consistent take to take."
       },
       {
         "name": "Period & historical",
@@ -48,7 +48,7 @@
       },
       {
         "name": "Ballroom",
-        "blurb": "Competition-level ballroom and Latin couples — waltz, foxtrot, tango, quickstep and more — able to perform full routines or background social dancing."
+        "blurb": "Competition-level ballroom and Latin couples (waltz, foxtrot, tango, quickstep and more), able to perform full routines or background social dancing."
       },
       {
         "name": "Street",
@@ -56,10 +56,10 @@
       },
       {
         "name": "Choreographed ensemble work",
-        "blurb": "Full ensembles cast to move as one — musical numbers, ceremonies and crowd choreography, matched for height, look and partnering experience."
+        "blurb": "Full ensembles cast to move as one: musical numbers, ceremonies and crowd choreography, matched for height, look and partnering experience."
       }
     ],
-    "note": "Solo artists to full ensembles, matched to the brief — style, look, height and partnering experience.",
+    "note": "Solo artists to full ensembles, matched to the brief: style, look, height and partnering experience.",
     "imageAlt": "Breaker in a one-arm freeze",
     "imageCaption": "TAKE 3 ROSTER · BREAKING"
   },
@@ -86,7 +86,7 @@
   "choreographers": {
     "eyebrow": "WORKING WITH CHOREOGRAPHERS",
     "heading": "We supply the talent. You keep the room.",
-    "paragraph1": "Send us the brief — style, numbers, dates and look — and we shortlist from the roster, hold availability and handle contracts, fees and on-the-day coordination. You audition and direct as you always would; we take the admin off your desk.",
+    "paragraph1": "Send us the brief (style, numbers, dates and look) and we shortlist from the roster, hold availability and handle contracts, fees and on-the-day coordination. You audition and direct as you always would; we take the admin off your desk.",
     "paragraph2": "Our commission comes from the artist’s fee, not from the client or the choreographer. Booking through Take 3 costs your production nothing extra."
   },
   "reviews": {
@@ -123,7 +123,7 @@
         "name": "Corey\nBaker",
         "role": "Choreographer",
         "credits": "Corey Baker Dance",
-        "quote": "They understand dancers as artists, not numbers. The people they’ve put in my rooms have lifted the work — that’s the only measure that matters."
+        "quote": "They understand dancers as artists, not numbers. The people they’ve put in my rooms have lifted the work. That’s the only measure that matters."
       },
       {
         "name": "Sammy\nMurray",
@@ -135,7 +135,7 @@
         "name": "Nathan\nKim",
         "role": "Choreographer",
         "credits": "",
-        "quote": "The roster runs deep — whatever style the job calls for, they have artists who can do it properly, and the process is effortless."
+        "quote": "The roster runs deep: whatever style the job calls for, they have artists who can do it properly, and the process is effortless."
       }
     ]
   },
@@ -165,7 +165,7 @@
       },
       {
         "label": "10 DANCE",
-        "alt": "10 Dance — Blackpool",
+        "alt": "10 Dance, Blackpool",
         "image": "/uploads/10-dance-takeuchi-ryoma-new-ig-caption-in-the-blackpool-an-v0-s6hgudm85x8g1.webp"
       },
       {
