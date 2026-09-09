@@ -134,7 +134,10 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline:2px so
 /* group headings open their own list rather than navigating — the parent page
    is the first entry inside it. Reset the button back to the link's look so
    ARTISTS and SPECIALISTS sit level with HOME and CREDITS. */
-.menuToggle { display:flex; align-items:center; justify-content:flex-start; gap:0; width:auto; background:none; border:0; padding:0; margin:0; text-align:left; cursor:pointer; -webkit-appearance:none; appearance:none; }
+/* The sign hangs off the line the letters stand on, not off the middle of the
+   line box — that box carries empty space under the capitals, so centring in
+   it always read low. */
+.menuToggle { display:flex; align-items:baseline; justify-content:flex-start; gap:0; width:auto; background:none; border:0; padding:0; margin:0; text-align:left; cursor:pointer; -webkit-appearance:none; appearance:none; }
 /* The group's sign is the same short line the navigating items draw in on
    hover, crossed into a plus. Zero-wide and out of the way at rest so every
    word in the list still starts on the same left edge; it opens out under the
@@ -147,7 +150,15 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline:2px so
   height:18px;
   margin-right:0;
   opacity:0;
-  transition:width 0.42s cubic-bezier(0.3, 0, 0.2, 1), margin-right 0.42s cubic-bezier(0.3, 0, 0.2, 1), opacity 0.42s cubic-bezier(0.3, 0, 0.2, 1);
+  /* Sitting on the baseline, the sign's own middle is 9px up; the middle of
+     these capitals is 0.433 of the type size up (Anton's caps are tall). Lift
+     by the difference so the two centres land together at every size.
+     --lift then carries the sign along with the letters, which rise under the
+     cursor — without it the word climbed and the sign stayed behind, which is
+     what left it sitting low exactly when it was on show. */
+  --lift:0px;
+  transform:translateY(calc(9px - 0.433em - var(--lift)));
+  transition:width 0.42s cubic-bezier(0.3, 0, 0.2, 1), margin-right 0.42s cubic-bezier(0.3, 0, 0.2, 1), opacity 0.42s cubic-bezier(0.3, 0, 0.2, 1), transform 0.34s cubic-bezier(0.3, 0, 0.2, 1);
 }
 .menuPlus span {
   position:absolute;
@@ -163,6 +174,11 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline:2px so
 .menuToggle:hover .menuPlus,
 .menuToggle:focus-visible .menuPlus,
 .menuToggle[aria-expanded="true"] .menuPlus { width:18px; margin-right:12px; opacity:1; }
+/* the letters rise under the cursor, and further again once the group is
+   chosen — the sign travels the same distance so it stays on their middle */
+.menuToggle:hover .menuPlus,
+.menuToggle:focus-visible .menuPlus { --lift:9px; }
+.menuToggle.is-picked .menuPlus { --lift:14px; }
 /* open group: the upright stroke lies down, leaving a minus */
 .menuToggle[aria-expanded="true"] .menuPlus span:last-child { transform:translate(-50%, -50%) rotate(0deg); }
 @media (prefers-reduced-motion:reduce) { .menuPlus, .menuPlus span { transition:none; } }
@@ -227,15 +243,31 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline:2px so
 .menuJoinWord { position:relative; display:inline-flex; padding-bottom:5px; }
 .menuJoinRule { position:absolute; left:0; right:0; bottom:0; height:1px; background:currentColor; transform-origin:right center; transition:transform 0.3s cubic-bezier(0.3, 0, 0.2, 1); }
 .menuJoinRuleAccent { position:absolute; left:0; right:0; bottom:0; height:1.5px; background:var(--accent); transform:scaleX(0); transform-origin:left center; transition:transform 0.36s cubic-bezier(0.3, 0, 0.2, 1); }
-.menuJoinArrow { font-size:15px; }
 .menuJoinLink .menuCh { transition-delay:calc(var(--i) * 18ms); }
 
 .menuJoinLink:hover, .menuJoinLink:focus-visible { transform:translateX(6px); }
 .menuJoinLink:hover .menuCh, .menuJoinLink:focus-visible .menuCh { transform:translateY(-5px); color:var(--accent); }
 .menuJoinLink:hover .menuJoinRule, .menuJoinLink:focus-visible .menuJoinRule { transform:scaleX(0); }
 .menuJoinLink:hover .menuJoinRuleAccent, .menuJoinLink:focus-visible .menuJoinRuleAccent { transform:scaleX(1); transition-delay:0.12s; }
-.menuJoinLink:hover .menuArrow, .menuJoinLink:focus-visible .menuArrow { opacity:1; transform:translateX(0); }
 .menuJoinNote { margin-top:12px; font-size:15px; font-weight:400; line-height:1.65; color:var(--sub); max-width:38ch; text-wrap:pretty; }
+
+/* a second entry for the same audience, one step quieter than the join link:
+   same movement, smaller line, separated by its own hairline */
+.menuAsideItemSecondary { margin-top:26px; border-top:1px solid var(--hair); padding-top:20px; }
+.menuAsideLink {
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:clamp(15px, 1.2vw, 17px); letter-spacing:2px; text-transform:uppercase;
+  color:var(--ink); text-decoration:none;
+  transition:transform 0.34s cubic-bezier(0.3, 0, 0.2, 1);
+}
+.menuAsideLink:hover, .menuAsideLink[aria-current="page"] { color:var(--accent); }
+.menuAsideLinkWord { position:relative; display:inline-flex; padding-bottom:5px; }
+.menuAsideLink .menuCh { transition-delay:calc(var(--i) * 18ms); }
+.menuAsideLink:hover, .menuAsideLink:focus-visible { transform:translateX(6px); }
+.menuAsideLink:hover .menuCh, .menuAsideLink:focus-visible .menuCh { transform:translateY(-4px); color:var(--accent); }
+.menuAsideLink:hover .menuJoinRule, .menuAsideLink:focus-visible .menuJoinRule { transform:scaleX(0); }
+.menuAsideLink:hover .menuJoinRuleAccent, .menuAsideLink:focus-visible .menuJoinRuleAccent { transform:scaleX(1); transition-delay:0.12s; }
+
 .menuContact { border-top:1px solid var(--hair); padding-top:22px; }
 .menuContactLine { margin-top:12px; font-size:16px; font-weight:400; }
 .menuContactLine a { color:var(--sub); text-decoration:underline; text-underline-offset:3px; }
@@ -579,11 +611,11 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   .revCredit { animation:none !important; transform:none; }
   /* the menu still reads the same, it just stops moving */
   .menuItem, .menuAside, .menuCh, .menuDash, .menuPlus, .menuPlus span, .menuArrow, .menuWipe, .menuSubLink,
-  .menuJoinLink, .menuJoinRule, .menuJoinRuleAccent { transition:none !important; }
+  .menuJoinLink, .menuAsideLink, .menuJoinRule, .menuJoinRuleAccent { transition:none !important; }
   .menuItem, .menuAside { opacity:1; transform:none; }
   .menuLink:hover .menuCh, .menuLink.is-picked .menuCh,
-  .menuJoinLink:hover .menuCh { transform:none; }
-  .menuJoinLink:hover, .menuSubLink:hover { transform:none; }
+  .menuJoinLink:hover .menuCh, .menuAsideLink:hover .menuCh { transform:none; }
+  .menuJoinLink:hover, .menuAsideLink:hover, .menuSubLink:hover { transform:none; }
   .heroStrip .genre, .heroStrip .sep, .menuSubList li {
     animation:none !important;
     opacity:1;
@@ -670,6 +702,11 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 /* the always-dark band, for a section that needs to sit apart */
 .bandDark { background:#1a1a1c; color:#f4f2ee; border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); padding:88px 0; }
 .bandDark + .band { padding-top:96px; }
+/* A band stacked on another loses its top padding (.band + .band), which is
+   right for two bands sharing the page colour. The dark band paints its own
+   background and hairlines, so it has to win that space back or its heading
+   sits tight against the top rule with all the room left underneath. */
+.band.bandDark { padding-top:88px; }
 .bandDark .bandBody { color:#c7c3bd; }
 .bandDark a:focus-visible, .bandDark button:focus-visible { outline-color:#f4f2ee; }
 .specialistsBlock { display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start; }
@@ -769,4 +806,36 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 @media (max-width:640px) {
   .whereList { columns:2; column-gap:24px; }
   .whereItem { font-size:11px; letter-spacing:1px; padding:8px 2px; }
+}
+
+/* ---------- insights: article cards ---------- */
+/* Shared by the Insights listing and the "more insights" row at the foot of an
+   article, so a card looks identical wherever it appears. */
+.insightTag { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--accent); }
+.insightMeta {
+  display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:16px;
+  font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted);
+}
+.insightDot { flex:none; width:3px; height:3px; border-radius:50%; background:var(--muted); }
+
+.insightGrid {
+  list-style:none; margin:0; padding:0;
+  display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:44px 32px;
+}
+.insightCard { border-top:1px solid var(--hair); padding-top:20px; }
+.insightCard[hidden] { display:none; }
+.insightCardLink { display:block; }
+.insightCardImg { display:block; width:100%; aspect-ratio:3/2; object-fit:cover; margin-bottom:20px; }
+.insightCardSlot { margin-bottom:20px; }
+.insightCardLink:hover .insightCardSlot,
+.insightCardLink:hover .insightCardImg { outline:1px solid var(--ctrlBorder); outline-offset:-1px; }
+.insightCardTitle { font-size:22px; font-weight:400; line-height:1.3; margin-top:12px; color:var(--ink); text-wrap:pretty; }
+.insightCardLink:hover .insightCardTitle { color:var(--accent); }
+.insightCardExcerpt { font-size:15px; font-weight:400; line-height:1.65; color:var(--sub); margin-top:12px; text-wrap:pretty; }
+
+@media (max-width:1024px) {
+  .insightGrid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width:640px) {
+  .insightGrid { grid-template-columns:1fr; gap:36px; }
 }

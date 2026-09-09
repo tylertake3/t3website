@@ -1,5 +1,5 @@
 import { $ as NoImageMetadata, Z as MissingSharp, _t as AstroError, ht as UnsupportedImageFormat, y as detector } from "./path_Cdi6L2qr.mjs";
-import { i as resolveDefaultOutputFormat, n as baseService, r as parseQuality } from "./generic_DI0obHw0.mjs";
+import { i as resolveDefaultOutputFormat, n as baseService, r as parseQuality } from "./generic_Ba9Anmax.mjs";
 //#region node_modules/astro/dist/assets/services/sharp.js
 var sharp;
 var qualityTable = {
@@ -68,7 +68,7 @@ var sharp_default = {
 	getHTMLAttributes: baseService.getHTMLAttributes,
 	getSrcSet: baseService.getSrcSet,
 	getRemoteSize: baseService.getRemoteSize,
-	async transform(inputBuffer, transformOptions, config) {
+	async transform(inputBuffer, transformOptions, config, logger) {
 		if (!sharp) sharp = await loadSharp();
 		const transform = transformOptions;
 		const kernel = config.service.config.kernel;
@@ -76,7 +76,7 @@ var sharp_default = {
 		const outputFormat = transform.format ?? resolveDefaultOutputFormat(bufferFormat);
 		if (outputFormat === "svg") {
 			if (bufferFormat && bufferFormat !== "svg") {
-				console.warn(`\u26A0\uFE0F  Astro expected an SVG for "${transform.src}" but the source is ${bufferFormat}. Passing it through as ${bufferFormat} instead.`);
+				logger.warn(`Astro expected an SVG for "${transform.src}" but the source is ${bufferFormat}. Passing it through as ${bufferFormat} instead.`);
 				return {
 					data: inputBuffer,
 					format: bufferFormat
@@ -136,7 +136,7 @@ var sharp_default = {
 		try {
 			({data, info} = await result.toBuffer({ resolveWithObject: true }));
 		} catch {
-			console.warn(`\u26A0\uFE0F  Astro could not optimize image "${transform.src}". Sharp doesn't support this format. The image will be used unoptimized. Consider converting to WebP or placing in the public/ folder.`);
+			logger.warn(`Astro could not optimize image "${transform.src}". Sharp doesn't support this format. The image will be used unoptimized. Consider converting to WebP or placing in the public/ folder.`);
 			return {
 				data: inputBuffer,
 				format: bufferFormat

@@ -6,7 +6,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 
 const PAGES = [
   'index', 'artists', 'specialists', 'laural', 'credits', 'about', 'contact', 'join',
-  'dancers', 'models', 'spacts', 'stand-ins', 'what-is-a-spact',
+  'dancers', 'models', 'spacts', 'stand-ins', 'what-is-a-spact', 'insights',
 ];
 const OUT = 'public/admin/config.yml';
 

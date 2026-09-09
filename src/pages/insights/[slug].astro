@@ -1,0 +1,235 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import copy from '../../content/pages/insights.json';
+import { site } from '../../data/site';
+import {
+  publishedInsights,
+  relatedTo,
+  readingMinutes,
+  topicLabel,
+  formatDate,
+  isoDate,
+  type Insight,
+} from '../../lib/insights';
+
+export async function getStaticPaths() {
+  const articles = await publishedInsights();
+  return articles.map((article) => ({
+    params: { slug: article.id },
+    props: { article, articles },
+  }));
+}
+
+interface Props {
+  article: Insight;
+  articles: Insight[];
+}
+
+const { article, articles } = Astro.props;
+const { Content } = await render(article);
+
+const minutes = readingMinutes(article.body);
+const related = relatedTo(article, articles);
+const more = articles.filter((entry) => entry.id !== article.id).slice(0, 3);
+
+const pageTitle = article.data.metaTitle || `${article.data.title} | Insights | ${site.name}`;
+const pageDescription = article.data.metaDescription || article.data.excerpt;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: article.data.title,
+  description: article.data.excerpt,
+  datePublished: isoDate(article.data.date),
+  author: { '@type': 'Organization', name: article.data.author },
+  publisher: { '@type': 'Organization', name: site.name },
+  mainEntityOfPage: `https://www.take3agency.com/insights/${article.id}`,
+  articleSection: topicLabel(article.data.topic),
+};
+---
+
+<Base
+  title={pageTitle}
+  description={pageDescription}
+  ogTitle={article.data.title}
+  ogDescription={article.data.excerpt}
+  ogImage={article.data.image || undefined}
+  ogImageAlt={article.data.imageAlt || undefined}
+  footerTitle={copy.meta.footerTitle}
+>
+  <script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd, null, 2)} />
+
+  <!-- cover -->
+  <section class="pageHero" aria-labelledby="articleTitle">
+    <div class="pageHeroInner">
+      <a class="insightCrumb" href="/insights">
+        <span aria-hidden="true">&larr;</span> {copy.article.backLabel}
+      </a>
+      <p class="kicker insightCoverTag">{topicLabel(article.data.topic)}</p>
+      <h1 class="pageHeroTitle insightArticleTitle" id="articleTitle">{article.data.title}</h1>
+      <p class="pageHeroLede">{article.data.excerpt}</p>
+      <p class="insightArticleMeta">
+        <span>{article.data.author}</span>
+        <span class="insightDot" aria-hidden="true"></span>
+        <time datetime={isoDate(article.data.date)}>{formatDate(article.data.date)}</time>
+        <span class="insightDot" aria-hidden="true"></span>
+        <span>{minutes} min read</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- the article, with a quiet sidebar -->
+  <section class="band">
+    <div class="bandInner insightArticleLayout">
+      <article class="insightProse">
+        {
+          article.data.image && (
+            <img
+              class="insightArticleImg"
+              src={article.data.image}
+              alt={article.data.imageAlt}
+              loading="lazy"
+              decoding="async"
+            />
+          )
+        }
+        <Content />
+      </article>
+
+      <aside class="insightAside" aria-label={copy.article.relatedHeading}>
+        {
+          related.length > 0 && (
+            <div>
+              <p class="insightAsideTitle">{copy.article.relatedHeading}</p>
+              <ul class="insightAsideList">
+                {
+                  related.map((entry) => (
+                    <li>
+                      <a href={`/insights/${entry.id}`}>{entry.data.title}</a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+          )
+        }
+        <div class="insightAsideCta">
+          <p class="insightAsideTitle">{copy.article.joinHeading}</p>
+          <p class="insightAsideBody">{copy.article.joinBody}</p>
+          <a class="btnSolid insightAsideBtn" href="/join">{copy.article.joinLabel}</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- more to read -->
+  {
+    more.length > 0 && (
+      <section class="band" aria-labelledby="moreInsights">
+        <div class="bandInner">
+          <div class="sectionHead">
+            <h2 class="sectionTitle" id="moreInsights">{copy.article.moreHeading}</h2>
+            <a class="insightAllLink" href="/insights">
+              {copy.article.allLabel} <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+          <ul class="insightGrid">
+            {
+              more.map((entry) => (
+                <li class="insightCard">
+                  <a class="insightCardLink" href={`/insights/${entry.id}`}>
+                    {
+                      entry.data.image ? (
+                        <img class="insightCardImg" src={entry.data.image} alt="" loading="lazy" decoding="async" />
+                      ) : (
+                        <span class="slot insightCardSlot" style="aspect-ratio:3/2;">
+                          <span class="slotLabel">IMAGE</span>
+                        </span>
+                      )
+                    }
+                    <p class="insightTag">{topicLabel(entry.data.topic)}</p>
+                    <h3 class="insightCardTitle">{entry.data.title}</h3>
+                    <p class="insightMeta">
+                      <span>{readingMinutes(entry.body)} min read</span>
+                    </p>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <style is:global>
+    /* ---------- cover ---------- */
+    /* --heroInkSoft, not --heroInkFaint: this is a link, so it has to clear
+       4.5:1 on the always-dark cover */
+    .insightCrumb {
+      display:inline-block; font-size:11px; letter-spacing:3px; text-transform:uppercase;
+      color:var(--heroInkSoft);
+    }
+    .insightCrumb:hover { color:var(--heroInk); }
+    .insightCoverTag { margin-top:22px; color:#d4704f; text-transform:uppercase; }
+    .insightArticleTitle { font-size:clamp(36px, 4.4vw, 72px); }
+    .insightArticleMeta {
+      display:flex; flex-wrap:wrap; gap:14px; align-items:center; margin-top:28px;
+      padding-top:22px; border-top:1px solid var(--heroLine);
+      font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--heroInkSoft);
+    }
+    .insightArticleMeta .insightDot { background:var(--heroInkFaint); }
+
+    /* ---------- body ---------- */
+    .insightArticleLayout { display:grid; grid-template-columns:1fr 260px; gap:72px; align-items:start; }
+    .insightProse { max-width:68ch; }
+    .insightArticleImg { display:block; width:100%; aspect-ratio:16/9; object-fit:cover; margin-bottom:44px; }
+    .insightProse p { font-size:18px; font-weight:400; line-height:1.8; color:var(--sub); text-wrap:pretty; }
+    .insightProse p + p { margin-top:22px; }
+    .insightProse h2 {
+      font-size:clamp(22px, 2.2vw, 30px); font-weight:400; text-transform:uppercase;
+      letter-spacing:1px; line-height:1.25; margin-top:52px; color:var(--ink); text-wrap:pretty;
+    }
+    .insightProse h2 + p { margin-top:18px; }
+    .insightProse h3 {
+      font-size:16px; font-weight:400; letter-spacing:2px; text-transform:uppercase;
+      margin-top:38px; color:var(--ink);
+    }
+    .insightProse ul, .insightProse ol { margin:22px 0 0; padding:0; list-style:none; display:grid; gap:14px; }
+    .insightProse li { position:relative; font-size:17px; line-height:1.7; color:var(--sub); padding-left:22px; text-wrap:pretty; }
+    /* a hairline dash instead of a bullet, to match the site's rules */
+    .insightProse li::before { content:""; position:absolute; left:0; top:12px; width:8px; height:1px; background:var(--accent); }
+    .insightProse blockquote { margin:52px 0; padding:32px 0; border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); }
+    .insightProse blockquote p {
+      font-size:clamp(22px, 2.4vw, 32px); line-height:1.3; text-transform:uppercase;
+      letter-spacing:0.5px; color:var(--ink);
+    }
+    .insightProse hr { border:0; border-top:1px solid var(--hair); margin:52px 0; }
+    /* prose links must not be colour-only (WCAG 1.4.1) */
+    .insightProse a { text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1px; color:var(--ink); }
+    .insightProse a:hover { color:var(--accent); }
+    .insightProse img { display:block; width:100%; margin:44px 0 0; }
+    .insightProse strong { font-weight:500; color:var(--ink); }
+
+    /* ---------- sidebar ---------- */
+    .insightAside { position:sticky; top:120px; display:grid; gap:32px; }
+    .insightAsideTitle { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
+    .insightAsideList {
+      list-style:none; margin:18px 0 0; padding:0; display:grid; gap:14px;
+      border-top:1px solid var(--hair); padding-top:18px;
+    }
+    .insightAsideList a { font-size:14px; line-height:1.5; color:var(--sub); }
+    .insightAsideList a:hover { color:var(--accent); }
+    .insightAsideCta { border-top:1px solid var(--hair); padding-top:20px; }
+    .insightAsideBody { font-size:15px; line-height:1.6; color:var(--sub); margin-top:12px; }
+    .insightAsideBtn { display:inline-block; margin-top:18px; }
+    .insightAllLink { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
+    .insightAllLink:hover { color:var(--ink); }
+
+    @media (max-width:1024px) {
+      .insightArticleLayout { grid-template-columns:1fr; gap:48px; }
+      .insightAside { position:static; }
+    }
+  </style>
+</Base>

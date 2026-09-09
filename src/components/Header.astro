@@ -1,5 +1,5 @@
 ---
-import { navLinks, performerLink, site, contactHref } from '../data/site';
+import { navLinks, performerLink, insightsLink, site, contactHref } from '../data/site';
 import { pageExists } from '../lib/pages';
 import Timecode from './Timecode.astro';
 
@@ -34,6 +34,7 @@ const menuItems = navLinks
     return { ...item, children: withOverview };
   });
 const showPerformerLink = exists(performerLink.href);
+const showInsightsLink = exists(insightsLink.href);
 
 /* Sub-lists start closed, except the one holding the page you are on — so
    arriving on /models from search, the menu shows you where you are. */
@@ -44,7 +45,7 @@ const isOpenGroup = (item: (typeof menuItems)[number]) =>
 
 <header class={overDark ? 'nav' : 'nav navOnLight'} id="siteNav">
   <div class="navLeft">
-    <a class="navLogoLink" href="/" aria-label={`${site.name} — home`}>
+    <a class="navLogoLink" href="/" aria-label={`${site.name} home`}>
       <img class="navLogo" id="navLogo" src="/assets/take3-logo.svg" alt={site.name} width="220" height="110" />
     </a>
   </div>
@@ -128,25 +129,50 @@ const isOpenGroup = (item: (typeof menuItems)[number]) =>
     </nav>
 
     <div class="menuAside">
-      {showPerformerLink && (
+      {(showPerformerLink || showInsightsLink) && (
       <nav class="menuPerformers" aria-label="For performers">
         <p class="menuAsideLabel">FOR PERFORMERS</p>
-        <a
-          class="menuJoinLink"
-          href={performerLink.href}
-          aria-label={performerLink.label}
-          aria-current={isCurrent(performerLink.href) ? 'page' : undefined}
-        >
-          <span class="menuJoinWord" aria-hidden="true">
-            {chars(performerLink.label).map((ch, ci) => (
-              <span class="menuCh" style={`--i:${ci}`}>{ch === ' ' ? ' ' : ch}</span>
-            ))}
-            <span class="menuJoinRule" />
-            <span class="menuJoinRuleAccent" />
-          </span>
-          <span class="menuArrow menuJoinArrow" aria-hidden="true">↗</span>
-        </a>
-        <p class="menuJoinNote">{performerLink.note}</p>
+        {showPerformerLink && (
+          <div class="menuAsideItem">
+            <a
+              class="menuJoinLink"
+              href={performerLink.href}
+              aria-label={performerLink.label}
+              aria-current={isCurrent(performerLink.href) ? 'page' : undefined}
+            >
+              <span class="menuJoinWord" aria-hidden="true">
+                {chars(performerLink.label).map((ch, ci) => (
+                  <span class="menuCh" style={`--i:${ci}`}>{ch === ' ' ? ' ' : ch}</span>
+                ))}
+                <span class="menuJoinRule" />
+                <span class="menuJoinRuleAccent" />
+              </span>
+            </a>
+            <p class="menuJoinNote">{performerLink.note}</p>
+          </div>
+        )}
+
+        {/* Advice for artists sits under the join link: the same audience,
+            a quieter voice, so it takes a smaller line of its own. */}
+        {showInsightsLink && (
+          <div class="menuAsideItem menuAsideItemSecondary">
+            <a
+              class="menuAsideLink"
+              href={insightsLink.href}
+              aria-label={insightsLink.label}
+              aria-current={isCurrent(insightsLink.href) ? 'page' : undefined}
+            >
+              <span class="menuAsideLinkWord" aria-hidden="true">
+                {chars(insightsLink.label).map((ch, ci) => (
+                  <span class="menuCh" style={`--i:${ci}`}>{ch === ' ' ? ' ' : ch}</span>
+                ))}
+                <span class="menuJoinRule" />
+                <span class="menuJoinRuleAccent" />
+              </span>
+            </a>
+            <p class="menuJoinNote">{insightsLink.note}</p>
+          </div>
+        )}
       </nav>
       )}
 

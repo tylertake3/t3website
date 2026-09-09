@@ -584,11 +584,15 @@ const organizationSchema = {
 
         var ROWS = 4;
         var SPREAD = 480; /* how long the diagonal takes to cross the whole wall */
-        var LIFT = 520;   /* how long a mark takes to lift away or settle back */
+        /* A mark's own fade is 500ms in the stylesheet; the wall waits a little
+           longer than that before changing over, so a dropped frame can't leave
+           the last mark still on screen when its artwork is swapped. */
+        var LIFT = 560;
+        var EVERY = 6200; /* how long a set of marks holds before the next turn */
         /* picks up where the marks already on the page left off, so the first
            turn carries on through the list rather than doubling back */
         var next = data.from || 0;
-        var timer = null, turning = false, pending = [];
+        var timer = null, turning = false, pending = [], held = false;
 
         function darkTheme() {
           return document.documentElement.getAttribute('data-theme') !== 'light';
@@ -616,7 +620,10 @@ const organizationSchema = {
           while (wall.children.length > want) wall.removeChild(wall.lastElementChild);
           while (wall.children.length < want) {
             var cell = document.createElement('div');
-            cell.className = 'logoCell';
+            /* a cell arriving while the wall is mid-turn — the page was resized
+               part way through — starts out of sight with the rest of them,
+               rather than popping in on its own */
+            cell.className = turning ? 'logoCell is-turning' : 'logoCell';
             dress(cell, roster[next % roster.length]);
             next++;
             wall.appendChild(cell);
@@ -627,14 +634,28 @@ const organizationSchema = {
         /* Each cell's place in the diagonal, measured from where it actually
            sits rather than counted off its position in the list — a wordmark
            taking two columns pushes everything after it along, so an index can
-           no longer say which column a cell is in. */
+           no longer say which column a cell is in.
+
+           The far corner's wait has to come out at exactly SPREAD, because the
+           two halves of a turn are timed off SPREAD + LIFT. Adding a cell's two
+           fractions together gives the last one close to double that, so the
+           reach is measured across the wall first and then scaled to fit —
+           otherwise the bottom-right mark is still on show when the wall
+           changes over, and is caught half way and left hanging. */
         function stagger() {
           var width = wall.offsetWidth || 1;
           var height = wall.offsetHeight || 1;
           var cells = wall.children;
+          var reach = [];
+          var far = 0;
           for (var c = 0; c < cells.length; c++) {
             var across = cells[c].offsetLeft / width + cells[c].offsetTop / height;
-            cells[c].style.setProperty('--d', Math.round(across * SPREAD) + 'ms');
+            reach.push(across);
+            if (across > far) far = across;
+          }
+          var scale = far > 0 ? SPREAD / far : 0;
+          for (var r = 0; r < reach.length; r++) {
+            cells[r].style.setProperty('--d', Math.round(reach[r] * scale) + 'ms');
           }
         }
 
@@ -651,19 +672,41 @@ const organizationSchema = {
           }
         }
 
+        /* Abandons a turn wherever it had got to and puts the whole wall back
+           on show. A turn is two timeouts deep, so anything that stops those
+           firing — the tab going to the background, a step back through
+           history — would otherwise leave the marks that had already lifted
+           away stuck out of sight, and the wall stuck refusing to turn again. */
+        function settle() {
+          clearPending();
+          turning = false;
+          hide(false);
+        }
+
+        /* hands every cell the next mark in the list */
+        function swap() {
+          var cells = wall.children;
+          for (var c = 0; c < cells.length; c++) {
+            dress(cells[c], roster[next % roster.length]);
+            next++;
+          }
+        }
+
         /* The wall clears on the diagonal, changes over while nothing is on
            show, then refills on the same diagonal. */
         function turn() {
           if (turning) return;
+
+          /* nothing fades when motion is turned down, so a click changes the
+             marks over there and then instead of blanking the wall for a
+             second while it waits out a fade that never happens */
+          if (lessMotion()) { swap(); fit(); return; }
+
           turning = true;
           hide(true);
 
           pending.push(window.setTimeout(function () {
-            var cells = wall.children;
-            for (var c = 0; c < cells.length; c++) {
-              dress(cells[c], roster[next % roster.length]);
-              next++;
-            }
+            swap();
             fit();
             hide(true);        /* any cell just added starts out of sight too */
             void wall.offsetWidth;
@@ -674,11 +717,28 @@ const organizationSchema = {
 
         function start() {
           window.clearInterval(timer);
-          if (lessMotion()) return;
-          timer = window.setInterval(turn, 8000);
+          if (lessMotion() || held) return;
+          timer = window.setInterval(turn, EVERY);
         }
 
         stack.addEventListener('click', function () { turn(); start(); });
+
+        /* With the pointer on the wall it holds still: someone reading the
+           marks, or going for one, shouldn't have them change under the cursor.
+           A click still turns it. Any turn already running is left to finish
+           rather than snapped back half way. Only on a pointer that can truly
+           hover — on a touchscreen a tap would otherwise stop the wall for
+           good, since nothing there ever moves away again. */
+        if (window.matchMedia && window.matchMedia('(hover: hover)').matches) {
+          stack.addEventListener('mouseenter', function () {
+            held = true;
+            window.clearInterval(timer);
+          });
+          stack.addEventListener('mouseleave', function () {
+            held = false;
+            start();
+          });
+        }
 
         var rzt = null;
         window.addEventListener('resize', function () {
@@ -689,9 +749,24 @@ const organizationSchema = {
         fit();
         start();
         if (reduce.addEventListener) reduce.addEventListener('change', start);
+
+        /* The wall only turns while it can actually be seen. A turn left part
+           finished behind a background tab is dropped rather than resumed, so
+           coming back to the page finds the whole wall on show and the clock
+           running again from there. */
+        document.addEventListener('visibilitychange', function () {
+          window.clearInterval(timer);
+          settle();
+          if (!document.hidden) { stagger(); start(); }
+        });
         window.addEventListener('pagehide', function () {
           window.clearInterval(timer);
-          clearPending();
+          settle();
+        });
+        window.addEventListener('pageshow', function () {
+          settle();
+          fit();
+          start();
         });
       })();
 

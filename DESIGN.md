@@ -156,6 +156,12 @@ All display headings use `font-weight:400` (never bold) and fluid `clamp()` sizi
 - Reviews carousel (`.revCard`), supply tiles (`.supplyTile`), poster grid — all lean on the same hairline + whitespace language.
 - Dots and arrow buttons are circular (`border-radius:50%`), thin border, no fill.
 
+### Insights cards (`.insightGrid` / `.insightCard`)
+- The listing at `/insights` and the "more insights" row at the foot of an article share one card: hairline top border, 3:2 image (or a `.slot` plate), accent topic label, 22px title, excerpt, then a `--muted` meta line. Grid is 3 → 2 → 1 columns.
+- Topic filters (`.insightChip`) are pill buttons carrying `aria-pressed`; they are progressive enhancement, so every article stays visible without JavaScript.
+- Article prose (`.insightProse`) is capped at `68ch`, 18px/1.8 in `--sub`; `h2` is uppercase Jost at `clamp(22px,2.2vw,30px)`; list items take a 8x1px accent dash instead of a bullet; a `blockquote` becomes the hairline-ruled pull quote.
+- Reading time is counted from the body in `src/lib/insights.ts`, never authored.
+
 ### Footer (`.footer`)
 - Big uppercase title, contact line, ghost + solid button pair, then a thin divider and fine print row with the logo.
 

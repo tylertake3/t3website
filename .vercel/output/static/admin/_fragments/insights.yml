@@ -1,0 +1,68 @@
+- name: page-insights
+  label: Insights page text
+  file: src/content/pages/insights.json
+  description: >-
+    The wording around the Insights articles — the top of the page, the topic
+    filters, and the monthly email strip. The articles themselves live under
+    "Insights articles".
+  fields:
+    - name: meta
+      label: Search & sharing
+      widget: object
+      collapsed: true
+      hint: The words Google and social media show. Not visible on the page itself.
+      fields:
+        - { name: title, label: Browser tab & Google title, widget: string }
+        - { name: description, label: Google description, widget: text, hint: Around 150-160 characters works best. }
+        - { name: ogTitle, label: Title when shared on social, widget: string }
+        - { name: ogDescription, label: Description when shared on social, widget: text }
+        - { name: footerTitle, label: Footer headline, widget: string, hint: The big line in the contact strip at the bottom of the page. }
+    - name: hero
+      label: Top of the page
+      widget: object
+      fields:
+        - { name: eyebrow, label: Small line above the headline, widget: string }
+        - { name: heading, label: Headline, widget: string }
+        - { name: lede, label: Opening paragraph, widget: text }
+    - name: listing
+      label: The list of articles
+      widget: object
+      fields:
+        - { name: heading, label: Heading above the list, widget: string }
+        - { name: allLabel, label: '"Show everything" button', widget: string }
+        - { name: readLabel, label: Link text on the featured article, widget: string }
+        - { name: emptyNote, label: Wording when a topic has nothing in it, widget: string }
+        - { name: filterLabel, label: Description of the filter row, widget: string, hint: Read aloud to visitors using a screen reader. Not shown on screen. }
+    - name: topics
+      label: Topics
+      widget: list
+      label_singular: Topic
+      summary: '{{fields.label}}'
+      hint: >-
+        The buttons visitors filter by. Each article is filed under one topic.
+        Changing a topic's short name here means every article using it needs
+        updating too, so prefer editing the label.
+      fields:
+        - { name: label, label: Topic name, widget: string, hint: 'As shown on the button, for example "On set".' }
+        - { name: id, label: Short name, widget: string, hint: 'Lowercase, no spaces — use dashes. This is what an article is filed under.' }
+    - name: signup
+      label: Monthly email strip
+      widget: object
+      fields:
+        - { name: kicker, label: Small label above the heading, widget: string }
+        - { name: heading, label: Heading, widget: string }
+        - { name: body, label: Paragraph, widget: text }
+        - { name: buttonLabel, label: Button text, widget: string }
+        - { name: note, label: Small print under the button, widget: string }
+    - name: article
+      label: Wording on an article page
+      widget: object
+      collapsed: true
+      fields:
+        - { name: backLabel, label: '"Back" link text', widget: string }
+        - { name: relatedHeading, label: Heading above the related list, widget: string }
+        - { name: moreHeading, label: Heading above the row at the bottom, widget: string }
+        - { name: allLabel, label: '"All articles" link text', widget: string }
+        - { name: joinHeading, label: Heading on the join-us box, widget: string }
+        - { name: joinBody, label: Paragraph on the join-us box, widget: text }
+        - { name: joinLabel, label: Button on the join-us box, widget: string }

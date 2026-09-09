@@ -1,9 +1,9 @@
 {
   "meta": {
     "title": "Unique Talent & Distinctive Casting | Take 3 Agency",
-    "description": "Distinctive casting for film, television and commercial — very tall and short performers, twins, unusual features and memorable faces. Take 3 Agency represents performers whose look is the reason they are cast.",
+    "description": "Distinctive casting for film, television and commercial: very tall and short performers, twins, unusual features and memorable faces. Take 3 Agency represents performers whose look is the reason they are cast.",
     "ogTitle": "Unique Talent | Take 3 Agency",
-    "ogDescription": "Performers whose look is the reason they are cast — height, stature, features and faces that hold a frame.",
+    "ogDescription": "Performers whose look is the reason they are cast: height, stature, features and faces that hold a frame.",
     "ogImageAlt": "A performer photographed in profile against a plain backdrop, lit to hold the character of the face.",
     "footerTitle": "Cast a face that holds the frame"
   },
@@ -11,7 +11,7 @@
   "hero": {
     "eyebrow": "SPECIALISTS · UNIQUE TALENT",
     "heading": "Unique talent",
-    "lede": "Performers whose look is the reason they are cast — and who can act, take direction and carry a scene once they are.",
+    "lede": "Performers whose look is the reason they are cast, and who can act, take direction and carry a scene once they are.",
     "tags": ["HEIGHT", "STATURE", "TWINS", "FEATURES", "CHARACTER"]
   },
 
@@ -19,12 +19,12 @@
     "kicker": "THE RANGE",
     "heading": "Some of the people on this roster",
     "items": [
-      { "slotLabel": "Portrait — 2:3", "caption": "FIG. 01" },
-      { "slotLabel": "Portrait — 2:3", "caption": "FIG. 02" },
-      { "slotLabel": "Portrait — 2:3", "caption": "FIG. 03" },
-      { "slotLabel": "Portrait — 2:3", "caption": "FIG. 04" }
+      { "slotLabel": "Portrait (2:3)", "caption": "FIG. 01" },
+      { "slotLabel": "Portrait (2:3)", "caption": "FIG. 02" },
+      { "slotLabel": "Portrait (2:3)", "caption": "FIG. 03" },
+      { "slotLabel": "Portrait (2:3)", "caption": "FIG. 04" }
     ],
-    "todo": "TODO: photography and captions — four portraits, chosen with each performer and used with their permission. Caption each with the performer's name rather than their measurement or feature; how someone is described here is theirs to decide."
+    "todo": "TODO: photography and captions. Four portraits, chosen with each performer and used with their permission. Caption each with the performer's name rather than their measurement or feature; how someone is described here is theirs to decide."
   },
 
   "supply": {
@@ -34,7 +34,7 @@
       {
         "number": "01",
         "title": "Height and stature",
-        "body": "Performers at the far ends of the range — from very tall to very short — cast for roles written around their height, and represented as actors rather than as a measurement."
+        "body": "Performers at the far ends of the range, from very tall to very short, cast for roles written around their height, and represented as actors rather than as a measurement."
       },
       {
         "number": "02",
@@ -44,7 +44,7 @@
       {
         "number": "03",
         "title": "Distinctive features",
-        "body": "Faces and figures that stay with an audience — striking bone structure, natural hair, tattoos, scarring, and looks a standard casting call rarely reaches."
+        "body": "Faces and figures that stay with an audience: striking bone structure, natural hair, tattoos, scarring, and looks a standard casting call rarely reaches."
       },
       {
         "number": "04",
@@ -88,13 +88,13 @@
       "Older character faces",
       "Real-people casting"
     ],
-    "note": "Categories, not a closed list — describe the role, not the label."
+    "note": "Categories, not a closed list. Describe the role, not the label."
   },
 
   "credits": {
     "kicker": "SELECTED WORK",
     "heading": "Where this has been booked",
-    "todo": "TODO: copy — two or three genuine bookings, cleared with both the performer and the production. Performer consent matters more than usual on this page. Nothing here may be invented."
+    "todo": "TODO: copy. Two or three genuine bookings, cleared with both the performer and the production. Performer consent matters more than usual on this page. Nothing here may be invented."
   },
 
   "related": {
@@ -104,7 +104,7 @@
       {
         "name": "Models",
         "href": "/models",
-        "description": "Faces for campaigns, character and camera — cast from a working roster, not a lookbook.",
+        "description": "Faces for campaigns, character and camera, cast from a working roster, not a lookbook.",
         "linkLabel": "View models"
       },
       {

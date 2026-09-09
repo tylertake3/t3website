@@ -71,3 +71,11 @@ export const performerLink = {
   href: '/join',
   note: 'Open to dancers, SPACTs, models and specialist performers with professional experience.',
 };
+
+/** Advice written mainly for artists, so it sits under the performer link in
+    the menu rather than in the client list. */
+export const insightsLink = {
+  label: 'Insights',
+  href: '/insights',
+  note: 'Practical advice on self-tapes, first days on set and the paperwork.',
+};

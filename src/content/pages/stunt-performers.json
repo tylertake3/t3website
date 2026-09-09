@@ -11,12 +11,12 @@
   "hero": {
     "eyebrow": "SPECIALISTS · STUNTS",
     "heading": "Stunt performers & stunt doubles",
-    "lede": "Action-trained talent for film, television and commercial — matched to your cast, cleared for the sequence, and safe on the day.",
+    "lede": "Action-trained talent for film, television and commercial, matched to your cast, cleared for the sequence, and safe on the day.",
     "tags": ["STUNT PERFORMERS", "DOUBLES", "FIGHT", "DRIVING", "FALLS"]
   },
 
   "plate": {
-    "slotLabel": "Action still — 21:9",
+    "slotLabel": "Action still (21:9)",
     "figNumber": "FIG. 01",
     "figNote": "SHOT ON SET, NOT IN STUDIO"
   },
@@ -38,7 +38,7 @@
       {
         "number": "03",
         "title": "Fight-trained performers",
-        "body": "Actors and performers with genuine combat training — screen fighting, martial arts and weapons — who can act the scene as well as land it."
+        "body": "Actors and performers with genuine combat training (screen fighting, martial arts and weapons) who can act the scene as well as land it."
       },
       {
         "number": "04",
@@ -82,13 +82,13 @@
       "Motorcycle riders",
       "Horse riders"
     ],
-    "note": "Categories, not a closed list — tell us the sequence."
+    "note": "Categories, not a closed list. Tell us the sequence."
   },
 
   "credits": {
     "kicker": "SELECTED WORK",
     "heading": "Sequences we have cast",
-    "todo": "TODO: copy — two or three genuine stunt bookings, with the production's permission. Needs real examples from the client. Nothing in this section may be invented."
+    "todo": "TODO: copy. Two or three genuine stunt bookings, with the production's permission. Needs real examples from the client. Nothing in this section may be invented."
   },
 
   "related": {
@@ -98,7 +98,7 @@
       {
         "name": "SPACTs",
         "href": "/spacts",
-        "description": "Real skills, delivered safely on camera — where a performer's ability is the point rather than the hazard.",
+        "description": "Real skills, delivered safely on camera, where a performer's ability is the point rather than the hazard.",
         "linkLabel": "View SPACTs"
       },
       {

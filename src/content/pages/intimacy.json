@@ -1,9 +1,9 @@
 {
   "meta": {
-    "title": "Intimacy — Take 3 Agency",
+    "title": "Intimacy | Take 3 Agency",
     "description": "Intimacy coordinators and intimacy-trained performers for film, television and commercial productions. Take 3 Agency supplies certified coordinators, trained doubles and performers who work intimate content safely, consensually and on schedule.",
-    "ogTitle": "Intimacy — Take 3 Agency",
-    "ogDescription": "Certified intimacy coordinators and intimacy-trained performers — intimate content handled safely, consensually and on schedule.",
+    "ogTitle": "Intimacy | Take 3 Agency",
+    "ogDescription": "Certified intimacy coordinators and intimacy-trained performers: intimate content handled safely, consensually and on schedule.",
     "ogImageAlt": "Two performers rehearsing a close, choreographed sequence on a quiet set with a coordinator watching from the edge of frame.",
     "footerTitle": "Book intimacy support for your production",
     "footerLinks": [
@@ -15,10 +15,10 @@
   "hero": {
     "eyebrow": "TAKE 3 AGENCY · No. 07",
     "title": "Intimacy",
-    "strapline": "Intimate content, choreographed and consented — the same care a fight gets, given to a love scene.",
+    "strapline": "Intimate content, choreographed and consented: the same care a fight gets, given to a love scene.",
     "tags": ["COORDINATION", "CHOREOGRAPHY", "DOUBLES", "TRAINING"],
     "figure": {
-      "slotLabel": "Hero portrait — 2:3",
+      "slotLabel": "Hero portrait (2:3)",
       "figNumber": "FIG. 01",
       "figNote": "REHEARSED, NOT IMPROVISED"
     }
@@ -35,7 +35,7 @@
       {
         "number": "02",
         "title": "Intimacy-trained performers",
-        "body": "Performers who have trained in intimate work — clear on boundaries, comfortable with repetition and reliable in close-up."
+        "body": "Performers who have trained in intimate work: clear on boundaries, comfortable with repetition and reliable in close-up."
       },
       {
         "number": "03",
@@ -52,13 +52,13 @@
 
   "brands": {
     "figure": {
-      "slotLabel": "Rehearsal still — closed set",
+      "slotLabel": "Rehearsal still (closed set)",
       "figNumber": "FIG. 02",
       "figNote": "PREP, REHEARSAL, AGREEMENT"
     },
     "eyebrow": "HOW IT WORKS",
     "heading": "Consent first, choreography second, camera last.",
-    "pullQuote": "“A love scene is a stunt with different stakes — you rehearse it, you agree it, and nobody improvises on the day.”",
+    "pullQuote": "“A love scene is a stunt with different stakes: you rehearse it, you agree it, and nobody improvises on the day.”",
     "paragraph": "We start with the script and the boundaries, not the schedule. The coordinator meets the production and the cast, agrees what is and is not on the table in writing, choreographs the sequence to that agreement, and stays through the shoot so anything that changes is renegotiated rather than assumed. It protects the cast, and it protects the day."
   },
 
@@ -81,7 +81,7 @@
       }
     ],
     "figure": {
-      "slotLabel": "On-set portrait — coordinator at monitor",
+      "slotLabel": "On-set portrait (coordinator at monitor)",
       "figNumber": "FIG. 03",
       "figNote": "ON SET, IN PROCESS"
     }
@@ -96,7 +96,7 @@
       },
       {
         "title": "One roster",
-        "body": "Coordinators, trained performers and matched doubles from the same roster — cast and covered in a single conversation."
+        "body": "Coordinators, trained performers and matched doubles from the same roster: cast and covered in a single conversation."
       },
       {
         "title": "Admin handled",

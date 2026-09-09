@@ -1,0 +1,238 @@
+---
+import Base from '../layouts/Base.astro';
+import copy from '../content/pages/insights.json';
+import { site } from '../data/site';
+import { publishedInsights, pickFeatured, readingMinutes, topicLabel, formatDate, isoDate } from '../lib/insights';
+
+const signupHref = `mailto:${site.email}?subject=${encodeURIComponent('Insights: monthly email sign-up')}`;
+
+const articles = await publishedInsights();
+const featured = pickFeatured(articles);
+const rest = featured ? articles.filter((article) => article.id !== featured.id) : articles;
+
+/* Only offer a filter for a topic that has something behind it, so the row
+   never advertises an empty result. */
+const usedTopics = copy.topics.filter((topic) => articles.some((article) => article.data.topic === topic.id));
+
+const countLabel = `${articles.length} ${articles.length === 1 ? 'ARTICLE' : 'ARTICLES'}`;
+---
+
+<Base
+  title={copy.meta.title}
+  description={copy.meta.description}
+  ogTitle={copy.meta.ogTitle}
+  ogDescription={copy.meta.ogDescription}
+  footerTitle={copy.meta.footerTitle}
+>
+  <!-- cover -->
+  <section class="pageHero" aria-labelledby="insightsTitle">
+    <div class="pageHeroInner">
+      <p class="kicker">{copy.hero.eyebrow}</p>
+      <h1 class="pageHeroTitle" id="insightsTitle">{copy.hero.heading}</h1>
+      <p class="pageHeroLede">{copy.hero.lede}</p>
+    </div>
+  </section>
+
+  <!-- topics, then the featured article -->
+  <section class="band" aria-labelledby="latestTitle">
+    <div class="bandInner">
+      <div class="sectionHead">
+        <h2 class="sectionTitle" id="latestTitle">{copy.listing.heading}</h2>
+        <p class="kicker">{countLabel}</p>
+      </div>
+
+      {
+        usedTopics.length > 0 && (
+          <div class="insightFilters" role="group" aria-label={copy.listing.filterLabel} data-insight-filters>
+            <button class="insightChip" type="button" aria-pressed="true" data-filter="all">
+              {copy.listing.allLabel}
+            </button>
+            {
+              usedTopics.map((topic) => (
+                <button class="insightChip" type="button" aria-pressed="false" data-filter={topic.id}>
+                  {topic.label}
+                </button>
+              ))
+            }
+          </div>
+        )
+      }
+
+      {
+        featured && (
+          <div class="insightFeature" data-insight-card data-topic={featured.data.topic}>
+            <a class="insightFeatureMedia" href={`/insights/${featured.id}`} tabindex="-1" aria-hidden="true">
+              {
+                featured.data.image ? (
+                  <img src={featured.data.image} alt="" loading="lazy" decoding="async" />
+                ) : (
+                  <span class="slot" style="aspect-ratio:4/3;">
+                    <span class="slotLabel">FEATURED IMAGE</span>
+                  </span>
+                )
+              }
+            </a>
+            <div>
+              <p class="insightTag">{topicLabel(featured.data.topic)}</p>
+              <h3 class="insightFeatureTitle">
+                <a href={`/insights/${featured.id}`}>{featured.data.title}</a>
+              </h3>
+              <p class="insightFeatureLede">{featured.data.excerpt}</p>
+              <p class="insightMeta">
+                <span>{readingMinutes(featured.body)} min read</span>
+                <span class="insightDot" aria-hidden="true"></span>
+                <time datetime={isoDate(featured.data.date)}>{formatDate(featured.data.date)}</time>
+              </p>
+              <a class="insightReadLink" href={`/insights/${featured.id}`}>
+                {copy.listing.readLabel} <span aria-hidden="true">&rarr;</span>
+              </a>
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- everything else -->
+  {
+    rest.length > 0 && (
+      <section class="band" aria-label="All articles">
+        <div class="bandInner">
+          <ul class="insightGrid">
+            {
+              rest.map((article) => (
+                <li class="insightCard" data-insight-card data-topic={article.data.topic}>
+                  <a class="insightCardLink" href={`/insights/${article.id}`}>
+                    {
+                      article.data.image ? (
+                        <img class="insightCardImg" src={article.data.image} alt="" loading="lazy" decoding="async" />
+                      ) : (
+                        <span class="slot insightCardSlot" style="aspect-ratio:3/2;">
+                          <span class="slotLabel">IMAGE</span>
+                        </span>
+                      )
+                    }
+                    <p class="insightTag">{topicLabel(article.data.topic)}</p>
+                    <h3 class="insightCardTitle">{article.data.title}</h3>
+                    <p class="insightCardExcerpt">{article.data.excerpt}</p>
+                    <p class="insightMeta">
+                      <span>{readingMinutes(article.body)} min read</span>
+                      <span class="insightDot" aria-hidden="true"></span>
+                      <time datetime={isoDate(article.data.date)}>{formatDate(article.data.date)}</time>
+                    </p>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="insightEmpty" data-insight-empty hidden>{copy.listing.emptyNote}</p>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    articles.length === 0 && (
+      <section class="band">
+        <div class="bandInner">
+          <p class="todoNote">{copy.listing.emptyNote}</p>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- monthly email -->
+  <section class="band bandDark" aria-labelledby="insightSignupTitle">
+    <div class="bandInner bandSplit">
+      <div>
+        <p class="kicker">{copy.signup.kicker}</p>
+        <h2 class="sectionTitle" id="insightSignupTitle">{copy.signup.heading}</h2>
+      </div>
+      <div>
+        <p class="bandBody">{copy.signup.body}</p>
+        {/* A mailing list needs an email service behind it; until one is
+            connected this asks by email, which actually works. */}
+        <p class="insightSignupRow">
+          <a class="btnSolid" href={signupHref}>{copy.signup.buttonLabel}</a>
+        </p>
+        <p class="insightSignupNote">{copy.signup.note}</p>
+      </div>
+    </div>
+  </section>
+
+  <style is:global>
+    /* ---------- topic filters ---------- */
+    .insightFilters { display:flex; flex-wrap:wrap; gap:10px; margin-top:28px; }
+    .insightChip {
+      font-family:inherit; font-size:12px; letter-spacing:2px; text-transform:uppercase;
+      padding:10px 16px; border:1px solid var(--hair); border-radius:999px;
+      background:none; color:var(--muted); cursor:pointer;
+      transition:color 0.25s ease, border-color 0.25s ease;
+    }
+    .insightChip:hover { border-color:var(--ctrlBorder); color:var(--ink); }
+    .insightChip[aria-pressed="true"] { border-color:var(--ink); color:var(--ink); }
+
+    /* ---------- featured article ---------- */
+    .insightFeature { display:grid; grid-template-columns:1.15fr 1fr; gap:48px; align-items:center; margin-top:40px; }
+    /* [hidden] alone loses to the display above it, so say it explicitly */
+    .insightFeature[hidden] { display:none; }
+    .insightFeatureMedia { display:block; }
+    .insightFeatureMedia img { display:block; width:100%; aspect-ratio:4/3; object-fit:cover; }
+    .insightFeatureTitle {
+      font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; letter-spacing:0;
+      font-size:clamp(28px, 3.2vw, 46px); font-weight:400; line-height:1.08; margin-top:16px;
+    }
+    .insightFeatureTitle a:hover { color:var(--accent); }
+    .insightFeatureLede { font-size:18px; line-height:1.7; color:var(--sub); margin-top:20px; max-width:48ch; text-wrap:pretty; }
+    .insightReadLink {
+      display:inline-block; margin-top:26px; font-size:13px; letter-spacing:2px; text-transform:uppercase;
+      color:var(--ink); border-bottom:1px solid var(--ctrlBorder); padding-bottom:4px;
+    }
+    .insightReadLink:hover { border-bottom-color:var(--ink); color:var(--accent); }
+
+    /* ---------- article grid ---------- */
+    /* The grid and card styles live in global.css — an article page uses them too. */
+    .insightEmpty { font-size:15px; color:var(--muted); margin-top:32px; }
+
+    /* ---------- monthly email ---------- */
+    .insightSignupRow { display:flex; gap:12px; margin-top:26px; flex-wrap:wrap; }
+    .insightSignupNote { font-size:12px; letter-spacing:1px; color:var(--heroInkFaint); margin-top:14px; }
+
+    @media (max-width:1024px) {
+      .insightFeature { grid-template-columns:1fr; gap:32px; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      .insightChip { transition:none; }
+    }
+  </style>
+
+  <script is:inline>
+    /* Progressive enhancement: with no JavaScript every article stays visible
+       and the chips simply do nothing. */
+    (function () {
+      var group = document.querySelector('[data-insight-filters]');
+      if (!group) return;
+      var chips = group.querySelectorAll('.insightChip');
+      var cards = document.querySelectorAll('[data-insight-card]');
+      var empty = document.querySelector('[data-insight-empty]');
+
+      chips.forEach(function (chip) {
+        chip.addEventListener('click', function () {
+          var filter = chip.dataset.filter;
+          chips.forEach(function (other) {
+            other.setAttribute('aria-pressed', String(other === chip));
+          });
+          var shown = 0;
+          cards.forEach(function (card) {
+            var match = filter === 'all' || card.dataset.topic === filter;
+            /* the featured block is a grid, the cards are list items — let each
+               keep its own display type rather than forcing one */
+            card.hidden = !match;
+            if (match) shown++;
+          });
+          if (empty) empty.hidden = shown > 0;
+        });
+      });
+    })();
+  </script>
+</Base>

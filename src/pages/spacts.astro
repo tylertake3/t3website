@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import copy from '../content/pages/spacts.json';
+import RoleFrame from '../components/RoleFrame.astro';
 
 /* `focus` is optional per slide: the point in the photo the wide banner holds
    on to when it trims the top and bottom away. Unset falls back to center 35%. */
@@ -64,6 +65,9 @@ const heroSlides = copy.hero.slides as Array<{ image: string; production: string
     </ul>
     <p style="font-size:14px; font-weight:400; color:var(--muted); line-height:1.6; margin:24px 0 0; max-width:720px; text-wrap:pretty;">{copy.disciplines.note}</p>
   </section>
+
+  <!-- SPACT vs stunt performer vs supporting artist, with the annotated frame -->
+  <RoleFrame copy={copy.distinctions} headingId="distinctions" />
 
   <!-- for film and television -->
   <section style="border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); background:#1a1a1c; color:#f4f2ee;">

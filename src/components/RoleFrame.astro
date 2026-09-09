@@ -1,0 +1,557 @@
+---
+/* The SPACT / stunt performer / supporting artist comparison, with the
+   annotated production frame under it. Lifted out of the /what-is-a-spact
+   explainer so it can sit on /spacts, where more people see it.
+
+   Every class here is namespaced .rf- and scoped under .roleFrame, because the
+   pages that host it define their own .pad / .frame / .legend rules. The styles
+   are is:global rather than scoped: the script builds the callouts for scenes
+   2 and 3 at runtime, and runtime-created nodes never carry Astro's scope
+   attribute. */
+type Spot = {
+  role: string;
+  label: string;
+  side: string;
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  delay: number;
+};
+
+type Scene = { image: string; title: string; spots: Spot[] };
+
+type Distinctions = {
+  eyebrow: string;
+  heading: string;
+  intro: string;
+  selectPrompt: string;
+  roleFlagLabel: string;
+  roles: Array<{ role: string; title: string; body: string }>;
+  frameAlt: string;
+  scenes: Scene[];
+  legend: { stunt: string; spact: string; sa: string; nextButton: string };
+  note: string;
+};
+
+interface Props {
+  copy: Distinctions;
+  /* the id the host page points its aria-labelledby at */
+  headingId?: string;
+}
+
+const { copy, headingId = 'roleFrameHeading' } = Astro.props;
+
+const roleCardIds: Record<string, string> = {
+  sa: 'cardSa',
+  spact: 'cardSpact',
+  stunt: 'cardStunt',
+};
+
+const scene1 = copy.scenes[0];
+
+/* The page is about SPACTs, so SPACT carries the accent and the stunt
+   performer is the pale solid line. SA stays the dashed, dimmest tier.
+   These mirror borderFor/colFor/dotFor/labBorderFor in the script below —
+   the server render has to agree with the first client paint. */
+const borderFor = (r: string) =>
+  r === 'sa'
+    ? '1px dashed rgba(244,242,238,0.55)'
+    : r === 'spact'
+      ? '1px solid var(--accent)'
+      : '1px solid rgba(244,242,238,0.95)';
+const colFor = (r: string) =>
+  r === 'spact' ? 'var(--accent)' : r === 'stunt' ? 'rgba(244,242,238,0.95)' : 'rgba(244,242,238,0.55)';
+const dotFor = (r: string) => (r === 'spact' ? 'var(--accent)' : r === 'stunt' ? '#f4f2ee' : 'var(--muted)');
+const labBorderFor = (r: string) => (r === 'spact' ? 'var(--accent)' : '#3a3a3e');
+
+/* spotlight geometry: the cut-out is 1.3x the callout box, centred on it, so
+   the mask fades out before it reaches the box edge */
+const spotlight = (s: Spot) => {
+  const ew = s.width * 1.3;
+  const eh = s.height * 1.3;
+  const el = s.left - 0.15 * s.width;
+  const et = s.top - 0.15 * s.height;
+  return {
+    left: (-el / ew) * 100,
+    top: (-et / eh) * 100,
+    width: 10000 / ew,
+    height: 10000 / eh,
+  };
+};
+
+/* SPACT is the role selected on arrival */
+const initial = 'spact';
+
+/* largest first, so a small hit area nested inside a bigger one still gets
+   the click */
+const hotspots = scene1.spots
+  .map((s, i) => ({ ...s, i }))
+  .sort((a, b) => b.width * b.height - a.width * a.height);
+---
+
+<section class="roleFrame" aria-labelledby={headingId}>
+  <div class="rf-wrap">
+    <p class="rf-eyebrow" id={headingId}>{copy.eyebrow}</p>
+    <h2 class="rf-heading">{copy.heading}</h2>
+    <p class="rf-intro">{copy.intro}</p>
+    <p class="rf-prompt">{copy.selectPrompt}</p>
+
+    <div class="rf-roleGrid">
+      {copy.roles.map((card) => (
+        <button
+          type="button"
+          class={`rf-roleCard ${card.role === 'spact' ? 'rf-roleCard--spact' : 'rf-roleCard--edge'}`}
+          id={roleCardIds[card.role]}
+          data-role={card.role}
+          aria-pressed={card.role === initial ? 'true' : 'false'}
+          style={card.role === initial
+            ? `border-top-color:${card.role === 'spact' ? 'var(--accent)' : '#f4f2ee'};`
+            : undefined}
+        >
+          <span
+            class="rf-roleTitle"
+            style={card.role === initial && card.role === 'spact' ? 'color:var(--accent);' : undefined}
+          >{card.title}</span>
+          <span class="rf-roleBody">{card.body}</span>
+          <span
+            class="rf-roleFlag"
+            style={`color:${card.role === 'spact' ? 'var(--accent)' : '#f4f2ee'};${card.role === initial ? ' opacity:1;' : ''}`}
+          >{copy.roleFlagLabel}</span>
+        </button>
+      ))}
+    </div>
+
+    <div class="rf-frame" id="sceneFrame">
+      {/* the frame is well below the fold on every viewport, so it is never
+          part of the initial payload */}
+      <img class="rf-frameImg" id="sceneImg" src={scene1.image} alt={copy.frameAlt} loading="lazy" decoding="async" />
+      <div class="rf-frameDim" id="sceneDim" style="opacity:1;"></div>
+      <div id="spotLayer">
+        {scene1.spots.map((s, i) => {
+          const on = s.role === initial;
+          const above = s.side !== 'below';
+          const sl = spotlight(s);
+          return (
+            <div
+              class="rf-spot"
+              data-idx={String(i)}
+              data-role={s.role}
+              style={`left:${s.left}%; top:${s.top}%; width:${s.width}%; height:${s.height}%; animation:none; opacity:${on ? 1 : 0};${on ? ' z-index:2;' : ''}`}
+            >
+              <div class="rf-spotImg" style={`opacity:${on ? 1 : 0};`}>
+                <img
+                  src={scene1.image}
+                  alt=""
+                  aria-hidden="true"
+                  loading="lazy"
+                  decoding="async"
+                  style={`left:${sl.left.toFixed(6)}%; top:${sl.top.toFixed(6)}%; width:${sl.width.toFixed(6)}%; height:${sl.height.toFixed(6)}%;`}
+                />
+              </div>
+              <div
+                class="rf-spotBox"
+                style={`border:${borderFor(s.role)};${s.role !== 'sa' ? ' box-shadow:0 0 0 1px rgba(20,20,22,0.35);' : ''}`}
+              ></div>
+              <div class="rf-spotTick" style={`${above ? 'bottom' : 'top'}:100%; background:${colFor(s.role)};`}></div>
+              <div
+                class="rf-spotLabel"
+                style={`${above ? 'bottom' : 'top'}:calc(100% + 10px); border-color:${labBorderFor(s.role)};`}
+              ><span style={`color:${dotFor(s.role)};`}>●</span>&nbsp; {s.label}</div>
+            </div>
+          );
+        })}
+      </div>
+      {/* transparent hit areas over each marked performer, so the frame is a
+          second way into the same control: click the stunt performer to
+          isolate stunts, hover to read who someone is */}
+      <div id="hotLayer">
+        {hotspots.map((s) => (
+          <button
+            type="button"
+            class="rf-hot"
+            data-role={s.role}
+            data-idx={String(s.i)}
+            style={`left:${s.left}%; top:${s.top}%; width:${s.width}%; height:${s.height}%;`}
+          >
+            <span class="rf-srOnly">{s.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="rf-frameMeta">
+      <p id="sceneTitle" class="rf-sceneTitle">{scene1.title}</p>
+      <div class="rf-legend">
+        <button type="button" class="rf-legBtn" id="legStunt" data-role="stunt" aria-pressed="false"><span style="color:#f4f2ee;">—</span> {copy.legend.stunt}</button>
+        <button type="button" class="rf-legBtn" id="legSpact" data-role="spact" aria-pressed="true"><span style="color:var(--accent);">—</span> {copy.legend.spact}</button>
+        <button type="button" class="rf-legBtn" id="legSa" data-role="sa" aria-pressed="false">╌ {copy.legend.sa}</button>
+        <button type="button" class="rf-nextBtn" id="nextScene">{copy.legend.nextButton}</button>
+      </div>
+    </div>
+
+    <p class="rf-note">{copy.note}</p>
+  </div>
+</section>
+
+<style is:global>
+  /* no bottom border: the section that follows supplies its own top hairline,
+     and two adjacent 1px lines read as one thick one */
+  .roleFrame { border-top:1px solid #3a3a3e; background:#1a1a1c; color:#f4f2ee; }
+
+  /* This band is hard-coded dark in BOTH themes, so the light-theme --accent
+     (#5d1f16 oxblood) and --muted (#605d57) — picked for a cream page, where
+     they measure ~1.4:1 and ~2.3:1 on this surface — are re-scoped to their
+     dark-theme values, which clear 4.5:1 on #1a1a1c (accent 5.16:1, muted
+     5.62:1). Everything inside still references the tokens. */
+  .roleFrame { --accent:#d4704f; --muted:#96928c; }
+
+  .roleFrame a:focus-visible, .roleFrame button:focus-visible { outline:2px solid #f4f2ee; outline-offset:3px; }
+
+  /* 40px gutters match the host page's own sections, so the heading lines up
+     with the one above it rather than sitting 20px further in */
+  .rf-wrap { max-width:1280px; margin:0 auto; padding:80px 40px 88px; }
+  .rf-eyebrow { font-size:12px; letter-spacing:3px; color:var(--accent); font-weight:400; margin:0; }
+  .rf-heading { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(24px,2.4vw,36px); font-weight:400; letter-spacing:0; line-height:1.2; margin:14px 0 0; }
+  .rf-intro { font-size:15px; font-weight:400; line-height:1.7; color:#c7c3bd; margin:16px 0 0; max-width:720px; text-wrap:pretty; }
+  .rf-prompt { font-size:10px; letter-spacing:2.5px; color:var(--muted); margin:22px 0 0; }
+
+  /* ---------- role cards ---------- */
+  .rf-roleGrid { display:grid; grid-template-columns:repeat(3,1fr); gap:40px; margin-top:30px; }
+  .rf-roleCard { display:block; width:100%; text-align:left; font-family:inherit; font-size:inherit; color:inherit; background:none; border:0; border-top:1px solid #3a3a3e; padding:20px 0 0; margin:0; cursor:pointer; transition:border-top-color .25s, background .25s; }
+  .rf-roleCard--edge:hover { border-top-color:var(--muted); }
+  .rf-roleCard--spact:hover { background:color-mix(in srgb, var(--accent) 4%, transparent); }
+  .rf-roleTitle { font-size:13px; letter-spacing:2.5px; font-weight:500; color:#f4f2ee; transition:color .25s; }
+  .rf-roleBody { display:block; font-size:14px; font-weight:400; line-height:1.7; color:#c7c3bd; margin:12px 0 0; text-wrap:pretty; }
+  .rf-roleFlag { display:block; font-size:9px; letter-spacing:2.5px; color:var(--accent); margin-top:12px; opacity:0; transition:opacity .25s; }
+
+  /* ---------- annotated scene frame ---------- */
+  /* The callouts are positioned as percentages of this frame, so the 3:2 shape
+     has to hold. Capping the width scales the whole thing down together and
+     keeps the three role cards in view above it. */
+  .rf-frame { position:relative; aspect-ratio:3/2; overflow:hidden; background:#242426; width:100%; max-width:min(100%, 62vh * 1.5, 820px); margin:40px auto 0; }
+  .rf-frame > img.rf-frameImg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+  .rf-frameDim { position:absolute; inset:0; background:rgba(14,14,16,0.55); transition:opacity .35s; pointer-events:none; }
+  /* the callouts are decoration: every click goes to a .rf-hot underneath */
+  .rf-spot { position:absolute; opacity:0; transition:opacity .35s; pointer-events:none; }
+  .rf-spotImg { position:absolute; left:-15%; top:-15%; width:130%; height:130%; overflow:hidden; opacity:0; transition:opacity .4s; -webkit-mask-image:radial-gradient(ellipse at center, #000 40%, transparent 73%); mask-image:radial-gradient(ellipse at center, #000 40%, transparent 73%); }
+  .rf-spotImg img { position:absolute; max-width:none; object-fit:cover; display:block; }
+  .rf-spotBox { position:absolute; inset:0; }
+  .rf-spotTick { position:absolute; left:50%; width:1px; height:10px; }
+  .rf-spotLabel { position:absolute; left:50%; transform:translateX(-50%); background:rgba(22,22,24,0.92); border:1px solid #3a3a3e; padding:4px 10px; font-size:10px; letter-spacing:2.5px; color:#f4f2ee; white-space:nowrap; }
+
+  /* ---------- clickable performers ---------- */
+  .rf-hot { position:absolute; background:none; border:1px solid transparent; padding:0; margin:0; cursor:pointer; -webkit-appearance:none; appearance:none; }
+  .rf-hot:hover { border-color:rgba(244,242,238,0.7); background:rgba(244,242,238,0.08); }
+  .rf-hot[data-role="spact"]:hover { border-color:var(--accent); background:color-mix(in srgb, var(--accent) 14%, transparent); }
+  .roleFrame .rf-hot:focus-visible { outline-offset:0; }
+  .rf-srOnly { position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
+
+  /* ---------- caption + key ---------- */
+  .rf-frameMeta { display:flex; justify-content:space-between; align-items:baseline; gap:24px; margin-top:14px; flex-wrap:wrap; }
+  .rf-sceneTitle { font-size:10px; letter-spacing:3px; color:var(--muted); margin:0; }
+  .rf-legend { display:flex; gap:28px; font-size:10px; letter-spacing:2.5px; color:var(--muted); flex-wrap:wrap; align-items:baseline; }
+  /* the label text is only 15px tall; 5px of vertical padding carries the
+     24x24 target (WCAG 2.2 AA) without moving a pixel of it — the key is
+     baseline-aligned, so padding grows the hit box around the text rather than
+     shifting it, and the row height is still set by the taller .rf-nextBtn. */
+  .rf-legBtn { background:none; border:0; padding:5px 0; margin:0; font:inherit; letter-spacing:inherit; color:inherit; cursor:pointer; white-space:nowrap; }
+  .rf-legBtn:hover { color:#f4f2ee; }
+  .rf-nextBtn { background:none; font:inherit; letter-spacing:inherit; color:#f4f2ee; border:1px solid #3a3a3e; padding:6px 12px; margin:0; cursor:pointer; white-space:nowrap; transition:border-color .25s, color .25s; }
+  .rf-nextBtn:hover { border-color:var(--accent); color:var(--accent); }
+  .rf-note { font-size:14px; font-weight:400; color:var(--muted); line-height:1.7; margin:44px 0 0; max-width:760px; text-wrap:pretty; }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:1024px) {
+    .rf-wrap { padding-left:24px; padding-right:24px; }
+    .rf-roleGrid { gap:28px; }
+    .rf-spotLabel { font-size:9px; letter-spacing:1.8px; padding:3px 7px; }
+  }
+  @media (max-width:640px) {
+    .rf-wrap { padding:56px 24px; }
+    .rf-heading { font-size:clamp(22px,6.6vw,32px); }
+    .rf-roleGrid { grid-template-columns:1fr; gap:28px; margin-top:28px; }
+    .rf-spotLabel { font-size:7px; letter-spacing:1px; padding:2px 5px; }
+    .rf-spotTick { height:6px; }
+    .rf-legend { gap:16px; }
+    .rf-frameMeta { flex-direction:column; align-items:flex-start; gap:14px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .roleFrame * { transition-duration:0.01ms !important; }
+  }
+</style>
+
+<script is:inline define:vars={{ SCENES: copy.scenes }}>
+(function () {
+  'use strict';
+
+  /* SCENES (image, title, callout labels and geometry) comes from the page's
+     content JSON via define:vars above. */
+
+  /* state: the isolated role (null = clean frame), and the scene on show */
+  var role = 'spact';
+  var sceneIdx = 0;
+  /* data-idx of the performer currently under the cursor / keyboard focus */
+  var hoverIdx = null;
+
+  var frameImg = document.getElementById('sceneImg');
+  var dim = document.getElementById('sceneDim');
+  var layer = document.getElementById('spotLayer');
+  var hotLayer = document.getElementById('hotLayer');
+  var titleEl = document.getElementById('sceneTitle');
+
+  /* These write inline styles, so they hand the browser `var(--accent)` /
+     `var(--muted)` rather than a hex: the token is resolved against the
+     element's own cascade (the band pins both to their dark-surface values)
+     and re-resolves for free when the theme toggle flips, which reading a
+     computed value once at startup would not. */
+  function borderFor(r) {
+    return r === 'sa' ? '1px dashed rgba(244,242,238,0.55)'
+      : (r === 'spact' ? '1px solid var(--accent)' : '1px solid rgba(244,242,238,0.95)');
+  }
+  function colFor(r) {
+    return r === 'spact' ? 'var(--accent)' : (r === 'stunt' ? 'rgba(244,242,238,0.95)' : 'rgba(244,242,238,0.55)');
+  }
+  function dotFor(r) {
+    return r === 'spact' ? 'var(--accent)' : (r === 'stunt' ? '#f4f2ee' : 'var(--muted)');
+  }
+  function labBorderFor(r) { return r === 'spact' ? 'var(--accent)' : '#3a3a3e'; }
+
+  function buildScene(i) {
+    var scene = SCENES[i % SCENES.length];
+    if (frameImg) frameImg.setAttribute('src', scene.image);
+    if (titleEl) titleEl.textContent = scene.title;
+    if (!layer) return;
+    layer.textContent = '';
+
+    scene.spots.forEach(function (s, idx) {
+      var above = s.side !== 'below';
+      /* spotlight geometry: expanded box is 1.3x the callout, centred on it */
+      var ew = s.width * 1.3, eh = s.height * 1.3;
+      var el = s.left - 0.15 * s.width, et = s.top - 0.15 * s.height;
+
+      var spot = document.createElement('div');
+      spot.className = 'rf-spot';
+      spot.setAttribute('data-role', s.role);
+      spot.setAttribute('data-idx', String(idx));
+      spot.style.left = s.left + '%';
+      spot.style.top = s.top + '%';
+      spot.style.width = s.width + '%';
+      spot.style.height = s.height + '%';
+
+      var mask = document.createElement('div');
+      mask.className = 'rf-spotImg';
+      var im = document.createElement('img');
+      im.setAttribute('src', scene.image);
+      im.setAttribute('alt', '');
+      im.setAttribute('aria-hidden', 'true');
+      im.style.width = (10000 / ew) + '%';
+      im.style.height = (10000 / eh) + '%';
+      im.style.left = (-el / ew * 100) + '%';
+      im.style.top = (-et / eh * 100) + '%';
+      mask.appendChild(im);
+
+      var box = document.createElement('div');
+      box.className = 'rf-spotBox';
+      box.style.border = borderFor(s.role);
+      if (s.role !== 'sa') box.style.boxShadow = '0 0 0 1px rgba(20,20,22,0.35)';
+
+      var tick = document.createElement('div');
+      tick.className = 'rf-spotTick';
+      tick.style[above ? 'bottom' : 'top'] = '100%';
+      tick.style.background = colFor(s.role);
+
+      var lab = document.createElement('div');
+      lab.className = 'rf-spotLabel';
+      lab.style[above ? 'bottom' : 'top'] = 'calc(100% + 10px)';
+      lab.style.borderColor = labBorderFor(s.role);
+      var dotEl = document.createElement('span');
+      dotEl.style.color = dotFor(s.role);
+      dotEl.textContent = '●';
+      lab.appendChild(dotEl);
+      lab.appendChild(document.createTextNode('  ' + s.label));
+
+      spot.appendChild(mask);
+      spot.appendChild(box);
+      spot.appendChild(tick);
+      spot.appendChild(lab);
+      layer.appendChild(spot);
+    });
+
+    buildHotspots(scene);
+    applyRole();
+  }
+
+  /* Transparent hit areas, largest first so a small box nested inside a
+     bigger one still wins the click. */
+  function buildHotspots(scene) {
+    if (!hotLayer) return;
+    hotLayer.textContent = '';
+    scene.spots
+      .map(function (s, i) { return { s: s, i: i }; })
+      .sort(function (a, b) { return (b.s.width * b.s.height) - (a.s.width * a.s.height); })
+      .forEach(function (entry) {
+        var s = entry.s;
+        var hot = document.createElement('button');
+        hot.type = 'button';
+        hot.className = 'rf-hot';
+        hot.setAttribute('data-role', s.role);
+        hot.setAttribute('data-idx', String(entry.i));
+        hot.style.left = s.left + '%';
+        hot.style.top = s.top + '%';
+        hot.style.width = s.width + '%';
+        hot.style.height = s.height + '%';
+        var sr = document.createElement('span');
+        sr.className = 'rf-srOnly';
+        sr.textContent = s.label;
+        hot.appendChild(sr);
+        hotLayer.appendChild(hot);
+      });
+  }
+
+  var CARDS = [
+    { role: 'sa', el: document.getElementById('cardSa') },
+    { role: 'spact', el: document.getElementById('cardSpact') },
+    { role: 'stunt', el: document.getElementById('cardStunt') }
+  ];
+  var LEGS = [
+    { role: 'stunt', el: document.getElementById('legStunt') },
+    { role: 'spact', el: document.getElementById('legSpact') },
+    { role: 'sa', el: document.getElementById('legSa') }
+  ];
+
+  function applyRole() {
+    /* frame dim + per-callout isolation */
+    if (dim) dim.style.opacity = (role == null) ? '0' : '1';
+
+    var spots = layer ? layer.querySelectorAll('.rf-spot') : [];
+    for (var i = 0; i < spots.length; i++) {
+      var sp = spots[i];
+      var sel = (role === sp.getAttribute('data-role'));
+      /* hovering a performer names them straight away, without committing to
+         the selection: their box and label show, the spotlight does not */
+      var prev = (hoverIdx != null && hoverIdx === sp.getAttribute('data-idx'));
+      var mask = sp.querySelector('.rf-spotImg');
+      if (sel) {
+        sp.style.opacity = '1';
+        sp.style.zIndex = '2';
+      } else if (prev) {
+        sp.style.opacity = '1';
+        sp.style.zIndex = '3';
+      } else {
+        /* nothing selected and nothing hovered: the frame goes back to a
+           clean plate rather than showing every label at once */
+        sp.style.opacity = '0';
+        sp.style.zIndex = '';
+      }
+      if (mask) mask.style.opacity = sel ? '1' : '0';
+    }
+
+    /* role cards */
+    CARDS.forEach(function (c) {
+      if (!c.el) return;
+      var sel = role === c.role;
+      /* the card's selected colour matches the colour its boxes take in the
+         frame, so the link between card and callout is unambiguous */
+      var hi = c.role === 'spact' ? 'var(--accent)' : '#f4f2ee';
+      c.el.style.borderTopColor = sel ? hi : '#3a3a3e';
+      c.el.setAttribute('aria-pressed', sel ? 'true' : 'false');
+      var t = c.el.querySelector('.rf-roleTitle');
+      if (t) t.style.color = sel ? hi : '#f4f2ee';
+      var f = c.el.querySelector('.rf-roleFlag');
+      if (f) {
+        f.style.color = hi;
+        f.style.opacity = sel ? '1' : '0';
+      }
+    });
+
+    /* key swatches */
+    LEGS.forEach(function (l) {
+      if (!l.el) return;
+      l.el.setAttribute('aria-pressed', role === l.role ? 'true' : 'false');
+    });
+  }
+
+  function pick(r) {
+    role = (role === r) ? null : r;
+    applyRole();
+  }
+
+  CARDS.concat(LEGS).forEach(function (b) {
+    if (!b.el) return;
+    b.el.addEventListener('click', function () { pick(b.role); });
+  });
+
+  /* delegated so it covers both the server-rendered hit areas and any set
+     rebuilt by buildHotspots on a scene change */
+  if (hotLayer) {
+    var hotAt = function (e) {
+      return e.target && e.target.closest ? e.target.closest('.rf-hot') : null;
+    };
+    hotLayer.addEventListener('click', function (e) {
+      var hot = hotAt(e);
+      if (hot) pick(hot.getAttribute('data-role'));
+    });
+    /* pointerover/out rather than enter/leave so one delegated pair covers
+       every hit area, including moving straight from one to the next */
+    hotLayer.addEventListener('pointerover', function (e) {
+      var hot = hotAt(e);
+      hoverIdx = hot ? hot.getAttribute('data-idx') : null;
+      applyRole();
+    });
+    hotLayer.addEventListener('pointerout', function (e) {
+      var hot = hotAt(e);
+      var to = e.relatedTarget;
+      /* ignore a move that stays inside the same hit area */
+      if (hot && to && to.closest && to.closest('.rf-hot') === hot) return;
+      if (!hot || hoverIdx === hot.getAttribute('data-idx')) {
+        hoverIdx = null;
+        applyRole();
+      }
+    });
+    /* keyboard equivalent: tabbing onto a performer names them too */
+    hotLayer.addEventListener('focusin', function (e) {
+      var hot = hotAt(e);
+      hoverIdx = hot ? hot.getAttribute('data-idx') : null;
+      applyRole();
+    });
+    hotLayer.addEventListener('focusout', function () {
+      hoverIdx = null;
+      applyRole();
+    });
+  }
+
+  var nextBtn = document.getElementById('nextScene');
+  if (nextBtn) {
+    nextBtn.addEventListener('click', function () {
+      sceneIdx = (sceneIdx + 1) % SCENES.length;
+      buildScene(sceneIdx);
+    });
+  }
+
+  /* Preload the second scene only once someone reaches for the stepper.
+     Fetching it on page load would cost every visitor ~197KB for a control
+     most of them never touch; firing on the first hover/focus/touch keeps that
+     at zero for the majority while still starting the fetch in the gap between
+     reaching the button and pressing it. */
+  (function () {
+    if (!nextBtn || !SCENES[1]) return;
+    var armed = true;
+    function preload() {
+      if (!armed) return;
+      armed = false;
+      var pre = new Image();
+      pre.src = SCENES[1].image;
+      ['pointerenter', 'focus', 'touchstart'].forEach(function (evt) {
+        nextBtn.removeEventListener(evt, preload);
+      });
+    }
+    ['pointerenter', 'focus', 'touchstart'].forEach(function (evt) {
+      nextBtn.addEventListener(evt, preload, { passive: true });
+    });
+  })();
+
+  /* sync the server-rendered initial frame with live state */
+  applyRole();
+})();
+</script>

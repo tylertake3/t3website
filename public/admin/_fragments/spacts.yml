@@ -65,6 +65,56 @@
             - { name: title, label: Skill, widget: string }
         - { name: note, label: Note under the grid, widget: text, hint: 'The small grey sentence below the grid.' }
 
+    - name: distinctions
+      label: SPACT, stunt performer, supporting artist
+      widget: object
+      hint: 'The dark section with the three clickable role cards and the annotated production frame.'
+      fields:
+        - { name: eyebrow, label: Small line above the heading, widget: string, hint: 'The short orange line above the heading, written in capitals, e.g. THE DISTINCTIONS.' }
+        - { name: heading, label: Section heading, widget: string, hint: 'Always shown in capitals.' }
+        - { name: intro, label: Introduction paragraph, widget: text, hint: 'The paragraph directly under the heading.' }
+        - { name: selectPrompt, label: Instruction above the cards, widget: string, hint: 'The small grey line telling visitors they can click a role. Written in capitals.' }
+        - { name: roleFlagLabel, label: "\"In frame\" flag on the chosen card", widget: string, hint: 'Appears under whichever role card is currently selected. The same wording is used on all three cards.' }
+        - name: roles
+          label: Role cards
+          widget: list
+          hint: 'The three cards side by side. Keep them in this order — supporting artist, SPACT, stunt performer — so they line up with the frame below.'
+          fields:
+            - { name: role, label: Which role this card is, widget: string, hint: 'Must be exactly sa, spact or stunt. This links the card to the matching outlines in the photo below, so do not change it unless you know what it does.' }
+            - { name: title, label: Card title, widget: string, hint: 'Written in capitals.' }
+            - { name: body, label: Card description, widget: text }
+        - { name: frameAlt, label: Production frame description for screen readers, widget: text, hint: 'Describes the large annotated photo for visitors who cannot see it. Not shown on screen.' }
+        - name: scenes
+          label: Annotated scenes
+          widget: list
+          hint: 'The photos behind the role cards. Visitors move through them with the NEXT SCENE button, and the page loops back to the first one at the end. The first scene here is the one that shows when the page loads.'
+          fields:
+            - { name: image, label: Scene photo, widget: string, hint: 'The path to the photo, e.g. /uploads/my-photo.png.' }
+            - { name: title, label: Scene caption, widget: string, hint: 'The small grey line under the photo, e.g. SC. 12 — THE SIEGE · ONE FRAME, THREE ROLES.' }
+            - name: spots
+              label: Outlined people in this photo
+              widget: list
+              hint: 'One entry per person marked out with a box and a label. The position settings decide where the box sits, so change those only if the photo itself changes.'
+              fields:
+                - { name: role, label: Which role this person is, widget: string, hint: 'Must be exactly sa, spact or stunt. This decides the outline colour and which role card reveals them.' }
+                - { name: label, label: Label text, widget: string, hint: 'The wording in the little box beside the person. Keep it short so it fits in the frame.' }
+                - { name: side, label: Label position, widget: string, hint: 'Type above to hang the label over the box, or below to drop it underneath.' }
+                - { name: left, label: 'Position: distance from left edge (%)', widget: number, hint: 'Percentage across the photo, 0 at the left edge and 100 at the right.' }
+                - { name: top, label: 'Position: distance from top edge (%)', widget: number, hint: 'Percentage down the photo, 0 at the top and 100 at the bottom.' }
+                - { name: width, label: 'Position: box width (%)', widget: number, hint: 'Percentage of the photo width.' }
+                - { name: height, label: 'Position: box height (%)', widget: number, hint: 'Percentage of the photo height.' }
+                - { name: delay, label: 'Timing: seconds before this label appears', widget: number, hint: 'Staggers the labels so they do not all pop up at once.' }
+        - name: legend
+          label: Key under the photo
+          widget: object
+          hint: 'The small buttons under the photo that filter the frame down to one role.'
+          fields:
+            - { name: stunt, label: Stunt button text, widget: string, hint: 'The pale dash before the word is added automatically.' }
+            - { name: spact, label: SPACT button text, widget: string, hint: 'The orange dash before the word is added automatically.' }
+            - { name: sa, label: Supporting artist button text, widget: string, hint: 'The dotted dash before the word is added automatically.' }
+            - { name: nextButton, label: Next scene button text, widget: string, hint: 'The outlined button that moves to the next photo. The arrow → is part of the text.' }
+        - { name: note, label: Closing note, widget: text, hint: 'The small grey paragraph at the end of this section.' }
+
     - name: film
       label: For film & television
       widget: object

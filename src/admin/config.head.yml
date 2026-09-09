@@ -1,4 +1,4 @@
-# Take 3 Agency — content settings for the website editor.
+# Take 3 Agency content settings for the website editor.
 # Repo and branch are filled in once the site is on GitHub.
 
 backend:
@@ -47,13 +47,51 @@ collections:
     create: true
     identifier_field: name
     format: frontmatter
-    summary: '{{name}} — {{role}}'
+    summary: '{{name}}, {{role}}'
     sortable_fields: [order, name]
     fields:
       - { name: name, label: Name, widget: string, hint: 'Use a line break to split the name across two lines.' }
       - { name: role, label: Job title, widget: string }
       - { name: credits, label: Productions, widget: string, required: false }
-      - { name: feature, label: Logo to show, widget: string, required: false, hint: 'One production name — the logo shown beside this review. Leave empty to use the first one with a logo. Type "none" to show no logo at all.' }
+      - { name: feature, label: Logo to show, widget: string, required: false, hint: 'One production name: the logo shown beside this review. Leave empty to use the first one with a logo. Type "none" to show no logo at all.' }
       - { name: showOnHomepage, label: Show in the homepage reviews slider, widget: boolean, default: true, hint: 'Switch off to keep the review for use elsewhere without showing it on the homepage.' }
       - { name: order, label: Position in the slider, widget: number, value_type: int, default: 99 }
       - { name: body, label: What they said, widget: text }
+
+  - name: insights
+    label: Insights articles
+    label_singular: Article
+    folder: src/content/insights
+    create: true
+    identifier_field: title
+    format: frontmatter
+    # The web address of an article is made from its title, so a published
+    # article's title is best left alone once links to it exist.
+    slug: '{{slug}}'
+    summary: '{{title}}, {{topic}}'
+    sortable_fields: [date, title]
+    description: >-
+      The advice articles at /insights. Reading time is worked out from the
+      length of the article, so there is nothing to type in for it.
+    fields:
+      - { name: title, label: Headline, widget: string }
+      - name: topic
+        label: Topic
+        widget: select
+        hint: 'Which filter button this article appears under. The list of topics is under Page text → Insights page text.'
+        options:
+          - { label: 'On set', value: 'on-set' }
+          - { label: 'Auditions & self-tapes', value: 'auditions' }
+          - { label: 'Your profile', value: 'profile' }
+          - { label: 'Rates & paperwork', value: 'paperwork' }
+          - { label: 'For productions', value: 'productions' }
+      - { name: excerpt, label: Short summary, widget: text, hint: 'One or two sentences. Shown on the listing page and when the article is shared.' }
+      - { name: date, label: Date published, widget: datetime, date_format: 'DD/MM/YYYY', time_format: false, picker_utc: true, hint: 'Newest articles appear first.' }
+      - { name: author, label: Written by, widget: string, default: 'Take 3 Agency', required: false }
+      - { name: image, label: Main photo, widget: image, required: false, hint: 'Optional. Without one, a plain grey plate is shown instead of a broken image.' }
+      - { name: imageAlt, label: Photo description, widget: string, required: false, hint: 'Read aloud to visitors who cannot see the photo.' }
+      - { name: featured, label: Hold this article at the top of the page, widget: boolean, default: false, required: false, hint: 'If more than one is switched on, the most recent wins.' }
+      - { name: draft, label: Hide while it is being written, widget: boolean, default: false, required: false, hint: 'Switch on to keep it off the website until it is ready.' }
+      - { name: metaTitle, label: Google title, widget: string, required: false, hint: 'Optional. Leave empty to use the headline.' }
+      - { name: metaDescription, label: Google description, widget: text, required: false, hint: 'Optional. Leave empty to use the short summary.' }
+      - { name: body, label: The article, widget: markdown, hint: 'Use Heading 2 for section headings, and bullet lists for anything that reads as a checklist.' }

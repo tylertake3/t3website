@@ -10,7 +10,7 @@
   "hero": {
     "eyebrow": "SPECIALISTS · CIRCUS & PHYSICAL",
     "heading": "Circus artists & physical performers",
-    "lede": "Aerial, acrobatic and physical talent for commercials, film, television and live — trained to performance standard, not to a party trick.",
+    "lede": "Aerial, acrobatic and physical talent for commercials, film, television and live: trained to performance standard, not to a party trick.",
     "tags": [
       "AERIAL",
       "ACROBATIC",
@@ -19,7 +19,7 @@
       "CREATURE"
     ],
     "figure": {
-      "slotLabel": "Hero portrait — 2:3",
+      "slotLabel": "Hero portrait (2:3)",
       "figNumber": "FIG. 01",
       "figNote": "AT HEIGHT, ON A RIG"
     }
@@ -31,26 +31,26 @@
       {
         "number": "01",
         "title": "Aerialists",
-        "body": "Silks, hoop, straps, rope and trapeze — performers who work at height to a rigger's brief and repeat the move take after take.",
-        "slotLabel": "Aerial still — 4:5"
+        "body": "Silks, hoop, straps, rope and trapeze: performers who work at height to a rigger's brief and repeat the move take after take.",
+        "slotLabel": "Aerial still (4:5)"
       },
       {
         "number": "02",
         "title": "Acrobats & tumblers",
         "body": "Hand-to-hand, tumbling, banquine and group acrobatics, from single moves in shot to full ensemble sequences.",
-        "slotLabel": "Acrobatic still — 4:5"
+        "slotLabel": "Acrobatic still (4:5)"
       },
       {
         "number": "03",
         "title": "Skill and object work",
-        "body": "Contortion, balance, juggling, cyr wheel, unicycle, fire and object manipulation — genuine skill, performed to camera.",
-        "slotLabel": "Skill still — 4:5"
+        "body": "Contortion, balance, juggling, cyr wheel, unicycle, fire and object manipulation: genuine skill, performed to camera.",
+        "slotLabel": "Skill still (4:5)"
       },
       {
         "number": "04",
         "title": "Creature & physical performers",
         "body": "Movement-trained performers for suit, puppetry, mask and creature work, comfortable in costume for a full shoot day.",
-        "slotLabel": "Creature still — 4:5"
+        "slotLabel": "Creature still (4:5)"
       }
     ]
   },
@@ -72,7 +72,7 @@
         "description": "Cast for performers who can hold the move across takes and coverage, not land it once."
       }
     ],
-    "pullQuote": "“If it cannot be repeated safely on take nine, it is not a shot — it is a stunt with a different name.”"
+    "pullQuote": "“If it cannot be repeated safely on take nine, it is not a shot; it is a stunt with a different name.”"
   },
   "briefs": {
     "kicker": "ILLUSTRATIVE, NOT EXHAUSTIVE",
@@ -88,12 +88,12 @@
       "Hand balancers",
       "Creature and suit performers"
     ],
-    "note": "Categories, not a closed list — tell us the shot."
+    "note": "Categories, not a closed list. Tell us the shot."
   },
   "credits": {
     "kicker": "SELECTED WORK",
     "heading": "Where this has been booked",
-    "todo": "TODO: copy — two or three genuine circus bookings, with the client's and production's permission. Needs real examples. Nothing in this section may be invented."
+    "todo": "TODO: copy, two or three genuine circus bookings, with the client's and production's permission. Needs real examples. Nothing in this section may be invented."
   },
   "related": {
     "kicker": "WHERE THE OVERLAP IS REAL",
@@ -102,7 +102,7 @@
       {
         "name": "Dancers",
         "href": "/dancers",
-        "description": "Trained dancers for film, television, commercial and live — every style, screen-ready.",
+        "description": "Trained dancers for film, television, commercial and live: every style, screen-ready.",
         "linkLabel": "View dancers"
       },
       {
