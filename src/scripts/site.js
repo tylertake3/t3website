@@ -112,7 +112,6 @@ import NumberFlow from 'number-flow';
        own flourish — the letters lift, the wash sweeps the word and the rest of
        the list steps back — then the page follows. */
     var menuList = menu.querySelector('.menuList');
-    var picking = false;
 
     /* Sub-lists open on demand rather than sitting open. Height is measured and
        set in pixels so opening and closing both glide — a plain hidden flip made
@@ -193,23 +192,8 @@ import NumberFlow from 'number-flow';
     menu.addEventListener('click', function (e) {
       var link = e.target.closest('a');
       if (!link) return;
-
-      var main = link.classList.contains('menuLink');
-      var plainClick = e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey;
-      var samePage = link.getAttribute('aria-current') === 'page';
-
-      if (!main || !plainClick || samePage || lessMotion() || link.target === '_blank') {
-        setMenu(false);
-        return;
-      }
-
-      if (picking) { e.preventDefault(); return; }
-      picking = true;
-      e.preventDefault();
-      link.classList.add('is-picked');
-      if (menuList) menuList.classList.add('is-picking');
-
-      window.setTimeout(function () { window.location.href = link.href; }, 520);
+      /* navigate straight away — no "picked" flourish on the chosen item */
+      setMenu(false);
     });
 
     document.addEventListener('keydown', function (e) {

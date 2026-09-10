@@ -10,6 +10,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import logoData from '../data/production-logos.json';
+import measuredSizes from '../data/production-logo-sizes.json';
 
 /* Two versions per production: light ink for the dark review bands, dark ink for
    anywhere a logo sits on the cream background. */
@@ -69,18 +70,22 @@ const pngSize = (file: string): { width: number; height: number } | null => {
 };
 
 /* Production logos are wildly different shapes: a tall stacked mark next to a
-   long single-line wordmark. Drawing them all at one height makes the long ones
-   tower over the page and the compact ones look lost, so instead each is scaled
-   to cover roughly the same amount of the page as the others — the eye reads
-   "same size" from area far more than from height.
-   The limits stop the very longest wordmarks from running away with the row and
-   the squarest marks from towering over it, and the files are trimmed of their
-   export padding first (scripts/trim-production-logos.mjs) so these shapes are
-   measured from the artwork itself. */
-const TARGET_AREA = 4100;
+   long single-line wordmark, a slab of heavy type next to a hairline one.
+   Drawing them all at one height makes the long ones tower over the page and
+   the compact ones look lost, so each is drawn at the size that puts roughly
+   the same amount of ink on the page as its neighbours.
+
+   Those sizes are measured ahead of time by scripts/measure-production-logos.mjs
+   (which renders every logo and reads its shape and ink density) and kept in
+   src/data/production-logo-sizes.json. A logo that hasn't been measured yet —
+   one just dropped in — falls back to matching footprint from its PNG header,
+   so it still lands at a sensible size until the script is re-run. */
+const TARGET_AREA = 3600;
 const MIN_HEIGHT = 18;
-const MAX_HEIGHT = 52;
+const MAX_HEIGHT = 48;
 const MAX_WIDTH = 215;
+
+const measured: Record<string, { width: number; height: number }> = measuredSizes;
 
 const sizeCache = new Map<string, { logoWidth: number; logoHeight: number } | undefined>();
 
@@ -89,18 +94,23 @@ const opticalSize = (path?: string) => {
   if (sizeCache.has(path)) return sizeCache.get(path);
 
   let result: { logoWidth: number; logoHeight: number } | undefined;
-  const file = locate(path);
-  const size = file ? pngSize(file) : null;
-  if (size && size.width > 0 && size.height > 0) {
-    const ratio = size.width / size.height;
-    let height = Math.sqrt(TARGET_AREA / ratio);
-    height = Math.min(MAX_HEIGHT, Math.max(MIN_HEIGHT, height));
-    let width = height * ratio;
-    if (width > MAX_WIDTH) {
-      width = MAX_WIDTH;
-      height = width / ratio;
+  const known = measured[path];
+  if (known) {
+    result = { logoWidth: known.width, logoHeight: known.height };
+  } else {
+    const file = locate(path);
+    const size = file ? pngSize(file) : null;
+    if (size && size.width > 0 && size.height > 0) {
+      const ratio = size.width / size.height;
+      let height = Math.sqrt(TARGET_AREA / ratio);
+      height = Math.min(MAX_HEIGHT, Math.max(MIN_HEIGHT, height));
+      let width = height * ratio;
+      if (width > MAX_WIDTH) {
+        width = MAX_WIDTH;
+        height = width / ratio;
+      }
+      result = { logoWidth: Math.round(width), logoHeight: Math.round(height) };
     }
-    result = { logoWidth: Math.round(width), logoHeight: Math.round(height) };
   }
 
   sizeCache.set(path, result);

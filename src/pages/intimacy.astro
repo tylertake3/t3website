@@ -434,6 +434,7 @@ const productionPosters = copy.productions.slugs
     .qList { list-style:none; margin:0; padding:0; display:grid; gap:88px; }
     .qList.isStack { display:block; position:relative; height:100%; }
     .qRow { display:grid; grid-template-columns:minmax(0,1fr) clamp(210px,21vw,290px); gap:clamp(36px,4vw,64px); align-items:start; justify-content:space-between; }
+    .isStack .qRow[hidden] { display:none; }
     .isStack .qRow { position:absolute; top:50%; left:clamp(0px,6vw,104px); right:clamp(0px,6vw,104px); min-height:112px; translate:0 -50%; transform-origin:0% 50%; pointer-events:none; }
     .qLine { font-family:'Cormorant Garamond',Georgia,serif; font-style:italic; font-size:clamp(28px,3.2vw,46px); line-height:1.08; margin:0; max-width:38ch; color:#f4f2ee; text-wrap:pretty; }
     .qWho { min-width:0; }
@@ -766,18 +767,32 @@ const productionPosters = copy.productions.slugs
       function pad(n) { return String(n).length < 2 ? '0' + n : String(n); }
 
       if (stage && list) {
-        var data = Array.prototype.map.call(list.querySelectorAll('.qRow'), function (row) {
+        var rows = Array.prototype.slice.call(list.querySelectorAll('.qRow'));
+        var data = rows.map(function (row) {
           return {
             quote: row.querySelector('.qLine').textContent,
             name: row.querySelector('.qName').textContent,
-            role: row.querySelector('.qRole').textContent,
-            credit: row.querySelector('.qCredit') ? row.querySelector('.qCredit').outerHTML : ''
+            role: row.querySelector('.qRole').textContent
           };
         });
 
         if (data.length > 1) {
           stage.classList.add('isStack');
           list.classList.add('isStack');
+
+          /* the rows built by the server are kept and reused for the life of
+             the page — never rebuilt — so a production logo loads once and
+             stays put instead of blinking as a new image every time the
+             carousel moves */
+          rows.forEach(function (row) {
+            row.setAttribute('aria-hidden', 'true');
+            Array.prototype.forEach.call(row.querySelectorAll('img'), function (img) {
+              img.loading = 'eager';
+              img.decoding = 'sync';
+            });
+          });
+          var spares = [];                          /* clones, only when a quote must show twice */
+          var anims = [];
 
           /* one neighbour either side on a phone, two on wider screens */
           var spanFor = function () { return (data.length >= 5 && window.innerWidth > 640) ? 2 : 1; };
@@ -789,12 +804,13 @@ const productionPosters = copy.productions.slugs
           function scaleFor(slot) { return 1 - Math.min(Math.abs(slot), 3) * 0.055; }
           function fadeFor(slot) { return slot === 0 ? 1 : (Math.abs(slot) === 1 ? 0.3 : 0.16); }
           function blurFor(slot) { return slot === 0 ? 'blur(0px)' : 'blur(' + Math.min(Math.abs(slot), 3) * 1.6 + 'px)'; }
+          function shown() { return Array.prototype.filter.call(list.children, function (el) { return !el.hidden; }); }
 
           /* positions come from each row's real height, so the clear space
              between one quote and the next never changes */
           function offsets() {
             var h = {}, g = gap(), p = { 0: 0 }, s;
-            Array.prototype.forEach.call(list.children, function (el) {
+            shown().forEach(function (el) {
               h[Number(el.getAttribute('data-slot'))] = el.getBoundingClientRect().height;
             });
             for (s = 1; s <= span; s++) p[s] = p[s - 1] + h[s - 1] / 2 + g + h[s] / 2;
@@ -804,40 +820,33 @@ const productionPosters = copy.productions.slugs
 
           function paint() {
             span = spanFor();
-            list.innerHTML = '';
+            /* any in-flight animation is dropped in the same breath the final
+               styles are written, so nothing is ever drawn in between */
+            anims.forEach(function (a) { try { a.cancel(); } catch (e) {} });
+            anims = [];
+            var used = [];
+            rows.forEach(function (row) { row.hidden = true; row.removeAttribute('data-slot'); });
+            spares.forEach(function (row) { if (row.parentNode) row.parentNode.removeChild(row); });
+            spares = [];
             for (var slot = -span; slot <= span; slot++) {
-              var item = data[wrap(index + slot)];
-              var li = document.createElement('li');
-              li.className = 'qRow';
-              li.setAttribute('data-slot', String(slot));
-              li.setAttribute('aria-hidden', 'true');
-              var q = document.createElement('blockquote');
-              q.className = 'qLine';
-              q.textContent = item.quote;
-              var who = document.createElement('div');
-              who.className = 'qWho';
-              var nm = document.createElement('span');
-              nm.className = 'qName';
-              nm.textContent = item.name;
-              var rl = document.createElement('span');
-              rl.className = 'qRole';
-              rl.textContent = item.role;
-              who.appendChild(nm); who.appendChild(rl);
-              if (item.credit) {                       /* the production sits under the name */
-                var holder = document.createElement('div');
-                holder.innerHTML = item.credit;
-                if (holder.firstChild) who.appendChild(holder.firstChild);
+              var i = wrap(index + slot);
+              var li = rows[i];
+              if (used.indexOf(i) !== -1) {           /* same quote needed twice: show a copy */
+                li = rows[i].cloneNode(true);
+                spares.push(li);
+                list.appendChild(li);
               }
-              li.appendChild(q); li.appendChild(who);
+              used.push(i);
+              li.hidden = false;
+              li.setAttribute('data-slot', String(slot));
               li.style.translate = '0 -50%';
               li.style.scale = String(scaleFor(slot));
               li.style.opacity = String(fadeFor(slot));
               li.style.filter = blurFor(slot);
-              list.appendChild(li);
             }
             var place = function () {
               var spots = offsets();
-              Array.prototype.forEach.call(list.children, function (el) {
+              shown().forEach(function (el) {
                 el.style.translate = '0 calc(-50% + ' + spots[Number(el.getAttribute('data-slot'))] + 'px)';
               });
             };
@@ -855,7 +864,7 @@ const productionPosters = copy.productions.slugs
             var spots = offsets();
             var shift = spots[direction];
             var waits = [];
-            Array.prototype.forEach.call(list.children, function (el) {
+            shown().forEach(function (el) {
               var slot = Number(el.getAttribute('data-slot'));
               var next = slot - direction;
               var to = {
@@ -875,6 +884,7 @@ const productionPosters = copy.productions.slugs
                 opacity: String(fadeFor(slot)),
                 filter: blurFor(slot)
               }, to], { duration: 950, easing: 'cubic-bezier(0.195, 0.824, 0.583, 1.208)', fill: 'both' });
+              anims.push(anim);
               waits.push(anim.finished ? anim.finished : new Promise(function (res) { anim.onfinish = res; }));
             });
             var settle = function () { index = wrap(index + direction); paint(); busy = false; };
