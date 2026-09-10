@@ -6,12 +6,12 @@
       "dark": "/assets/logos/20th-century-fox-c.png"
     },
     {
-      "height": 56,
+      "height": 46,
       "light": "/assets/logos/absolut-vodka.svg",
       "dark": "/assets/logos/absolut-vodka-c.svg"
     },
     {
-      "height": 50,
+      "height": 47,
       "light": "/assets/logos/aesop.svg",
       "dark": "/assets/logos/aesop-c.svg"
     },
@@ -21,7 +21,7 @@
       "dark": "/assets/logos/amazon-mgm-studios-c.svg"
     },
     {
-      "height": 56,
+      "height": 51,
       "light": "/assets/logos/amc.svg",
       "dark": "/assets/logos/amc-c.svg"
     },
@@ -46,12 +46,12 @@
       "dark": "/assets/logos/belmond-c.svg"
     },
     {
-      "height": 56,
+      "height": 51,
       "light": "/assets/logos/bt-sport.svg",
       "dark": "/assets/logos/bt-sport-c.svg"
     },
     {
-      "height": 40,
+      "height": 30,
       "light": "/assets/logos/canal-plus.png",
       "dark": "/assets/logos/canal-plus-c.png"
     },
@@ -61,7 +61,7 @@
       "dark": "/assets/logos/chase-c.svg"
     },
     {
-      "height": 43,
+      "height": 38,
       "light": "/assets/logos/clarks.svg",
       "dark": "/assets/logos/clarks-c.svg"
     },
@@ -71,7 +71,7 @@
       "dark": "/assets/logos/compare-the-market-c.svg"
     },
     {
-      "height": 56,
+      "height": 54,
       "light": "/assets/logos/courreges.svg",
       "dark": "/assets/logos/courreges-c.svg"
     },
@@ -81,12 +81,12 @@
       "dark": "/assets/logos/cupra-c.svg"
     },
     {
-      "height": 56,
+      "height": 50,
       "light": "/assets/logos/disney.svg",
       "dark": "/assets/logos/disney-c.svg"
     },
     {
-      "height": 56,
+      "height": 47,
       "light": "/assets/logos/dove.svg",
       "dark": "/assets/logos/dove-c.svg"
     },
@@ -96,12 +96,12 @@
       "dark": "/assets/logos/ee-c.svg"
     },
     {
-      "height": 53,
+      "height": 36,
       "light": "/assets/logos/fifa.svg",
       "dark": "/assets/logos/fifa-c.svg"
     },
     {
-      "height": 56,
+      "height": 44,
       "light": "/assets/logos/fx.svg",
       "dark": "/assets/logos/fx-c.svg"
     },
@@ -111,7 +111,7 @@
       "dark": "/assets/logos/gucci-c.svg"
     },
     {
-      "height": 38,
+      "height": 36,
       "light": "/assets/logos/heineken.svg",
       "dark": "/assets/logos/heineken-c.svg"
     },
@@ -126,12 +126,12 @@
       "dark": "/assets/logos/hyundai-c.svg"
     },
     {
-      "height": 56,
+      "height": 50,
       "light": "/assets/logos/itv.png",
       "dark": "/assets/logos/itv-c.png"
     },
     {
-      "height": 50,
+      "height": 34,
       "light": "/assets/logos/kfc.svg",
       "dark": "/assets/logos/kfc-c.svg"
     },
@@ -141,17 +141,17 @@
       "dark": "/assets/logos/legendary-c.svg"
     },
     {
-      "height": 53,
+      "height": 37,
       "light": "/assets/logos/lucasfilm.svg",
       "dark": "/assets/logos/lucasfilm-c.svg"
     },
     {
-      "height": 56,
+      "height": 49,
       "light": "/assets/logos/marks-and-spencer.svg",
       "dark": "/assets/logos/marks-and-spencer-c.svg"
     },
     {
-      "height": 36,
+      "height": 32,
       "light": "/assets/logos/marvel-studios.png",
       "dark": "/assets/logos/marvel-studios-c.png"
     },
@@ -166,7 +166,7 @@
       "dark": "/assets/logos/michael-kors-c.svg"
     },
     {
-      "height": 28,
+      "height": 27,
       "light": "/assets/logos/monzo.svg",
       "dark": "/assets/logos/monzo-c.svg"
     },
@@ -176,7 +176,7 @@
       "dark": "/assets/logos/new-line-cinema-c.svg"
     },
     {
-      "height": 56,
+      "height": 46,
       "light": "/assets/logos/nike.svg",
       "dark": "/assets/logos/nike-c.svg"
     },
@@ -196,7 +196,7 @@
       "dark": "/assets/logos/paramount-plus-c.svg"
     },
     {
-      "height": 50,
+      "height": 42,
       "light": "/assets/logos/prime-video.svg",
       "dark": "/assets/logos/prime-video-c.svg"
     },
@@ -216,7 +216,7 @@
       "dark": "/assets/logos/santander-c.svg"
     },
     {
-      "height": 52,
+      "height": 35,
       "light": "/assets/logos/sega.png",
       "dark": "/assets/logos/sega-c.png"
     },
@@ -226,7 +226,7 @@
       "dark": "/assets/logos/shondaland-c.svg"
     },
     {
-      "height": 56,
+      "height": 55,
       "light": "/assets/logos/sky.png",
       "dark": "/assets/logos/sky-c.png"
     },
@@ -236,17 +236,17 @@
       "dark": "/assets/logos/sony-pictures-c.png"
     },
     {
-      "height": 28,
+      "height": 25,
       "light": "/assets/logos/studiocanal.png",
       "dark": "/assets/logos/studiocanal-c.png"
     },
     {
-      "height": 45,
+      "height": 36,
       "light": "/assets/logos/tesco.svg",
       "dark": "/assets/logos/tesco-c.svg"
     },
     {
-      "height": 47,
+      "height": 40,
       "light": "/assets/logos/tiktok.svg",
       "dark": "/assets/logos/tiktok-c.svg"
     },
@@ -271,17 +271,17 @@
       "dark": "/assets/logos/waitrose-c.svg"
     },
     {
-      "height": 46,
+      "height": 42,
       "light": "/assets/logos/working-title.png",
       "dark": "/assets/logos/working-title-c.png"
     },
     {
-      "height": 56,
+      "height": 44,
       "light": "/assets/logos/a24.svg",
       "dark": "/assets/logos/a24-c.svg"
     },
     {
-      "height": 56,
+      "height": 52,
       "light": "/assets/logos/adidas.svg",
       "dark": "/assets/logos/adidas-c.svg"
     },
@@ -291,7 +291,7 @@
       "dark": "/assets/logos/aldi-c.png"
     },
     {
-      "height": 56,
+      "height": 53,
       "light": "/assets/logos/amblin.svg",
       "dark": "/assets/logos/amblin-c.svg"
     },
@@ -301,7 +301,7 @@
       "dark": "/assets/logos/annabels-c.svg"
     },
     {
-      "height": 56,
+      "height": 48,
       "light": "/assets/logos/apple-tv.svg",
       "dark": "/assets/logos/apple-tv-c.svg"
     },
@@ -311,7 +311,7 @@
       "dark": "/assets/logos/axa-c.png"
     },
     {
-      "height": 46,
+      "height": 32,
       "light": "/assets/logos/bbc.svg",
       "dark": "/assets/logos/bbc-c.svg"
     },
@@ -336,12 +336,12 @@
       "dark": "/assets/logos/chelsea-fc-c.png"
     },
     {
-      "height": 43,
+      "height": 39,
       "light": "/assets/logos/columbia-pictures.svg",
       "dark": "/assets/logos/columbia-pictures-c.svg"
     },
     {
-      "height": 56,
+      "height": 44,
       "light": "/assets/logos/coors.svg",
       "dark": "/assets/logos/coors-c.svg"
     },
@@ -371,7 +371,7 @@
       "dark": "/assets/logos/england-rugby-c.png"
     },
     {
-      "height": 44,
+      "height": 43,
       "light": "/assets/logos/focus-features.svg",
       "dark": "/assets/logos/focus-features-c.svg"
     },
@@ -381,7 +381,7 @@
       "dark": "/assets/logos/grey-goose-c.svg"
     },
     {
-      "height": 56,
+      "height": 38,
       "light": "/assets/logos/hbo.svg",
       "dark": "/assets/logos/hbo-c.svg"
     },
@@ -391,12 +391,12 @@
       "dark": "/assets/logos/hermes-c.svg"
     },
     {
-      "height": 53,
+      "height": 38,
       "light": "/assets/logos/hulu.svg",
       "dark": "/assets/logos/hulu-c.svg"
     },
     {
-      "height": 36,
+      "height": 31,
       "light": "/assets/logos/iceland.svg",
       "dark": "/assets/logos/iceland-c.svg"
     },
@@ -406,27 +406,27 @@
       "dark": "/assets/logos/john-frieda-c.png"
     },
     {
-      "height": 30,
+      "height": 29,
       "light": "/assets/logos/kudos.svg",
       "dark": "/assets/logos/kudos-c.svg"
     },
     {
-      "height": 56,
+      "height": 45,
       "light": "/assets/logos/lionsgate.svg",
       "dark": "/assets/logos/lionsgate-c.svg"
     },
     {
-      "height": 44,
+      "height": 40,
       "light": "/assets/logos/magnum.svg",
       "dark": "/assets/logos/magnum-c.svg"
     },
     {
-      "height": 56,
+      "height": 48,
       "light": "/assets/logos/marv.png",
       "dark": "/assets/logos/marv-c.png"
     },
     {
-      "height": 56,
+      "height": 51,
       "light": "/assets/logos/mcdonalds.png",
       "dark": "/assets/logos/mcdonalds-c.png"
     },
@@ -436,27 +436,27 @@
       "dark": "/assets/logos/mgm-c.svg"
     },
     {
-      "height": 25,
+      "height": 23,
       "light": "/assets/logos/miramax.svg",
       "dark": "/assets/logos/miramax-c.svg"
     },
     {
-      "height": 43,
+      "height": 35,
       "light": "/assets/logos/netflix.svg",
       "dark": "/assets/logos/netflix-c.svg"
     },
     {
-      "height": 56,
+      "height": 41,
       "light": "/assets/logos/nhs.png",
       "dark": "/assets/logos/nhs-c.png"
     },
     {
-      "height": 42,
+      "height": 32,
       "light": "/assets/logos/nutella.png",
       "dark": "/assets/logos/nutella-c.png"
     },
     {
-      "height": 56,
+      "height": 48,
       "light": "/assets/logos/ocado.svg",
       "dark": "/assets/logos/ocado-c.svg"
     },
@@ -471,12 +471,12 @@
       "dark": "/assets/logos/pepsi-c.png"
     },
     {
-      "height": 34,
+      "height": 30,
       "light": "/assets/logos/reebok.svg",
       "dark": "/assets/logos/reebok-c.svg"
     },
     {
-      "height": 42,
+      "height": 38,
       "light": "/assets/logos/ridley-scott-creative-group.png",
       "dark": "/assets/logos/ridley-scott-creative-group-c.png"
     },
@@ -486,7 +486,7 @@
       "dark": "/assets/logos/samsung-c.svg"
     },
     {
-      "height": 41,
+      "height": 34,
       "light": "/assets/logos/searchlight-pictures.svg",
       "dark": "/assets/logos/searchlight-pictures-c.svg"
     },
@@ -496,7 +496,7 @@
       "dark": "/assets/logos/seven-bucks-c.svg"
     },
     {
-      "height": 56,
+      "height": 41,
       "light": "/assets/logos/showtime.svg",
       "dark": "/assets/logos/showtime-c.svg"
     },
@@ -506,12 +506,12 @@
       "dark": "/assets/logos/skydance-c.svg"
     },
     {
-      "height": 37,
+      "height": 30,
       "light": "/assets/logos/starz.svg",
       "dark": "/assets/logos/starz-c.svg"
     },
     {
-      "height": 40,
+      "height": 33,
       "light": "/assets/logos/syncopy.svg",
       "dark": "/assets/logos/syncopy-c.svg"
     },
@@ -536,7 +536,7 @@
       "dark": "/assets/logos/under-armour-c.svg"
     },
     {
-      "height": 40,
+      "height": 38,
       "light": "/assets/logos/vodafone.svg",
       "dark": "/assets/logos/vodafone-c.svg"
     },

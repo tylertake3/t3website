@@ -18,6 +18,9 @@ import { readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync, existsSync
 import { join, basename, extname } from 'node:path';
 import sharp from 'sharp';
 import { optimize } from 'svgo';
+import { clientHeight, CELL } from './size-client-logos.mjs';
+
+const CAP = CELL.maxHeight;
 
 const SRC = '_design/client-logo-masters';
 const OUT = 'public/assets/logos';
@@ -288,25 +291,18 @@ for (const file of traced) {
 
 logos.sort((a, b) => a.name.localeCompare(b.name));
 
-/* One height per logo, worked back from its shape. Every mark gets one column
-   and no more, so each row holds the same number of names and the wall keeps
-   its grid — and every mark is drawn as large as that column will carry it,
-   which is either the full width of the column or the full height of the row,
-   whichever it runs out of first.
-
-   TRACK is how wide a column is on the desktop wall, worked out from the
-   stylesheet: the 1280px stack, less its 40px of padding either side, less the
-   five 48px gaps between six columns. CAP is the row height. Keep the two in
-   step with global.css — the numbers here decide how tall a mark is asked to
-   be, and the stylesheet decides how much room it actually gets. */
-const TRACK = 160;
-const CAP = 56;
-const clamp = (low, high, value) => Math.max(low, Math.min(high, Math.round(value)));
-const rows = logos.map((logo) => ({
-  height: clamp(15, CAP, TRACK / logo.ratio),
-  light: `/assets/logos/${logo.name}.${logo.ext}`,
-  dark: `/assets/logos/${logo.name}-c.${logo.ext}`,
-}));
+/* One height per logo, worked back from its shape and how much ink it carries,
+   so every mark on the wall reads as the same size at a glance. The rule lives
+   in scripts/lib/optical-size.mjs and the cell it is fitted to in
+   scripts/size-client-logos.mjs (which can also re-run this step on its own). */
+const rows = [];
+for (const logo of logos) {
+  rows.push({
+    height: (await clientHeight(join(OUT, `${logo.name}-c.${logo.ext}`))) ?? CAP,
+    light: `/assets/logos/${logo.name}.${logo.ext}`,
+    dark: `/assets/logos/${logo.name}-c.${logo.ext}`,
+  });
+}
 
 /* Dealt alternately into the two halves the homepage wall fades between, so
    neither half is all one kind of name. */

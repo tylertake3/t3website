@@ -170,7 +170,7 @@ All display headings use `font-weight:400` (never bold) and fluid `clamp()` sizi
 - A quieter "For performers" area holds the single performer-facing link, separated by a hairline.
 - Escape and any link close it, focus is trapped, background scroll is locked, and the page behind is `inert`.
 - Menu hierarchy and URLs are independent: categories keep flat top-level paths.
-- Picking a link runs a short `--accent` wipe behind the word (`.menuWipe`, 18% opacity, `0.45s`) before the page changes. The "Join" link in the aside lifts its letters one by one and swaps its hairline rule for an accent one on hover. All of it is stilled under reduced motion.
+- Clicking a link navigates straight away; there is no wash or highlight on the chosen item. The "Join" link in the aside lifts its letters one by one and swaps its hairline rule for an accent one on hover. All of it is stilled under reduced motion.
 
 ### Theme toggle (`.themeBtn`)
 - A 36px circular icon button using the hero border tokens; switches to `--ctrlBorder` / `--ink` over light surfaces (`.navOnLight`) and while the menu is open. Also drives the logo wall and mono logos via `--logoFilter`.
@@ -198,6 +198,7 @@ All display headings use `font-weight:400` (never bold) and fluid `clamp()` sizi
 
 ### Client logo wall (`.logoStack` / `.logoCell`)
 - A grid of `.logoCell` tiles that swap between `data-dark` / `data-light` artwork with the theme, cycling through the roster in pages: outgoing cells lift, blur and fade (`.is-turning`), incoming ones settle. Clicking the wall advances it; `.logoHint` says so. Tiles without a dark asset sit on `--tileBg`.
+- **Optical sizing.** Each mark's height in `src/data/clients.json` is worked out for it, not shared: every logo is rendered and measured for its shape and ink density, then scaled so the ink it puts on the page roughly matches its neighbours' (dense slabs like hulu or HBO drawn smaller, airy or hairline marks larger), inside the 160×56 desktop cell. The rule lives in `scripts/lib/optical-size.mjs`; re-run `node scripts/size-client-logos.mjs` after swapping a logo. Never hand-tune a height to make one brand bigger.
 
 ### Counters (`data-countup`)
 - Any number wrapped in `data-countup` (stat row, Credits count, Where-we-work country count) counts up digit-by-digit as it scrolls into view, keeping its prefix/suffix and grouping. Years tick only their last stretch rather than starting from zero. The final width is held so the row never reflows, and the counter is skipped entirely under `prefers-reduced-motion` or without IntersectionObserver — the plain figure is always in the markup.
@@ -207,6 +208,7 @@ All display headings use `font-weight:400` (never bold) and fluid `clamp()` sizi
 
 ### Reviews band (`.reviews`)
 - Always-dark `#1a1a1c` band. Cards slide in a track (`.revTrack`, gap `--revGap`, three across), with Anton names, the quote, role, then a `.revCredits` row of production logos that fade in with the card. Arrows and dots are the thin circular controls; focus rings are pinned to `#f4f2ee`.
+- Production logos beside a quote are sized by the same optical rule as the client wall: measured sizes live in `src/data/production-logo-sizes.json` (18–48px tall, at most 215px wide) and are read by `src/lib/productionLogos.ts`; re-run `node scripts/measure-production-logos.mjs` after adding a logo. An unmeasured logo falls back to a footprint match from its file until then.
 - One card at a time on a phone, which makes the dots a long ragged double row of tiny targets: below 640px they are dropped and the `n / total` count and arrows carry the position. A horizontal drag pages the cards there; anything closer to vertical is left to scroll the page.
 
 ### Image slots (`.slot`)
@@ -230,7 +232,7 @@ All display headings use `font-weight:400` (never bold) and fluid `clamp()` sizi
 ## 6. Motion
 
 - **Easing:** `cubic-bezier(0.3, 0, 0.2, 1)` for carousels; `ease` for fades.
-- **Durations:** theme/page transitions `0.5s`; hero layer cross-fade `1.8s`; logo cross-fade `3s`; carousel slide `0.65s`; menu items stagger in over `0.5s` (aside delayed `340ms`); menu wipe `0.45s`; poster hover `scale(1.04)`.
+- **Durations:** theme/page transitions `0.5s`; hero layer cross-fade `1.8s`; logo cross-fade `3s`; carousel slide `0.65s`; menu items stagger in over `0.5s` (aside delayed `340ms`); poster hover `scale(1.04)`.
 - **Scroll-triggered reveals** (counters, map pins) are armed with IntersectionObserver and run once. If the observer or `customElements` is unavailable, the final state is simply shown.
 - **Nav scroll** is rAF-throttled and proportional to scroll position.
 - **Always honour `prefers-reduced-motion: reduce`** — transitions are disabled and smooth scroll turned off in that media query. Any new animation must be wrapped the same way.

@@ -111,7 +111,6 @@ const isOpenGroup = (item: (typeof menuItems)[number]) =>
                   <a class="menuLink" href={item.href} aria-label={item.label} aria-current={isCurrent(item.href) ? 'page' : undefined}>
                     <span class="menuDash" aria-hidden="true" />
                     <span class="menuWord" aria-hidden="true">
-                      <span class="menuWipe" />
                       {chars(item.label).map((ch, ci) => (
                         <span class="menuCh" style={`--i:${ci}`}>{ch === ' ' ? ' ' : ch}</span>
                       ))}

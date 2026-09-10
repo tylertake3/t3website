@@ -115,23 +115,15 @@ main[tabindex]:focus, main[tabindex]:focus-visible { outline:none; }
 .menuWord { position:relative; display:inline-flex; }
 .menuCh { display:inline-block; white-space:pre; transition:transform 0.34s cubic-bezier(0.3, 0, 0.2, 1), color 0.34s cubic-bezier(0.3, 0, 0.2, 1); transition-delay:calc(var(--i) * 26ms); }
 .menuArrow { flex:none; margin-left:12px; font-size:0.42em; color:var(--accent); opacity:0; transform:translateX(-14px); transition:transform 0.38s cubic-bezier(0.3, 0, 0.2, 1), opacity 0.38s cubic-bezier(0.3, 0, 0.2, 1); }
-/* colour wash that sweeps the word on the way out */
-.menuWipe { position:absolute; top:10%; bottom:10%; left:-4px; right:-4px; background:var(--accent); opacity:0.18; transform:scaleX(0); transform-origin:left center; transition:transform 0.45s cubic-bezier(0.3, 0, 0.2, 1); }
 
-.menuLink:hover .menuDash, .menuLink:focus-visible .menuDash, .menuLink.is-picked .menuDash { width:18px; margin-right:12px; opacity:1; }
+.menuLink:hover .menuDash, .menuLink:focus-visible .menuDash { width:18px; margin-right:12px; opacity:1; }
 .menuLink:hover .menuCh, .menuLink:focus-visible .menuCh { transform:translateY(-9px); color:var(--accent); }
-.menuLink:hover .menuArrow, .menuLink:focus-visible .menuArrow, .menuLink.is-picked .menuArrow { opacity:1; transform:translateX(0); }
+.menuLink:hover .menuArrow, .menuLink:focus-visible .menuArrow { opacity:1; transform:translateX(0); }
 
 /* The rest of the list deliberately stays at full strength while you hover.
    Dimming the others read as a spotlight and made the menu feel murky — the
    item under the cursor already leads through its own colour and movement. */
 
-/* chosen item: the letters lift further and faster, the wash sweeps through,
-   everything else drops right back while the overlay closes */
-.menuLink.is-picked .menuCh { transform:translateY(-14px); color:var(--accent); transition-delay:calc(var(--i) * 18ms); }
-.menuLink.is-picked .menuWipe { transform:scaleX(1); }
-.menuList.is-picking .menuLink:not(.is-picked) { opacity:0.15; }
-.menuList.is-picking .menuSubLink { opacity:0.15; }
 .menuLinkPlain { color:var(--muted); }
 .menuLinkPlain:hover { color:var(--muted); }
 .menuLink[aria-current="page"] { color:var(--accent); }
@@ -183,7 +175,6 @@ main[tabindex]:focus, main[tabindex]:focus-visible { outline:none; }
    chosen — the sign travels the same distance so it stays on their middle */
 .menuToggle:hover .menuPlus,
 .menuToggle:focus-visible .menuPlus { --lift:9px; }
-.menuToggle.is-picked .menuPlus { --lift:14px; }
 /* open group: the upright stroke lies down, leaving a minus */
 .menuToggle[aria-expanded="true"] .menuPlus span:last-child { transform:translate(-50%, -50%) rotate(0deg); }
 @media (prefers-reduced-motion:reduce) { .menuPlus, .menuPlus span { transition:none; } }
@@ -629,10 +620,10 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   /* production logos stay put and stay visible */
   .revCredit { animation:none !important; transform:none; }
   /* the menu still reads the same, it just stops moving */
-  .menuItem, .menuAside, .menuCh, .menuDash, .menuPlus, .menuPlus span, .menuArrow, .menuWipe, .menuSubLink,
+  .menuItem, .menuAside, .menuCh, .menuDash, .menuPlus, .menuPlus span, .menuArrow, .menuSubLink,
   .menuJoinLink, .menuAsideLink, .menuJoinRule, .menuJoinRuleAccent { transition:none !important; }
   .menuItem, .menuAside { opacity:1; transform:none; }
-  .menuLink:hover .menuCh, .menuLink.is-picked .menuCh,
+  .menuLink:hover .menuCh,
   .menuJoinLink:hover .menuCh, .menuAsideLink:hover .menuCh { transform:none; }
   .menuJoinLink:hover, .menuAsideLink:hover, .menuSubLink:hover { transform:none; }
   .heroStrip .genre, .heroStrip .sep, .menuSubList li {
