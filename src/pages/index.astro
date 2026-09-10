@@ -81,6 +81,8 @@ const organizationSchema = {
   ogTitle={copy.meta.ogTitle}
   ogDescription={copy.meta.ogDescription}
   ogImage="/uploads/the-odyssey-beach-horse.webp"
+  footerTitle={copy.meta.footerTitle}
+  footerLinks={copy.meta.footerLinks}
 >
   <script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(organizationSchema)} />
 
@@ -110,8 +112,10 @@ const organizationSchema = {
     <div class="heroStrip">
       <div>
         {
+          /* the word and the slash after it travel together, so a wrapped
+             row can never begin with a stray separator */
           copy.hero.strip.map((item, i) => (
-            <>
+            <span class="genreItem">
               <a
                 href={item.href}
                 class={item.label.includes(' ') ? 'genre nw' : 'genre'}
@@ -122,7 +126,7 @@ const organizationSchema = {
               {i < copy.hero.strip.length - 1 && (
                 <span class="sep" style={`--gi:${stripStagger(i)}`}>/</span>
               )}
-            </>
+            </span>
           ))
         }
       </div>
@@ -253,7 +257,10 @@ const organizationSchema = {
         </div>
       </div>
       <div class="revFoot">
-        <p class="revCount" id="revCount" aria-live="polite">1 / 6</p>
+        {/* the real page count, worked out from the reviews themselves: the figure
+            was written into the markup by hand, so it said 6 for fifteen reviews
+            until the script replaced it a moment later */}
+        <p class="revCount" id="revCount" aria-live="polite">1 / {Math.ceil(reviews.length / 3)}</p>
         <div class="revDots" id="revDots" role="group" aria-label="Review pages"></div>
         <div class="revNav">
           <button class="revBtn" id="revPrev" type="button" aria-label="Previous reviews">
@@ -296,7 +303,10 @@ const organizationSchema = {
         logos: logoRoster.map((c) => ({ h: c.height, l: c.light, d: c.dark })),
       })}
     />
-    <p class="logoHint" aria-hidden="true">{copy.clients.turnHint}</p>
+    <p class="logoHint" aria-hidden="true">
+      <span class="hintPointer">{copy.clients.turnHint}</span>
+      <span class="hintTouch">{copy.clients.turnHintTouch}</span>
+    </p>
   </section>
 
   <!-- our credits: poster grid -->
@@ -349,6 +359,139 @@ const organizationSchema = {
     .marqueeToggle:hover { color:var(--ink); border-bottom-color:var(--ink); }
     @media (prefers-reduced-motion: reduce) { .marqueeToggle { transition:none; } }
     .marqueeToggle[hidden] { display:none; }
+
+    /* This page's footer carries three buttons rather than two, so the shared
+       45% pairing left "Join the roster" wrapping onto two lines next to a
+       one-line neighbour. On a phone they each take the full width. */
+    @media (max-width:640px) {
+      .footerBtns a { flex:1 1 100%; }
+    }
+  </style>
+
+  <!-- Homepage-only layout + responsive rules. Scoped, so the shared
+       .hero / .sectionHead / .supply rules other pages rely on are untouched. -->
+  <style>
+    /* ---- one left edge for the whole page ----
+       Every section below the banner sits on the 1280px column (40px in from
+       it), so the banner copy does too. It used to hang off the header's 60px
+       edge instead, which put the biggest type on the page 60px left of
+       everything under it. 50% is measured on the banner, not the window, so
+       the scrollbar cannot pull it off the column. */
+    @media (min-width:1025px) {
+      .heroCopy { left:max(40px, calc(50% - 600px)); max-width:calc(100% - 500px); }
+      .heroProd { right:max(40px, calc(50% - 600px)); }
+    }
+
+    /* Section rules line up with the words above them. The shared header
+       paints its hairline on the padded box, so on this page the rule ran
+       40px past the title at each end, while the reviews band — a different
+       container — sat flush. Draw it on the text column instead. */
+    .supply .sectionHead,
+    .clients .sectionHead,
+    .credits .sectionHead { position:relative; border-bottom:0; --headInset:40px; }
+    .supply .sectionHead::after,
+    .clients .sectionHead::after,
+    .credits .sectionHead::after {
+      content:''; position:absolute; left:var(--headInset); right:var(--headInset); bottom:0;
+      height:1px; background:var(--hair);
+    }
+
+    /* The roster header used to be inset by the scroller's own padding, which
+       left it 16px adrift of every other title. The page padding now sits on
+       the scroller, so the header keeps the column and the tiles still run to
+       the edges. */
+    .supply { padding:0 0 48px; }
+    .supply .sectionHead { padding:0 40px 18px; }
+    .supplyScroll { padding:0 16px; }
+
+    /* Name and its View link belong to the same tile, so they sit together.
+       Spread apart, each View landed nearer the next tile's name than its own
+       and the row read as "View / Dance" pairs. */
+    .supplyMeta { justify-content:flex-start; gap:14px; }
+
+    /* the credits link belongs to the column, not to the bleeding poster wall */
+    .posterMore { max-width:1280px; margin:0 auto; padding:22px 40px 0; }
+
+    /* the slash belongs to the word in front of it, at the same distance as
+       the gap between one pairing and the next, so the row reads evenly */
+    .heroStrip .genreItem { display:inline-flex; align-items:center; gap:14px; white-space:nowrap; }
+
+    /* a finger taps; only a cursor clicks */
+    .hintTouch { display:none; }
+
+    /* ---- touch: nothing may depend on hover ---- */
+    @media (hover: none) {
+      /* the marquee's stop control was hover-revealed; a finger can't hover */
+      .marqueeToggle { opacity:1; padding-top:14px; margin-top:-14px; }
+      .posterMore a { display:inline-block; padding:12px 0; margin:-12px 0; }
+      .supplyView { display:inline-flex; align-items:center; min-height:44px; margin:-12px 0; }
+      .hintPointer { display:none; }
+      .hintTouch { display:inline; }
+    }
+    /* the phone rules below already carry the strip's tap area */
+    @media (hover: none) and (min-width:641px) {
+      .heroStrip .genre { padding:10px 2px; margin:-10px 0; }
+    }
+
+    /* ---- tablet: 641–1024. Bounded below as well, because on a phone the
+         copy and credit sit in the flow and these offsets would shift them. ---- */
+    @media (min-width:641px) and (max-width:1024px) {
+      /* the headline and the production credit shared one line and collided
+         under ~800px; the credit now sits under the copy, as it does on a
+         phone, and both take the page's own 40px edge. */
+      .hero { min-height:max(var(--coverPhotoH), 580px); }
+      .heroCopy { left:40px; bottom:190px; max-width:calc(100% - 80px); }
+      .heroProd { left:40px; right:auto; bottom:96px; text-align:left; }
+      .heroProdName { font-size:24px; letter-spacing:4px; }
+    }
+
+    /* ---- phone: ≤640 ---- */
+    @media (max-width:640px) {
+      /* the category strip was pinned over the bottom of the hero with a fixed
+         allowance; wrapping to four rows overran the credit. It now sits in
+         the column after the credit, full-bleed, and the hero grows to fit. */
+      .hero { padding:130px 0 0; }
+      .heroCopy, .heroProd { margin-left:20px; margin-right:20px; }
+      .heroStrip { position:relative; margin-top:40px; }
+      .heroStrip div { padding:6px 12px; row-gap:0; column-gap:8px; }
+      .heroStrip .genreItem { gap:8px; }
+      .heroStrip .genre { padding:10px 2px; margin:0; }
+
+      /* three figures across rather than two and an orphan. Equal thirds, not
+         figure-width columns: a caption wider than its figure ran into the
+         next one. Captions may wrap and the figures ease down to fit a third. */
+      .stats { grid-template-columns:repeat(3, minmax(0, 1fr)); gap:24px 12px; }
+      .statNum { font-size:clamp(24px, 8vw, 28px); }
+      .statLabel { white-space:normal; }
+      /* the reviews header is its own flex row, not a .sectionHead, so it
+         missed the phone stacking and squeezed its label beside the title */
+      .reviewsHead { flex-direction:column; align-items:flex-start; gap:8px; }
+      /* fifteen dots wrapped to two ragged rows and were too small to aim at.
+         The count and the arrows say the same thing, in less. */
+      .revDots { display:none; }
+
+      .supply { padding:0 0 32px; }
+      .supply .sectionHead { padding:0 20px 14px; }
+      .supplyScroll { padding:0 12px; --supplyFade:24px; }
+      .supply .sectionHead,
+      .clients .sectionHead,
+      .credits .sectionHead { --headInset:20px; }
+
+      /* 200px tiles: the name was set for tiles nearly twice that width */
+      .supplyName { font-size:15px; letter-spacing:3px; }
+      .supplyMeta { gap:12px; }
+
+      .posterMore { padding:22px 20px 0; }
+      /* the count's caption wrapped with "2019" stranded on its own line */
+      .creditsCountLabel { text-wrap:balance; }
+    }
+
+    @media (max-width:400px) {
+      .stats { gap:24px 10px; }
+      .statLabel { font-size:11px; letter-spacing:0.5px; }
+      /* three columns left 77px for a wordmark; two reads */
+      .logoPage { grid-template-columns:repeat(2, 1fr); column-gap:32px; }
+    }
   </style>
 
   <script slot="scripts" is:inline>
@@ -538,6 +681,22 @@ const organizationSchema = {
           }
         }
         function go(i) { page = ((i % pages) + pages) % pages; paint(); }
+
+        /* On a phone the cards are moved by the arrows alone, which is not
+           how anyone reaches for a carousel there. A horizontal drag pages it;
+           anything closer to vertical is left to scroll the page. */
+        var swipeX = 0, swipeY = 0, swiping = false;
+        viewport.addEventListener('touchstart', function (e) {
+          if (e.touches.length !== 1) { swiping = false; return; }
+          swipeX = e.touches[0].clientX; swipeY = e.touches[0].clientY; swiping = true;
+        }, { passive: true });
+        viewport.addEventListener('touchend', function (e) {
+          if (!swiping) return;
+          swiping = false;
+          var t = e.changedTouches[0];
+          var dx = t.clientX - swipeX, dy = t.clientY - swipeY;
+          if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.4) go(page + (dx < 0 ? 1 : -1));
+        }, { passive: true });
 
         dotsWrap.addEventListener('click', function (e) {
           var b = e.target.closest('.revDot');

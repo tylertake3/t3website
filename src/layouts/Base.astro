@@ -92,7 +92,7 @@ const ogImageUrl = new URL(shareImage, base).toString();
     <a class="skip" href="#main">Skip to content</a>
     <div class="page">
       <Header overDark={navOverDark} />
-      <main id="main">
+      <main id="main" tabindex="-1">
         <slot />
       </main>
       <Footer title={footerTitle} intro={footerIntro} links={footerLinks} />
