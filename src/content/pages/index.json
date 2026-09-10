@@ -3,7 +3,14 @@
     "title": "Take 3 Agency | Specialist Talent & SPACT Agency",
     "description": "Take 3 is the UK's largest specialist talent agency. We supply dancers, fighters, SPACTs, models and specialist performers to film, television and commercial productions: 500+ productions since 2019.",
     "ogTitle": "Take 3 Agency | Specialist Talent & SPACT Agency",
-    "ogDescription": "The artists behind the action. Dancers, fighters, SPACTs, models and specialist performers for film, television and commercial productions."
+    "ogDescription": "The artists behind the action. Dancers, fighters, SPACTs, models and specialist performers for film, television and commercial productions.",
+    "footerTitle": "Tell us what you need",
+    "footerLinks": [
+      {
+        "label": "JOIN THE ROSTER \u2192",
+        "href": "/join"
+      }
+    ]
   },
   "hero": {
     "kicker": "SPECIALIST TALENT & SPACT AGENCY",
@@ -91,7 +98,8 @@
     "heading": "Who we've supplied",
     "kicker": "FILM · TV · ADVERTISING",
     "body": "The companies we've supplied artists for: over a hundred of the world's biggest names across film, TV and advertising.",
-    "turnHint": "Click the wall for more"
+    "turnHint": "Click the wall for more",
+    "turnHintTouch": "Tap the wall for more"
   },
   "credits": {
     "heading": "Our credits",

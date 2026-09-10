@@ -24,6 +24,9 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline:2px so
 /* the reviews band is dark in both themes, so its ring must stay light */
 .reviews a:focus-visible, .reviews button:focus-visible, .reviews [tabindex]:focus-visible { outline-color:#f4f2ee; }
 
+/* the skip link's target is focusable so the jump lands in every browser; it
+   is a container being scrolled to, not a control, so it takes no ring */
+main[tabindex]:focus, main[tabindex]:focus-visible { outline:none; }
 .skip { position:absolute; left:-9999px; top:0; z-index:200; background:var(--bg); color:var(--ink); padding:12px 18px; font-size:13px; letter-spacing:2px; border:1px solid var(--hair); }
 .skip:focus { left:12px; top:12px; }
 
@@ -535,7 +538,10 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
    controls (carousel arrows, dots, theme toggle) are circles. The explicit
    reset keeps native <button> elements from picking up browser rounding. */
 .btnGhost, .btnSolid, .navCta { border-radius:0; appearance:none; -webkit-appearance:none; }
-.btnGhost { border:1px solid var(--hair); padding:12px 22px; font-size:12px; letter-spacing:2px; }
+/* --ctrlBorder, not --hair: a hairline is for dividing content, and at 1.3:1
+   on the light page the outline of a button all but disappeared. This is the
+   token the guide reserves for control outlines, and it clears WCAG 1.4.11. */
+.btnGhost { border:1px solid var(--ctrlBorder); padding:12px 22px; font-size:12px; letter-spacing:2px; }
 .btnGhost:hover { border-color:var(--ink); color:var(--ink); }
 .btnSolid { background:#5d1f16; color:#f4f2ee; padding:12px 22px; font-size:12px; letter-spacing:2px; }
 .btnSolid:hover { background:#7a2f20; color:#f4f2ee; }
@@ -554,6 +560,13 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   .menuBtn { gap:8px; padding-left:0; }
   .menuBtnLabel { min-width:0; }
   .menuInner { padding:150px 20px 72px; grid-template-columns:1fr; gap:52px; }
+  /* touch targets: the list keeps its rhythm but each entry carries its tap
+     area as padding — main entries ~42px, sub-entries and contact lines ~44px */
+  .menuItem + .menuItem { margin-top:0; }
+  .menuLink { padding:4px 0; }
+  .menuSubLink { padding:12px 0; }
+  .menuContactLine { margin-top:0; }
+  .menuContactLine a { display:inline-block; padding:10px 0; }
 }
 
 /* ---------- tablet ---------- */
@@ -648,9 +661,20 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 [data-theme="light"] .navOnLight .slateTime { color:var(--sub); }
 
 /* ---------- header responsive ---------- */
-@media (max-width:1024px) {
+/* bounded below: the ≤860 block sets the phone padding, and this later rule
+   was winning over it, so phones were getting the tablet inset and top gap */
+@media (min-width:861px) and (max-width:1024px) {
   .nav { padding:14px 32px; }
   .menuInner { padding:170px 32px 76px; gap:56px; }
+}
+/* the header keeps its tablet padding down to the phone break, as before */
+@media (max-width:860px) {
+  .nav { padding:12px 20px; }
+}
+/* a phone on its side: the header is shorter than the 150px reserved for it,
+   so the list starts closer up rather than opening on a screen of nothing */
+@media (max-height:520px) {
+  .menuInner { padding-top:110px; }
 }
 @media (max-width:999px) {
   /* the city label is the first thing to go; the clock itself stays, and the
