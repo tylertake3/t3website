@@ -1,0 +1,123 @@
+{
+  "meta": {
+    "title": "After Dark — Take 3 Agency",
+    "description": "Pole artists, aerial performers and alternative talent for film, television and live productions. Take 3 After Dark is the other side of our intimacy roster — distinctive artists for bold creative briefs, booked and run with the same care as every intimacy job.",
+    "ogTitle": "Take 3 / After Dark",
+    "ogDescription": "A different kind of presence. Pole artists, aerial performers and alternative talent for film, television and live productions.",
+    "ogImageAlt": "A performer with vivid pink hair lying on a studio floor in leather trousers and patent heels, one leg raised.",
+    "footerTitle": "Book After Dark artists for your production",
+    "footerLinks": [
+      {
+        "label": "INTIMACY →",
+        "href": "/intimacy"
+      },
+      {
+        "label": "SPECIALISTS →",
+        "href": "/specialists"
+      }
+    ]
+  },
+  "crumbs": {
+    "parentLabel": "Intimacy",
+    "parentHref": "/intimacy",
+    "currentLabel": "After Dark",
+    "backLabel": "Back to Intimacy",
+    "returnLabel": "Back to Intimacy"
+  },
+  "hero": {
+    "eyebrow": "Take 3 Agency — Specialist performance",
+    "title": "After Dark",
+    "lede": "A different kind of presence.\nPole artists, aerial performers and alternative talent for film, television and live productions.",
+    "cta": {
+      "label": "Enquire about artists",
+      "subject": "After Dark artists enquiry"
+    },
+    "tags": [
+      "POLE",
+      "AERIAL",
+      "ALTERNATIVE"
+    ],
+    "figure": {
+      "src": "/uploads/after-dark-hero.webp",
+      "width": 3400,
+      "height": 1833,
+      "alt": "A performer with vivid pink hair and tattoos lying on a studio floor in leather trousers, one leg raised and a patent heel held in hand."
+    }
+  },
+  "statement": {
+    "eyebrow": "The other side of performance",
+    "heading": "Distinctive artists.\nExtraordinary scenes.",
+    "body": "Tell us the look, movement and atmosphere your production needs. We’ll help you find the artists to bring it to life."
+  },
+  "talent": {
+    "eyebrow": "Explore the talent",
+    "items": [
+      {
+        "number": "01",
+        "title": "Pole & movement",
+        "body": "Strength, control and stage presence.",
+        "figure": {
+          "src": "/uploads/after-dark-pole.webp",
+          "width": 750,
+          "height": 1000,
+          "alt": "Two pole artists mirrored on a single pole in a warm, low-lit studio, legs extended in a split."
+        }
+      },
+      {
+        "number": "02",
+        "title": "Alternative artists",
+        "body": "Distinctive looks for bold creative briefs.",
+        "figure": {
+          "src": "/uploads/after-dark-alternative.webp",
+          "width": 1200,
+          "height": 1799,
+          "alt": "A black and white portrait of a performer with painted brows and lips, silver rings and tattoos, one hand raised to their face."
+        }
+      },
+      {
+        "number": "03",
+        "title": "Aerial & rope",
+        "body": "Sculptural movement and specialist performance.",
+        "figure": {
+          "src": "/uploads/after-dark-aerial.webp",
+          "width": 750,
+          "height": 1000,
+          "alt": "A performer photographed in black and white, suspended upside down from chains in a high panelled studio, one leg extended straight overhead, holding a platform heel, hair falling toward the parquet floor."
+        }
+      }
+    ]
+  },
+  "care": {
+    "eyebrow": "Same rules, different stage",
+    "heading": "Bold on camera. Careful on set.",
+    "paragraph": "After Dark work is booked and run the way we run every intimacy job. Boundaries are agreed in writing before the scene is blocked, choreography is rehearsed rather than improvised, and the set is closed when the material calls for it — with one point of contact for agreements, riders and fees.",
+    "definitions": [
+      {
+        "term": "AGREED IN ADVANCE",
+        "description": "What is performed, how it is shot and how the footage may be used, set out before the shoot day."
+      },
+      {
+        "term": "REHEARSED",
+        "description": "Pole, aerial and rope work is choreographed and rehearsed like a stunt — rigging checked, spotters in place, nothing left to the day."
+      },
+      {
+        "term": "ONE CONTACT",
+        "description": "Casting, contracts and coordination through Take 3, documented for your production file."
+      }
+    ],
+    "figure": {
+      "src": "/uploads/after-dark-duo.webp",
+      "width": 1200,
+      "height": 1686,
+      "alt": "Two performers in a black and white studio pose: one kneeling with wrists bound, the other standing in heels and sunglasses holding the line.",
+      "figNote": "CHOREOGRAPHED, AGREED, HELD"
+    }
+  },
+  "closing": {
+    "heading": "Cast something\nunexpected.",
+    "cta": {
+      "label": "Discuss your production",
+      "subject": "After Dark production enquiry"
+    }
+  }
+}

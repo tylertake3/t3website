@@ -1,0 +1,361 @@
+---
+/* /after-dark — the other side of the intimacy roster: pole, aerial and
+   alternative artists. A child of /intimacy (breadcrumb and return links point
+   back there). Everything here is scoped with an `ad` prefix so it cannot leak
+   into the other specialist pages; the only shared pieces are the global tokens.
+
+   The hero and the closing band are permanently dark in both themes, so they
+   use the dark-theme ink/accent values directly rather than the theme-aware
+   tokens — the same approach as the always-dark bands on /intimacy. */
+import Base from '../layouts/Base.astro';
+import copy from '../content/pages/after-dark.json';
+import { contactHref } from '../data/site';
+
+const enquiry = (subject: string) => `${contactHref}?subject=${encodeURIComponent(subject)}`;
+---
+
+<Base
+  theme="dark"
+  navOverDark={true}
+  title={copy.meta.title}
+  description={copy.meta.description}
+  ogTitle={copy.meta.ogTitle}
+  ogDescription={copy.meta.ogDescription}
+  ogImage={copy.hero.figure.src}
+  ogImageAlt={copy.meta.ogImageAlt}
+  footerTitle={copy.meta.footerTitle}
+  footerLinks={copy.meta.footerLinks}
+  noindex
+>
+  <!-- After Dark is always dark: override any saved light preference before first paint -->
+  <script is:inline slot="head">
+    document.documentElement.setAttribute('data-theme', 'dark');
+    /* set before paint: only hide things if we are actually going to move them */
+    if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('motion');
+    }
+  </script>
+  <link
+    slot="head"
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- hero: full-bleed portrait, the title and lede on the darkened left -->
+  <section class="adHero" aria-labelledby="adTitle">
+   <div class="adHeroFrame">
+    <img class="adHeroImg" src={copy.hero.figure.src} alt={copy.hero.figure.alt} width={copy.hero.figure.width} height={copy.hero.figure.height} fetchpriority="high" decoding="async" />
+    <div class="adHeroScrim" aria-hidden="true"></div>
+    <div class="adHeroInner">
+      <div class="adCrumbRow">
+        <nav class="adCrumbs" aria-label="Breadcrumb">
+          <a href={copy.crumbs.parentHref}>{copy.crumbs.parentLabel}</a>
+          <span class="adCrumbSep" aria-hidden="true">/</span>
+          <span class="adCrumbHere" aria-current="page">{copy.crumbs.currentLabel}</span>
+        </nav>
+        <a class="adBack" href={copy.crumbs.parentHref}><span aria-hidden="true">←</span> {copy.crumbs.backLabel}</a>
+      </div>
+      <!-- phones stack the photo above the copy instead of behind it; only one of the two images is ever shown -->
+      <img class="adHeroImg adHeroImg--stack" src={copy.hero.figure.src} alt="" aria-hidden="true" width={copy.hero.figure.width} height={copy.hero.figure.height} decoding="async" />
+      <div class="adHeroCopy">
+        <p class="adEyebrow adEyebrow--hero">{copy.hero.eyebrow}</p>
+        <h1 class="adTitle" id="adTitle">{copy.hero.title}</h1>
+        <p class="adLede">{copy.hero.lede}</p>
+        <p class="adCtaRow"><a class="adBtn" href={enquiry(copy.hero.cta.subject)}>{copy.hero.cta.label} <span class="adArrow" aria-hidden="true">↗</span></a></p>
+      </div>
+      <p class="adTagRow">
+        {copy.hero.tags.map((tag, i) => (
+          <>
+            {i > 0 && <span class="adTagSep" aria-hidden="true">/</span>}
+            <span>{tag}</span>
+          </>
+        ))}
+      </p>
+    </div>
+   </div>
+  </section>
+
+  <!-- statement -->
+  <section class="adBand adStatement" aria-labelledby="adStatementHead">
+    <div class="adRail adStatementInner">
+      <div>
+        <p class="adEyebrow" data-rise>{copy.statement.eyebrow}</p>
+        <h2 class="adStatementHead" id="adStatementHead" data-head>{copy.statement.heading}</h2>
+      </div>
+      <p class="adStatementBody" data-rise>{copy.statement.body}</p>
+    </div>
+  </section>
+
+  <!-- explore the talent: three routes -->
+  <section class="adBand" aria-labelledby="adTalentHead">
+    <div class="adRail adBandInner">
+      <h2 class="adEyebrow adEyebrow--ink" id="adTalentHead" data-rise>{copy.talent.eyebrow}</h2>
+      <ul class="adTalent" data-stagger>
+        {copy.talent.items.map((item) => (
+          <li class="adTalentItem">
+            <a class="adTalentLink" href={enquiry(`After Dark enquiry — ${item.title}`)}>
+              <span class="adSlot">
+                <img class="adSlotImg" src={item.figure.src} alt={item.figure.alt} width={item.figure.width} height={item.figure.height} loading="lazy" decoding="async" />
+              </span>
+              <span class="adTalentTitle"><span class="adNum">{item.number}</span><span class="adSlash" aria-hidden="true">/</span>{item.title}</span>
+              <span class="adTalentBody">{item.body}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- run with the same care as every intimacy job -->
+  <section class="adBand adDark" aria-labelledby="adCareHead">
+    <div class="adRail adSplit adSplit--care">
+      <figure class="adFig" data-figure>
+        <span class="adSlot adSlot--tall">
+          <img class="adSlotImg" src={copy.care.figure.src} alt={copy.care.figure.alt} width={copy.care.figure.width} height={copy.care.figure.height} loading="lazy" decoding="async" />
+        </span>
+        <figcaption class="adFigCap">{copy.care.figure.figNote}</figcaption>
+      </figure>
+      <div class="adSplitCopy">
+        <p class="adEyebrow" data-rise>{copy.care.eyebrow}</p>
+        <h2 class="adH2" id="adCareHead" data-head>{copy.care.heading}</h2>
+        <p class="adPara" data-rise>{copy.care.paragraph}</p>
+        <dl class="adDefs" data-stagger>
+          {copy.care.definitions.map((def) => (
+            <div class="adDefRow"><dt class="adDefKey">{def.term}</dt><dd class="adDefDesc">{def.description}</dd></div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- closing call -->
+  <section class="adClose" aria-labelledby="adCloseHead">
+    <div class="adRail adCloseInner">
+      <h2 class="adCloseHead" id="adCloseHead" data-head>{copy.closing.heading}</h2>
+      <div class="adCloseSide" data-rise>
+        <a class="adBtn adBtn--light" href={enquiry(copy.closing.cta.subject)}>{copy.closing.cta.label} <span class="adArrow" aria-hidden="true">↗</span></a>
+        <a class="adCloseMail" href={contactHref}>{contactHref.replace('mailto:', '')}</a>
+      </div>
+    </div>
+    <div class="adRail adCloseFoot">
+      <span>TAKE 3 AGENCY</span>
+      <a class="adBtn adBtn--back" href={copy.crumbs.parentHref}><span aria-hidden="true">←</span> {copy.crumbs.returnLabel}</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* No light/dark switch on this page: it is dark by design. */
+  :global(.themeBtn) { display:none; }
+
+  /* Permanently dark surfaces (hero, care band, closing band) keep the
+     dark-theme values whatever the toggle says — same as /intimacy's film band. */
+  .adHero, .adDark, .adClose { --adInk:#f4f2ee; --adSub:#c7c3bd; --adMuted:#96928c; --adHair:#35353a; --adAccent:#d4704f; }
+
+  .adPage, body { --sectionPad:96px; }
+  .adRail { max-width:1360px; margin:0 auto; padding:0 40px; }
+
+  /* arrival motion — nothing here changes layout: opacity, a few pixels of
+     travel, a clip and a slight scale, so nothing reflows or shifts */
+  html.motion [data-rise], html.motion [data-head], html.motion [data-stagger] > *, html.motion [data-figure] { opacity:0; }
+  html.motion [data-head] { clip-path:inset(0 0 108% 0); }
+  html.motion [data-figure] .adSlotImg { clip-path:inset(0 0 100% 0); }
+  .adEyebrow { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin:0; }
+  .adEyebrow--ink { color:var(--muted); font-weight:400; }
+  .adDark .adEyebrow, .adHero .adEyebrow { color:var(--adAccent); }
+  .adArrow { display:inline-block; margin-left:8px; }
+
+  /* ---------- buttons ---------- */
+  .adBtn { display:inline-flex; align-items:center; gap:10px; min-height:44px; border:1px solid var(--adAccent, var(--accent)); color:var(--adAccent, var(--accent)); padding:14px 24px; font-size:12px; letter-spacing:3px; text-transform:uppercase; text-decoration:none; background:transparent; border-radius:0; transition:background 0.25s ease, color 0.25s ease; }
+  .adBtn:hover { background:var(--adAccent, var(--accent)); color:#101012; }
+  .adBtn--light { border-color:var(--adInk); color:var(--adInk); }
+  .adBtn--back { border-color:rgba(244,242,238,0.4); color:var(--adInk); padding:12px 20px; font-size:11px; }
+  .adBtn--back:hover { background:var(--adInk); color:#101012; border-color:var(--adInk); }
+  .adBtn--light:hover { background:var(--adInk); color:#101012; }
+  .adBack { display:inline-flex; align-items:center; gap:8px; min-height:44px; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--adMuted, var(--muted)); text-decoration:none; white-space:nowrap; }
+  .adBack:hover { color:var(--adInk, var(--ink)); }
+
+  /* ---------- hero ---------- */
+  /* Shorter than the site's photo covers on purpose: the figure is scaled by
+     the banner's height, so a lower banner keeps him smaller and further right
+     of the title (his head lands just under halfway across). */
+  .adHero { background:#101012; color:var(--adInk); }
+  .adHeroFrame { position:relative; min-height:clamp(440px, 44vw, min(82vh, 880px)); overflow:hidden; display:flex; }
+  /* The photo carries its own 1400px fade-to-dark on the left, so it is
+     anchored to the right edge: the figure keeps the right of the banner and
+     the faded extension sits under the title. Only the phone re-centres it. */
+  .adHeroImg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:100% 100%; filter:brightness(0.86) saturate(0.95); }
+  .adHeroImg--stack { display:none; }
+  .adHeroScrim { position:absolute; inset:0; background:
+      linear-gradient(90deg, rgba(16,16,18,0.7) 0%, rgba(16,16,18,0.4) 26%, rgba(16,16,18,0) 44%, rgba(16,16,18,0.1) 100%),
+      linear-gradient(180deg, rgba(16,16,18,0.55) 0%, rgba(16,16,18,0) 24%, rgba(16,16,18,0) 64%, rgba(16,16,18,0.82) 100%); }
+  /* the top padding clears the full-height logo the header shows over a dark cover */
+  .adHeroInner { position:relative; z-index:2; width:100%; max-width:1360px; margin:0 auto; padding:156px 40px 28px; display:flex; flex-direction:column; justify-content:space-between; gap:36px; }
+  .adCrumbRow { display:flex; justify-content:space-between; align-items:center; gap:24px; font-size:11px; letter-spacing:3px; text-transform:uppercase; }
+  .adCrumbs { display:flex; gap:10px; align-items:center; }
+  .adCrumbs a { display:inline-flex; align-items:center; min-height:44px; color:var(--adMuted); text-decoration:none; }
+  .adCrumbs a:hover { color:var(--adInk); }
+  .adCrumbSep { color:var(--adMuted); }
+  .adCrumbHere { color:var(--adAccent); }
+  .adHeroCopy { max-width:min(520px, 40%); padding:16px 0 12px; }
+  .adEyebrow--hero { margin:0; }
+  .adTitle { font-family:'Anton','Jost',sans-serif; font-weight:400; text-transform:uppercase; font-size:clamp(60px, 9.2vw, 142px); line-height:0.9; letter-spacing:0; margin:14px 0 0; color:var(--adInk); max-width:7ch; }
+  .adLede { white-space:pre-line; font-size:clamp(16px, 1.45vw, 21px); font-weight:300; line-height:1.55; color:rgba(244,242,238,0.86); margin:22px 0 0; max-width:34ch; text-wrap:pretty; }
+  .adCtaRow { margin:28px 0 0; }
+  .adTagRow { display:flex; gap:18px; margin:0; border-top:1px solid rgba(244,242,238,0.22); padding-top:18px; font-size:11px; letter-spacing:3px; color:var(--adMuted); flex-wrap:wrap; }
+  .adTagSep { color:rgba(244,242,238,0.35); }
+  .adHero a:focus-visible { outline:2px solid var(--adInk); outline-offset:3px; }
+
+  /* very wide screens: the banner stops growing at 1920px and sits centred,
+     its right edge fading into the page so the figure is not pinned to the
+     far side of a cinema display */
+  @media (min-width:1921px) {
+    .adHeroFrame { max-width:1920px; margin:0 auto; }
+    .adHeroFrame::after { content:''; position:absolute; top:0; bottom:0; right:0; width:22%; z-index:1; pointer-events:none;
+      background:linear-gradient(90deg, rgba(16,16,18,0) 0%, rgba(16,16,18,0.55) 55%, #101012 100%); }
+  }
+
+  /* ---------- bands ---------- */
+  .adBand { border-top:1px solid var(--hair); }
+  .adBandInner { padding:var(--sectionPad) 40px; }
+  .adStatementInner { padding:var(--sectionPad) 40px; display:grid; grid-template-columns:1.15fr 0.85fr; gap:40px 72px; align-items:center; }
+  .adStatementHead { white-space:pre-line; font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(36px, 5vw, 76px); font-weight:400; letter-spacing:0; line-height:0.96; margin:18px 0 0; color:var(--ink); }
+  .adStatementBody { font-size:clamp(18px, 1.6vw, 22px); font-weight:400; line-height:1.55; color:var(--ink); margin:0; padding-left:40px; border-left:1px solid var(--ctrlBorder); max-width:34ch; text-wrap:pretty; }
+
+  /* ---------- talent ---------- */
+  .adTalent { list-style:none; margin:28px 0 0; padding:0; display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:32px; }
+  .adTalentLink { display:block; color:inherit; text-decoration:none; }
+  .adSlot { display:block; position:relative; overflow:hidden; background:var(--tileBg); border:1px solid var(--hair); aspect-ratio:4/5; }
+  .adSlot--tall { aspect-ratio:1200/1686; border:0; }
+  .adSlotImg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease; }
+  .adTalentLink:hover .adSlotImg, .adTalentLink:focus-visible .adSlotImg { transform:scale(1.04); opacity:0.88; }
+  .adTalentTitle { display:block; margin-top:22px; font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(20px, 1.8vw, 26px); letter-spacing:1px; line-height:1.1; color:var(--ink); }
+  .adNum { color:var(--accent); }
+  .adSlash { padding:0 10px; color:var(--muted); }
+  .adTalentLink:hover .adTalentTitle { color:var(--accent); }
+  .adTalentBody { display:block; margin-top:8px; font-size:15px; font-weight:400; line-height:1.6; color:var(--sub); }
+
+  /* ---------- split sections ---------- */
+  .adSplit { padding:var(--sectionPad) 40px; display:grid; gap:72px; align-items:start; }
+  .adSplit--care { grid-template-columns:0.85fr 1.15fr; }
+  .adFig { margin:0; max-width:520px; }
+  .adFigCap { font-size:11px; letter-spacing:2px; color:var(--muted); padding-top:10px; text-align:right; }
+  .adSplitCopy { padding-top:12px; }
+  .adH2 { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(30px, 3.4vw, 50px); font-weight:400; letter-spacing:0.5px; line-height:1.1; margin:16px 0 0; max-width:560px; color:var(--ink); }
+  .adPara { font-size:17px; font-weight:300; line-height:1.75; color:var(--sub); margin:26px 0 0; max-width:560px; text-wrap:pretty; }
+  .adDefs { margin:36px 0 0; max-width:560px; border-top:1px solid var(--hair); }
+  .adDefRow { display:grid; grid-template-columns:170px 1fr; gap:24px; padding:18px 0; border-bottom:1px solid var(--hair); }
+  .adDefKey { font-size:12px; letter-spacing:2px; color:var(--muted); padding-top:3px; }
+  .adDefDesc { margin:0; font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); }
+
+  .adDark { background:#1a1a1c; color:var(--adInk); }
+  .adDark .adH2 { color:var(--adInk); }
+  .adDark .adPara, .adDark .adDefDesc { color:var(--adSub); }
+  .adDark .adFigCap, .adDark .adDefKey { color:var(--adMuted); }
+  .adDark .adDefs, .adDark .adDefRow { border-color:var(--adHair); }
+  .adDark .adSlot { background:#101012; }
+
+  /* ---------- closing ---------- */
+  .adClose { background:#101012; color:var(--adInk); border-top:1px solid var(--hair); }
+  .adCloseInner { padding:var(--sectionPad) 40px; display:grid; grid-template-columns:1.2fr 0.8fr; gap:40px 72px; align-items:center; }
+  .adCloseHead { white-space:pre-line; font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(48px, 7.5vw, 112px); font-weight:400; letter-spacing:0; line-height:0.94; margin:0; }
+  .adCloseSide { display:flex; flex-direction:column; align-items:flex-start; gap:22px; justify-self:end; }
+  .adCloseMail { display:inline-flex; align-items:center; min-height:44px; font-size:17px; color:var(--adSub); text-decoration:none; border-bottom:1px solid transparent; }
+  .adCloseMail:hover { color:var(--adInk); border-bottom-color:currentColor; }
+  .adCloseFoot { display:flex; justify-content:space-between; align-items:center; gap:24px; padding:26px 40px 48px; border-top:1px solid var(--adHair); font-size:11px; letter-spacing:3px; color:var(--adMuted); }
+  .adClose a:focus-visible { outline:2px solid var(--adInk); outline-offset:3px; }
+
+  /* ---------- responsive: tablet ---------- */
+  @media (max-width:1024px) {
+    .adRail, .adBandInner, .adStatementInner, .adSplit, .adCloseInner { padding-left:32px; padding-right:32px; }
+    .adHeroFrame { min-height:clamp(400px, 44vw, 82vh); }
+    .adHeroScrim { background:
+      linear-gradient(90deg, rgba(16,16,18,0.78) 0%, rgba(16,16,18,0.5) 34%, rgba(16,16,18,0.08) 60%, rgba(16,16,18,0.1) 100%),
+      linear-gradient(180deg, rgba(16,16,18,0.55) 0%, rgba(16,16,18,0) 24%, rgba(16,16,18,0) 64%, rgba(16,16,18,0.82) 100%); }
+    .adHeroInner { padding:140px 32px 24px; }
+    .adHeroCopy { max-width:min(520px, 46%); }
+  }
+  /* small tablets: the photo (which fades to dark along its top) is sized by
+     width and pinned bottom-right, so the figure stays smaller and to the right
+     of the copy instead of filling the banner's height */
+  @media (max-width:900px) {
+    .adHeroImg:not(.adHeroImg--stack) { inset:auto 0 0 auto; width:118%; height:auto; object-fit:fill; }
+    body { --sectionPad:68px; }
+    .adStatementInner { grid-template-columns:1fr; gap:28px; }
+    .adStatementBody { padding-left:0; border-left:0; padding-top:20px; border-top:1px solid var(--hair); max-width:none; }
+
+    .adTalent { gap:24px; }
+    .adSplit { grid-template-columns:1fr !important; gap:44px; }
+    .adSplit--care .adFig { order:1; }
+    .adSplit--care .adSplitCopy { order:2; }
+    .adCloseInner { grid-template-columns:1fr; gap:36px; }
+    .adCloseSide { justify-self:start; }
+    .adCloseFoot { padding-left:32px; padding-right:32px; }
+  }
+
+  /* ---------- responsive: phone ---------- */
+  @media (max-width:640px) {
+    body { --sectionPad:56px; }
+    .adRail, .adBandInner, .adStatementInner, .adSplit, .adCloseInner, .adCloseFoot { padding-left:20px; padding-right:20px; }
+    .adHeroFrame { min-height:0; }
+    .adHeroInner { padding:100px 0 24px; gap:24px; }
+    .adCrumbRow, .adHeroCopy, .adTagRow { margin-left:20px; margin-right:20px; }
+    .adHeroImg:not(.adHeroImg--stack), .adHeroScrim { display:none; }
+    .adHeroImg--stack { display:block; position:static; width:100%; height:auto; aspect-ratio:3/2; object-fit:cover; object-position:100% 100%; filter:brightness(0.9) contrast(1.05); }
+    .adHeroCopy { max-width:none; }
+    .adCrumbRow { flex-direction:column; align-items:flex-start; gap:10px; }
+    .adHeroCopy { padding:8px 0 4px; }
+    .adTitle { font-size:clamp(60px, 19vw, 96px); }
+    .adLede { font-size:16px; }
+    .adTagRow { gap:12px; }
+    .adBandInner { padding-top:56px; padding-bottom:64px; }
+    .adTalent { grid-template-columns:1fr; gap:36px; }
+    .adSplit { padding-top:56px; padding-bottom:64px; gap:36px; }
+    .adFig { max-width:none; }
+    .adH2, .adPara, .adDefs { max-width:none; }
+    .adDefRow { grid-template-columns:1fr; gap:6px; }
+    .adCloseFoot { flex-direction:column; align-items:flex-start; gap:12px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .adSlotImg, .adBtn { transition:none; }
+    .adTalentLink:hover .adSlotImg, .adTalentLink:focus-visible .adSlotImg { transform:none; }
+  }
+</style>
+
+<script>
+  import { animate, inView, stagger } from 'motion';
+
+  if (document.documentElement.classList.contains('motion')) {
+    const RISE = [0.22, 1, 0.36, 1];
+    const SETTLE = [0.16, 1, 0.3, 1];
+    const seen = (el) => el.dataset.seen === '1';
+    const mark = (el) => { el.dataset.seen = '1'; };
+
+    inView('[data-head]', (el) => {
+      if (seen(el)) return; mark(el);
+      animate(el, { opacity: [0, 1], clipPath: ['inset(0 0 108% 0)', 'inset(0 0 -8% 0)'], y: [22, 0] },
+        { duration: 0.78, ease: RISE });
+    }, { margin: '0px 0px -12% 0px' });
+
+    inView('[data-rise]', (el) => {
+      if (seen(el)) return; mark(el);
+      animate(el, { opacity: [0, 1], y: [12, 0] }, { duration: 0.66, delay: 0.06, ease: SETTLE });
+    }, { margin: '0px 0px -10% 0px' });
+
+    inView('[data-stagger]', (el) => {
+      if (seen(el)) return; mark(el);
+      animate(Array.from(el.children), { opacity: [0, 1], y: [22, 0] },
+        { duration: 0.68, delay: stagger(0.07), ease: RISE });
+    }, { margin: '0px 0px -8% 0px' });
+
+    inView('[data-figure]', (el) => {
+      if (seen(el)) return; mark(el);
+      const img = el.querySelector('.adSlotImg');
+      animate(el, { opacity: [0, 1] }, { duration: 0.5, ease: SETTLE });
+      if (img) animate(img, { clipPath: ['inset(0 0 100% 0)', 'inset(0 0 0% 0)'], scale: [1.05, 1] },
+        { duration: 1.0, ease: RISE });
+    }, { margin: '0px 0px -10% 0px' });
+  }
+</script>
+

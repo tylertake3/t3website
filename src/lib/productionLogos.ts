@@ -79,7 +79,7 @@ const pngSize = (file: string): { width: number; height: number } | null => {
    measured from the artwork itself. */
 const TARGET_AREA = 4100;
 const MIN_HEIGHT = 18;
-const MAX_HEIGHT = 42;
+const MAX_HEIGHT = 52;
 const MAX_WIDTH = 215;
 
 const sizeCache = new Map<string, { logoWidth: number; logoHeight: number } | undefined>();

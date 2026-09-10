@@ -58,6 +58,7 @@ The hero is always dark, regardless of theme, so it has its own token set:
 | `--heroLine` | `rgba(244,242,238,0.25)` |
 | `--heroBtnBorder` | `rgba(244,242,238,0.5)` |
 | `--heroScrim` | vertical dark gradient over hero imagery |
+| `--intimacyHeroBackdrop` | Theme-independent grey studio sweep for the intimacy portrait |
 
 ### Accent rules
 - Use `--accent` sparingly — kickers, stat numbers, "view" links, focus rings. It should feel like a highlight, never a fill for large areas.
@@ -72,6 +73,7 @@ The hero is always dark, regardless of theme, so it has its own token set:
 - **`'Jost', sans-serif`** — the default. Body, nav, labels, most headings. Weights loaded: 300, 400, 500, 600. **Body copy is 400** — 300 is reserved for large display figures (stat numbers) and large tracked display headings, never for reading text.
 - **`'Anton', 'Jost', sans-serif`** — condensed display. Hero title, section titles, review/testimonial names, big statements. Always `text-transform:uppercase`, weight 400, and **`letter-spacing:0`**.
 - **`'Cormorant Garamond', serif`** — editorial serif accent (currently used on the Models page). Reach for it only where an elegant serif is intentional.
+- The intimacy title uses the same regular Cormorant Garamond face, served locally as `Intimacy Display` and preloaded to preserve the measured arm/letter alignment. Its condensed proportions are specific to that composition.
 
 Load fonts once, in the document head:
 ```
@@ -125,8 +127,9 @@ All display headings use `font-weight:400` (never bold) and fluid `clamp()` sizi
 ### Buttons
 - **`.btnSolid`** — oxblood `#5d1f16` fill, ink text, `12px 22px`, `letter-spacing:2px`. Primary action (CTA, "Get in touch").
 - **`.btnGhost`** — transparent with `1px solid var(--hair)` border; border darkens to `--ink` on hover. Secondary action.
-- **`.navCta`** — outlined pill in the nav, uses hero border tokens.
+- **`.navCta`** — outlined, square-cornered button in the nav, uses hero border tokens.
 - All button-ish text is `12–13px`, uppercase-feel, `letter-spacing:2px`.
+- **Corners: every rectangular button, chip or tag is square (`border-radius:0`).** No pills, no soft radii. The only round controls on the site are icon-only ones — carousel arrows, dots and the theme toggle — which are full circles (`border-radius:50%`). Native `<button>` elements must carry the same reset so browsers never add their own rounding.
 
 ### Header (`.nav`)
 - Fixed, with its own gradient scrim (`.nav::before`) so controls stay legible over any hero photograph. The scrim is removed on light pages (`.navOnLight`) and while the overlay menu is open.

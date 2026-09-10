@@ -7,7 +7,7 @@ export default defineConfig({
   site: 'https://www.take3agency.com',
   trailingSlash: 'never',
   build: { format: 'file' },
-  integrations: [sitemap()],
+  integrations: [sitemap({ filter: (page) => !page.includes('/after-dark') })],
   /* Every page is still prerendered; the adapter exists so the two sign-in
      routes under /api can run on the server. */
   adapter: vercel(),
