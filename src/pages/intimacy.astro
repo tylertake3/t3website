@@ -1,11 +1,43 @@
 ---
 import Base from '../layouts/Base.astro';
 import copy from '../content/pages/intimacy.json';
+import { posters, posterLabel } from '../lib/posters';
+import { featuredCredit, resolveCredits } from '../lib/productionLogos';
+import { contactHref } from '../data/site';
+
+/* The hero title is painted in two passes so the figure can sit BETWEEN the
+   letters: everything except the chosen letters goes behind her, and those are
+   painted again on top. frontLetterIndices picks them — 3 and 4 are the I and M,
+   which sit on the front of her hair and raised arm, while the A stays behind
+   the forearm so the arm reads as its crossbar. */
+const heroLetters = copy.hero.title.toUpperCase().split('');
+const heroFront = new Set(copy.hero.frontLetterIndices ?? []);
+
+/* the productions wall: the titles named in the page content, in that order */
+/* the one production shown beside a review — its logo when the artwork has
+   been uploaded, otherwise its name in type */
+const reviewCredits = copy.reviews.items.map((item) => {
+  if ((item.feature ?? '').trim().toLowerCase() === 'none') return null;
+  /* a production whose artwork hasn't been supplied yet is still named in type,
+     so a review never loses its credit while a logo is being chased */
+  return featuredCredit(item.credits, item.feature) ?? resolveCredits(item.credits)[0] ?? null;
+});
+
+/* the clip turns over to show this review in full — the same one whose short
+   line runs in the quotes section below */
+const louReview = copy.reviews.items[0];
+const louCredit = reviewCredits[0];
+const louParagraphs = (louReview.full ?? '').split('\n\n').filter(Boolean);
+
+const bySlug = new Map(posters.map((p) => [p.slug, p]));
+const productionPosters = copy.productions.slugs
+  .map((slug) => bySlug.get(slug))
+  .filter((p): p is (typeof posters)[number] => Boolean(p));
 ---
 
 <Base
   theme="light"
-  navOverDark={false}
+  navOverDark={true}
   title={copy.meta.title}
   description={copy.meta.description}
   ogTitle={copy.meta.ogTitle}
@@ -15,92 +47,211 @@ import copy from '../content/pages/intimacy.json';
   footerTitle={copy.meta.footerTitle}
   footerLinks={copy.meta.footerLinks}
 >
+  <script slot="head" is:inline>
+    /* set before paint: only hide things if we are actually going to move them */
+    if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('motion');
+    }
+  </script>
+  <link slot="head" rel="preload" href="/fonts/cormorant-garamond/regular.ttf" as="font" type="font/ttf" crossorigin />
   <link
     slot="head"
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap"
     rel="stylesheet"
   />
 
-  <!-- editorial hero -->
-  <section class="rail hero" aria-labelledby="heroTitle">
-    <div class="heroCopy">
-      <p class="eyebrow6">{copy.hero.eyebrow}</p>
-      <h1 class="display" id="heroTitle">{copy.hero.title}</h1>
-      <p class="strapline">{copy.hero.strapline}</p>
-      <p class="tagRow">
-        {copy.hero.tags.map((tag) => <span>{tag}</span>)}
+  <!-- editorial hero: the title passes behind the figure, her forearm forming the A's crossbar -->
+  <section class="hero" aria-labelledby="heroTitle">
+    <div class="heroFrame">
+      <div class="heroStage">
+        <h1 class="heroWord heroWord--back" id="heroTitle">
+          {heroLetters.map((letter, i) => <span class={heroFront.has(i) ? 'heroGhost' : undefined}>{letter}</span>)}
+        </h1>
+        <img class="heroCut" src={copy.hero.figure.cutout} alt={copy.hero.figure.alt} width={copy.hero.figure.width} height={copy.hero.figure.height} fetchpriority="high" decoding="async" />
+        <p class="heroWord heroWord--front" aria-hidden="true">
+          {heroLetters.map((letter, i) => <span class={heroFront.has(i) ? undefined : 'heroGhost'}>{letter}</span>)}
+        </p>
+      </div>
+    </div>
+    <div class="heroOverlay">
+      <p class="heroStrap" id="heroStrap" data-lines={JSON.stringify(copy.hero.straplines ?? [copy.hero.strapline])}>
+        <span class="strapLine">{(copy.hero.straplines?.[0] ?? copy.hero.strapline).split(' ').map((word, i) => (
+          <span class="strapWord">{i === 0 ? word : ' ' + word}</span>
+        ))}</span>
       </p>
     </div>
-    <figure class="heroFig" style="margin:0;">
-      <div class="slot heroSlot" style="aspect-ratio:2/3;"><span class="slotLabel">{copy.hero.figure.slotLabel}</span></div>
-      <figcaption class="figCap"><span>{copy.hero.figure.figNumber}</span><span>{copy.hero.figure.figNote}</span></figcaption>
-    </figure>
   </section>
 
-  <!-- what we supply -->
-  <section id="supply" class="band" aria-labelledby="supplyHead">
+  <!-- intro: the same care as any specialist performance -->
+  <section id="intro" class="band" aria-labelledby="introHead">
+    <div class="rail introInner">
+      <p class="eyebrow3" data-rise>{copy.intro.eyebrow}</p>
+      <h2 class="introHead" id="introHead" data-head>{copy.intro.heading}</h2>
+      <div class="introBody" data-rise>
+        <p class="para" style="margin-top:0;">{copy.intro.paragraph1}</p>
+        <p class="para" data-rise>{copy.intro.paragraph2}</p>
+        <p class="introCtaRow"><a class="btnSolid introCta" href={`${contactHref}?subject=${encodeURIComponent(copy.intro.cta.subject)}`}>{copy.intro.cta.label}</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- selected productions -->
+  <section id="productions" class="band" aria-labelledby="productionsHead">
     <div class="rail bandInner">
-      <h2 class="eyebrow3" id="supplyHead">{copy.supply.heading}</h2>
-      <div class="list">
-        {copy.supply.items.map((item) => (
-          <div class="listRow">
-            <span class="listNum">{item.number}</span>
-            <h3 class="listTitle">{item.title}</h3>
-            <p class="listBody" style="margin:0;">{item.body}</p>
-          </div>
+      <p class="eyebrow3" data-rise>{copy.productions.eyebrow}</p>
+      <div class="prodHead">
+        <h2 class="h2Anton prodTitle" id="productionsHead" data-head>{copy.productions.heading}</h2>
+        <p class="prodNote" data-rise>{copy.productions.note}</p>
+      </div>
+      <ul class="posterGrid posterGrid--six" data-stagger="posters">
+        {productionPosters.map((poster) => (
+          <li class="posterCell">
+            <img class="posterImg" src={poster.src} alt={`${posterLabel(poster)} poster`} width="400" height="600" loading="lazy" decoding="async" />
+            <span class="posterName">{posterLabel(poster)}</span>
+          </li>
         ))}
-      </div>
+      </ul>
+      <p class="prodMore" data-rise><a href={copy.productions.moreHref}>{copy.productions.moreLabel} →</a></p>
     </div>
   </section>
 
-  <!-- for brands and commercial -->
-  <section id="brands" class="band" aria-labelledby="brandsHead">
-    <div class="rail splitInner split--brands">
-      <figure class="splitFig" style="margin:0;">
-        <div class="slot" style="aspect-ratio:4/5;"><span class="slotLabel">{copy.brands.figure.slotLabel}</span></div>
-        <figcaption class="figCap"><span>{copy.brands.figure.figNumber}</span><span>{copy.brands.figure.figNote}</span></figcaption>
+  <!-- intimacy-trained performers -->
+  <section id="trained" class="band" aria-labelledby="trainedHead">
+    <div class="rail splitInner split--trained">
+      <div class="splitCopy">
+        <p class="eyebrow3" data-rise>{copy.trained.eyebrow}</p>
+        <h2 class="h2Anton" id="trainedHead" data-head>{copy.trained.heading}</h2>
+        <p class="subhead" data-rise>{copy.trained.subheading}</p>
+        <p class="para" data-rise>{copy.trained.paragraph}</p>
+        <ul class="points" data-stagger>
+          {copy.trained.points.map((point) => <li>{point}</li>)}
+        </ul>
+        <p class="para workshopNote">{copy.trained.workshopNote}</p>
+      </div>
+      <figure class="splitFig" style="margin:0;" data-figure>
+        <div class="slot flipWrap" id="louFlip" style="aspect-ratio:9/16;">
+          <div class="flipInner">
+            <div class="face faceFront">
+              <video class="slotVideo" data-src={copy.trained.figure.video} poster={copy.trained.figure.poster} width={copy.trained.figure.width} height={copy.trained.figure.height} muted loop playsinline preload="none" aria-label={copy.trained.figure.label}></video>
+            </div>
+            <div class="face faceBack" id="louPanel" role="group" aria-label={copy.trained.review.panelLabel} aria-hidden="true">
+              <button class="flipClose" type="button" id="louClose" aria-label={copy.trained.review.dismissLabel} tabindex="-1">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"></path></svg>
+              </button>
+              <p class="flipName">{louReview.name}</p>
+              <p class="flipRole">{louReview.role}</p>
+              {louCredit && louCredit.onDark && (
+                <img class="flipLogo" src={louCredit.onDark} alt={louCredit.title} loading="lazy" width={louCredit.logoWidth} height={louCredit.logoHeight} style={louCredit.logoHeight ? `--logo-h:${louCredit.logoHeight};--logo-w:${louCredit.logoWidth}` : undefined} />
+              )}
+              <blockquote class="flipQuote">
+                {louParagraphs.map((para) => <p>{para}</p>)}
+              </blockquote>
+            </div>
+          </div>
+        </div>
+        <figcaption class="figCap">
+          <button class="flipBtn" type="button" id="louFlipBtn" aria-expanded="false" aria-controls="louPanel">{copy.trained.review.openLabel}</button>
+        </figcaption>
       </figure>
-      <div class="splitCopy">
-        <p class="eyebrow3">{copy.brands.eyebrow}</p>
-        <h2 class="h2Anton" id="brandsHead">{copy.brands.heading}</h2>
-        <blockquote class="pullQuote">{copy.brands.pullQuote}</blockquote>
-        <p class="para">{copy.brands.paragraph}</p>
-      </div>
     </div>
   </section>
 
-  <!-- for film and television -->
-  <section id="film" class="filmBand" aria-labelledby="filmHead">
-    <div class="rail splitInner split--film">
-      <div class="splitCopy">
-        <p class="eyebrow3">{copy.film.eyebrow}</p>
-        <h2 class="h2Anton" id="filmHead">{copy.film.heading}</h2>
-        <p class="para">{copy.film.paragraph}</p>
-        <div class="defs">
-          {copy.film.definitions.map((def) => (
-            <div class="defRow"><span class="defKey">{def.term}</span><span>{def.description}</span></div>
+  <!-- reviews: coordinators and artists -->
+  <section id="coordinator-reviews" class="quotes" aria-labelledby="quotesTitle" aria-roledescription="carousel">
+    <div class="rail quotesInner">
+      <div class="quotesHead">
+        <h2 class="quotesTitle" id="quotesTitle" data-head>{copy.reviews.heading}</h2>
+        <div class="quotesKicker" data-rise>{copy.reviews.kicker}</div>
+      </div>
+      <!-- one quote in focus; the others sit clear above and below, spaced by
+           their own measured height so a long quote never crowds its neighbour -->
+      <div class="qStage" id="qStage" tabindex="0" role="group" aria-label={copy.reviews.stageLabel}>
+        <ul class="qList" id="qList">
+          {copy.reviews.items.map((item, i) => (
+            <li class="qRow">
+              <blockquote class="qLine">{'\u201C' + item.quote + '\u201D'}</blockquote>
+              <div class="qWho">
+                <span class="qName">{item.name}</span>
+                <span class="qRole">{item.role}</span>
+                {reviewCredits[i] && (
+                  <span class={reviewCredits[i].onDark ? 'qCredit qCreditLogo' : 'qCredit'}>
+                    {reviewCredits[i].onDark ? (
+                      <img
+                        src={reviewCredits[i].onDark}
+                        alt={reviewCredits[i].title}
+                        loading="lazy"
+                        width={reviewCredits[i].logoWidth}
+                        height={reviewCredits[i].logoHeight}
+                        style={reviewCredits[i].logoHeight ? `--logo-h:${reviewCredits[i].logoHeight};--logo-w:${reviewCredits[i].logoWidth}` : undefined}
+                      />
+                    ) : (
+                      reviewCredits[i].title
+                    )}
+                  </span>
+                )}
+              </div>
+            </li>
           ))}
+        </ul>
+      </div>
+      <p class="qLive" id="qLive" aria-live="polite" aria-atomic="true"></p>
+      <div class="qFoot">
+        <p class="qHelper">{copy.reviews.helper}</p>
+        <div class="qCount" id="qCount">01 / 01</div>
+        <div class="revNav">
+          <button class="revArrow" type="button" id="revPrev" aria-label={copy.reviews.previousLabel} aria-controls="qList">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 15l8-8 8 8"></path></svg>
+          </button>
+          <button class="revArrow" type="button" id="revNext" aria-label={copy.reviews.nextLabel} aria-controls="qList">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 9l8 8 8-8"></path></svg>
+          </button>
         </div>
       </div>
-      <figure class="splitFig" style="margin:0;">
-        <div class="slot slot--dark" style="aspect-ratio:2/3;"><span class="slotLabel">{copy.film.figure.slotLabel}</span></div>
-        <figcaption class="figCap"><span>{copy.film.figure.figNumber}</span><span>{copy.film.figure.figNote}</span></figcaption>
-      </figure>
     </div>
   </section>
 
-  <!-- why book through take 3 -->
-  <section class="band" aria-labelledby="whyHead">
+  <!-- why book through take 3: one roster, one point of contact -->
+  <section id="why-take-3" class="band" aria-labelledby="contactHead">
     <div class="rail bandInner">
-      <h2 class="eyebrow3" id="whyHead">{copy.why.heading}</h2>
-      <div class="cards">
-        {copy.why.cards.map((card) => (
-          <div class="card">
-            <h3 class="cardTitle">{card.title}</h3>
-            <p class="cardBody">{card.body}</p>
+      <p class="contactEyebrow" data-rise>{copy.contact.eyebrow}</p>
+      <div class="contactTop">
+        <h2 class="contactHead" id="contactHead" data-head>{copy.contact.heading}</h2>
+      </div>
+      <div class="contactCols" data-stagger>
+        {copy.contact.columns.map((col) => (
+          <div class="contactCol">
+            <h3 class="contactColTitle"><span class="contactNum">{col.number}</span><span class="contactSlash" aria-hidden="true">/</span>{col.title}</h3>
+            <p class="contactColBody">{col.body}</p>
           </div>
         ))}
       </div>
+      <p class="contactCtaRow" data-rise>
+        <a class="btnSolid" href={`${contactHref}?subject=${encodeURIComponent(copy.contact.cta.subject)}`}>{copy.contact.cta.label}</a>
+        <span class="contactCtaNote">{copy.contact.cta.note}</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- take 3 / after dark: the other side of the roster -->
+  <section id="after-dark" class="adBand" aria-labelledby="afterDarkHead">
+    <div class="rail adInner">
+      <div class="adCopy">
+        <p class="adEyebrow" data-rise>{copy.afterDark.eyebrow}</p>
+        <h2 class="adHead" id="afterDarkHead" data-head>{copy.afterDark.heading}</h2>
+        <p class="adBody" data-rise>{copy.afterDark.body}</p>
+        <p class="adTags">
+          {copy.afterDark.tags.map((tag, i) => (
+            <>
+              {i > 0 && <span class="adTagSep" aria-hidden="true">/</span>}
+              <span>{tag}</span>
+            </>
+          ))}
+        </p>
+        <p class="adCtaRow"><a class="adCta" href={copy.afterDark.cta.href}>{copy.afterDark.cta.label} <span aria-hidden="true">→</span></a></p>
+      </div>
+      <a class="adFig" data-figure href={copy.afterDark.cta.href} aria-label={`${copy.afterDark.cta.label} — ${copy.afterDark.heading}`}>
+        <img class="adImg" src={copy.afterDark.figure.src} alt={copy.afterDark.figure.alt} width={copy.afterDark.figure.width} height={copy.afterDark.figure.height} loading="lazy" decoding="async" />
+      </a>
     </div>
   </section>
 
@@ -117,104 +268,657 @@ import copy from '../content/pages/intimacy.json';
 
     .rail { max-width:1360px; margin:0 auto; }
 
+    /* One rhythm for the page: the shared band padding is switched off here and
+       each section's own inner padding sets the spacing, so the gaps between
+       sections are deliberate rather than two paddings stacked. */
+    .page { --sectionPad:96px; }
+    #intro, #productions, #trained, #why-take-3, #after-dark, #coordinator-reviews { padding-block:0; }
+
+    /* every control on this page clears the 44px touch target */
+    .introCta, .contactCtaRow .btnSolid, .prodMore a, .adCta { min-height:44px; display:inline-flex; align-items:center; }
+    .prodMore a, .adCta { padding-block:8px; }
+
+    /* ---------- arrival motion (motion.dev) ----------
+       Nothing here changes layout: only opacity, a few pixels of travel, a
+       clip and a slight scale, so no text reflows and nothing shifts. */
+    html.motion [data-rise], html.motion [data-head], html.motion [data-stagger] > *, html.motion [data-figure] { opacity:0; }
+    html.motion [data-head] { clip-path:inset(0 0 108% 0); }
+    html.motion [data-figure] > .slot, html.motion [data-figure] > img, html.motion .adImg { clip-path:inset(0 0 100% 0); }
+    html.motion .heroWord, html.motion .heroCut, html.motion .heroStrap { opacity:0; }
+
     /* ---------- hero ---------- */
     /* position/min-height/background/overflow reset the homepage hero rules in global.css */
-    /* same cover height as every other page, set by --coverH: the portrait
-       fits the cover rather than setting its height */
-    .heroSlot { height:calc(var(--coverH) - 200px); width:auto; margin-left:auto; }
-    .hero { padding:170px 40px 0; display:grid; grid-template-columns:1.15fr 0.85fr; gap:56px; align-items:end; position:static; min-height:var(--coverH); background:none; overflow:visible; }
-    .heroCopy { padding-bottom:56px; position:static; left:auto; bottom:auto; z-index:auto; color:inherit; width:auto; max-width:none; }
-    .eyebrow6 { font-size:12px; letter-spacing:6px; color:var(--muted); }
-    .display { font-family:'Anton', sans-serif; font-size:clamp(72px, 11vw, 190px); line-height:0.92; letter-spacing:2px; margin:24px 0 0; text-transform:uppercase; font-weight:400; }
-    .strapline { font-family:'Cormorant Garamond', serif; font-style:italic; font-size:clamp(24px,2.4vw,36px); font-weight:400; line-height:1.3; margin-top:28px; max-width:480px; color:var(--sub); text-wrap:pretty; }
-    .tagRow { display:flex; gap:36px; margin-top:44px; border-top:1px solid var(--hair); padding-top:20px; font-size:12px; letter-spacing:2px; color:var(--muted); flex-wrap:wrap; }
-    .heroFig { display:grid; grid-template-columns:1fr; gap:0; }
-    .figCap { display:flex; justify-content:space-between; font-size:11px; letter-spacing:2px; color:var(--muted); padding-top:10px; gap:16px; }
-    .heroFig .figCap { padding-bottom:24px; }
+    /* HERO — fixed composition for the reference's interleaved lettering.
+       A studio sweep, the word, then a cut-out of the performer on top, with two
+       letters (I, M) painted again in front of her so she sits BETWEEN the letters
+       and her forearm reads as the crossbar of the A.
+       Every position is a share of the stage WIDTH (cqw / %). The composition
+       stops growing at 1440px; its visible height caps at 880px including the
+       header clearance. Only the lower portrait is cropped: title and figure
+       always share the same origin and scale, including on wider screens. The letters are Cormorant Garamond condensed
+       to 66% width (scaleX) to match the mockup's proportions; the A's centre
+       and crossbar height were measured from the font's own outlines at this
+       size/spacing — change the font-size, letter-spacing, indent or scale and
+       .heroCut's left/top must be recomputed. --heroClear keeps the word below
+       the fixed header. */
+    @font-face {
+      font-family:'Intimacy Display';
+      src:url('/fonts/cormorant-garamond/regular.ttf') format('truetype');
+      font-weight:400;
+      font-style:normal;
+      font-display:block;
+    }
+    .hero { --heroClear:clamp(78px, 9vw, 142px); position:relative; padding:0; display:block; min-height:0; background:none; overflow:visible; }
+    .heroFrame {
+      position:relative; overflow:hidden; padding-top:var(--heroClear);
+      background:var(--intimacyHeroBackdrop);
+    }
+    .heroStage { position:relative; width:100%; max-width:1440px; margin:0 auto; aspect-ratio:2368/1678; max-height:calc(880px - var(--heroClear)); container-type:inline-size; }
+    .heroWord {
+      position:absolute; left:50%; top:12.35vw; top:12.35cqw; z-index:1; margin:0;
+      width:max-content; white-space:nowrap;
+      transform:translate(-50%,-50%) scaleX(0.66); transform-origin:50% 50%;
+      font-family:'Intimacy Display', 'Cormorant Garamond', serif; font-weight:400; text-transform:uppercase;
+      color:var(--heroInk); line-height:1; letter-spacing:0.13em; text-indent:0.13em;
+      font-size:24.8vw; font-size:24.8cqw;
+    }
+    .heroWord--front { z-index:3; pointer-events:none; }
+    .heroGhost { color:transparent; }
+    .heroCut { position:absolute; z-index:2; display:block; height:auto; max-width:none; width:102.6%; left:0.43%; top:-24.42vw; top:-24.42cqw; }
+
+    /* The strapline shares the capped stage width; on small screens it sits
+       below the image so the smaller type remains readable. */
+    .heroOverlay { position:absolute; left:50%; transform:translateX(-50%); width:100%; max-width:1440px; top:var(--heroClear); container-type:inline-size; z-index:4; pointer-events:none; }
+    .heroOverlay > * { pointer-events:auto; }
+    .strapLine { display:inline-block; }
+    .strapWord { display:inline-block; white-space:pre; backface-visibility:hidden; will-change:transform,opacity; }
+    .heroStrap { position:absolute; left:3.5cqw; top:22.4cqw; margin:0; font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; text-transform:uppercase; font-size:1.8cqw; letter-spacing:0.06em; line-height:1; color:var(--heroInk); white-space:nowrap; }
+    .introCtaRow { margin-top:28px; }
+    .introCta { display:inline-block; max-width:100%; text-transform:uppercase; text-decoration:none; }
+    .introCta:hover { color:var(--heroInk); }
+    .figCap { display:flex; justify-content:flex-end; font-size:11px; letter-spacing:2px; color:var(--muted); padding-top:6px; }
+    /* the clip turns over to show Lou Kempton's review in full */
+    .flipWrap { position:relative; display:block; background:#1a1a1c; }
+    .flipInner { position:absolute; inset:0; }
+    .face { position:absolute; inset:0; }
+    /* the review rises over the clip, covering it completely, and drops back */
+    .faceBack { transform:translateY(101%); visibility:hidden;
+      transition:transform 0.62s cubic-bezier(0.2, 0.75, 0.25, 1), visibility 0s linear 0.62s;
+      box-shadow:0 -26px 54px rgba(0,0,0,0.45); }
+    .flipWrap.isOpen .faceBack { transform:none; visibility:visible;
+      transition:transform 0.62s cubic-bezier(0.2, 0.75, 0.25, 1), visibility 0s linear 0s; }
+    .faceBack { background:#1a1a1c; color:#f4f2ee; overflow:auto; overscroll-behavior:contain; padding:30px 26px 26px; text-align:left; }
+    .flipClose { position:absolute; top:12px; right:12px; width:44px; height:44px; border:1px solid rgba(244,242,238,0.4); border-radius:50%; background:transparent; color:#f4f2ee; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; }
+    .flipClose:hover { border-color:#f4f2ee; }
+    .flipName { white-space:pre-line; font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:30px; font-weight:400; letter-spacing:0; line-height:1.02; margin:0; }
+    .flipRole { min-height:1.15em; font-size:11px; letter-spacing:2px; font-weight:500; text-transform:uppercase; color:#96928c; margin:12px 0 0; }
+    .flipLogo { display:block; margin-top:14px; opacity:0.78; height:calc(var(--logo-h,30) * 1px); width:auto; max-width:calc(var(--logo-w,170) * 1px); object-fit:contain; object-position:left center; }
+    .flipQuote { margin:18px 0 0; border-top:1px solid #3a3a3e; padding-top:16px; }
+    .flipQuote p { font-size:14px; font-weight:400; line-height:1.7; margin:0 0 14px; color:#c7c3bd; text-wrap:pretty; }
+    .flipQuote p:last-child { margin-bottom:0; }
+    .flipBtn { font:inherit; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--ink); background:transparent; border:0; padding:10px 0 6px; min-height:44px; cursor:pointer; white-space:nowrap; text-align:right; text-decoration:underline; text-decoration-color:var(--accent); text-decoration-thickness:1px; text-underline-offset:6px; }
+    .flipBtn:hover { text-decoration-thickness:2px; }
+    .flipBtn:focus-visible { outline:2px solid var(--ink); outline-offset:3px; }
+    .faceBack :focus-visible { outline-color:#f4f2ee; }
 
     /* ---------- image slots ---------- */
     .slot { position:relative; background:var(--tileBg); overflow:hidden; display:flex; align-items:center; justify-content:center; }
     .slot .slotLabel { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); text-align:center; padding:0 16px; }
-    .slot--dark { background:#101012; }
-    /* .slot--dark's #101012 plate is the same in both themes, so its label keeps
-       the light-on-dark grey rather than the theme-aware token */
-    .slot--dark .slotLabel { color:#96928c; }
 
-    /* ---------- what we supply ---------- */
+    /* ---------- bands ---------- */
     .band { border-top:1px solid var(--hair); }
-    .bandInner { padding:88px 40px 96px; }
+    .bandInner { padding:var(--sectionPad) 40px; }
     .eyebrow3 { font-size:11px; letter-spacing:3px; color:var(--accent); }
-    .list { display:grid; grid-template-columns:1fr; margin-top:36px; border-bottom:1px solid var(--hair); }
-    .listRow { border-top:1px solid var(--hair); padding:30px 0; display:grid; grid-template-columns:60px 1fr 1.1fr; gap:32px; align-items:baseline; }
-    .listNum { font-size:12px; letter-spacing:2px; color:var(--muted); }
-    .listTitle { text-transform:uppercase; font-size:clamp(19px,2vw,28px); font-weight:300; letter-spacing:3px; margin:0; }
-    .listBody { font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); text-wrap:pretty; }
 
     /* ---------- split sections ---------- */
     .splitInner { padding:96px 40px; display:grid; gap:72px; align-items:start; }
     .split--brands { grid-template-columns:0.9fr 1.1fr; }
-    .split--film { grid-template-columns:1.1fr 0.9fr; }
     .splitCopy { padding-top:12px; }
     .h2Anton { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3.2vw,46px); font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0; max-width:520px; }
-    .pullQuote { font-family:'Cormorant Garamond', serif; font-style:italic; font-size:clamp(20px,1.8vw,26px); line-height:1.5; color:var(--sub); margin:28px 0 0; max-width:520px; text-wrap:pretty; }
     .para { font-size:16px; font-weight:300; line-height:1.75; color:var(--sub); margin-top:28px; max-width:520px; text-wrap:pretty; }
 
-    .filmBand { border-top:1px solid var(--hair); background:#1a1a1c; color:#f4f2ee; }
-    /* .filmBand is a permanently dark #1a1a1c band in both themes, so everything
-       inside it keeps a light-on-dark grey instead of var(--muted) */
-    .filmBand .eyebrow3 { color:#96928c; }
-    .filmBand .figCap { color:#96928c; }
-    .filmBand .para { color:#c7c3bd; }
-    .filmBand a { color:#f4f2ee; }
-    .defs { display:grid; row-gap:0; font-size:15px; font-weight:300; line-height:1.7; color:#c7c3bd; margin-top:36px; max-width:520px; }
-    .defRow { border-top:1px solid #35353a; padding:16px 0; display:grid; grid-template-columns:150px 1fr; gap:24px; }
-    .defRow:last-child { border-bottom:1px solid #35353a; }
-    /* .defs only ever render inside .filmBand — light-on-dark grey again */
-    .defKey { font-size:12px; letter-spacing:2px; color:#96928c; padding-top:3px; }
 
-    /* ---------- why ---------- */
-    .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:48px; margin-top:40px; }
-    .card { border-top:1px solid var(--hair); padding-top:24px; }
-    .cardTitle { font-size:19px; letter-spacing:1px; margin:0; font-weight:400; }
-    .cardBody { font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); margin-top:10px; text-wrap:pretty; }
+    /* ---------- photos in slots ---------- */
+    .slotVideo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+
+    /* ---------- intro ---------- */
+    .introInner { padding:var(--sectionPad) 40px; display:grid; grid-template-columns:1.1fr 0.9fr; gap:26px 72px; align-items:start; }
+    .introInner .eyebrow3 { grid-column:1 / -1; margin:0; }
+    .introHead { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3.4vw,50px); font-weight:400; letter-spacing:0; line-height:1.02; margin:0; text-wrap:pretty; }
+    .introBody { padding-top:6px; }
+    .introBody .para { max-width:none; font-size:17px; }
+
+    /* ---------- trained ---------- */
+    .split--trained { grid-template-columns:1.18fr 0.82fr; gap:clamp(48px,5vw,76px); padding-top:var(--sectionPad); padding-bottom:var(--sectionPad); }
+    .split--trained .h2Anton, .split--trained .subhead, .split--trained .para, .split--trained .points { max-width:585px; }
+    .split--trained .splitFig { max-width:460px; margin-left:auto; }
+    .subhead { font-family:'Cormorant Garamond', serif; font-style:italic; font-size:clamp(22px,2vw,30px); line-height:1.35; color:var(--sub); margin:20px 0 0; max-width:520px; text-wrap:pretty; }
+    .points { list-style:none; margin:24px 0 0; padding:0; max-width:520px; border-bottom:1px solid var(--hair); }
+    .points li { border-top:1px solid var(--hair); padding:14px 0 14px 28px; position:relative; font-size:15px; font-weight:400; line-height:1.6; color:var(--ink); }
+    .points li::before { content:''; position:absolute; left:4px; top:22px; width:8px; height:8px; border-radius:50%; background:var(--accent); }
+    .workshopNote { margin-top:32px; }
+
+    /* ---------- productions ---------- */
+    .prodHead { display:flex; justify-content:space-between; align-items:flex-end; gap:40px; border-bottom:1px solid var(--hair); padding-bottom:20px; margin-top:16px; }
+    .prodTitle { margin:0; max-width:none; }
+    .prodNote { font-size:13px; letter-spacing:1px; color:var(--muted); margin:0; max-width:360px; text-align:right; line-height:1.6; text-wrap:balance; }
+    .posterGrid--six { grid-template-columns:repeat(6, minmax(0,1fr)); }
+    .prodMore { padding:26px 0 0; margin:0; font-size:13px; letter-spacing:2px; text-transform:uppercase; }
+    .prodMore a { color:var(--accent); border-bottom:1px solid transparent; }
+    .prodMore a:hover { border-bottom-color:currentColor; color:var(--accent); }
+
+    /* ---------- specialist artists, one point of contact ---------- */
+    .contactEyebrow { font-size:13px; letter-spacing:3px; font-weight:500; text-transform:uppercase; color:var(--ink); margin:0; }
+    .contactTop { margin-top:22px; }
+    .contactHead { white-space:pre-line; font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(44px,6vw,96px); font-weight:400; letter-spacing:0; line-height:0.94; margin:0; }
+    .contactCols { display:grid; grid-template-columns:repeat(3,1fr); margin-top:60px; }
+    .contactCol { padding:0 44px; border-left:1px solid var(--ctrlBorder); }
+    .contactCol:first-child { padding-left:0; border-left:0; }
+    .contactCol:last-child { padding-right:0; }
+    .contactColTitle { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(21px,2vw,30px); font-weight:400; letter-spacing:0.5px; margin:0; color:var(--ink); }
+    .contactSlash { padding:0 6px; }
+.contactCtaRow { display:flex; flex-wrap:wrap; align-items:center; gap:18px 24px; margin:56px 0 0; }
+    .contactCtaNote { font-size:13px; letter-spacing:1px; color:var(--muted); }
+    .contactColBody { font-size:17px; font-weight:400; line-height:1.55; color:var(--ink); margin:16px 0 0; text-wrap:pretty; }
+
+    /* ---------- coordinator reviews carousel (always-dark band) ---------- */
+    .quotes { background:#1a1a1c; color:#f4f2ee; border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); }
+    .quotesInner { padding:var(--sectionPad) 40px; }
+    .quotesHead { display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid #3a3a3e; padding-bottom:18px; }
+    .quotesTitle { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(26px,3vw,40px); font-weight:400; letter-spacing:0; margin:0; }
+    .quotesKicker { font-size:12px; letter-spacing:3px; color:#96928c; }
+    /* One quote in focus, the rest stacked clear above and below. Without
+       script the list is simply a well-spaced column of quotes. */
+    .qStage { position:relative; margin-top:40px; }
+    .qStage.isStack { height:min(78vh,560px); overflow:hidden; touch-action:pan-x; cursor:ns-resize; -webkit-mask-image:linear-gradient(transparent,#000 9%,#000 91%,transparent); mask-image:linear-gradient(transparent,#000 9%,#000 91%,transparent); }
+    .qList { list-style:none; margin:0; padding:0; display:grid; gap:88px; }
+    .qList.isStack { display:block; position:relative; height:100%; }
+    .qRow { display:grid; grid-template-columns:minmax(0,1fr) clamp(210px,21vw,290px); gap:clamp(36px,4vw,64px); align-items:start; justify-content:space-between; }
+    .isStack .qRow { position:absolute; top:50%; left:clamp(0px,6vw,104px); right:clamp(0px,6vw,104px); min-height:112px; translate:0 -50%; transform-origin:0% 50%; pointer-events:none; }
+    .qLine { font-family:'Cormorant Garamond',Georgia,serif; font-style:italic; font-size:clamp(28px,3.2vw,46px); line-height:1.08; margin:0; max-width:38ch; color:#f4f2ee; text-wrap:pretty; }
+    .qWho { min-width:0; }
+    .qName { display:block; white-space:pre-line; font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(34px,3.4vw,58px); font-weight:400; letter-spacing:0; line-height:1.0; color:#f4f2ee; /* Anton leaves a lot of room above its capitals; this lifts the block so the
+         name starts level with the first line of the quote */
+      margin-top:-0.09em; }
+    .qCredit { display:flex; align-items:center; min-height:56px; margin-top:14px; font-size:15px; font-weight:500; letter-spacing:1px; text-transform:uppercase; color:#f4f2ee; opacity:0.62; }
+    .qCreditLogo { opacity:0.78; }
+    .qCredit img { height:auto; max-height:calc(var(--logo-h,30) * 1px); width:auto; max-width:min(100%, calc(var(--logo-w,170) * 1px)); object-fit:contain; object-position:left center; }
+    .qRole { display:block; min-height:1.15em; font-size:13px; letter-spacing:2px; font-weight:500; text-transform:uppercase; line-height:1.6; color:#96928c; margin-top:14px; }
+    .qLive { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+    .qFoot { display:flex; justify-content:space-between; align-items:center; margin-top:36px; border-top:1px solid #3a3a3e; padding-top:20px; gap:16px; }
+    .qHelper { font-size:12px; color:#96928c; margin:0; }
+    .qCount { font-size:13px; letter-spacing:3px; color:#96928c; font-variant-numeric:tabular-nums; }
+    .revNav { display:flex; gap:12px; }
+    .revArrow { width:44px; height:44px; border:1px solid rgba(244,242,238,0.4); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#f4f2ee; background:transparent; padding:0; }
+    .revArrow:hover { border-color:#f4f2ee; }
+    .quotes :focus-visible { outline-color:#f4f2ee; }
+
+    /* ---------- take 3 / after dark teaser (always-dark band) ---------- */
+    /* Permanently #101012 in both themes, so it keeps the dark-theme ink and
+       accent values directly, like the reviews band above.
+       NOTE: these rules sit between the contact section and the responsive
+       blocks. Do not delete a range of this stylesheet by anchoring on two
+       comments without checking what lives between them — this block was
+       removed once that way and the section rendered unstyled. */
+    .adBand { background:#101012; color:#f4f2ee; border-top:1px solid var(--hair); }
+    .adInner { padding:var(--sectionPad) 40px; display:grid; grid-template-columns:0.9fr 1.1fr; gap:56px; align-items:center; }
+    .adCopy { padding:0; }
+    .adEyebrow { font-size:11px; letter-spacing:3px; color:#d4704f; margin:0; }
+    .adHead { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(40px, 5.6vw, 84px); font-weight:400; letter-spacing:0; line-height:0.96; margin:18px 0 0; max-width:12ch; }
+    .adBody { font-size:17px; font-weight:300; line-height:1.7; color:#c7c3bd; margin:24px 0 0; max-width:52ch; text-wrap:pretty; }
+    .adTags { display:flex; gap:14px; flex-wrap:wrap; margin:28px 0 0; font-size:11px; letter-spacing:3px; color:#96928c; }
+    .adTagSep { color:rgba(244,242,238,0.35); }
+    .adCtaRow { margin:32px 0 0; }
+    .adCta { display:inline-block; border:1px solid #d4704f; color:#d4704f; padding:14px 24px; font-size:12px; letter-spacing:3px; text-transform:uppercase; text-decoration:none; transition:background 0.25s ease, color 0.25s ease; }
+    .adCta:hover { background:#d4704f; color:#101012; }
+    .adFig { display:block; position:relative; overflow:hidden; background:#1a1a1c; aspect-ratio:3/2; }
+    .adImg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 50%; display:block; transition:transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease; }
+    .adFig:hover .adImg, .adFig:focus-visible .adImg { transform:scale(1.04); opacity:0.88; }
+    .adBand a:focus-visible { outline-color:#f4f2ee; }
 
     /* ---------- responsive: tablet ---------- */
     @media (max-width:1024px) {
-      .hero { grid-template-columns:1fr; gap:40px; padding:150px 32px 0; }
-      .heroCopy { padding-bottom:24px; }
-      .heroFig { max-width:520px; }
-      .splitInner { grid-template-columns:1fr !important; gap:48px; padding:72px 32px; }
-      .split--film .splitCopy { order:2; }
-      .split--film .splitFig { order:1; max-width:520px; }
+      .heroOverlay { position:static; transform:none; padding:24px 32px 0; }
+      .heroStrap { position:static; }
+      .heroStrap { font-size:13px; letter-spacing:2px; white-space:normal; color:var(--ink); }
+      .page { --sectionPad:68px; }
+      .splitInner { grid-template-columns:1fr !important; gap:48px; padding:var(--sectionPad) 32px; }
+      .split--trained { gap:40px; padding-top:56px; padding-bottom:56px; }
       .split--brands .splitFig { max-width:520px; }
       .bandInner { padding:72px 32px 80px; }
-      .listRow { grid-template-columns:48px 1fr; gap:12px 24px; }
-      .listRow .listBody { grid-column:2; }
-      .cards { grid-template-columns:repeat(2,1fr); gap:36px; }
+      .introInner { grid-template-columns:1fr; gap:22px; padding:48px 32px 44px; }
+      .split--trained .splitFig { max-width:520px; margin-left:0; }
+      .adInner { grid-template-columns:1fr; gap:40px; padding:64px 32px; }
+      .prodHead { flex-direction:column; align-items:flex-start; gap:12px; }
+      .prodNote { text-align:left; max-width:520px; }
+      .contactCols { grid-template-columns:1fr; margin-top:40px; }
+      .contactCol { padding:20px 0; border-left:0; border-top:1px solid var(--hair); }
+      .contactCol:first-child { border-top:0; padding-top:0; }
+      .quotesInner { padding:48px 32px; }
+      .qRow { grid-template-columns:minmax(0,1fr) clamp(180px,21vw,240px); gap:30px; }
     }
 
     /* ---------- responsive: phone ---------- */
     @media (max-width:640px) {
       /* clears the fixed site header once the hero stacks */
-      .hero { padding:140px 20px 0; gap:32px; }
-      .display { font-size:clamp(48px, 17vw, 96px); }
-      .strapline { font-size:clamp(20px, 5.4vw, 28px); max-width:none; }
-      .tagRow { gap:16px 20px; margin-top:32px; }
+      .heroOverlay { padding:20px 20px 0; }
+      .heroStrap { font-size:12px; }
       .bandInner { padding:56px 20px 64px; }
-      .splitInner { padding:56px 20px; gap:40px; }
-      .heroFig, .splitFig { max-width:none; }
-      .h2Anton, .pullQuote, .para, .defs { max-width:none; }
-      .listRow { grid-template-columns:1fr; gap:10px; padding:24px 0; }
-      .listRow .listBody { grid-column:auto; }
-      .defRow { grid-template-columns:1fr; gap:6px; }
-      .cards { grid-template-columns:1fr; gap:28px; }
+      .page { --sectionPad:56px; }
+      .splitInner { padding:var(--sectionPad) 20px; gap:40px; }
+      .split--trained { padding-top:44px; padding-bottom:44px; gap:32px; }
+      .splitFig { max-width:none; }
+      .flipBtn { width:auto; }
+      .faceBack { padding:20px 18px 18px; }
+      .flipName { font-size:22px; }
+      .flipRole { margin-top:10px; }
+      .flipLogo { margin-top:10px; height:calc(var(--logo-h,30) * 0.85px); }
+      .flipQuote { margin-top:14px; padding-top:13px; }
+      .flipQuote p { font-size:12.5px; line-height:1.62; margin-bottom:9px; }
+      .faceBack { padding:18px 16px 16px; }
+      .h2Anton, .para { max-width:none; }
+      .introInner { padding:40px 20px 40px; }
+      .introBody .para { font-size:16px; }
+      .subhead, .points { max-width:none; }
+      .adInner { padding:48px 20px; gap:28px; }
+      .adHead, .adBody { max-width:none; }
+      .posterGrid--six { grid-template-columns:repeat(2, minmax(0,1fr)); gap:6px; }
+      .contactHead { font-size:clamp(32px,10vw,56px); }
+      .quotesInner { padding:40px 20px; }
+      .quotesHead { flex-direction:column; align-items:flex-start; gap:8px; }
+      .qStage.isStack { height:min(80vh,520px); }
+      .qRow { grid-template-columns:1fr; gap:14px; min-height:0; }
+      .qWho { display:flex; flex-wrap:wrap; align-items:baseline; gap:0 14px; }
+      .qName { flex:0 0 100%; }
+      .qRole { margin-top:6px; }
+      .qCredit { margin-top:8px; min-height:30px; }
+      .qCredit img { max-height:22px; }
+      .isStack .qRow { left:0; right:0; }
+      .qLine { font-size:27px; }
+      .qName { font-size:26px; margin-top:-0.26em; }
+      .qRole { font-size:11px; letter-spacing:1.6px; margin-top:12px; }
+      .qCredit { font-size:12px; }
+      .qList { gap:64px; }
+      .qHelper { max-width:145px; line-height:1.6; }
+      .qFoot { flex-wrap:wrap; justify-content:center; gap:20px; }
+      .qCount { order:3; width:100%; text-align:center; }
     }
 
     /* ---------- reduced motion ---------- */
     @media (prefers-reduced-motion: reduce) {
-      .page { transition:none; }
+      .page, .posterImg, .posterName, .faceBack { transition:none; }
+      .adImg, .adCta { transition:none; }
+      .adFig:hover .adImg { transform:none; }
       * { animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
       ::view-transition-old(root), ::view-transition-new(root) { animation:none !important; }
     }
   </style>
+  <!-- motion.dev drives the arrivals: bundled, so it ships as one small module -->
+  <script>
+    import { animate, inView, stagger } from 'motion';
+
+    if (document.documentElement.classList.contains('motion')) {
+      /* the site's own arrival curve, and the settle curve from the text-effect catalogue */
+      const RISE = [0.22, 1, 0.36, 1];
+      const SETTLE = [0.16, 1, 0.3, 1];
+
+      /* --- the banner, on load: the word resolves out of a soft blur, the
+             figure fades up behind it, the line arrives last --- */
+      const word = document.querySelectorAll('.heroWord');
+      const cut = document.querySelector('.heroCut');
+      const strap = document.querySelector('.heroStrap');
+      if (word.length) {
+        /* opacity and blur only — .heroWord carries the measured
+           translate/scaleX that aligns the letters to her arm, and a transform
+           animation would overwrite it */
+        animate(word, { opacity: [0, 1], filter: ['blur(16px)', 'blur(0px)'] },
+          { duration: 0.95, ease: RISE });
+      }
+      if (cut) animate(cut, { opacity: [0, 1], filter: ['blur(10px)', 'blur(0px)'] }, { duration: 1.05, delay: 0.12, ease: RISE });
+      if (strap) animate(strap, { opacity: [0, 1] }, { duration: 0.7, delay: 0.5, ease: SETTLE });
+
+      /* --- everything else arrives as it is scrolled to, once --- */
+      const seen = (el) => el.dataset.seen === '1';
+      const mark = (el) => { el.dataset.seen = '1'; };
+
+      inView('[data-head]', (el) => {
+        if (seen(el)) return; mark(el);
+        animate(el, { opacity: [0, 1], clipPath: ['inset(0 0 108% 0)', 'inset(0 0 -8% 0)'], y: [22, 0] },
+          { duration: 0.78, ease: RISE });
+      }, { margin: '0px 0px -12% 0px' });
+
+      inView('[data-rise]', (el) => {
+        if (seen(el)) return; mark(el);
+        animate(el, { opacity: [0, 1], y: [12, 0] }, { duration: 0.66, delay: 0.06, ease: SETTLE });
+      }, { margin: '0px 0px -10% 0px' });
+
+      inView('[data-stagger]', (el) => {
+        if (seen(el)) return; mark(el);
+        const kids = Array.from(el.children);   /* a live HTMLCollection is not animatable */
+        const posters = el.dataset.stagger === 'posters';
+        animate(kids, posters ? { opacity: [0, 1], y: [26, 0], scale: [0.985, 1] } : { opacity: [0, 1], y: [16, 0] },
+          { duration: posters ? 0.72 : 0.6, delay: stagger(posters ? 0.055 : 0.07), ease: RISE });
+      }, { margin: '0px 0px -8% 0px' });
+
+      inView('[data-figure]', (el) => {
+        if (seen(el)) return; mark(el);
+        const plate = el.querySelector('.slot, img, .adImg');
+        const media = el.querySelector('video, .slot img, .adImg') || plate;
+        animate(el, { opacity: [0, 1] }, { duration: 0.5, ease: SETTLE });
+        /* the plate is only ever clipped — never transformed — because the
+           review panel slides inside it and a transform on the plate would
+           shift that panel mid-flight */
+        if (plate) animate(plate, { clipPath: ['inset(0 0 100% 0)', 'inset(0 0 0% 0)'] },
+          { duration: 1.0, ease: RISE });
+        if (media && media !== plate) animate(media, { scale: [1.05, 1] }, { duration: 1.0, ease: RISE });
+      }, { margin: '0px 0px -10% 0px' });
+    }
+  </script>
+
+  <script is:inline>
+    (function () {
+      /* The workshop clip is four screens down, so it is not fetched until the
+         reader is nearly there — the page costs a fraction of a megabyte until
+         then, and the poster frame holds its place. */
+      (function () {
+        var clip = document.querySelector('.slotVideo');
+        if (!clip || !clip.dataset.src) return;
+        var quiet = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var load = function () {
+          if (clip.src) return;
+          clip.src = clip.dataset.src;
+          if (!quiet) clip.play().catch(function () {});
+        };
+        if (window.IntersectionObserver) {
+          var io = new IntersectionObserver(function (entries) {
+            if (entries[0].isIntersecting) { load(); io.disconnect(); }
+          }, { rootMargin: '400px 0px' });
+          io.observe(clip);
+        } else { load(); }
+        /* pause it whenever it is off screen or the tab is hidden */
+        if (window.IntersectionObserver) {
+          new IntersectionObserver(function (entries) {
+            if (quiet || !clip.src) return;
+            if (entries[0].isIntersecting) { clip.play().catch(function () {}); } else { clip.pause(); }
+          }, { threshold: 0.05 }).observe(clip);
+        }
+        document.addEventListener('visibilitychange', function () {
+          if (!clip.src || quiet) return;
+          if (document.hidden) clip.pause(); else if (!clip.closest('.isOpen')) clip.play().catch(function () {});
+        });
+      })();
+      /* Reviews: one quote in focus, the rest held clear above and below.
+         Every row is measured, so the gap between quotes stays constant
+         whether a quote runs to one line or four. */
+      /* The banner line changes phrase every few seconds: per-word crossfade —
+         each word fades up 8px, 50ms behind the one before; the whole line
+         leaves before the next arrives. Distances and speeds are the effect's
+         own site-tuned values. */
+      (function () {
+        var strap = document.getElementById('heroStrap');
+        if (!strap || !strap.animate) return;
+        var lines;
+        try { lines = JSON.parse(strap.getAttribute('data-lines') || '[]'); } catch (e) { lines = []; }
+        if (!lines || lines.length < 2) return;
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        var Y = 0.58;                                  /* travel multiplier */
+        var ENTER = { dur: 504, stagger: 50, ease: 'cubic-bezier(0.16, 1, 0.3, 1)', from: { o: 0, y: 8 }, to: { o: 1, y: 0 } };
+        var EXIT  = { dur: 360, stagger: 29, ease: 'cubic-bezier(0.7, 0, 0.84, 0)', from: { o: 1, y: 0 }, to: { o: 0, y: -6 } };
+        var HOLD = 4200, MICRO = 70, GAP = 320;   /* the phrase sits and is read before it changes */
+
+        var index = 0, line = strap.querySelector('.strapLine'), timer = null, onScreen = true;
+
+        function build(text) {
+          var el = document.createElement('span');
+          el.className = 'strapLine';
+          text.split(' ').forEach(function (word, i) {
+            var w = document.createElement('span');
+            w.className = 'strapWord';
+            w.textContent = i === 0 ? word : ' ' + word;
+            el.appendChild(w);
+          });
+          return el;
+        }
+        function frames(p) {
+          return [
+            { opacity: p.from.o, transform: 'translate3d(0,' + (p.from.y * Y) + 'px,0)' },
+            { opacity: p.to.o, transform: 'translate3d(0,' + (p.to.y * Y) + 'px,0)' }
+          ];
+        }
+        function phase(el, p) {
+          var words = el.querySelectorAll('.strapWord');
+          Array.prototype.forEach.call(words, function (w, i) {
+            w.animate(frames(p), { duration: p.dur, delay: i * p.stagger, easing: p.ease, fill: 'both' });
+          });
+          return p.dur + Math.max(0, words.length - 1) * p.stagger;
+        }
+        function cycle() {
+          var leaving = line;
+          var out = phase(leaving, EXIT);
+          setTimeout(function () {
+            leaving.remove();
+            index = (index + 1) % lines.length;
+            line = build(lines[index]);
+            strap.appendChild(line);
+            phase(line, ENTER);
+          }, out + MICRO);
+        }
+        function tick() {
+          var enterTotal = ENTER.dur + Math.max(0, line.querySelectorAll('.strapWord').length - 1) * ENTER.stagger;
+          var exitTotal = EXIT.dur + Math.max(0, line.querySelectorAll('.strapWord').length - 1) * EXIT.stagger;
+          timer = setTimeout(function () {
+            if (onScreen && !document.hidden) cycle();
+            tick();
+          }, enterTotal + HOLD + exitTotal + MICRO + GAP);
+        }
+        setTimeout(tick, Math.random() * 400);          /* start off the beat */
+
+        if (window.IntersectionObserver) {
+          new IntersectionObserver(function (entries) { onScreen = entries[0].isIntersecting; })
+            .observe(strap);
+        }
+      })();
+
+      /* the workshop clip turns over to Lou Kempton's full review */
+      (function () {
+        var wrap = document.getElementById('louFlip');
+        var btn = document.getElementById('louFlipBtn');
+        var panel = document.getElementById('louPanel');
+        var closeBtn = document.getElementById('louClose');
+        if (!wrap || !btn || !panel || !closeBtn) return;
+        var clip = wrap.querySelector('.slotVideo');
+        var openLabel = btn.textContent;
+        var closeLabel = 'Back to the clip';
+
+        function setOpen(on, moveFocus) {
+          wrap.classList.toggle('isOpen', on);
+          btn.setAttribute('aria-expanded', String(on));
+          btn.textContent = on ? closeLabel : openLabel;
+          panel.setAttribute('aria-hidden', String(!on));
+          closeBtn.setAttribute('tabindex', on ? '0' : '-1');
+          if ('inert' in panel) panel.inert = !on;
+          if (clip) { if (on) { clip.pause(); } else if (clip.src) { clip.play().catch(function () {}); } }
+          if (on) { panel.scrollTop = 0; }
+          if (moveFocus) {
+            var target = on ? closeBtn : btn;
+            /* focus without letting the browser scroll the page mid-animation */
+            try { target.focus({ preventScroll: true }); } catch (e) { target.focus(); }
+          }
+        }
+
+        btn.addEventListener('click', function () { setOpen(!wrap.classList.contains('isOpen'), true); });
+        closeBtn.addEventListener('click', function () { setOpen(false, true); });
+        wrap.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && wrap.classList.contains('isOpen')) { e.stopPropagation(); setOpen(false, true); }
+        });
+        setOpen(false, false);
+      })();
+
+      var stage = document.getElementById('qStage');
+      var list = document.getElementById('qList');
+      var counter = document.getElementById('qCount');
+      var live = document.getElementById('qLive');
+      var prevBtn = document.getElementById('revPrev');
+      var nextBtn = document.getElementById('revNext');
+      var reduce = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+
+      function pad(n) { return String(n).length < 2 ? '0' + n : String(n); }
+
+      if (stage && list) {
+        var data = Array.prototype.map.call(list.querySelectorAll('.qRow'), function (row) {
+          return {
+            quote: row.querySelector('.qLine').textContent,
+            name: row.querySelector('.qName').textContent,
+            role: row.querySelector('.qRole').textContent,
+            credit: row.querySelector('.qCredit') ? row.querySelector('.qCredit').outerHTML : ''
+          };
+        });
+
+        if (data.length > 1) {
+          stage.classList.add('isStack');
+          list.classList.add('isStack');
+
+          /* one neighbour either side on a phone, two on wider screens */
+          var spanFor = function () { return (data.length >= 5 && window.innerWidth > 640) ? 2 : 1; };
+          var span = spanFor();
+          var index = 0, busy = false, wheelSum = 0, lastWheel = 0, touchY = null;
+
+          function wrap(n) { var L = data.length; return ((n % L) + L) % L; }
+          function gap() { return window.innerWidth <= 640 ? 64 : 88; }
+          function scaleFor(slot) { return 1 - Math.min(Math.abs(slot), 3) * 0.055; }
+          function fadeFor(slot) { return slot === 0 ? 1 : (Math.abs(slot) === 1 ? 0.3 : 0.16); }
+          function blurFor(slot) { return slot === 0 ? 'blur(0px)' : 'blur(' + Math.min(Math.abs(slot), 3) * 1.6 + 'px)'; }
+
+          /* positions come from each row's real height, so the clear space
+             between one quote and the next never changes */
+          function offsets() {
+            var h = {}, g = gap(), p = { 0: 0 }, s;
+            Array.prototype.forEach.call(list.children, function (el) {
+              h[Number(el.getAttribute('data-slot'))] = el.getBoundingClientRect().height;
+            });
+            for (s = 1; s <= span; s++) p[s] = p[s - 1] + h[s - 1] / 2 + g + h[s] / 2;
+            for (s = -1; s >= -span; s--) p[s] = p[s + 1] - h[s + 1] / 2 - g - h[s] / 2;
+            return p;
+          }
+
+          function paint() {
+            span = spanFor();
+            list.innerHTML = '';
+            for (var slot = -span; slot <= span; slot++) {
+              var item = data[wrap(index + slot)];
+              var li = document.createElement('li');
+              li.className = 'qRow';
+              li.setAttribute('data-slot', String(slot));
+              li.setAttribute('aria-hidden', 'true');
+              var q = document.createElement('blockquote');
+              q.className = 'qLine';
+              q.textContent = item.quote;
+              var who = document.createElement('div');
+              who.className = 'qWho';
+              var nm = document.createElement('span');
+              nm.className = 'qName';
+              nm.textContent = item.name;
+              var rl = document.createElement('span');
+              rl.className = 'qRole';
+              rl.textContent = item.role;
+              who.appendChild(nm); who.appendChild(rl);
+              if (item.credit) {                       /* the production sits under the name */
+                var holder = document.createElement('div');
+                holder.innerHTML = item.credit;
+                if (holder.firstChild) who.appendChild(holder.firstChild);
+              }
+              li.appendChild(q); li.appendChild(who);
+              li.style.translate = '0 -50%';
+              li.style.scale = String(scaleFor(slot));
+              li.style.opacity = String(fadeFor(slot));
+              li.style.filter = blurFor(slot);
+              list.appendChild(li);
+            }
+            var place = function () {
+              var spots = offsets();
+              Array.prototype.forEach.call(list.children, function (el) {
+                el.style.translate = '0 calc(-50% + ' + spots[Number(el.getAttribute('data-slot'))] + 'px)';
+              });
+            };
+            place();
+            /* measure again once the browser has laid the rows out, so the gap
+               is exact even when a quote wraps to a different number of lines */
+            if (window.requestAnimationFrame) requestAnimationFrame(function () { if (!busy) place(); });
+            if (counter) counter.textContent = pad(index + 1) + ' / ' + pad(data.length);
+            if (live) live.textContent = data[index].quote + ' \u2014 ' + data[index].name.replace(/\n/g, ' ') + ', ' + data[index].role;
+          }
+
+          function move(direction) {
+            if (busy) return;
+            busy = true;
+            var spots = offsets();
+            var shift = spots[direction];
+            var waits = [];
+            Array.prototype.forEach.call(list.children, function (el) {
+              var slot = Number(el.getAttribute('data-slot'));
+              var next = slot - direction;
+              var to = {
+                translate: '0 calc(-50% + ' + (spots[slot] - shift) + 'px)',
+                scale: String(scaleFor(next)),
+                opacity: String(fadeFor(next)),
+                filter: blurFor(next)
+              };
+              if (reduce.matches || !el.animate) {
+                el.style.translate = to.translate; el.style.scale = to.scale;
+                el.style.opacity = to.opacity; el.style.filter = to.filter;
+                return;
+              }
+              var anim = el.animate([{
+                translate: '0 calc(-50% + ' + spots[slot] + 'px)',
+                scale: String(scaleFor(slot)),
+                opacity: String(fadeFor(slot)),
+                filter: blurFor(slot)
+              }, to], { duration: 950, easing: 'cubic-bezier(0.195, 0.824, 0.583, 1.208)', fill: 'both' });
+              waits.push(anim.finished ? anim.finished : new Promise(function (res) { anim.onfinish = res; }));
+            });
+            var settle = function () { index = wrap(index + direction); paint(); busy = false; };
+            if (!waits.length) { settle(); return; }
+            Promise.all(waits).then(settle, settle);
+          }
+
+          if (prevBtn) prevBtn.addEventListener('click', function () { move(-1); });
+          if (nextBtn) nextBtn.addEventListener('click', function () { move(1); });
+
+          stage.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); move(e.key === 'ArrowDown' ? 1 : -1); }
+          });
+
+          stage.addEventListener('wheel', function (e) {
+            if (e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+            e.preventDefault();
+            var now = Date.now();
+            if (now - lastWheel > 180) wheelSum = 0;
+            lastWheel = now;
+            if (busy) { wheelSum = 0; return; }
+            wheelSum += e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? stage.clientHeight : 1);
+            if (Math.abs(wheelSum) > 45) { move(wheelSum > 0 ? 1 : -1); wheelSum = 0; }
+          }, { passive: false });
+
+          stage.addEventListener('pointerdown', function (e) {
+            if (e.pointerType === 'mouse') return;
+            touchY = e.clientY;
+            stage.setPointerCapture(e.pointerId);
+          });
+          stage.addEventListener('pointerup', function (e) {
+            if (touchY === null) return;
+            var delta = touchY - e.clientY;
+            touchY = null;
+            if (Math.abs(delta) > 35) move(delta > 0 ? 1 : -1);
+          });
+          stage.addEventListener('pointercancel', function () { touchY = null; });
+
+          window.addEventListener('resize', function () { if (!busy) paint(); });
+          if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (!busy) paint(); });
+
+          paint();
+        }
+      }
+    })();
+  </script>
 </Base>

@@ -1,5 +1,7 @@
 :root { --bg:#161618; --ink:#f4f2ee; --sub:#c2beb6; --hair:#35353a; --tileBg:#232327; --accent:#d4704f; --heroBg:#101012; --heroInk:#f4f2ee; --heroInkSoft:rgba(244,242,238,0.7); --heroInkFaint:rgba(244,242,238,0.35); --heroLine:rgba(244,242,238,0.25); --heroBtnBorder:rgba(244,242,238,0.5); --heroScrim:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.18) 30%, rgba(20,20,22,0.18) 55%, rgba(20,20,22,0.8) 100%); --logoFilter:invert(1); --muted:#96928c; --ctrlBorder:#6f6f77; --revGap:56px; --coverH:clamp(440px, 46vw, 720px); --coverPhotoH:clamp(440px, 56vw, 88vh); }
 [data-theme="light"] { --bg:#f4f2ee; --ink:#1a1a1c; --sub:#3a3632; --hair:#d9d6d1; --tileBg:#e2e0dc; --accent:#5d1f16; --muted:#605d57; --heroBg:#101012; --heroInk:#f4f2ee; --heroInkSoft:rgba(244,242,238,0.7); --heroInkFaint:rgba(244,242,238,0.35); --heroLine:rgba(244,242,238,0.25); --heroBtnBorder:rgba(244,242,238,0.5); --heroScrim:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.18) 30%, rgba(20,20,22,0.18) 55%, rgba(20,20,22,0.8) 100%); --logoFilter:none; --ctrlBorder:#8a8781; }
+/* The intimacy studio backdrop stays the same in both themes. */
+:root, [data-theme="light"] { --intimacyHeroBackdrop:radial-gradient(95% 95% at 76% 50%, #999996 0%, #868683 30%, #6c6c69 62%, #545451 85%, #454542 100%); }
 * { box-sizing:border-box; }
 html, body { margin:0; background:#161618; font-family:'Jost', sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
 html { scroll-padding-top:84px; }
@@ -421,7 +423,7 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 /* One production per review, so the row only ever needs the height of a single
    logo. Held whether or not a given reviewer has one, so the three quotes in
    view always start on the same line. */
-.revCredits { min-height:48px; display:flex; align-items:center; margin-top:12px; }
+.revCredits { min-height:56px; display:flex; align-items:center; margin-top:12px; }
 /* a production with no logo uploaded yet keeps its name in type, so the row
    never has a hole in it while artwork is still being gathered */
 .revCredit { display:inline-flex; align-items:center; font-size:15px; font-weight:500; letter-spacing:1px; text-transform:uppercase; color:#f4f2ee; opacity:0.62; transition:opacity 0.4s cubic-bezier(0.3, 0, 0.2, 1); }
@@ -529,6 +531,10 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .footerContact { font-size:16px; margin-top:18px; }
 .footerBtns { display:flex; gap:12px; flex-wrap:wrap; justify-content:flex-end; margin-left:auto; }
 .footerIntro { font-size:17px; font-weight:400; line-height:1.65; color:var(--sub); margin-top:16px; max-width:46ch; text-wrap:pretty; }
+/* Every rectangular button on the site is square-cornered. Only icon-only
+   controls (carousel arrows, dots, theme toggle) are circles. The explicit
+   reset keeps native <button> elements from picking up browser rounding. */
+.btnGhost, .btnSolid, .navCta { border-radius:0; appearance:none; -webkit-appearance:none; }
 .btnGhost { border:1px solid var(--hair); padding:12px 22px; font-size:12px; letter-spacing:2px; }
 .btnGhost:hover { border-color:var(--ink); color:var(--ink); }
 .btnSolid { background:#5d1f16; color:#f4f2ee; padding:12px 22px; font-size:12px; letter-spacing:2px; }

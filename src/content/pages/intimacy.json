@@ -1,107 +1,190 @@
 {
   "meta": {
-    "title": "Intimacy | Take 3 Agency",
-    "description": "Intimacy coordinators and intimacy-trained performers for film, television and commercial productions. Take 3 Agency supplies certified coordinators, trained doubles and performers who work intimate content safely, consensually and on schedule.",
-    "ogTitle": "Intimacy | Take 3 Agency",
-    "ogDescription": "Certified intimacy coordinators and intimacy-trained performers: intimate content handled safely, consensually and on schedule.",
+    "title": "Intimacy — Take 3 Agency",
+    "description": "Intimacy-trained performers and intimacy support for film, television and commercial productions. Take 3 Agency supplies performers trained to work within intimacy-led productions, alongside matched doubles and coordinator support — safely, consensually and on schedule.",
+    "ogTitle": "Intimacy — Take 3 Agency",
+    "ogDescription": "Intimacy, without the guesswork. Intimacy-trained performers, matched doubles and coordinator support for intimate and sensitive content.",
     "ogImageAlt": "Two performers rehearsing a close, choreographed sequence on a quiet set with a coordinator watching from the edge of frame.",
     "footerTitle": "Book intimacy support for your production",
     "footerLinks": [
-      { "label": "SPECIALISTS →", "href": "/specialists" },
-      { "label": "SPACTS →", "href": "/spacts" }
+      {
+        "label": "SPECIALISTS →",
+        "href": "/specialists"
+      },
+      {
+        "label": "SPACTS →",
+        "href": "/spacts"
+      }
     ]
   },
-
   "hero": {
-    "eyebrow": "TAKE 3 AGENCY · No. 07",
     "title": "Intimacy",
-    "strapline": "Intimate content, choreographed and consented: the same care a fight gets, given to a love scene.",
-    "tags": ["COORDINATION", "CHOREOGRAPHY", "DOUBLES", "TRAINING"],
+    "strapline": "Without the guesswork",
     "figure": {
-      "slotLabel": "Hero portrait (2:3)",
-      "figNumber": "FIG. 01",
-      "figNote": "REHEARSED, NOT IMPROVISED"
+      "cutout": "/uploads/intimacy-figure.webp",
+      "width": 1800,
+      "height": 2999,
+      "alt": "A performer seen from behind, arms raised and hands clasped above her head, photographed in a studio."
+    },
+    "frontLetterIndices": [
+      3,
+      4
+    ],
+    "straplines": [
+      "Without the guesswork",
+      "Professional performers",
+      "Performed with purpose",
+      "Prepared, not prompted",
+      "Confidence on camera"
+    ]
+  },
+  "intro": {
+    "eyebrow": "PREPARED, PROFESSIONAL, READY TO WORK",
+    "heading": "Intimate scenes need the same level of preparation, professionalism and care as any other specialist performance.",
+    "paragraph1": "At Take 3, we represent performers who are specifically trained to work within intimacy-led productions. They understand professional set etiquette, consent-based practices and the expectations of working alongside an Intimacy Coordinator: meaning your performers arrive prepared, professional and ready to work.",
+    "paragraph2": "From a tender moment between two characters to a fully choreographed intimate sequence, we can help you find the right performers for the scene.",
+    "cta": {
+      "label": "Inquire about the artists",
+      "subject": "Intimacy artists enquiry"
     }
   },
-
-  "supply": {
-    "heading": "WHAT WE SUPPLY",
+  "trained": {
+    "eyebrow": "INTIMACY-TRAINED PERFORMERS",
+    "heading": "Trained for the real thing",
+    "subheading": "Professional performers. Clear expectations. A smoother set.",
+    "paragraph": "Many of our intimacy artists have had dedicated training in working professionally within intimate scenes and on-set environments. We have hosted specific intimacy workshops led by industry-renowned coordinators, exploring practical approaches to:",
+    "points": [
+      "Intimacy on screen",
+      "Professional set etiquette",
+      "Boundaries",
+      "Communication",
+      "Working effectively with an Intimacy Coordinator in production"
+    ],
+    "workshopNote": "We recently brought our artists together for an intimacy workshop led by industry-renowned Intimacy Coordinator Louise Kempton, exploring practical approaches to intimacy on screen, professional set etiquette, boundaries, communication and working effectively within an intimacy-coordinated production.",
+    "figure": {
+      "video": "/uploads/intimacy-workshop-540.mp4",
+      "width": 540,
+      "height": 960,
+      "label": "Take 3 intimacy workshop led by Louise Kempton — short looping clip, no sound.",
+      "figNote": "WORKSHOP, LED BY LOUISE KEMPTON",
+      "poster": "/uploads/intimacy-workshop-poster.webp"
+    },
+    "review": {
+      "openLabel": "Read Lou Kempton's quote",
+      "closeLabel": "Back to the clip",
+      "dismissLabel": "Turn back to the clip",
+      "panelLabel": "Lou Kempton's full review"
+    }
+  },
+  "afterDark": {
+    "eyebrow": "TAKE 3 / AFTER DARK",
+    "heading": "A different kind of presence.",
+    "body": "Pole artists, aerial performers and alternative talent for film, television and live productions — the other side of the intimacy roster, booked and run with the same care.",
+    "tags": [
+      "POLE",
+      "AERIAL",
+      "ALTERNATIVE"
+    ],
+    "cta": {
+      "label": "After Dark",
+      "href": "/after-dark"
+    },
+    "figure": {
+      "src": "/uploads/after-dark-lead.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A performer in sunglasses, gloves and heels seated on a studio floor in black and white, one leg raised."
+    }
+  },
+  "productions": {
+    "eyebrow": "SELECTED PRODUCTIONS",
+    "heading": "Intimacy work we have supplied",
+    "note": "A selection of the film and television productions we have supplied intimacy-trained performers and doubles to.",
+    "slugs": [
+      "bridgerton",
+      "rivals",
+      "sexy-beast",
+      "too-much",
+      "one-day",
+      "we-live-in-time"
+    ],
+    "moreLabel": "See every production we have supplied",
+    "moreHref": "/credits"
+  },
+  "reviews": {
+    "heading": "Reviews",
+    "kicker": "WHAT COORDINATORS & ARTISTS SAY",
+    "previousLabel": "Previous review",
+    "nextLabel": "Next review",
     "items": [
       {
+        "name": "Lou\nKempton",
+        "role": "Intimacy Coordinator",
+        "quote": "When I know talent is sourced from Take 3 Agency, I approach intimate scenes with confidence.",
+        "full": "As an Intimacy Coordinator, the quality and professionalism of supporting artists is integral to the safe and successful execution of intimate content on set. Take 3 Agency consistently delivers talented, professional, and engaging performers who make that work possible.\n\nWhat sets Take 3 Agency apart is the balance their artists bring to every job — they take on choreography and direction with care and attentiveness while also contributing their own artistic ideas with integrity and skill. This creative collaboration elevates the work and makes for a richer on-set experience for everyone involved.\n\nWhether working in deep background or interacting directly with lead and featured cast, Take 3 supporting artists foster a professional yet creative atmosphere that I genuinely value. When I know talent is sourced from Take 3 Agency, I approach intimate scenes with confidence.\n\nI wholeheartedly recommend Tyler and his team to any production seeking outstanding results.",
+        "credits": "The Regime",
+        "feature": ""
+      },
+      {
+        "name": "Jessie\nLee",
+        "role": "Take 3 Artist",
+        "quote": "Placeholder — a line from Jessie about how the day was run and how the work felt.",
+        "full": "",
+        "credits": "Fightland",
+        "feature": ""
+      },
+      {
+        "name": "Zara\nSands",
+        "role": "Take 3 Artist",
+        "quote": "Placeholder — a line from Zara about the closed set and the agreements made beforehand.",
+        "full": "",
+        "credits": "Werwulf",
+        "feature": ""
+      },
+      {
+        "name": "Kyia Bobbi\nJohnston",
+        "role": "Take 3 Artist",
+        "quote": "Placeholder — a line from Kyia about arriving prepared and knowing what was expected.",
+        "full": "",
+        "credits": "Fightland",
+        "feature": ""
+      },
+      {
+        "name": "Nicholas\nShikkis",
+        "role": "Take 3 Artist",
+        "quote": "Placeholder — a line from Nicholas about working with an Intimacy Coordinator in the room.",
+        "full": "",
+        "credits": "Red White & Royal Wedding",
+        "feature": ""
+      }
+    ],
+    "stageLabel": "Reviews. Scroll, swipe, or use the up and down arrow keys to change quote.",
+    "helper": "Scroll or swipe through the voices"
+  },
+  "contact": {
+    "eyebrow": "WHY BOOK THROUGH TAKE 3",
+    "heading": "Trained artists.\nOne point of contact.",
+    "columns": [
+      {
         "number": "01",
-        "title": "Intimacy coordinators",
-        "body": "Certified coordinators who run consent, choreography and closed-set protocol from prep through to the final take."
+        "title": "Trained & current",
+        "body": "Performers trained in intimate work through workshops led by industry-renowned Intimacy Coordinators, with current production experience behind them."
       },
       {
         "number": "02",
-        "title": "Intimacy-trained performers",
-        "body": "Performers who have trained in intimate work: clear on boundaries, comfortable with repetition and reliable in close-up."
+        "title": "One roster",
+        "body": "Trained performers, matched doubles and stand-ins from the same roster — cast and covered in a single conversation."
       },
       {
         "number": "03",
-        "title": "Body doubles",
-        "body": "Matched doubles for intimate and partial-nudity sequences, cast to build, marking and continuity with agreements in place first."
-      },
-      {
-        "number": "04",
-        "title": "Rehearsal & workshops",
-        "body": "Pre-shoot rehearsal and cast workshops so the scene is built, agreed and blocked before a camera is anywhere near it."
-      }
-    ]
-  },
-
-  "brands": {
-    "figure": {
-      "slotLabel": "Rehearsal still (closed set)",
-      "figNumber": "FIG. 02",
-      "figNote": "PREP, REHEARSAL, AGREEMENT"
-    },
-    "eyebrow": "HOW IT WORKS",
-    "heading": "Consent first, choreography second, camera last.",
-    "pullQuote": "“A love scene is a stunt with different stakes: you rehearse it, you agree it, and nobody improvises on the day.”",
-    "paragraph": "We start with the script and the boundaries, not the schedule. The coordinator meets the production and the cast, agrees what is and is not on the table in writing, choreographs the sequence to that agreement, and stays through the shoot so anything that changes is renegotiated rather than assumed. It protects the cast, and it protects the day."
-  },
-
-  "film": {
-    "eyebrow": "FOR FILM & TELEVISION",
-    "heading": "Safe, compliant and quick on the floor.",
-    "paragraph": "Intimacy coordination is now standard practice across UK broadcast and streaming, and productions are expected to evidence it. We supply coordinators who know the guidance, work comfortably alongside ADs, stunts and costume, and keep the closed-set process tight enough that it costs you time rather than losing you a day.",
-    "definitions": [
-      {
-        "term": "CONSENT & AGREEMENTS",
-        "description": "Boundaries captured in writing before the scene is blocked, and revisited if anything changes."
-      },
-      {
-        "term": "CLOSED SET",
-        "description": "Room protocol, monitor discipline and minimum crew, run without slowing the schedule."
-      },
-      {
-        "term": "MODESTY & KIT",
-        "description": "Garments, barriers and cover coordinated with costume so nothing is improvised on the floor."
+        "title": "Admin handled",
+        "body": "Agreements, nudity riders, contracts, fees and coordination through one point of contact, documented for your production file."
       }
     ],
-    "figure": {
-      "slotLabel": "On-set portrait (coordinator at monitor)",
-      "figNumber": "FIG. 03",
-      "figNote": "ON SET, IN PROCESS"
+    "cta": {
+      "label": "Inquire about the artists",
+      "subject": "Intimacy artists enquiry",
+      "note": "One point of contact for availability, rates and agreements."
     }
-  },
-
-  "why": {
-    "heading": "WHY BOOK THROUGH TAKE 3",
-    "cards": [
-      {
-        "title": "Certified & current",
-        "body": "Coordinators trained and accredited to recognised industry standards, with current production experience behind them."
-      },
-      {
-        "title": "One roster",
-        "body": "Coordinators, trained performers and matched doubles from the same roster: cast and covered in a single conversation."
-      },
-      {
-        "title": "Admin handled",
-        "body": "Agreements, contracts, fees and coordination through one point of contact, documented for your production file."
-      }
-    ]
   }
 }
