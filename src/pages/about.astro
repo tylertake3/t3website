@@ -108,18 +108,32 @@ const team = copy.team as typeof copy.team & { bioPending: string; emailLabel: s
               <li class={member.dog ? 'aboutMember aboutMemberDog' : 'aboutMember'} data-reveal-item>
                 {/* the photo is a button: hovering reveals the bio, and so
                     does tapping or focusing it, for touch and keyboard */}
-                <button class="aboutMemberCard" type="button" aria-expanded="false" aria-controls={bioId}>
-                  {member.image?.trim() ? (
-                    <img class="aboutMemberPhoto" src={member.image} alt={member.alt || member.name} loading="lazy" decoding="async" />
-                  ) : (
-                    <span class="slot aboutTeamSlot">
-                      <span class="slotLabel">{team.slotLabel}</span>
+                {bio ? (
+                  <button class="aboutMemberCard" type="button" aria-expanded="false" aria-controls={bioId}>
+                    {member.image?.trim() ? (
+                      <img class="aboutMemberPhoto" src={member.image} alt={member.alt || member.name} loading="lazy" decoding="async" />
+                    ) : (
+                      <span class="slot aboutTeamSlot">
+                        <span class="slotLabel">{team.slotLabel}</span>
+                      </span>
+                    )}
+                    <span class="aboutMemberBio" id={bioId}>
+                      <span class="aboutMemberBioText">{bio}</span>
                     </span>
-                  )}
-                  <span class="aboutMemberBio" id={bioId}>
-                    <span class={bio ? 'aboutMemberBioText' : 'aboutMemberBioText aboutMemberBioPending'}>{bio || team.bioPending}</span>
+                  </button>
+                ) : (
+                  /* no bio yet: the photo is just a photo. A tap that only
+                     revealed a "to come" note would feel like a broken control. */
+                  <span class="aboutMemberCard aboutMemberCardStill">
+                    {member.image?.trim() ? (
+                      <img class="aboutMemberPhoto" src={member.image} alt={member.alt || member.name} loading="lazy" decoding="async" />
+                    ) : (
+                      <span class="slot aboutTeamSlot">
+                        <span class="slotLabel">{team.slotLabel}</span>
+                      </span>
+                    )}
                   </span>
-                </button>
+                )}
                 <p class={member.name.trim() ? 'aboutMemberName' : 'aboutMemberName aboutMemberNamePending'}>
                   {member.name.trim() || team.namePending}
                 </p>
@@ -327,6 +341,7 @@ const team = copy.team as typeof copy.team & { bioPending: string; emailLabel: s
       border:0; background:none; color:inherit; font:inherit; text-align:left; cursor:pointer;
     }
     .aboutMemberCard:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+    .aboutMemberCardStill { cursor:default; }
     .aboutMemberBio {
       position:absolute; inset:0; display:flex; align-items:flex-end; padding:22px 20px;
       background:linear-gradient(180deg, rgba(20,20,22,0) 0%, rgba(20,20,22,0.55) 35%, rgba(20,20,22,0.9) 100%);
@@ -334,12 +349,12 @@ const team = copy.team as typeof copy.team & { bioPending: string; emailLabel: s
       transition:opacity 0.4s ease, transform 0.4s cubic-bezier(0.3, 0, 0.2, 1);
     }
     .aboutMemberBioText { font-size:15px; line-height:1.6; text-wrap:pretty; }
-    .aboutMemberBioPending { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:#96928c; }
     .aboutMemberCard:hover .aboutMemberBio,
     .aboutMemberCard:focus-visible .aboutMemberBio,
     .aboutMemberCard[aria-expanded="true"] .aboutMemberBio { opacity:1; transform:none; }
     .aboutMemberPhoto { transition:transform 0.6s cubic-bezier(0.3, 0, 0.2, 1); }
-    .aboutMemberCard:hover .aboutMemberPhoto,
+    /* only a card with something to reveal answers a hover */
+    button.aboutMemberCard:hover .aboutMemberPhoto,
     .aboutMemberCard[aria-expanded="true"] .aboutMemberPhoto { transform:scale(1.04); }
     @media (prefers-reduced-motion: reduce) {
       .aboutMemberBio, .aboutMemberPhoto { transition:none; transform:none; }
@@ -423,13 +438,26 @@ const team = copy.team as typeof copy.team & { bioPending: string; emailLabel: s
       .aboutTeamScroller { margin-right:-32px; }
       .aboutTeam { --teamCols:2.5; padding-right:32px; }
       .aboutMember { flex-basis:calc((100% - 32px - var(--teamGap) * 2) / var(--teamCols)); }
-      .aboutValues { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:36px 40px; }
+      /* three short columns rather than two plus an orphan */
+      .aboutValues { gap:36px 32px; }
       .aboutQuotesScroller { margin-right:-32px; }
       .aboutQuotes { --quoteGap:48px; padding-right:32px; }
       .aboutQuotes > li { flex-basis:calc((100% - 32px - var(--quoteGap)) / 2); }
     }
 
+    @media (max-width:860px) {
+      /* too narrow for three columns of display type: one column, each
+         value a short block, the copy capped so lines stay readable */
+      .aboutValues { grid-template-columns:1fr; gap:36px; margin-top:36px; }
+      .aboutValueDetail { max-width:52ch; }
+    }
+
     @media (max-width:640px) {
+      /* the banner carries no info strip here, so the deep bottom padding
+         the shared hero reserves for one only reads as empty space */
+      .hero.aboutHero { padding-bottom:56px; }
+      /* the story photo keeps the crew's heads in frame on a narrow plate */
+      .aboutStoryPhoto img { object-position:50% 30%; }
       /* the page's own band paddings come down with the global ladder */
       .band.aboutStory { padding:64px 0 56px; }
       .band.aboutValuesBand { padding-top:56px; }
@@ -452,8 +480,12 @@ const team = copy.team as typeof copy.team & { bioPending: string; emailLabel: s
       .aboutMember { flex-basis:calc((100% - 20px - var(--teamGap)) / var(--teamCols)); }
       .aboutQuotesScroller { margin-right:-20px; }
       .aboutQuotes { --quoteGap:24px; padding-right:20px; }
-      .aboutQuotes > li { flex-basis:calc(100% - 20px); }
-      .aboutValues { grid-template-columns:1fr; gap:32px; margin-top:32px; }
+      /* the next quote shows a clear sliver at the edge, so the row reads
+         as something you can swipe rather than a single quote */
+      .aboutQuotes > li { flex-basis:calc(100% - 56px); }
+      .aboutValues { gap:32px; margin-top:32px; }
+      /* the values band hands over to the quotes without the desktop-size gap */
+      .aboutValuesBand + .band { padding-top:56px; }
     }
 
     @media (max-width:360px) {
@@ -524,7 +556,7 @@ const team = copy.team as typeof copy.team & { bioPending: string; emailLabel: s
 
     /* Team bios: on touch screens there is no hover, so tapping a photo opens
        its bio and tapping again (or tapping elsewhere) closes it. */
-    const cards = Array.from(document.querySelectorAll<HTMLButtonElement>('.aboutMemberCard'));
+    const cards = Array.from(document.querySelectorAll<HTMLButtonElement>('button.aboutMemberCard'));
     const closeAll = (except?: HTMLButtonElement) =>
       cards.forEach((c) => c !== except && c.setAttribute('aria-expanded', 'false'));
     cards.forEach((card) => {
