@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Take 3 — loading intro (Three.js)</title>
+    <style>
+      :root {
+        --ink: #f4f2ee;
+        --soft: rgba(244, 242, 238, 0.6);
+        --faint: rgba(244, 242, 238, 0.24);
+        --hair: rgba(244, 242, 238, 0.14);
+        --accent: #d4704f;
+        --ease: cubic-bezier(0.22, 0, 0.14, 1);
+      }
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        height: 100%;
+        background: #101012;
+        color: var(--ink);
+        font-family: Inter, "Helvetica Neue", system-ui, sans-serif;
+        overflow: hidden;
+      }
+
+      /* ---- the page waiting underneath ---- */
+      #site {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        opacity: 0;
+        transition: opacity 1s var(--ease);
+      }
+      #site.is-in { opacity: 1; }
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 28px 40px;
+      }
+      .brand {
+        font-weight: 300;
+        font-size: 17px;
+        letter-spacing: 6px;
+        text-transform: uppercase;
+      }
+      .navRight {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        font-size: 10px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--soft);
+      }
+      .navRight .tc { font-variant-numeric: tabular-nums; }
+      .navCta {
+        border: 1px solid var(--hair);
+        padding: 11px 20px;
+        color: var(--ink);
+      }
+      .hero {
+        flex: 1;
+        display: flex;
+        align-items: flex-end;
+        padding: 0 40px 80px;
+      }
+      .kicker {
+        font-size: 10px;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin: 0 0 22px;
+        opacity: 0;
+        transform: translateY(12px);
+        transition: opacity 1s var(--ease) 0.45s, transform 1s var(--ease) 0.45s;
+      }
+      h1 {
+        margin: 0;
+        font-weight: 200;
+        font-size: clamp(34px, 6vw, 74px);
+        letter-spacing: 0.02em;
+        line-height: 1.06;
+        max-width: 18ch;
+        text-transform: uppercase;
+        opacity: 0;
+        transform: translateY(18px);
+        transition: opacity 1.2s var(--ease) 0.6s, transform 1.2s var(--ease) 0.6s;
+      }
+      #site.is-in .kicker,
+      #site.is-in h1 { opacity: 1; transform: none; }
+
+      /* ---- the loader ---- */
+      #loader {
+        position: fixed;
+        inset: 0;
+        background: #101012;
+        transition: opacity 0.9s var(--ease);
+      }
+      #loader::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: radial-gradient(
+          115% 85% at 50% 44%,
+          rgba(212, 112, 79, 0.06) 0%,
+          rgba(16, 16, 18, 0) 62%
+        );
+      }
+      #scene { display: block; width: 100%; height: 100%; }
+
+      button {
+        font: inherit;
+        font-size: 9.5px;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+      #skip {
+        position: absolute;
+        bottom: 34px;
+        right: 34px;
+        z-index: 3;
+        background: none;
+        border: 0;
+        color: var(--faint);
+        padding: 10px 4px;
+      }
+      #skip:hover { color: var(--soft); }
+      #replay {
+        position: fixed;
+        bottom: 32px;
+        right: 32px;
+        z-index: 10;
+        background: rgba(16, 16, 18, 0.55);
+        border: 1px solid var(--hair);
+        color: var(--ink);
+        padding: 12px 22px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.6s var(--ease);
+        backdrop-filter: blur(6px);
+      }
+      #replay.is-in { opacity: 1; pointer-events: auto; }
+      @media (max-width: 640px) {
+        .nav { padding: 20px; }
+        .navRight .tc, .navRight .menu { display: none; }
+        .hero { padding: 0 20px 60px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="site">
+      <div class="nav">
+        <span class="brand">Take 3</span>
+        <div class="navRight">
+          <span class="tc">00:25:04:11</span>
+          <span class="navCta">Get in touch</span>
+          <span class="menu">Menu</span>
+        </div>
+      </div>
+      <div class="hero">
+        <div>
+          <p class="kicker">Casting — Models — Dancers</p>
+          <h1>People who make the frame</h1>
+        </div>
+      </div>
+    </div>
+
+    <div id="loader">
+      <canvas id="scene"></canvas>
+      <button id="skip">Skip</button>
+    </div>
+
+    <button id="replay">Replay intro</button>
+
+    <script>/*BUNDLE*/</script>
+  </body>
+</html>

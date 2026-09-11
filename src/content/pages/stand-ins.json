@@ -1,23 +1,31 @@
 {
   "meta": {
-    "title": "Stand-ins & Picture Doubles | Take 3 Agency",
-    "description": "Accurate stand-ins, picture doubles, body, intimacy, hand and stunt doubles matched to your leads on height, build, colouring, skin tone and hair, experienced on set, so lighting holds and cameras keep turning.",
-    "ogTitle": "Stand-ins & Picture Doubles | Take 3 Agency",
-    "ogDescription": "Accurate matches to your leads, experienced on set, so lighting holds, cameras keep turning and your actors' hours go where they matter.",
-    "ogImageAlt": "A long line of costumed performers hauling a ship's mast up a beach at dawn, with a rider on a white horse watching from the shoreline.",
+    "title": "Stand-ins & Picture Doubles — Take 3 Agency",
+    "description": "Accurate stand-ins, picture doubles, body, intimacy, hand and stunt doubles matched to your leads on height, build, colouring, skin tone and hair — experienced on set, so lighting holds and cameras keep turning.",
+    "ogTitle": "Stand-ins & Picture Doubles — Take 3 Agency",
+    "ogDescription": "Accurate matches to your leads, experienced on set — so lighting holds, cameras keep turning and your actors' hours go where they matter.",
+    "ogImageAlt": "Behind the scenes on a lit kitchen set: an actor sits in shot on a wooden chair while the camera on its dolly track and a boom operator hold position.",
     "footerTitle": "Book doubles for your production",
     "footerLinks": [
-      { "label": "DANCERS →", "href": "/dancers" },
-      { "label": "SPACTS →", "href": "/spacts" }
-    ]
+      {
+        "label": "DANCERS →",
+        "href": "/dancers"
+      },
+      {
+        "label": "SPACTS →",
+        "href": "/spacts"
+      }
+    ],
+    "ogImage": "/uploads/stand-ins-hero-set.webp"
   },
-
   "hero": {
     "eyebrow": "TAKE 3 AGENCY · CONTINUITY PERFORMERS",
     "title": "Stand-ins & picture doubles",
-    "lede": "Accurate matches to your leads, experienced on set, so lighting holds, cameras keep turning and your actors' hours go where they matter."
+    "lede": "Accurate matches to your leads, experienced on set — so lighting holds, cameras keep turning and your actors' hours go where they matter.",
+    "image": "/uploads/stand-ins-hero-set.webp",
+    "imageAlt": "Behind the scenes on a lit kitchen set: an actor sits in shot on a wooden chair while the camera on its dolly track and a boom operator hold position.",
+    "focus": "center 55%"
   },
-
   "difference": {
     "eyebrow": "THE DIFFERENCE",
     "heading": "Six jobs, often confused. Here's what each one does.",
@@ -54,7 +62,6 @@
       }
     ]
   },
-
   "whyItMatters": {
     "slotLabel": "On-set still (lighting setup)",
     "eyebrow": "WHY IT MATTERS",
@@ -74,21 +81,34 @@
       }
     ]
   },
-
   "matching": {
     "eyebrow": "MATCHING",
     "heading": "Matched to your leads, not close enough.",
     "items": [
-      { "number": "01", "name": "Height" },
-      { "number": "02", "name": "Build" },
-      { "number": "03", "name": "Colouring" },
-      { "number": "04", "name": "Skin tone" },
-      { "number": "05", "name": "Hair" }
+      {
+        "number": "01",
+        "name": "Height"
+      },
+      {
+        "number": "02",
+        "name": "Build"
+      },
+      {
+        "number": "03",
+        "name": "Colouring"
+      },
+      {
+        "number": "04",
+        "name": "Skin tone"
+      },
+      {
+        "number": "05",
+        "name": "Hair"
+      }
     ],
     "note": "Send your leads' details or casting references. We shortlist from measured, photographed artists on our books, not self-reported stats.",
     "slotLabel": "Side-by-side (lead and double)"
   },
-
   "commercial": {
     "eyebrow": "FOR COMMERCIAL & BRAND",
     "heading": "Not just for features.",
@@ -107,7 +127,6 @@
       }
     ]
   },
-
   "why": {
     "heading": "WHY BOOK THROUGH TAKE 3",
     "cards": [

@@ -1,0 +1,493 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import clientData from '../data/clients.json';
+import copy from '../content/pages/credits.json';
+import { featuredCredit } from '../lib/productionLogos';
+import { hasLogo } from '../lib/clientLogos';
+import { entryTags, wall, wallCount, wallDisciplines, wallFormats } from '../lib/creditWall';
+
+const clients = clientData.clients;
+
+/* Testimonials are editable content, not page copy: they live in
+   src/content/reviews and are managed under Reviews in the editor. */
+const reviews = (await getCollection('reviews'))
+  .filter((review) => !(review.body ?? '').trimStart().startsWith('TODO:'))
+  .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+
+/* Copy still to be written is styled as a visible note rather than passed off as
+   body text. The moment real wording replaces it, it reads as body text again. */
+const isTodo = (text: string) => text.trimStart().startsWith('TODO:');
+const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `bandBody ${extra}`.trim());
+
+/* How many cards are rendered ready to show before "Load more" is needed. The
+   whole wall is in the document either way, so search reaches every title and
+   the page still works with no script running. */
+const FIRST_BATCH = 30;
+
+/* The pills. Built from what credit-detail.json actually contains, so a pill can
+   never offer a format or a discipline that no card carries. Both groups are
+   empty until that file is filled in, and the row hides itself. */
+const formatPills = wallFormats.length
+  ? [{ label: 'All', value: 'all' }, ...wallFormats]
+  : [];
+const filters = [...formatPills, ...wallDisciplines];
+const dividerAfter = formatPills.length - 1;
+---
+
+<Base
+  title={copy.meta.title}
+  description={copy.meta.description}
+  ogTitle={copy.meta.ogTitle}
+  ogDescription={copy.meta.ogDescription}
+  footerTitle={copy.meta.footerTitle}
+>
+  <!-- hero -->
+  <section class="pageHero" aria-labelledby="creditsTitle">
+    <div class="pageHeroInner">
+      <p class="kicker">{copy.hero.eyebrow}</p>
+      <h1 class="pageHeroTitle" id="creditsTitle">{copy.hero.heading}</h1>
+      <p class="pageHeroLede">{copy.hero.lede}</p>
+    </div>
+  </section>
+
+  <!-- headline figures -->
+  <section class="band" aria-labelledby="figuresTitle">
+    <div class="bandInner">
+      <div class="sectionHead">
+        <h2 class="sectionTitle" id="figuresTitle">{copy.figures.heading}</h2>
+        <p class="kicker">{copy.figures.kicker}</p>
+      </div>
+      <div class="stats creditsStats">
+        {
+          copy.figures.items.map((figure) => (
+            <div class="stat">
+              <div class="statNum" data-countup>{figure.number}</div>
+              <div class="statLabel">{figure.label}</div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- production credits -->
+  <section class="band creditsWall" id="productions" aria-labelledby="productionsTitle">
+    <div class="bandInner">
+      <div class="sectionHead">
+        <h2 class="sectionTitle" id="productionsTitle">{copy.productions.heading}</h2>
+        <p class="kicker">{copy.productions.kicker}</p>
+      </div>
+      <p class="bandBody creditsIntro">{copy.productions.intro}</p>
+
+      {
+        filters.length > 0 && (
+          <div class="workFilters" role="group" aria-label="Filter productions">
+            {filters.map((filter, i) => (
+              <>
+                <button
+                  type="button"
+                  class="workFilter"
+                  data-filter={filter.value}
+                  aria-pressed={i === 0 ? 'true' : 'false'}
+                >
+                  {filter.label}
+                </button>
+                {i === dividerAfter && filters.length > formatPills.length && (
+                  <span class="workFilterSplit" aria-hidden="true"></span>
+                )}
+              </>
+            ))}
+          </div>
+        )
+      }
+
+      <!-- Not shown, but kept as a live region: without it, pressing a pill or
+           "Load more" changes the grid with nothing announced to a screen
+           reader. It carries the same sentence it always did. -->
+      <p class="workCount srOnly" data-work-count role="status">
+        Showing {Math.min(FIRST_BATCH, wallCount)} of {wallCount} productions
+      </p>
+
+      <ul class="workGrid" data-work-grid data-batch={FIRST_BATCH}>
+        {
+          wall.map((entry, i) => (
+            <li
+              class="workCard"
+              data-card
+              data-tags={entryTags(entry)}
+              hidden={i >= FIRST_BATCH}
+            >
+              <div class="workCardPlate">
+                <img
+                  class="workCardImg"
+                  src={entry.src}
+                  alt={`${entry.label} poster`}
+                  width="500"
+                  height="750"
+                  loading={i < 10 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+              </div>
+              <div class="workCardBody">
+                <h3 class="workCardTitle">{entry.label}</h3>
+                {
+                  /* What Take 3 supplied. Omitted when it is not recorded — the
+                     title and the poster stand on their own. */
+                  entry.disciplines.length > 0 && (
+                    <p class="workCardRoles">{entry.disciplines.join(' · ')}</p>
+                  )
+                }
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="workEmpty" data-work-empty hidden>
+        <p class="workEmptyTitle">Nothing in that category yet.</p>
+        <button type="button" class="workReset" data-work-reset>Show all productions</button>
+      </div>
+
+      <div class="workMoreRow">
+        <button type="button" class="workMore" data-work-more>
+          Load more productions
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- client logos -->
+  <section class="band creditsClients" aria-labelledby="clientsTitle">
+    <div class="bandInner">
+      <div class="sectionHead">
+        <h2 class="sectionTitle" id="clientsTitle">{copy.clients.heading}</h2>
+        <p class="kicker">{copy.clients.kicker}</p>
+      </div>
+      {
+        /* Unwritten copy is omitted rather than printed as a note to the
+           reader; the heading and the marks stand on their own until real
+           wording is supplied. See docs/credits-content-gaps.md. */
+        !isTodo(copy.clients.body) && <p class="bandBody creditsIntro">{copy.clients.body}</p>
+      }
+    </div>
+    <div class="logoStack creditsLogoWall">
+      <div class="logoPage is-on" style="position:relative;" aria-hidden="true">
+        {
+          clients.map((cell) => (
+            <div
+              class="logoCell"
+              style={
+                hasLogo(cell)
+                  ? `height:${cell.height}px; background-image:url("${cell.dark}");`
+                  : `height:${cell.height}px;`
+              }
+              data-light={hasLogo(cell) ? cell.light : undefined}
+              data-dark={hasLogo(cell) ? cell.dark : undefined}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- testimonials -->
+  <section class="band bandDark" aria-labelledby="testimonialsTitle">
+    <div class="bandInner">
+      <div class="sectionHead">
+        <h2 class="sectionTitle" id="testimonialsTitle">{copy.testimonials.heading}</h2>
+        <p class="kicker">{copy.testimonials.kicker}</p>
+      </div>
+      {
+        reviews.length > 0 ? (
+          <>
+            <p class={bodyClass(copy.testimonials.intro, 'creditsIntro')}>{copy.testimonials.intro}</p>
+            <ul class="creditsQuoteGrid">
+              {reviews.map((review) => (
+                <li>
+                  <figure class="creditsQuote">
+                    <blockquote class="creditsQuoteText">{review.body?.trim()}</blockquote>
+                    <figcaption>
+                      <span class="creditsQuoteName">{review.data.name}</span>
+                      <span class="creditsQuoteRole">{review.data.role}</span>
+                      {(() => {
+                        const c = featuredCredit(review.data.credits, review.data.feature);
+                        if (!c) return null;
+                        return (
+                          <span class="creditsQuoteCredits">
+                            <span class={c.onDark ? 'revCredit revCreditLogo' : 'revCredit'}>
+                              {c.onDark ? <img src={c.onDark} alt={c.title} loading="lazy" /> : c.title}
+                            </span>
+                          </span>
+                        );
+                      })()}
+                    </figcaption>
+                  </figure>
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <p class="bandBody creditsIntro">{copy.testimonials.emptyNote}</p>
+        )
+      }
+    </div>
+  </section>
+
+  <script is:inline>
+    /* The wall is filtered in place: every card is already on the page, so a
+       discipline is a matter of hiding the ones that do not carry it. No
+       network, no reflow of anything above the grid. */
+    (function () {
+      var grid = document.querySelector('[data-work-grid]');
+      if (!grid) return;
+
+      /* Every card is in the document, so the wall still reads with no script
+         running. What changes here is which of them are visible: the pill
+         narrows the set, and "Load more" lengthens the batch shown from it. */
+      var cards = Array.prototype.slice.call(grid.querySelectorAll('[data-card]'));
+      var pills = Array.prototype.slice.call(document.querySelectorAll('.workFilter'));
+      var count = document.querySelector('[data-work-count]');
+      var empty = document.querySelector('[data-work-empty]');
+      var resetButton = document.querySelector('[data-work-reset]');
+      var moreButton = document.querySelector('[data-work-more]');
+      var moreRow = moreButton ? moreButton.parentNode : null;
+
+      var STEP = parseInt(grid.getAttribute('data-batch'), 10) || 30;
+      var shownLimit = STEP;
+      var tag = 'all';
+
+      var apply = function () {
+        var matching =
+          tag === 'all'
+            ? cards.slice()
+            : cards.filter(function (card) {
+                return (card.getAttribute('data-tags') || '').split(' ').indexOf(tag) !== -1;
+              });
+
+        var visible = Math.min(shownLimit, matching.length);
+        cards.forEach(function (card) {
+          card.hidden = true;
+        });
+        for (var i = 0; i < visible; i++) matching[i].hidden = false;
+
+        pills.forEach(function (pill) {
+          pill.setAttribute('aria-pressed', pill.getAttribute('data-filter') === tag ? 'true' : 'false');
+        });
+
+        if (count) {
+          var label = '';
+          if (tag !== 'all') {
+            var active = pills.filter(function (p) {
+              return p.getAttribute('data-filter') === tag;
+            })[0];
+            if (active) label = ' ' + active.textContent.trim().toLowerCase();
+          }
+          count.textContent = matching.length
+            ? 'Showing ' + visible + ' of ' + matching.length + label +
+              (matching.length === 1 ? ' production' : ' productions')
+            : 'Nothing in that category yet';
+        }
+        if (empty) empty.hidden = matching.length > 0;
+        if (moreRow) moreRow.hidden = visible >= matching.length;
+      };
+
+      /* Changing the pill starts the batch again, so the first thing shown is
+         the first thing that matches. */
+      pills.forEach(function (pill) {
+        pill.addEventListener('click', function () {
+          tag = pill.getAttribute('data-filter');
+          shownLimit = STEP;
+          apply();
+        });
+      });
+
+      if (resetButton) {
+        resetButton.addEventListener('click', function () {
+          tag = 'all';
+          shownLimit = STEP;
+          apply();
+          if (pills[0]) pills[0].focus();
+        });
+      }
+
+      if (moreButton) {
+        moreButton.addEventListener('click', function () {
+          /* Nothing above the button moves, so the page does not jump; the
+             button keeps focus so the keyboard can carry on loading. */
+          shownLimit += STEP;
+          apply();
+        });
+      }
+
+      apply();
+    })();
+  </script>
+
+  <style is:global>
+    /* three headline figures, not the homepage's four. The section header
+       already draws a rule, so the row does not draw a second one. */
+    .stats.creditsStats {
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      border-top:0; padding-top:0; margin-top:36px;
+    }
+
+    .creditsIntro { margin-top:26px; max-width:64ch; }
+
+    /* the hero and the dark band are dark in both themes, so they keep the dark
+       accent: the light theme's oxblood falls below 4.5:1 on either surface */
+    .pageHero .kicker,
+    .bandDark .kicker,
+    .bandDark .todoNote { color:#d4704f; }
+    .bandDark .todoNote { border-left-color:#d4704f; }
+
+    /* ---------- the wall of productions ---------- */
+    /* Filter pills. They sit on their own row rather than in the section head,
+       so a long heading and five buttons never fight for the same line. */
+    /* An anchor jump here is cleared of the fixed header by html{scroll-padding-top}
+       alone. It used to carry its own scroll-margin as well, and the two stacked:
+       the wall landed 216px down, with a strip of the stage — the board's
+       underside — still showing under the header. The section's own top padding
+       is all the breathing room it needs. */
+
+    .srOnly {
+      position:absolute; width:1px; height:1px; padding:0;
+      overflow:hidden; clip-path:inset(50%); white-space:nowrap;
+    }
+
+
+    /* Filter pills — the wall's only control, alongside "Load more". Built from
+       what the data actually contains, so a pill can never offer nothing. */
+    .workFilters {
+      display:flex; flex-wrap:wrap; gap:8px;
+      margin-top:32px; padding-bottom:24px; border-bottom:1px solid var(--hair);
+    }
+    .workFilter {
+      font:inherit; font-size:12px; letter-spacing:1.8px; text-transform:uppercase;
+      color:var(--ink); background:none; border:1px solid var(--ctrlBorder);
+      padding:11px 20px; cursor:pointer;
+      transition:background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    }
+    /* what it is, then what we supplied */
+    .workFilterSplit { width:1px; align-self:stretch; margin:0 6px; background:var(--hair); }
+    .workFilter:hover { border-color:var(--ink); }
+    .workFilter[aria-pressed='true'] { background:var(--ink); border-color:var(--ink); color:var(--bg); }
+
+    /* Five to a row: the artwork, then the title beneath it. The credit used to
+       sit over the foot of the poster, where it collided with whatever title
+       treatment the poster already carried. */
+    .workGrid {
+      display:grid; grid-template-columns:repeat(5, minmax(0, 1fr)); gap:36px 16px;
+      list-style:none; margin:34px 0 0; padding:0;
+    }
+    .workCard { display:flex; flex-direction:column; }
+    .workCard[hidden] { display:none; }
+    .workCardPlate {
+      position:relative; overflow:hidden; background:var(--tileBg); aspect-ratio:2 / 3;
+    }
+    .workCardImg {
+      width:100%; height:100%; object-fit:cover;
+      transition:opacity 0.4s cubic-bezier(0.3, 0, 0.2, 1);
+    }
+    /* The cards do not link anywhere yet, so the hover is a quiet
+       acknowledgement rather than anything that reads as clickable. */
+    .workCard:hover .workCardImg { opacity:0.88; }
+    .workCardBody { padding:14px 0 0; }
+    .workCardTitle {
+      font-family:'Anton', 'Jost', sans-serif; font-weight:400;
+      font-size:16px; line-height:1.24; letter-spacing:0.2px;
+      text-transform:uppercase; color:var(--ink);
+      text-wrap:balance;
+    }
+    /* What Take 3 supplied. Set wide and quiet against the condensed title —
+       this reverses the "reduce letter spacing on small text" note earlier in
+       docs/, on Tyler's instruction of 8 September 2026. */
+    .workCardRoles {
+      margin:9px 0 0;
+      font-size:11.5px; font-weight:400; letter-spacing:2.6px; text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    /* ---------- empty state and load more ---------- */
+    .workEmpty { margin:44px 0 8px; text-align:center; }
+    .workEmptyTitle { font-size:17px; color:var(--sub); }
+    .workReset {
+      margin-top:18px;
+      font:inherit; font-size:12px; font-weight:500; letter-spacing:2px; text-transform:uppercase;
+      color:var(--ink); background:none; border:1px solid var(--ctrlBorder);
+      padding:12px 22px; cursor:pointer;
+      transition:border-color 0.25s ease, background 0.25s ease;
+    }
+    .workReset:hover { border-color:var(--ink); background:var(--tileBg); }
+    .workMoreRow { display:flex; justify-content:center; margin-top:44px; }
+    .workMoreRow[hidden] { display:none; }
+    .workMore {
+      font:inherit; font-size:12px; font-weight:500; letter-spacing:2px; text-transform:uppercase;
+      color:var(--ink); background:none; border:1px solid var(--ctrlBorder);
+      padding:15px 34px; cursor:pointer;
+      transition:border-color 0.25s ease, background 0.25s ease;
+    }
+    .workMore:hover { border-color:var(--ink); background:var(--tileBg); }
+
+    @media (prefers-reduced-motion:reduce) {
+      .workCardImg { transition:none; }
+      .workCard:hover .workCardImg { transform:none; }
+    }
+
+    @media (max-width:1200px) { .workGrid { grid-template-columns:repeat(4, minmax(0, 1fr)); } }
+    @media (max-width:900px) {
+      .workGrid { grid-template-columns:repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width:640px) {
+      .workGrid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:26px 12px; }
+      .workCardBody { padding:12px 0 0; }
+      .workCardTitle { font-size:14px; }
+      .workCardRoles { font-size:10px; letter-spacing:1.9px; }
+      .workFilter { padding:9px 14px; font-size:11px; letter-spacing:1.4px; }
+      .workFilterSplit { display:none; }
+    }
+
+    /* the wall runs long, so it breathes less than the homepage's two half-grids */
+    .creditsLogoWall { margin-top:44px; }
+    .creditsLogoWall .logoPage { row-gap:44px; }
+
+    /* testimonials, reproduced as given */
+    .creditsQuoteGrid {
+      list-style:none; margin:36px 0 0; padding:0;
+      display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:44px 40px;
+    }
+    .creditsQuote { margin:0; display:flex; flex-direction:column; height:100%; }
+    .creditsQuoteText {
+      margin:0; font-size:17px; font-weight:400; line-height:1.8; color:#c7c3bd;
+      text-wrap:pretty; flex:1 1 auto;
+    }
+    .creditsQuote figcaption { margin-top:22px; border-top:1px solid #3a3a3e; padding-top:18px; }
+    .creditsQuoteName {
+      display:block; white-space:pre-line;
+      font-family:'Anton', 'Jost', sans-serif; font-size:clamp(26px, 2.4vw, 34px);
+      letter-spacing:0; line-height:1.02; font-weight:400; text-transform:uppercase; color:#f4f2ee;
+    }
+    .creditsQuoteRole {
+      display:block; margin-top:10px; font-size:13px; letter-spacing:2px;
+      font-weight:500; text-transform:uppercase; color:#f4f2ee;
+    }
+    /* same production-logo row as the homepage reviews, at a quieter size to
+       suit the tighter quote grid */
+    .creditsQuoteCredits { display:flex; flex-wrap:wrap; align-items:center; gap:8px 18px; margin-top:10px; font-size:15px; font-weight:400; color:#c7c3bd; }
+    .creditsQuoteCredits .revCredit { animation:none; font-size:13px; }
+    .creditsQuoteCredits .revCredit img { height:28px; max-width:140px; }
+    .creditsQuote:hover .revCredit { opacity:1; }
+
+    @media (max-width:1024px) {
+      .stats.creditsStats { grid-template-columns:repeat(3, minmax(0, 1fr)); }
+      .creditsQuoteGrid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:36px 32px; }
+      .creditsGroup { margin-top:44px; }
+    }
+
+    @media (max-width:640px) {
+      .stats.creditsStats { grid-template-columns:1fr; gap:22px; }
+      .creditsQuoteGrid { grid-template-columns:1fr; gap:34px; }
+      .creditsLogoWall .logoPage { row-gap:36px; }
+    }
+  </style>
+</Base>

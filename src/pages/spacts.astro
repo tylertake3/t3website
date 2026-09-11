@@ -79,7 +79,7 @@ const heroSlides = copy.hero.slides as Array<{ image: string; production: string
         </div>
         <p style="font-size:16px; font-weight:400; line-height:1.75; color:#c7c3bd; text-wrap:pretty; margin:0;">{copy.film.paragraph}</p>
       </div>
-      <div class="tiles" style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:48px;">
+      <div class="tiles" style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:48px;">
         {copy.film.tiles.map((tile) => (
           <figure style="margin:0;">
             <div style="aspect-ratio:16/9; overflow:hidden; background:#101012;"><img src={tile.image} alt={tile.alt} loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>

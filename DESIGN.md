@@ -266,4 +266,50 @@ All display headings use `font-weight:400` (never bold) and fluid `clamp()` sizi
 
 ---
 
-_Last updated 2026-09-10. Update this file whenever a token, type choice, or core pattern changes._
+_Last updated 2026-08-25. Update this file whenever a token, type choice, or core pattern changes._
+
+
+### Launch studio (the slate on /laural)
+
+The Laural cover is a WebGL scene (`src/lib/clapperStudio.js`, painted faces in
+`src/lib/clapperArt.js`, shell `src/components/ClapperBoard.astro`): a bevelled
+aluminium chassis with an acrylic insert, solid painted sticks on a real hinge,
+a recessed LED behind glass, hovering over a fine-grained charcoal floor that
+runs, in one continuous surface, into a paper backdrop. It is lit like a still
+life: one soft front key (the only shadow-caster), a cool rim from behind and
+above, a bare lamp hidden behind the board pooling on the paper, and quiet fill
+— the slate falls out of focus as it recedes and the room darkens to black at
+the edges and foreground. The room follows the site theme through the
+`t3:themechange` event — charcoal by default, a pale slate studio in light — and
+a theme change repaints the rear plate and relights the room without rebuilding
+anything.
+
+On /laural the board is one screen tall and does not scroll: the LED counts
+down to the launch (`src/lib/countdown.js`, DD:HH:MM:SS, clamped at zero), a
+clap counts the take up, and the board turns in the hand: drag it sideways to
+spin it round, up or down to tip it; it stays where it hangs, coasts a little
+when let go and settles to the nearest face, level again. "Turn it over" turns
+the same axis, and flips it to a rear that carries the
+Laural mark — tinted white on the dark plate, black on the pale one — and the
+date, nothing else. The front prints "PRESENTS" over the mark, "COMING SOON" in Jost
+capitals across the title band, and the date on the credit line. All the words come from the `launch` block in
+`laural.json`. Until launch the board is the whole page: the platform sections
+that used to follow are held back (their copy stays in `laural.json`).
+
+The launch board idles `lively`: a fuller hover with a slow turn, nod and roll,
+a sideways wander, lamps that breathe like tungsten, a camera that is never
+quite still, and dust rising through the beam (150 soft additive points in the
+dark room, faint grey specks in the pale one). The credits variant keeps its
+`calm` idle. All of it is off under reduced motion.
+
+The page paints only what sits around the canvas, with `--studioBack` (the
+stage colour, matching the scene's own background), `--stageScrim`, and the
+`--stage*` ink tokens for the copy in the room, all in `src/styles/global.css`
+for both themes. Everything printed on the board is set in the brand faces —
+Jost for labels, Caveat for the marker hand, Anton for the title band and the
+rear — at texture resolution, so the type stays crisp as the object turns.
+
+The component keeps its `credits` variant (the production deck; the board turns
+over on scroll to show a record), but /credits no longer uses it: that page
+opens on the plain dark cover, or on a full-bleed photo once `credits.json`
+carries `hero.slides`, with the figures band beneath as before.

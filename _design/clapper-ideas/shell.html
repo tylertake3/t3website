@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Clapperboard — interaction ideas</title>
+    <style>
+      /*FONTS*/
+
+      /* The page borrows the project's own tokens where they exist. The board's
+         own inks are the physical object's colours, not brand tokens, so they
+         stay literal — the same call the real component makes. */
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg, #161618);
+        color: var(--ink, #f4f2ee);
+        font-family: 'Jost', system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      img { display: block; }
+      button { font: inherit; }
+
+      .wrap { max-width: 1180px; margin: 0 auto; padding: 64px 32px 120px; }
+
+      .lede { max-width: 62ch; }
+      .kicker {
+        margin: 0 0 14px; font-size: 11px; font-weight: 500;
+        letter-spacing: 4px; text-transform: uppercase; color: var(--accent, #d4704f);
+      }
+      h1 {
+        margin: 0; font-family: 'Anton', sans-serif; font-weight: 400;
+        font-size: clamp(38px, 5vw, 68px); line-height: 0.98; text-transform: uppercase;
+      }
+      .lede p { margin: 18px 0 0; font-size: 16px; line-height: 1.7; color: var(--sub, #c2beb6); }
+
+      /* ---------------- a concept ---------------- */
+      .idea { margin-top: 84px; padding-top: 40px; border-top: 1px solid var(--hair, #35353a); }
+      .ideaHead { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+      .ideaNo {
+        font-family: 'Anton', sans-serif; font-size: 15px; letter-spacing: 2px;
+        color: var(--accent, #d4704f);
+      }
+      .ideaName {
+        margin: 0; font-family: 'Anton', sans-serif; font-weight: 400;
+        font-size: clamp(24px, 2.6vw, 36px); text-transform: uppercase; letter-spacing: 0.5px;
+      }
+      .ideaWhy { margin: 14px 0 0; max-width: 68ch; font-size: 15px; line-height: 1.68; color: var(--sub, #c2beb6); }
+      .ideaTry {
+        margin: 20px 0 0; display: inline-flex; align-items: center; gap: 10px;
+        font-size: 11px; font-weight: 500; letter-spacing: 2.4px; text-transform: uppercase;
+        color: var(--ink, #f4f2ee);
+        border: 1px solid var(--ctrlBorder, #6f6f77); padding: 10px 16px;
+      }
+      .ideaTry span { color: var(--muted, #96928c); letter-spacing: 2.4px; }
+
+      .stageBox {
+        margin-top: 32px; padding: 172px 30px 56px;
+        border: 1px solid var(--hair, #35353a);
+        background:
+          radial-gradient(74% 62% at 60% 34%, rgba(226,226,232,0.14) 0%, transparent 74%),
+          #101013;
+        display: flex; justify-content: center;
+        overflow: hidden;
+      }
+      .stageBox.tall { padding: 184px 30px 92px; }
+
+      /* ================= the board ================= */
+      .slate {
+        --open: 1;              /* 1 fully open, 0 shut */
+        --card: #f4f3f0;
+        --cardHi: #ffffff;
+        --rule: #17171b;
+        --ink2: #191a1e;
+        --label: #2a2a2e;
+        --hand: 'Caveat';
+        --handStroke: 0.35px;
+        --stick: linear-gradient(180deg,#202024 0%,#121216 46%,#0b0b0e 100%);
+        --tooth: linear-gradient(180deg,#fbfaf7 0%,#f2f0eb 52%,#ddd9d1 100%);
+        --metal: linear-gradient(146deg,#5c5c66 0%,#2c2c34 26%,#3d3d47 48%,#191920 78%,#33333d 100%);
+        --band: #070709;
+        --bandInk: #f4f2ee;
+        --readout: #07070a;
+        --led: #ff3d14;
+        position: relative;
+        width: 560px; max-width: 100%;
+        transform-origin: 50% 100%;
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        filter: drop-shadow(0 26px 34px rgba(0,0,0,0.55));
+        transition: transform 0.45s cubic-bezier(0.22,0,0.14,1);
+      }
+      .slate:focus-visible { outline: 2px solid var(--accent, #d4704f); outline-offset: 14px; }
+
+      /* the upper stick, hinged at its left end */
+      .stick {
+        position: absolute; left: 0; right: 0; top: -22px; height: 22px;
+        transform-origin: 12px 100%;
+        transform: rotate(calc(var(--open) * -15deg));
+        z-index: 3;
+      }
+      .stickBody, .rail {
+        position: relative; height: 22px; overflow: hidden;
+        background: var(--stick);
+        border: 1px solid #0a0a0c; border-radius: 4px;
+      }
+      .rail { border-radius: 4px 4px 0 0; border-bottom: 0; }
+      .teeth { position: absolute; inset: 0 0 0 48px; display: flex; overflow: hidden; }
+      .teeth i { flex: 1; transform: skewX(-19deg) scaleX(1.4); }
+      .stickBody .teeth i { transform-origin: 50% 100%; }
+      .rail .teeth i { transform-origin: 50% 0%; }
+      .teeth i:nth-child(odd) { background: var(--tooth); }
+      .sheen {
+        position: absolute; inset: 0; z-index: 2; pointer-events: none;
+        background: linear-gradient(180deg, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0) 30%, rgba(0,0,0,0.34) 100%);
+      }
+      .hinge {
+        position: absolute; left: 2px; bottom: -6px; z-index: 4;
+        width: 34px; height: 22px; border-radius: 6px 3px 2px 2px;
+        background: var(--metal);
+        box-shadow: inset 0 1.5px 0 rgba(255,255,255,0.34), 0 3px 7px rgba(0,0,0,0.55);
+      }
+      .pin {
+        position: absolute; left: 8px; bottom: -2px; z-index: 5;
+        width: 12px; height: 12px; border-radius: 50%;
+        background: radial-gradient(circle at 30% 24%,#cfcfd6 0%,#74747f 34%,#2a2a32 74%,#46464f 100%);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 1px 3px rgba(0,0,0,0.7);
+      }
+
+      /* the card */
+      .card {
+        position: relative;
+        background: radial-gradient(140% 120% at 26% -10%, var(--cardHi) 0%, var(--card) 58%, var(--card) 100%);
+        border: 1px solid var(--rule); border-top: 0;
+        border-radius: 0 0 7px 7px;
+        overflow: hidden;
+      }
+      .head {
+        display: flex; align-items: stretch; gap: 9px; padding: 16px 9px 8px;
+        border-bottom: 1px solid var(--rule);
+      }
+      .side { position: relative; width: 62px; display: flex; align-items: center; justify-content: center; padding-top: 8px; }
+      .side b, .cell b {
+        position: absolute; top: 2px; left: 6px;
+        font-size: 7px; font-weight: 600; letter-spacing: 1.6px;
+        text-transform: uppercase; color: var(--label);
+      }
+      .side.r b { left: auto; right: 6px; }
+      .v {
+        font-style: normal; font-family: var(--hand), cursive; font-weight: 700;
+        font-size: 27px; line-height: 1.2; color: var(--ink2);
+        -webkit-text-stroke: var(--handStroke) var(--ink2);
+        white-space: nowrap;
+      }
+      .readout {
+        position: relative; flex: 1; display: flex; align-items: center; justify-content: center;
+        padding: 9px 10px 7px; border-radius: 6px;
+        background: var(--readout);
+        box-shadow: inset 0 0 0 1px rgba(0,0,0,0.9), inset 0 4px 14px rgba(0,0,0,0.95), 0 1px 0 rgba(255,255,255,0.4);
+      }
+      .tc {
+        font-family: 'Jost', monospace; font-weight: 600;
+        font-size: 25px; letter-spacing: 1.5px; color: var(--led);
+        text-shadow: 0 0 11px rgba(255,60,20,0.6);
+        transform: skewX(-4deg); font-variant-numeric: tabular-nums;
+      }
+      .tally { position: absolute; top: 6px; right: 8px; width: 4px; height: 4px; border-radius: 50%; background: #3ad06f; box-shadow: 0 0 6px rgba(58,208,111,0.9); }
+      .row { display: flex; border-bottom: 1px solid var(--rule); }
+      .row:last-of-type { border-bottom: 0; }
+      .cell {
+        position: relative; flex: 1; min-width: 0; height: 42px; padding: 11px 6px 0;
+        display: flex; align-items: center; justify-content: center;
+        border-left: 1px solid var(--rule);
+      }
+      .cell:first-child { border-left: 0; }
+      .cell .v { font-size: 23px; transform: rotate(-1.4deg); }
+      .cell:nth-child(2n) .v { transform: rotate(1.1deg); }
+      .rowMain .cell { height: 54px; }
+      .rowMain .cell .v { font-size: 30px; }
+      .cell.take .v { font-size: 32px; transform: rotate(2.4deg); }
+      .red { color: #b3261a; -webkit-text-stroke: 0.4px #b3261a; }
+      .cell.studio { padding: 13px 6px 4px; }
+      .studioArt { height: 30px; width: 82%; display: flex; align-items: center; justify-content: center; }
+      .studioArt img { max-height: 100%; max-width: 100%; width: auto; object-fit: contain; filter: var(--studioFilter, contrast(1.08)); }
+      .band {
+        position: relative; padding: 11px 18px 10px; background: var(--band);
+        border-top: 1px solid var(--rule);
+        display: flex; flex-direction: column; align-items: center; gap: 8px;
+      }
+      .bandArt { height: 60px; width: 74%; display: flex; align-items: center; justify-content: center; }
+      .bandArt img { height: var(--logoH, 44px); width: auto; max-width: 100%; max-height: 100%; object-fit: contain; }
+      .credit {
+        display: flex; gap: 10px; white-space: nowrap;
+        font-size: 7px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
+        color: color-mix(in srgb, var(--bandInk) 52%, transparent);
+      }
+      .credit .t3 { font-family: 'Anton', sans-serif; font-size: 9px; letter-spacing: 2.6px; color: var(--bandInk); }
+      .bolt {
+        position: absolute; bottom: 7px; width: 5px; height: 5px; border-radius: 50%;
+        background: radial-gradient(circle at 34% 28%,#fdfdfc,#b9b9bd 42%,#3b3b43);
+      }
+      .bolt.l { left: 9px; } .bolt.r { right: 9px; }
+
+      /* the flash a clap throws */
+      .flash {
+        position: absolute; inset: -60px; z-index: 9; opacity: 0; pointer-events: none;
+        background: radial-gradient(52% 46% at 50% 46%, rgba(255,250,240,0.6) 0%, transparent 72%);
+      }
+      .flash.go { animation: fl 0.4s cubic-bezier(0.1,0,0.3,1); }
+      @keyframes fl { 0%{opacity:0} 8%{opacity:1} 100%{opacity:0} }
+
+      /* the shake a clap gives the camera */
+      .slate.shake { animation: shk 0.34s cubic-bezier(0.3,0,0.2,1); }
+      @keyframes shk {
+        0%   { transform: translate(0,0) rotate(0); }
+        16%  { transform: translate(-5px,3px) rotate(-0.5deg); }
+        38%  { transform: translate(4px,-2px) rotate(0.34deg); }
+        62%  { transform: translate(-2px,1px) rotate(-0.16deg); }
+        100% { transform: translate(0,0) rotate(0); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .slate.shake { animation: none; }
+        .flash.go { animation: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="lede" data-odyn-id="intro">
+        <p class="kicker">Credits page · interaction study</p>
+        <h1>Five ways the<br />board could earn a click</h1>
+        <p>
+          Each board below is live — click it. These are flat CSS stand-ins for the real
+          three.js object, so the point is the <em>behaviour</em>, not the render. Pick the
+          ones worth building and I will put them into the real board.
+        </p>
+      </div>
+
+      <!-- ============ 1 ============ -->
+      <section class="idea" data-odyn-id="idea-rechalk">
+        <div class="ideaHead">
+          <span class="ideaNo">01</span>
+          <h2 class="ideaName">Re-chalk between takes</h2>
+        </div>
+        <p class="ideaWhy">
+          The production already changes on a clap, but it changes <em>instantly</em>, which is
+          why it does not register. Here the change happens <em>while the sticks are shut</em>:
+          an eraser sweep wipes the marked values, they rewrite themselves one cell at a time,
+          and the title cuts on a hard two-frame black. You never see it happen — you see the
+          board come back up already re-marked, the way it does on set.
+        </p>
+        <p class="ideaTry">Click the board <span>· watch the cells, not the sticks</span></p>
+        <div class="stageBox"><div class="slate" id="s1" tabindex="0" role="button" aria-label="Clap the board"></div></div>
+      </section>
+
+      <!-- ============ 2 ============ -->
+      <section class="idea" data-odyn-id="idea-styles">
+        <div class="ideaHead">
+          <span class="ideaNo">02</span>
+          <h2 class="ideaName">Every production brings its own slate</h2>
+        </div>
+        <p class="ideaWhy">
+          A clap changes the object, not just the data. Four real slate types in rotation —
+          the modern acrylic insert, a classic black board written in chalk, a wooden
+          clapper with brass, and a digital smart-slate where everything is LED and nothing
+          is handwritten. It makes the wall of credits feel like a range of productions
+          rather than one template with the numbers swapped.
+        </p>
+        <p class="ideaTry">Click to change slate <span>· acrylic → chalk → wood → digital</span></p>
+        <div class="stageBox"><div class="slate" id="s2" tabindex="0" role="button" aria-label="Change slate"></div></div>
+      </section>
+
+      <!-- ============ 3 ============ -->
+      <section class="idea" data-odyn-id="idea-throw">
+        <div class="ideaHead">
+          <span class="ideaNo">03</span>
+          <h2 class="ideaName">Throw the stick yourself</h2>
+        </div>
+        <p class="ideaWhy">
+          Drag the upper stick and it follows your pointer on the hinge; let go and it falls
+          under its own weight, overshoots a hair and settles. A click still claps it. This is
+          the one that makes people play — the board stops being a button and becomes an
+          object you can pick up.
+        </p>
+        <p class="ideaTry">Drag the stick <span>· or just click</span></p>
+        <div class="stageBox tall"><div class="slate" id="s3" tabindex="0" role="button" aria-label="Clap the board"></div></div>
+      </section>
+
+      <!-- ============ 4 ============ -->
+      <section class="idea" data-odyn-id="idea-takes">
+        <div class="ideaHead">
+          <span class="ideaNo">04</span>
+          <h2 class="ideaName">Takes, then print</h2>
+        </div>
+        <p class="ideaWhy">
+          Clapping counts up: take 1, take 2, take 3 on the same production. On the third the
+          board stamps <em>PRINT</em> and moves on. It gives the click somewhere to go instead of
+          shuffling at random, and it teaches the interaction — you clap again because you
+          want to see what take 2 does.
+        </p>
+        <p class="ideaTry">Click three times <span>· watch TAKE</span></p>
+        <div class="stageBox"><div class="slate" id="s4" tabindex="0" role="button" aria-label="Clap the board"></div></div>
+      </section>
+
+      <!-- ============ 5 ============ -->
+      <section class="idea" data-odyn-id="idea-peek">
+        <div class="ideaHead">
+          <span class="ideaNo">05</span>
+          <h2 class="ideaName">Peek at the back</h2>
+        </div>
+        <p class="ideaWhy">
+          Nothing currently tells you the board has a back. Hover its right edge and the
+          corner lifts to show a sliver of the record underneath — a one-second tease that
+          the turn exists. Cheap to build, and it answers "why would I scroll?".
+        </p>
+        <p class="ideaTry">Hover the right edge <span>· no click needed</span></p>
+        <div class="stageBox tall"><div class="slate" id="s5" tabindex="0" role="button" aria-label="Clap the board"></div></div>
+      </section>
+    </div>
+
+    <script>
+      const DECK = __DECK__;
+
+      const TEETH = n => Array.from({length:n}).map(()=>'<i></i>').join('');
+
+      const board = p => `
+        <span class="flash"></span>
+        <div class="stick">
+          <div class="stickBody"><div class="teeth">${TEETH(15)}</div><span class="sheen"></span></div>
+          <span class="hinge"></span><span class="pin"></span>
+        </div>
+        <div class="rail"><div class="teeth">${TEETH(15)}</div><span class="sheen"></span></div>
+        <div class="card">
+          <div class="head">
+            <div class="side"><b>Fps</b><em class="v" data-f="fps"></em></div>
+            <div class="readout"><span class="tally"></span><span class="tc">00:00:00:00</span></div>
+            <div class="side r"><b>Stop</b><em class="v" data-f="stop"></em></div>
+          </div>
+          <div class="row rowMain">
+            <div class="cell" style="flex:1.1"><b>Roll</b><em class="v" data-f="roll"></em></div>
+            <div class="cell studio" style="flex:1.8"><b>Studio</b><span class="studioArt"><img data-f="studioLogo" alt="" /></span></div>
+            <div class="cell take" style="flex:.9"><b>Take</b><em class="v" data-f="take"></em></div>
+          </div>
+          <div class="row">
+            <div class="cell"><b>Res</b><em class="v" data-f="res"></em></div>
+            <div class="cell" style="flex:1.5"><b>Lens</b><em class="v" data-f="lens"></em></div>
+            <div class="cell"><b>Slate</b><em class="v" data-f="slate"></em></div>
+            <div class="cell"><b>Ct &deg;</b><em class="v" data-f="ct"></em></div>
+          </div>
+          <div class="band">
+            <span class="bolt l"></span><span class="bolt r"></span>
+            <span class="bandArt"><img data-f="logo" alt="" /></span>
+            <span class="credit"><span>Casting</span><b class="t3">Take 3</b><span data-f="unit"></span><span data-f="city"></span></span>
+          </div>
+        </div>`;
+
+      /* ---- one live clock for every board on the page ---- */
+      const clocks = [];
+      const pad = n => String(n).padStart(2,'0');
+      setInterval(() => {
+        const d = new Date();
+        const f = Math.floor(d.getMilliseconds()/1000*25);
+        const s = pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds())+':'+pad(f);
+        clocks.forEach(c => { if (!c.held) c.el.textContent = s; });
+      }, 1000/25);
+
+      function mount(id, opts = {}) {
+        const el = document.getElementById(id);
+        el.innerHTML = board();
+        const clock = { el: el.querySelector('.tc'), held: false };
+        clocks.push(clock);
+        const put = (f, v) => el.querySelectorAll(`[data-f="${f}"]`).forEach(n => {
+          if (n.tagName === 'IMG') { n.src = v; } else { n.innerHTML = v; }
+        });
+        let i = Math.floor(Math.random()*DECK.length);
+        let take = 3;
+
+        function write(p, opts2 = {}) {
+          put('fps', p.fps); put('stop', p.stop); put('res', p.res); put('lens', p.lens);
+          put('slate', p.slate); put('ct', p.ct); put('unit', p.unit); put('city', p.city);
+          put('roll', `<span class="red">${p.roll[0]}</span>${p.roll.slice(1)}`);
+          put('take', opts2.take ?? take);
+          put('studioLogo', p.studioLogo);
+          const dark = el.classList.contains('paleBand');
+          put('logo', dark ? p.logoDark : p.logo);
+          el.querySelector('.bandArt').style.setProperty('--logoH', p.logoH + 'px');
+        }
+        write(DECK[i]);
+        return { el, clock, put, write, get index(){return i}, set index(v){i=v},
+                 get take(){return take}, set take(v){take=v}, deck: DECK };
+      }
+
+      /* the shared shut-hold-lift, so every demo claps the same way */
+      function clap(b, atImpact, hold = 620) {
+        if (b.el.dataset.busy) return;
+        b.el.dataset.busy = '1';
+        b.el.style.setProperty('--open','0');
+        setTimeout(() => {
+          b.clock.held = true;
+          const f = b.el.querySelector('.flash');
+          f.classList.remove('go'); void f.offsetWidth; f.classList.add('go');
+          b.el.classList.remove('shake'); void b.el.offsetWidth; b.el.classList.add('shake');
+          atImpact && atImpact();
+        }, 170);
+        setTimeout(() => { b.clock.held = false; b.el.style.setProperty('--open','1'); }, 170 + hold);
+        setTimeout(() => { b.el.removeAttribute('data-busy'); }, 170 + hold + 420);
+      }
+
+      /* ============ 01 · re-chalk ============ */
+      (function () {
+        const b = mount('s1');
+        const cells = () => [...b.el.querySelectorAll('.card .v')];
+        const art = b.el.querySelector('.bandArt img');
+        const st = document.createElement('style');
+        st.textContent = `
+          #s1 .card .v { transition: opacity .16s linear, transform .22s cubic-bezier(.2,0,.1,1); }
+          #s1 .card .v.wipe { opacity: 0; transform: translateX(-9px) rotate(-3deg); }
+          #s1 .bandArt img { transition: opacity .1s linear; }
+          #s1 .bandArt img.cut { opacity: 0; }`;
+        document.head.appendChild(st);
+        b.el.addEventListener('click', () => clap(b, () => {
+          /* wipe, swap underneath, then rewrite cell by cell */
+          cells().forEach(c => c.classList.add('wipe'));
+          art.classList.add('cut');
+          setTimeout(() => {
+            b.index = (b.index + 1) % b.deck.length;
+            b.write(b.deck[b.index]);
+            art.classList.remove('cut');
+            cells().forEach((c, n) => setTimeout(() => c.classList.remove('wipe'), 40 + n * 34));
+          }, 150);
+        }, 820));
+        b.el.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); b.el.click(); }
+        });
+      })();
+
+      /* ============ 02 · a slate per production ============ */
+      (function () {
+        const b = mount('s2');
+        const SKINS = [
+          { name: 'Acrylic insert', cls: '', vars: {} },
+          { name: 'Chalk board', cls: 'skinChalk', vars: {
+              '--card':'#232a2b','--cardHi':'#2d3536','--rule':'#0d1112','--ink2':'#f2f4f2',
+              '--label':'rgba(242,244,242,.62)','--hand':'Chalk','--handStroke':'0px',
+              '--band':'#161c1d','--studioFilter':'invert(1) contrast(1.1)' } },
+          { name: 'Vintage wood', cls: 'skinWood', vars: {
+              '--card':'#c9a06a','--cardHi':'#dcb782','--rule':'#4a3418','--ink2':'#231708',
+              '--label':'#43301a','--hand':'Caveat',
+              '--stick':'linear-gradient(180deg,#7a5a34 0%,#5d431f 46%,#3f2d13 100%)',
+              '--tooth':'linear-gradient(180deg,#f6efe2 0%,#e6dcc6 52%,#cdbfa2 100%)',
+              '--metal':'linear-gradient(146deg,#e8c98a 0%,#a8823f 30%,#d8b872 52%,#7d5c26 80%,#c8a45e 100%)',
+              '--band':'#2b1d0c' } },
+          { name: 'Digital smart-slate', cls: 'skinDigital', vars: {
+              '--card':'#0d1013','--cardHi':'#151a1f','--rule':'#242c33','--ink2':'#ff3d14',
+              '--label':'rgba(180,200,214,.6)','--hand':'Jost','--handStroke':'0px',
+              '--band':'#080a0c','--readout':'#04060a','--studioFilter':'invert(1) contrast(1.1)' } },
+        ];
+        const st = document.createElement('style');
+        st.textContent = `
+          #s2 { transition: transform .45s cubic-bezier(.22,0,.14,1); }
+          #s2 .card, #s2 .stickBody, #s2 .rail, #s2 .band, #s2 .v, #s2 .cell b, #s2 .side b {
+            transition: background .34s ease, color .34s ease, border-color .34s ease;
+          }
+          #s2.skinDigital .v { font-family:'Jost',sans-serif; font-weight:600; letter-spacing:.5px;
+            text-shadow:0 0 10px rgba(255,60,20,.55); transform:none !important; }
+          #s2.skinDigital .cell, #s2.skinDigital .row { border-color:#242c33; }
+          #s2.skinChalk .v { -webkit-text-stroke:0; }
+          #s2.skinWood .card { box-shadow: inset 0 0 34px rgba(80,50,14,.4); }
+          #s2 .skinTag {
+            position:absolute; left:0; right:0; bottom:-34px; text-align:center;
+            font-size:10px; font-weight:500; letter-spacing:3px; text-transform:uppercase;
+            color: var(--muted,#96928c);
+          }`;
+        document.head.appendChild(st);
+        const tag = document.createElement('span');
+        tag.className = 'skinTag'; tag.textContent = SKINS[0].name;
+        b.el.appendChild(tag);
+        let s = 0;
+        b.el.addEventListener('click', () => clap(b, () => {
+          SKINS[s].cls && b.el.classList.remove(SKINS[s].cls);
+          Object.keys(SKINS[s].vars).forEach(k => b.el.style.removeProperty(k));
+          s = (s + 1) % SKINS.length;
+          const skin = SKINS[s];
+          skin.cls && b.el.classList.add(skin.cls);
+          Object.entries(skin.vars).forEach(([k, v]) => b.el.style.setProperty(k, v));
+          b.el.classList.toggle('paleBand', s === 0 ? false : false);
+          b.index = (b.index + 1) % b.deck.length;
+          b.write(b.deck[b.index]);
+          tag.textContent = skin.name;
+        }, 700));
+        b.el.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); b.el.click(); }
+        });
+      })();
+
+      /* ============ 03 · throw the stick ============ */
+      (function () {
+        const b = mount('s3');
+        const stick = b.el.querySelector('.stick');
+        let dragging = false, open = 1, vel = 0, raf = 0;
+        const OPEN_DEG = 15;
+
+        const set = v => { open = Math.max(0, Math.min(1, v)); b.el.style.setProperty('--open', open.toFixed(3)); };
+
+        b.el.style.setProperty('--open','1');
+        stick.style.transition = 'none';
+
+        function fall() {
+          raf = requestAnimationFrame(fall);
+          if (dragging) return;
+          /* gravity toward shut, with a small bounce off the rail */
+          vel += 0.055;
+          let next = open - vel;
+          if (next <= 0) {
+            next = 0;
+            if (vel > 0.06) { vel = -vel * 0.28; impact(); } else { vel = 0; cancelAnimationFrame(raf); raf = 0; }
+          }
+          if (next >= 1) { next = 1; vel = 0; }
+          set(next);
+        }
+        let last = 0;
+        function impact() {
+          if (Date.now() - last < 220) return;
+          last = Date.now();
+          const f = b.el.querySelector('.flash');
+          f.classList.remove('go'); void f.offsetWidth; f.classList.add('go');
+          b.el.classList.remove('shake'); void b.el.offsetWidth; b.el.classList.add('shake');
+          b.clock.held = true;
+          setTimeout(() => { b.clock.held = false; }, 700);
+          b.index = (b.index + 1) % b.deck.length;
+          b.write(b.deck[b.index]);
+          setTimeout(() => { if (!dragging) { vel = -0.16; if (!raf) fall(); } }, 620);
+        }
+
+        const angleFrom = e => {
+          const r = b.el.getBoundingClientRect();
+          const dx = Math.max(12, e.clientX - r.left);
+          const dy = (r.top - e.clientY);
+          return Math.max(0, Math.min(1, (Math.atan2(dy, dx) * 180 / Math.PI) / OPEN_DEG));
+        };
+        stick.addEventListener('pointerdown', e => {
+          e.stopPropagation(); dragging = true; vel = 0;
+          stick.setPointerCapture(e.pointerId);
+          set(angleFrom(e));
+        });
+        stick.addEventListener('pointermove', e => { if (dragging) set(angleFrom(e)); });
+        stick.addEventListener('pointerup', () => { dragging = false; vel = 0.02; if (!raf) fall(); });
+        b.el.addEventListener('click', e => {
+          if (dragging) return;
+          set(1); vel = 0.22; if (!raf) fall();
+        });
+        b.el.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); set(1); vel = 0.22; if (!raf) fall(); }
+        });
+      })();
+
+      /* ============ 04 · takes, then print ============ */
+      (function () {
+        const b = mount('s4');
+        b.take = 1; b.write(b.deck[b.index], { take: 1 });
+        const st = document.createElement('style');
+        st.textContent = `
+          #s4 .stamp {
+            position:absolute; left:50%; top:44%; transform:translate(-50%,-50%) rotate(-11deg) scale(.7);
+            z-index:8; pointer-events:none; opacity:0;
+            font-family:'Anton',sans-serif; font-size:52px; letter-spacing:5px;
+            color:#b3261a; -webkit-text-stroke:2px #b3261a; text-transform:uppercase;
+          }
+          #s4 .stamp.go { animation: stamp .9s cubic-bezier(.2,0,.1,1); }
+          @keyframes stamp {
+            0%{opacity:0;transform:translate(-50%,-50%) rotate(-11deg) scale(1.5)}
+            14%{opacity:1;transform:translate(-50%,-50%) rotate(-11deg) scale(.98)}
+            72%{opacity:1}
+            100%{opacity:0;transform:translate(-50%,-50%) rotate(-11deg) scale(1)}
+          }
+          #s4 .card { transition: transform .4s cubic-bezier(.3,0,.15,1), opacity .3s linear; }
+          #s4.pull .card { transform: translateY(-14px); opacity: 0; }`;
+        document.head.appendChild(st);
+        const stamp = document.createElement('span');
+        stamp.className = 'stamp'; stamp.textContent = 'Print';
+        b.el.appendChild(stamp);
+        b.el.addEventListener('click', () => clap(b, () => {
+          if (b.take < 3) {
+            b.take += 1;
+            b.put('take', b.take);
+          } else {
+            stamp.classList.remove('go'); void stamp.offsetWidth; stamp.classList.add('go');
+            setTimeout(() => {
+              b.el.classList.add('pull');
+              setTimeout(() => {
+                b.index = (b.index + 1) % b.deck.length;
+                b.take = 1; b.write(b.deck[b.index], { take: 1 });
+                b.el.classList.remove('pull');
+              }, 330);
+            }, 260);
+          }
+        }, b.take >= 3 ? 1150 : 620));
+        b.el.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); b.el.click(); }
+        });
+      })();
+
+      /* ============ 05 · peek at the back ============ */
+      (function () {
+        const b = mount('s5');
+        const st = document.createElement('style');
+        st.textContent = `
+          #s5 { perspective: 1500px; }
+          #s5 .card, #s5 .rail, #s5 .stick {
+            transition: transform .5s cubic-bezier(.22,0,.14,1);
+            transform-style: preserve-3d;
+          }
+          #s5.peek .card { transform: rotateY(-26deg); transform-origin: 14% 50%; }
+          #s5.peek .rail { transform: rotateY(-26deg); transform-origin: 14% 50%; }
+          #s5.peek .stick { transform: rotate(calc(var(--open) * -15deg)) rotateY(-22deg); }
+          #s5 .backPeek {
+            position:absolute; inset:22px 0 0 auto; width:62%; z-index:-1;
+            border-radius:0 7px 7px 0; padding:20px 22px;
+            background:linear-gradient(172deg,#17171b 0%,#0d0d10 60%,#101014 100%);
+            border:1px solid #000; box-shadow:0 20px 30px rgba(0,0,0,.5);
+            opacity:0; transform:translateX(6px); transition:opacity .4s ease, transform .5s cubic-bezier(.22,0,.14,1);
+          }
+          #s5.peek .backPeek { opacity:1; transform:translateX(58%); }
+          #s5 .backPeek h4 { margin:0 0 12px; font-family:'Anton',sans-serif; font-weight:400;
+            font-size:12px; letter-spacing:2px; text-transform:uppercase; color:#f4f2ee; }
+          #s5 .pk { display:flex; justify-content:space-between; align-items:baseline; gap:12px;
+            padding:6px 0; border-bottom:1px solid rgba(244,242,238,.1); }
+          #s5 .pk span { font-size:8px; font-weight:500; letter-spacing:1.8px;
+            text-transform:uppercase; color:rgba(244,242,238,.8); }
+          #s5 .pk b { font-family:'Anton',sans-serif; font-weight:400; font-size:16px; color:#fbf9f6; }
+          #s5 .hint {
+            position:absolute; right:-6px; top:50%; transform:translateY(-50%);
+            width:3px; height:64px; border-radius:3px; background:var(--accent,#d4704f); opacity:.55;
+          }
+          #s5.peek .hint { opacity:0; }`;
+        document.head.appendChild(st);
+        const back = document.createElement('div');
+        back.className = 'backPeek';
+        back.innerHTML = '<h4>The work so far</h4>' +
+          [['Productions supplied','533'],['Feature films','151'],['Television series','194']]
+            .map(([k,v]) => `<div class="pk"><span>${k}</span><b>${v}</b></div>`).join('');
+        b.el.appendChild(back);
+        const hint = document.createElement('span');
+        hint.className = 'hint';
+        b.el.appendChild(hint);
+
+        b.el.addEventListener('pointermove', e => {
+          const r = b.el.getBoundingClientRect();
+          b.el.classList.toggle('peek', e.clientX > r.right - r.width * 0.22);
+        });
+        b.el.addEventListener('pointerleave', () => b.el.classList.remove('peek'));
+        b.el.addEventListener('focus', () => b.el.classList.add('peek'));
+        b.el.addEventListener('blur', () => b.el.classList.remove('peek'));
+        b.el.addEventListener('click', () => {
+          if (b.el.classList.contains('peek')) return;
+          clap(b, () => { b.index = (b.index + 1) % b.deck.length; b.write(b.deck[b.index]); });
+        });
+      })();
+    </script>
+  </body>
+</html>

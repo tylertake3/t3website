@@ -4,6 +4,14 @@ import { join } from 'node:path';
 import Base from '../layouts/Base.astro';
 import { pageExists } from '../lib/pages';
 import copy from '../content/pages/specialists.json';
+import { getEntry } from 'astro:content';
+import { featuredCredit } from '../lib/productionLogos';
+
+/* the quote beside the on-set still is a normal review from the shared
+   collection, so it carries a production logo exactly like the homepage cards */
+const featureReview = await getEntry('reviews', copy.feature.review);
+const featureCredit = featureReview ? featuredCredit(featureReview.data.credits, featureReview.data.feature) : null;
+const featureQuote = featureReview?.body?.trim() ?? '';
 
 /* Only link to a sibling category once its page is actually in the build —
    the same guard artists.astro uses for its link through to this page.
@@ -36,14 +44,28 @@ const divisions = copy.divisions.items.filter((item) => pageExists(item.href) ||
   description={copy.meta.description}
   ogTitle={copy.meta.ogTitle}
   ogDescription={copy.meta.ogDescription}
+  ogImage={copy.meta.ogImage}
+  ogImageAlt={copy.meta.ogImageAlt}
   footerTitle={copy.meta.footerTitle}
 >
   <!-- hero -->
   <section class="pageHero specHero" aria-labelledby="specialistsTitle">
+    {/* the photo sits behind the copy, under the same scrim the homepage hero uses */}
+    <div
+      class="specHeroPhoto"
+      role="img"
+      aria-label={copy.hero.imageAlt}
+      style={`background-image:url("${encodeURI(copy.hero.image)}"); background-position:${copy.hero.focus};`}
+    />
+    <div class="specHeroScrim"></div>
     <div class="pageHeroInner">
       <p class="kicker">{copy.hero.eyebrow}</p>
       <h1 class="pageHeroTitle" id="specialistsTitle">{copy.hero.heading}</h1>
       <p class="todoNote specHeroTodo">{copy.hero.lede}</p>
+      {/* production credit for the cover still, bottom-right like the SPACTs cover */}
+      <p class="specHeroCredit">
+        {copy.hero.creditLabel}<br /><span class="specHeroCreditName">{copy.hero.credit}</span>
+      </p>
     </div>
   </section>
 
@@ -106,6 +128,31 @@ const divisions = copy.divisions.items.filter((item) => pageExists(item.href) ||
         <h3 class="specSpecificsTitle">{copy.examples.specifics.heading}</h3>
         <p class="bandBody specSpecificsBody">{copy.examples.specifics.body}</p>
       </div>
+    </div>
+  </section>
+
+  <!-- on set: a production still beside a client's words -->
+  <section class="band bandDark specDark specFeatureBand" aria-labelledby="featureTitle">
+    <div class="bandInner specFeature">
+      <figure class="specStill">
+        <div class="specStillFrame">
+          <img src={copy.feature.still.image} alt={copy.feature.still.alt} loading="lazy" decoding="async" />
+        </div>
+      </figure>
+      {featureReview && (
+        <article class="specFeatureQuote revCard">
+          <h3 class="revName" id="featureTitle">{featureReview.data.name}</h3>
+          <p class="revRole">{featureReview.data.role}</p>
+          <div class="revCredits">
+            {featureCredit && (
+              <span class={featureCredit.onDark ? 'revCredit revCreditLogo' : 'revCredit'}>
+                {featureCredit.onDark ? <img src={featureCredit.onDark} alt={featureCredit.title} loading="lazy" /> : featureCredit.title}
+              </span>
+            )}
+          </div>
+          <blockquote class="revQuote">{featureQuote}</blockquote>
+        </article>
+      )}
     </div>
   </section>
 
@@ -186,7 +233,33 @@ const divisions = copy.divisions.items.filter((item) => pageExists(item.href) ||
     .specDark { --sub:#c7c3bd; --ink:#f4f2ee; --hair:#3a3a3e; }
 
     .specHead { padding-bottom:18px; }
-    .specHeroTodo { max-width:56ch; }
+
+    /* on set: still on the left, a client's words on the right */
+    .specFeature { display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
+    .specStill { margin:0; }
+    .specStillFrame { aspect-ratio:16/9; overflow:hidden; background:#101012; }
+    .specStillFrame img { width:100%; height:100%; object-fit:cover; object-position:center 45%; display:block; filter:saturate(0.92) contrast(1.05) brightness(0.96); }
+    .specStillCap { margin-top:14px; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
+    /* the band is dark like the homepage reviews; it keeps its own top padding
+       even when it follows another band, and runs straight into the next dark one */
+    .specFeatureBand.band { padding-top:88px; }
+    .specFeatureBand + .bandDark { border-top:0; }
+    .specFeature .revCard { flex:none; }
+    .specFeature .revCredit { animation:none; }
+
+    /* photo hero: same recipe as the homepage banner (cover photo, dark
+       scrim, copy pinned to the bottom-left) on top of the shared pageHero */
+    .specHero { position:relative; overflow:hidden; min-height:var(--coverPhotoH); }
+    .specHeroPhoto { position:absolute; inset:0; background-size:cover; background-repeat:no-repeat; filter:saturate(0.92) contrast(1.05) brightness(0.96); }
+    .specHeroScrim { position:absolute; inset:0; background:var(--heroScrim); }
+    .specHero .pageHeroInner { position:relative; z-index:2; }
+    /* the cover title breaks where the copy says, not where the window does */
+    .specHero .pageHeroTitle { white-space:pre-line; }
+    .specHeroCredit { position:absolute; right:40px; bottom:0; margin:0; text-align:right; color:var(--heroInkSoft); font-size:11px; letter-spacing:3px; line-height:1.5; }
+    .specHeroCreditName { display:block; margin-top:4px; font-size:18px; letter-spacing:5px; font-weight:300; color:var(--heroInk); }
+    /* the intro reads at the same size and measure as the other cover ledes;
+       it keeps the accent rule while the copy is still a placeholder */
+    .specHeroTodo { font-size:clamp(17px, 1.6vw, 21px); line-height:1.7; letter-spacing:0; margin-top:22px; max-width:56ch; text-wrap:pretty; }
 
     /* the divisions — the hub's main job. Given more weight than the
        cross-links at the foot of the page: this is what most visitors have
@@ -227,12 +300,19 @@ const divisions = copy.divisions.items.filter((item) => pageExists(item.href) ||
     .specRelatedGo:hover { color:var(--ink); }
 
     @media (max-width:1024px) {
+      .specFeature { grid-template-columns:1fr; gap:40px; }
+      .specHeroCredit { right:32px; }
       .specExampleGrid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:0 32px; }
       .specSteps { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:28px; }
     }
 
     @media (max-width:640px) {
       .specExampleGrid { grid-template-columns:1fr; }
+      .specHeroCredit { position:static; text-align:left; margin-top:28px; }
+      .specHeroCreditName { font-size:15px; letter-spacing:3px; }
+      .specStillFrame { aspect-ratio:16/10; }
+      /* on a phone the title wraps on its own; the forced break would orphan a word */
+      .specHero .pageHeroTitle { white-space:normal; }
       .specSteps, .specRelated, .specDivisions { grid-template-columns:1fr; gap:26px; }
       .specSpecifics { margin-top:40px; }
     }

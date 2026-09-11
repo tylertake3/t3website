@@ -8,13 +8,18 @@ import copy from '../content/pages/stand-ins.json';
   description={copy.meta.description}
   ogTitle={copy.meta.ogTitle}
   ogDescription={copy.meta.ogDescription}
-  ogImage="/assets/og-default.jpg"
+  ogImage={copy.meta.ogImage}
   ogImageAlt={copy.meta.ogImageAlt}
   footerTitle={copy.meta.footerTitle}
   footerLinks={copy.meta.footerLinks}
 >
   <header class="hero">
-    <div class="heroMedia" aria-hidden="true"></div>
+    <div
+      class="heroMedia"
+      role="img"
+      aria-label={copy.hero.imageAlt}
+      style={`background-image:url("${encodeURI(copy.hero.image)}"); background-position:${copy.hero.focus};`}
+    ></div>
     <div class="heroScrim" aria-hidden="true"></div>
 
     <div class="heroCopy">
@@ -112,14 +117,14 @@ import copy from '../content/pages/stand-ins.json';
     .wrap { max-width:1280px; margin:0 auto; }
 
     /* ---------- hero ---------- */
-    .hero { position:relative; min-height:var(--coverH); background:var(--heroBg); overflow:hidden; display:flex; flex-direction:column; }
-    /* The hero photo is not yet supplied: the media layer degrades to the flat
-       dark --heroBg colour and the gradient scrim stays applied on top. */
-    .heroMedia { position:absolute; inset:0; background:var(--heroBg); }
+    .hero { position:relative; min-height:var(--coverPhotoH); background:var(--heroBg); overflow:hidden; display:flex; flex-direction:column; }
+    /* the set photo sits under the gradient scrim; the flat --heroBg colour
+       shows through until it has loaded */
+    .heroMedia { position:absolute; inset:0; background-color:var(--heroBg); background-size:cover; background-repeat:no-repeat; filter:saturate(0.92) contrast(1.05) brightness(0.96); }
     .heroScrim { position:absolute; inset:0; pointer-events:none; background:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.15) 30%, rgba(20,20,22,0.15) 55%, rgba(20,20,22,0.8) 100%); }
 
     /* padding-top clears the fixed site header at short viewport heights */
-    .heroCopy { position:relative; z-index:2; margin-top:auto; padding:150px 40px 64px; color:#f4f2ee; pointer-events:none; }
+    .heroCopy { position:relative; left:auto; bottom:auto; z-index:2; width:100%; max-width:1280px; margin:auto auto 0; padding:150px 40px 64px; color:#f4f2ee; pointer-events:none; }
     .heroEyebrow { font-size:12px; letter-spacing:6px; color:rgba(244,242,238,0.7); }
     .heroTitle { font-family:'Anton',sans-serif; font-size:clamp(38px, 4.8vw, 84px); letter-spacing:0; line-height:1.05; margin:18px 0 0; text-transform:uppercase; font-weight:400; max-width:none; white-space:normal; }
     .heroLede { font-size:clamp(17px,1.6vw,22px); font-weight:400; letter-spacing:1px; margin-top:18px; max-width:680px; color:rgba(244,242,238,0.9); text-wrap:pretty; }
@@ -201,7 +206,7 @@ import copy from '../content/pages/stand-ins.json';
     @media (max-width:640px) {
       .hero { padding:0; }
       .heroCopy { padding:120px 20px 48px; }
-      .heroEyebrow { letter-spacing:4px; font-size:11px; }
+      .heroEyebrow { letter-spacing:3px; font-size:10px; line-height:1.6; }
       .heroTitle { font-size:clamp(30px, 9.5vw, 46px); letter-spacing:0; }
       .heroLede { font-size:clamp(16px, 4.4vw, 19px); letter-spacing:0.5px; }
       .display { font-size:clamp(24px, 7.5vw, 34px); }
