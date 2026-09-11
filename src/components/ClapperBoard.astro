@@ -1,0 +1,520 @@
+---
+/* The slate: a real object in a WebGL studio (src/lib/clapperStudio.js) that
+   claps when it is clicked. The copy, the controls and the text alternative are
+   ordinary HTML laid over the scene; the scene publishes its attitude as custom
+   properties (--clapHinge, --clapLift, --clapTurn …) so the captions can follow
+   the object without ever driving it.
+
+   Two variants:
+
+     credits  the production deck; the board turns over as the page scrolls to
+              show the agency's record on its back
+     launch   one card that reads "coming soon"; the readout counts down to the
+              launch, the page does not scroll the board, and a button turns it
+              over instead */
+import { slateDeck } from '../lib/slateDeck';
+
+interface Launch {
+  /** ISO moment with its offset, e.g. 2026-09-17T12:00:00+01:00 */
+  at: string;
+  /** the mark printed on the board's front cell and its rear, black on transparent */
+  markSrc: string;
+  markAlt: string;
+  /** what the rear says under the mark */
+  /** the line set across the band on the face of the board */
+  faceTitle?: string;
+  boardLines: string[];
+  /** the credit line on the front's band */
+  faceCredit: string;
+  /** the text alternative for the whole thing */
+  accessible: string;
+  turn: string;
+  turnBack: string;
+}
+
+interface Props {
+  variant?: 'credits' | 'launch';
+  /** The kicker, heading and lede that hold the left of the frame. */
+  eyebrow: string;
+  heading: string;
+  lede: string;
+  /** credits: the agency-wide record printed on the back of the board. */
+  recordTitle?: string;
+  recordNote?: string;
+  record?: { label: string; value: string }[];
+  /** launch: the countdown, the mark, and the words on the board. */
+  launch?: Launch;
+}
+
+const {
+  variant = 'credits',
+  eyebrow,
+  heading,
+  lede,
+  recordTitle = '',
+  recordNote = '',
+  record = [],
+  launch,
+} = Astro.props;
+const isLaunch = variant === 'launch' && Boolean(launch);
+
+/* the launch board is one card, built here so the copy file stays plain words */
+const releaseMark = (iso: string) => {
+  const d = new Date(iso);
+  const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', day: '2-digit', month: '2-digit', year: 'numeric' })
+    .formatToParts(d)
+    .reduce<Record<string, string>>((acc, p) => ((acc[p.type] = p.value), acc), {});
+  return `${parts.day} · ${parts.month} · ${parts.year}`;
+};
+const deck = isLaunch && launch
+  ? [{
+      key: 'coming-soon', title: 'Coming Soon', release: releaseMark(launch.at), studio: 'laural', format: 'Launch',
+      slate: 'SOON', roll: 'T003', lens: '35mm', stop: '2.8', res: '4K', shutter: '180', ct: '5600', ei: '800',
+      fps: '25', unit: 'Coming Soon', city: 'London', take: 1,
+      logo: '', logoHeight: 60, studioLogo: launch.markSrc,
+    }]
+  : slateDeck;
+
+/* what the scene paints on the rear plate */
+const rear = isLaunch && launch
+  ? { kind: 'mark', mark: launch.markSrc, lines: launch.boardLines }
+  : { kind: 'record', title: recordTitle, note: recordNote, rows: record };
+
+const config = isLaunch && launch
+  ? {
+      scroll: false,
+      clock: { kind: 'countdown', at: Date.parse(launch.at) },
+      face: { studioLabel: 'PRESENTS', markBox: [747, 409, 615, 180], bandText: launch.faceTitle ?? 'COMING SOON', creditLine: launch.faceCredit },
+      idle: 'lively',
+      takeCounter: true,
+    }
+  : { scroll: true, clock: { kind: 'time' }, face: {}, takeCounter: false, idle: 'calm' };
+---
+
+<section class:list={['clapHero', { 'clapHero--launch': isLaunch }]} data-clap-hero data-clap-variant={variant}>
+  <div class="clapStage" data-clap-stage>
+    <!-- the studio: floor, backdrop, light, and the board itself -->
+    <div class="clapScene" data-clap-scene aria-hidden="true"></div>
+    <div class="clapScrim" aria-hidden="true"></div>
+
+    <div class="clapCopy" data-clap-copy>
+      <p class="kicker clapKicker">{eyebrow}</p>
+      <h1 class="clapTitle" id="clapTitle">{heading}</h1>
+      <p class="clapLede">{lede}</p>
+      <div class="clapActions">
+        <button type="button" class="clapTrigger" data-clap-trigger>
+          <span class="clapTriggerMark" aria-hidden="true"></span>
+          <span>Clap the board</span>
+        </button>
+        {
+          isLaunch && launch ? (
+            <button type="button" class="clapSkip clapTurn" data-clap-turn data-turn-back={launch.turnBack} aria-pressed="false">
+              <span data-clap-turn-label>{launch.turn}</span>
+              <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M4 12a8 8 0 0 1 13.6-5.7M20 12a8 8 0 0 1-13.6 5.7M17.6 2.5v4h-4M6.4 21.5v-4h4" />
+              </svg>
+            </button>
+          ) : (
+            <a class="clapSkip" href="#productions">
+              Browse productions
+              <svg aria-hidden="true" width="11" height="13" viewBox="0 0 12 14" fill="none"
+                   stroke="currentColor" stroke-width="1.6">
+                <path d="M6 1v11M1.5 8 6 12.5 10.5 8" />
+              </svg>
+            </a>
+          )
+        }
+      </div>
+    </div>
+
+    {
+      !isLaunch && (
+        <>
+          <!-- The caption for the other side, which arrives as the board comes round. -->
+          <div class="clapBackCopy" aria-hidden="true">
+            <p class="kicker clapKicker">{recordNote}</p>
+            <p class="clapBackHeading">{recordTitle}</p>
+          </div>
+          <p class="clapCue" aria-hidden="true"><i></i>Scroll to turn it over</p>
+          <div class="clapProgress" aria-hidden="true"><span></span></div>
+        </>
+      )
+    }
+
+    <!-- what the board says, for anyone who cannot see it change -->
+    <p class="clapStatus" role="status" data-clap-status></p>
+  </div>
+
+  <!-- The board's faces are decorative, so what they carry is read from here
+       instead. It is also what the page shows if the scene cannot run. -->
+  <div class="clapRecordAlt">
+    {
+      isLaunch && launch ? (
+        <p class="clapRecordAltNote">{launch.accessible}</p>
+      ) : (
+        <>
+          <h2 class="clapRecordAltTitle">{recordTitle}</h2>
+          <p class="clapRecordAltNote">{recordNote}</p>
+          <dl class="clapRecordAltList">
+            {record.map((row) => [<dt>{row.label}</dt>, <dd>{row.value}</dd>])}
+          </dl>
+        </>
+      )
+    }
+  </div>
+</section>
+
+<script define:vars={{ deck, rear, config }}>
+  window.__take3Slate = { deck, rear, config };
+</script>
+
+<script>
+  import { mountClapperStudio } from '../lib/clapperStudio.js';
+
+  const hero = document.querySelector('[data-clap-hero]');
+  const stage = document.querySelector('[data-clap-stage]');
+  const data = window.__take3Slate ?? {};
+  const deck = data.deck ?? [];
+  const config = data.config ?? {};
+
+  /* The scene is the page when it can run. When it cannot — no WebGL, no deck,
+     a mount that throws — the plain reading takes over rather than leaving a
+     tall empty stage to scroll past. */
+  const fallBackToText = () => hero?.classList.add('is-static');
+
+  /* Reduced motion gets a real alternative rather than a degraded version of
+     the same thing: the hero stops being a tall pinned sequence, the board is
+     shown facing us at a normal block height, and what it carries is read as
+     type underneath. The clap still works, without the swing. */
+  const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (calm) hero?.classList.add('is-calm');
+
+  if (!hero || !stage || !deck.length) {
+    fallBackToText();
+  } else {
+    try {
+      const studio = mountClapperStudio({
+        stage,
+        hero,
+        host: stage.querySelector('[data-clap-scene]'),
+        deck,
+        record: data.rear,
+        copy: stage.querySelector('[data-clap-copy]'),
+        status: stage.querySelector('[data-clap-status]'),
+        ...config,
+      });
+      if (!studio) {
+        fallBackToText();
+      } else {
+        /* the launch board is turned by its button rather than by scrolling */
+        const turnButton = stage.querySelector('[data-clap-turn]');
+        if (turnButton) {
+          const label = turnButton.querySelector('[data-clap-turn-label]');
+          const forward = label?.textContent ?? '';
+          const back = turnButton.getAttribute('data-turn-back') ?? forward;
+          const showFacing = (toRear) => {
+            turnButton.setAttribute('aria-pressed', toRear ? 'true' : 'false');
+            if (label) label.textContent = toRear ? back : forward;
+          };
+          turnButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const toRear = !studio.turned;
+            studio.turn(toRear);
+            showFacing(toRear);
+          });
+          /* the board can also be dragged round by hand; the button follows */
+          new MutationObserver(() => showFacing(stage.dataset.clapFacing === 'rear'))
+            .observe(stage, { attributes: true, attributeFilter: ['data-clap-facing'] });
+        }
+      }
+    } catch (error) {
+      console.error('[slate] the board could not be built', error);
+      fallBackToText();
+    }
+  }
+</script>
+
+<noscript>
+  <style>
+    /* Same shape as .is-static, applied before any script gets a chance. */
+    .clapHero { height: auto !important; min-height: 0 !important; }
+    .clapHero .clapStage {
+      position: static !important; height: auto !important; padding: 170px 0 64px !important;
+    }
+    .clapHero .clapScene,
+    .clapHero .clapScrim,
+    .clapHero .clapCue,
+    .clapHero .clapProgress,
+    .clapHero .clapBackCopy,
+    .clapHero .clapTurn,
+    .clapHero .clapTrigger { display: none !important; }
+    .clapHero .clapCopy {
+      position: static !important; transform: none !important; width: auto !important;
+      max-width: 1280px; margin: 0 auto; padding: 0 40px !important;
+    }
+    .clapHero .clapRecordAlt {
+      position: static !important; width: auto !important; height: auto !important;
+      max-width: 1280px; margin: 56px auto 0; padding: 0 40px !important;
+      overflow: visible !important; clip-path: none !important; white-space: normal !important;
+    }
+  </style>
+</noscript>
+
+<style is:global>
+  /* ==================================================================
+     THE HERO THE SLATE STANDS IN
+     credits: tall enough for the lift and the turn to happen while the stage
+     is pinned — the whole travel is reserved up front, so nothing reflows
+     mid-turn. launch: one screen, and the page scrolls past it normally.
+     The stage colour matches the scene's own background, so the room is there
+     before the first frame and nothing flashes when it arrives.
+     ================================================================== */
+  .clapHero { position: relative; height: 225svh; background: var(--studioBack); }
+  .clapStage {
+    position: sticky; top: 0; height: 100svh; overflow: hidden;
+    background: var(--studioBack);
+    /* the attitude the scene publishes each frame */
+    --clapHinge: 1;
+    --clapTurn: 0;
+    --clapLift: 0;
+  }
+  .clapHero--launch { height: 100svh; min-height: 640px; }
+  .clapHero--launch .clapStage { position: relative; height: 100%; }
+  /* the launch copy stays put while the board turns: there is no second caption */
+  .clapHero--launch .clapCopy > :not(.clapActions) { opacity: 1; }
+
+  .clapScene { position: absolute; inset: 0; }
+  .clapScene canvas {
+    display: block; width: 100% !important; height: 100% !important;
+    opacity: 0; transition: opacity 0.6s ease;
+  }
+  .clapHero.is-ready .clapScene canvas { opacity: 1; }
+
+  /* A little extra weight behind the copy. The room already darkens towards
+     its edges; this only makes sure the lede clears its contrast wherever the
+     key happens to fall. */
+  .clapScrim {
+    position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(90deg, var(--stageScrim), transparent 46%);
+  }
+
+  /* ================= the copy that holds the left of the frame ================= */
+  .clapCopy {
+    position: absolute; z-index: 3;
+    left: clamp(20px, 5vw, 72px);
+    top: 50%;
+    transform: translateY(calc(-50% + var(--clapCopyShift, 0px)));
+    width: min(36ch, 29vw);
+    color: var(--stageInk);
+  }
+  /* The captions change, but the same keyboard-accessible controls remain. */
+  .clapCopy > :not(.clapActions) {
+    opacity: var(--clapCopyFade, 1);
+    pointer-events: none;
+  }
+  .clapKicker { color: var(--stageAccent); margin: 0 0 16px; }
+  .clapTitle {
+    margin: 0;
+    font-family: 'Anton', 'Jost', sans-serif; text-transform: uppercase; font-weight: 400;
+    font-size: clamp(52px, 6.4vw, 108px); line-height: 0.94; letter-spacing: 0;
+  }
+  .clapLede {
+    margin: 22px 0 0; max-width: 38ch;
+    font-size: clamp(15px, 1.15vw, 18px); line-height: 1.72; color: var(--stageInkSoft);
+    text-wrap: pretty;
+  }
+  .clapActions {
+    margin-top: 30px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px;
+  }
+  /* a way straight to the wall (credits), or the turn (launch) */
+  .clapSkip {
+    display: inline-flex; align-items: center; gap: 9px;
+    font: inherit; font-size: 11px; font-weight: 500; letter-spacing: 2.2px; text-transform: uppercase;
+    color: var(--stageInkSoft); text-decoration: none; background: none;
+    border: 0; border-bottom: 1px solid var(--stageLine); padding: 0 0 4px; cursor: pointer;
+    transition: color 0.25s ease, border-color 0.25s ease;
+  }
+  .clapSkip:hover { color: var(--stageInk); border-color: var(--stageInk); }
+  .clapTurn[aria-pressed='true'] { color: var(--stageInk); border-color: var(--stageInk); }
+  .clapTrigger {
+    display: inline-flex; align-items: center; gap: 12px;
+    font: inherit; font-size: 11px; font-weight: 500; letter-spacing: 2.8px; text-transform: uppercase;
+    color: var(--stageInk); background: none; border: 1px solid var(--stageBtnBorder);
+    padding: 13px 22px; cursor: pointer;
+    transition: border-color 0.3s ease, background 0.3s ease;
+  }
+  .clapTrigger:hover { border-color: var(--stageInk); background: var(--stageBtnWash); }
+  .clapTriggerMark {
+    width: 18px; height: 11px; flex: none; border: 1px solid currentColor;
+    background: repeating-linear-gradient(108deg, currentColor 0 3.2px, transparent 3.2px 6.4px);
+  }
+
+  /* the caption for the other side, arriving as the board comes round */
+  /* Centred a little above the front copy's centre: the front block ends in
+     the two controls, which stay put through the turn, and this heading has
+     to finish above them rather than run into them. */
+  .clapBackCopy {
+    position: absolute; z-index: 3;
+    left: clamp(20px, 5vw, 72px);
+    top: calc(50% - 56px);
+    transform: translateY(calc(-50% + var(--clapBackShift, 26px)));
+    width: min(36ch, 29vw);
+    color: var(--stageInk);
+    opacity: var(--clapBackFade, 0);
+    pointer-events: none;
+  }
+  .clapBackHeading {
+    margin: 0;
+    font-family: 'Anton', 'Jost', sans-serif; text-transform: uppercase; font-weight: 400;
+    font-size: clamp(40px, 4.5vw, 76px); line-height: 1.02; letter-spacing: 0; text-wrap: balance;
+  }
+
+  .clapCue {
+    position: absolute; left: clamp(20px, 5vw, 72px); bottom: 6vh; z-index: 3;
+    display: flex; align-items: center; gap: 14px; margin: 0;
+    font-size: 9.5px; font-weight: 500; letter-spacing: 4.4px; text-transform: uppercase;
+    color: var(--stageInkFaint);
+    opacity: var(--clapCopyFade, 1);
+  }
+  .clapCue i {
+    width: 46px; height: 1px; flex: none;
+    background: linear-gradient(90deg, var(--stageInkFaint), transparent);
+  }
+
+  /* how far through the hero we are: a hairline, not a scrollbar */
+  .clapProgress {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 4; height: 1px;
+    background: var(--stageLine);
+  }
+  .clapProgress span {
+    display: block; height: 100%; width: calc(var(--clapHeroProgress, 0) * 100%);
+    background: var(--stageAccent);
+  }
+
+  /* what the board currently says, announced rather than shown */
+  .clapStatus {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: 0;
+    overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+  }
+
+  /* ==================================================================
+     READ RATHER THAN SEEN
+     The painted faces are decorative, so this is what a screen reader gets.
+     It is also what the page falls back to if the scene cannot run.
+     ================================================================== */
+  .clapRecordAlt {
+    position: absolute; width: 1px; height: 1px; padding: 0;
+    overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+  }
+  .clapRecordAltTitle {
+    font-family: 'Anton', 'Jost', sans-serif; font-size: 24px;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .clapRecordAltNote {
+    margin-top: 8px; font-size: 12px; font-weight: 500; letter-spacing: 2.6px;
+    text-transform: uppercase; color: var(--stageAccent);
+  }
+  .clapHero--launch .clapRecordAltNote {
+    margin: 0; max-width: 60ch; font-size: 15px; letter-spacing: 0; text-transform: none;
+    line-height: 1.7; color: var(--stageInkSoft);
+  }
+  .clapRecordAltList {
+    margin: 20px 0 0; display: grid; grid-template-columns: 1fr auto; gap: 10px 24px; max-width: 520px;
+  }
+  .clapRecordAltList dt {
+    font-size: 12px; letter-spacing: 2.4px; text-transform: uppercase; color: var(--stageInkSoft);
+  }
+  .clapRecordAltList dd {
+    margin: 0; text-align: right; font-family: 'Anton', 'Jost', sans-serif; font-size: 20px;
+  }
+
+  /* ---------- reduced motion ----------
+     A real alternative rather than a degraded version of the same thing: the
+     hero stops being a tall pinned sequence, the board is shown facing us at an
+     ordinary block height, and what it carries is read as type underneath it.
+     The clap still works. */
+  .clapHero.is-calm { height: auto; min-height: 0; }
+  .clapHero.is-calm .clapStage { position: relative; height: min(84svh, 720px); }
+  .clapHero.is-calm .clapCue,
+  .clapHero.is-calm .clapProgress,
+  .clapHero.is-calm .clapBackCopy { display: none; }
+  .clapHero.is-calm .clapRecordAlt {
+    position: static; width: auto; height: auto;
+    max-width: 1280px; margin: 0 auto; padding: 4px 40px 88px;
+    overflow: visible; clip-path: none; white-space: normal;
+    color: var(--stageInk);
+  }
+  .clapHero.is-calm .clapRecordAltList { max-width: 620px; }
+
+  /* ---------- no scene ---------- */
+  .clapHero.is-static { height: auto; min-height: 0; }
+  .clapHero.is-static .clapStage {
+    position: static; height: auto; padding: 170px 0 64px; background: var(--studioBack);
+  }
+  .clapHero.is-static .clapScene,
+  .clapHero.is-static .clapScrim,
+  .clapHero.is-static .clapCue,
+  .clapHero.is-static .clapProgress,
+  .clapHero.is-static .clapBackCopy,
+  .clapHero.is-static .clapTurn,
+  .clapHero.is-static .clapTrigger { display: none; }
+  .clapHero.is-static .clapCopy {
+    position: static; transform: none; width: auto;
+    max-width: 1280px; margin: 0 auto; padding: 0 40px; opacity: 1;
+  }
+  .clapHero.is-static .clapRecordAlt {
+    position: static; width: auto; height: auto; max-width: 1280px;
+    margin: 56px auto 0; padding: 0 40px;
+    overflow: visible; clip-path: none; white-space: normal; color: var(--stageInk);
+  }
+
+  /* ================= narrow ================= */
+  /* The board takes the upper half and the copy sits under it, so neither is
+     cropped and the turn still has the whole width to happen in. */
+  @media (max-width: 900px) {
+    .clapHero { height: 205svh; }
+    .clapHero--launch { height: 100svh; min-height: 780px; }
+    /* the room's weight moves to the foot of the frame, under the copy */
+    .clapScrim { background: linear-gradient(180deg, transparent 48%, var(--stageScrim) 100%); }
+    /* Both captions are anchored to the same top edge, directly under the
+       board, rather than to the bottom of the viewport. */
+    .clapCopy {
+      top: 62svh; bottom: auto; width: auto; right: clamp(20px, 5vw, 72px);
+      transform: translateY(var(--clapCopyShift, 0px));
+    }
+    .clapHero--launch .clapCopy { top: 62%; }
+    .clapBackCopy {
+      top: 62svh; bottom: auto; width: auto; right: clamp(20px, 5vw, 72px);
+      transform: translateY(var(--clapBackShift, 26px));
+    }
+    .clapTitle { font-size: clamp(44px, 12.5vw, 76px); }
+    .clapLede { margin-top: 16px; font-size: 14.5px; line-height: 1.6; }
+    .clapActions { margin-top: 22px; }
+    .clapHero.is-calm .clapStage { height: max(100svh, 760px); }
+    /* the cue collided with the Browse link at this width, and the copy block
+       already ends with a scroll affordance */
+    .clapCue { display: none; }
+    .clapHero.is-calm .clapRecordAlt { padding: 4px 20px 64px; }
+    .clapHero.is-static .clapStage { padding: 150px 0 56px; }
+    .clapHero.is-static .clapCopy,
+    .clapHero.is-static .clapRecordAlt { padding: 0 20px; }
+  }
+  @media (max-width: 900px) and (max-height: 740px) {
+    .clapHero { height: auto; }
+    .clapStage { position: relative; height: 760px; }
+    .clapHero--launch .clapStage { height: 780px; }
+    .clapCopy, .clapBackCopy { top: 470px; }
+    .clapRecordAlt {
+      position: static; width: auto; height: auto; padding: 20px 20px 48px;
+      overflow: visible; clip-path: none; white-space: normal; color: var(--stageInk);
+    }
+    .clapHero .clapCue, .clapHero .clapProgress { display: none; }
+    .clapHero.is-static .clapStage { height: auto; }
+  }
+  .clapTrigger:focus-visible, .clapSkip:focus-visible { outline-color: var(--stageInk); }
+  @media (prefers-reduced-motion: reduce) {
+    .clapHero *, .clapHero *::before, .clapHero *::after {
+      animation: none !important; transition: none !important;
+    }
+  }
+</style>

@@ -1,0 +1,8 @@
+/* Anchor jumps (e.g. the "Browse productions" link to #productions) stop short
+   of the fixed nav. The nav gets shorter at each breakpoint, so this tracks its
+   measured height at each: 84 → 80 → 72 → 64. Replace the existing single
+   `html { scroll-padding-top:84px; }` line with these four, kept together. */
+html { scroll-padding-top:84px; }
+@media (max-width:1024px) { html { scroll-padding-top:80px; } }
+@media (max-width:860px)  { html { scroll-padding-top:72px; } }
+@media (max-width:400px)  { html { scroll-padding-top:64px; } }

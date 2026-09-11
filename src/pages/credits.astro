@@ -1,27 +1,42 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import clientData from '../data/clients.json';
 import copy from '../content/pages/credits.json';
-import { featuredCredit } from '../lib/productionLogos';
-import { hasLogo } from '../lib/clientLogos';
-import { posterLabel, posterWall } from '../lib/posters';
-import WhereWeWork from '../components/WhereWeWork.astro';
+import { entryTags, wall, wallCount, wallDisciplines, wallFormats } from '../lib/creditWall';
 
-const clients = clientData.clients;
+/* How many cards are rendered ready to show before "Load more" is needed. The
+   whole wall is in the document either way, so search reaches every title and
+   the page still works with no script running. */
+const FIRST_BATCH = 30;
 
-const anyLogoSupplied = clients.some(hasLogo);
+/* The pills. Built from what credit-detail.json actually contains, so a pill can
+   never offer a format or a discipline that no card carries. Both groups are
+   empty until that file is filled in, and the row hides itself. */
+const formatPills = wallFormats.length
+  ? [{ label: 'All', value: 'all' }, ...wallFormats]
+  : [];
+const filters = [...formatPills, ...wallDisciplines];
+const dividerAfter = formatPills.length - 1;
 
-/* Testimonials are editable content, not page copy: they live in
-   src/content/reviews and are managed under Reviews in the editor. */
-const reviews = (await getCollection('reviews'))
-  .filter((review) => !(review.body ?? '').trimStart().startsWith('TODO:'))
-  .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
-
-/* Copy still to be written is styled as a visible note rather than passed off as
-   body text. The moment real wording replaces it, it reads as body text again. */
-const isTodo = (text: string) => text.trimStart().startsWith('TODO:');
-const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `bandBody ${extra}`.trim());
+/* The cover. When credits.json carries a photo (hero.slides) the page opens on
+   it, full-bleed, the way /dancers does; until then it opens on the site's plain
+   dark cover with the same words. Nothing else on the page changes either way. */
+type HeroSlide = { image: string; focus?: string; wide?: string; wideFocus?: string; narrowFocus?: string };
+const heroSlides = ((copy.hero as { slides?: HeroSlide[] }).slides ?? []).filter((slide) => slide?.image);
+const NARROW_UNTIL = 900;
+const layerRule = (i: number, src: string | null, position?: string) =>
+  `.heroLayer[data-hero="${i}"]{` +
+  (src ? `background-image:url("${encodeURI(src)}");` : '') +
+  (position ? `background-position:${position};` : '') +
+  '}';
+const narrowRules = heroSlides
+  .map((slide, i) => (slide.narrowFocus ? layerRule(i, null, slide.narrowFocus) : ''))
+  .filter(Boolean);
+const heroCss = [
+  ...heroSlides.map((slide, i) =>
+    layerRule(i, slide.wide ?? slide.image, slide.wide ? slide.wideFocus ?? 'center center' : slide.focus),
+  ),
+  ...(narrowRules.length ? [`@media (max-width:${NARROW_UNTIL - 1}px){${narrowRules.join('')}}`] : []),
+].join('\n');
 ---
 
 <Base
@@ -31,165 +46,295 @@ const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `ba
   ogDescription={copy.meta.ogDescription}
   footerTitle={copy.meta.footerTitle}
 >
-  <!-- hero -->
-  <section class="pageHero" aria-labelledby="creditsTitle">
-    <div class="pageHeroInner">
-      <p class="kicker">{copy.hero.eyebrow}</p>
-      <h1 class="pageHeroTitle" id="creditsTitle">{copy.hero.heading}</h1>
-      <p class="pageHeroLede">{copy.hero.lede}</p>
-    </div>
-  </section>
+  {
+    heroSlides.length > 0 ? (
+      <>
+        {/* full-bleed photo cover: one still per slide, cross-fading if there is
+            more than one; the words sit over its foot */}
+        <style is:inline set:html={heroCss} />
+        <header class="hero creditsHero" aria-labelledby="creditsTitle">
+          {heroSlides.map((_slide, i) => <div class={i === 0 ? 'heroLayer on' : 'heroLayer'} data-hero={i} />)}
+          <div class="heroScrim"></div>
+          <div class="heroCopy">
+            <h1 class="heroTitle" id="creditsTitle">{copy.hero.heading}</h1>
+            <p class="heroLede">{copy.hero.lede}</p>
+          </div>
+        </header>
+      </>
+    ) : (
+      <section class="pageHero" aria-labelledby="creditsTitle">
+        <div class="pageHeroInner">
+          <p class="kicker">{copy.hero.eyebrow}</p>
+          <h1 class="pageHeroTitle" id="creditsTitle">{copy.hero.heading}</h1>
+          <p class="pageHeroLede">{copy.hero.lede}</p>
+          <!-- the work so far, in the banner: the row of figures -->
+          <div class="stats creditsHeroStats" aria-label={copy.figures.heading}>
+            {
+              copy.figures.items.map((figure) => (
+                <div class="stat">
+                  <div class="statNum" data-countup>{figure.number}</div>
+                  <div class="statLabel">{figure.label}</div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+    )
+  }
 
-  <!-- headline figures -->
-  <section class="band" aria-labelledby="figuresTitle">
-    <div class="bandInner">
-      <div class="sectionHead">
-        <h2 class="sectionTitle" id="figuresTitle">{copy.figures.heading}</h2>
-        <p class="kicker">{copy.figures.kicker}</p>
-      </div>
-      <div class="stats creditsStats">
-        {
-          copy.figures.items.map((figure) => (
-            <div class="stat">
-              <div class="statNum" data-countup>{figure.number}</div>
-              <div class="statLabel">{figure.label}</div>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  <!-- production credits, grouped by format -->
-  <section class="band" aria-labelledby="productionsTitle">
+  <!-- production credits -->
+  <section class="band creditsWall" id="productions" aria-labelledby="productionsTitle">
     <div class="bandInner">
       <div class="sectionHead">
         <h2 class="sectionTitle" id="productionsTitle">{copy.productions.heading}</h2>
         <p class="kicker">{copy.productions.kicker}</p>
       </div>
-      <p class={bodyClass(copy.productions.intro, 'creditsIntro')}>{copy.productions.intro}</p>
-      <p class="todoNote">{copy.productions.clearanceNote}</p>
+      <p class="bandBody creditsIntro">{copy.productions.intro}</p>
 
-      <ul class="posterGrid creditsPosters">
+      {
+        filters.length > 0 && (
+          <div class="workFilters" role="group" aria-label="Filter productions">
+            {filters.map((filter, i) => (
+              <>
+                <button
+                  type="button"
+                  class="workFilter"
+                  data-filter={filter.value}
+                  aria-pressed={i === 0 ? 'true' : 'false'}
+                >
+                  {filter.label}
+                </button>
+                {i === dividerAfter && filters.length > formatPills.length && (
+                  <span class="workFilterSplit" aria-hidden="true"></span>
+                )}
+              </>
+            ))}
+          </div>
+        )
+      }
+
+      <!-- Not shown, but kept as a live region: without it, pressing a pill or
+           "Load more" changes the grid with nothing announced to a screen
+           reader. It carries the same sentence it always did. -->
+      <p class="workCount srOnly" data-work-count role="status">
+        Showing {Math.min(FIRST_BATCH, wallCount)} of {wallCount} productions
+      </p>
+
+      <ul class="workGrid" data-work-grid data-batch={FIRST_BATCH}>
         {
-          posterWall.map((poster, i) => (
-            <li class="posterCell">
-              <img
-                class="posterImg"
-                src={poster.src}
-                alt={`${posterLabel(poster)} poster`}
-                width="500"
-                height="750"
-                loading={i < 10 ? 'eager' : 'lazy'}
-                decoding="async"
-              />
-              <span class="posterName">{posterLabel(poster)}</span>
+          wall.map((entry, i) => (
+            <li
+              class="workCard"
+              data-card
+              data-tags={entryTags(entry)}
+              hidden={i >= FIRST_BATCH}
+            >
+              <div class="workCardPlate">
+                <img
+                  class="workCardImg"
+                  src={entry.src}
+                  alt={`${entry.label} poster`}
+                  width="500"
+                  height="750"
+                  loading={i < 10 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+              </div>
+              <div class="workCardBody">
+                <h3 class="workCardTitle">{entry.label}</h3>
+                {
+                  /* What Take 3 supplied. Omitted when it is not recorded — the
+                     title and the poster stand on their own. */
+                  entry.disciplines.length > 0 && (
+                    <p class="workCardRoles">{entry.disciplines.join(' · ')}</p>
+                  )
+                }
+              </div>
             </li>
           ))
         }
       </ul>
-    </div>
-  </section>
 
-  <!-- client logos -->
-  <section class="band creditsClients" aria-labelledby="clientsTitle">
-    <div class="bandInner">
-      <div class="sectionHead">
-        <h2 class="sectionTitle" id="clientsTitle">{copy.clients.heading}</h2>
-        <p class="kicker">{copy.clients.kicker}</p>
+      <div class="workEmpty" data-work-empty hidden>
+        <p class="workEmptyTitle">Nothing in that category yet.</p>
+        <button type="button" class="workReset" data-work-reset>Show all productions</button>
       </div>
-      <p class={bodyClass(copy.clients.body, 'creditsIntro')}>{copy.clients.body}</p>
-      {!anyLogoSupplied && <p class="todoNote">{copy.clients.artworkNote}</p>}
-    </div>
-    <div class="logoStack creditsLogoWall">
-      <div class="logoPage is-on" aria-hidden="true">
-        {
-          clients.map((cell) => (
-            <div
-              class="logoCell"
-              style={
-                hasLogo(cell)
-                  ? `height:${cell.height}px; background-image:url("${cell.dark}");`
-                  : `height:${cell.height}px;`
-              }
-              data-light={hasLogo(cell) ? cell.light : undefined}
-              data-dark={hasLogo(cell) ? cell.dark : undefined}
-            />
-          ))
-        }
+
+      <div class="workMoreRow">
+        <button type="button" class="workMore" data-work-more>
+          Load more productions
+        </button>
       </div>
     </div>
   </section>
 
-  <!-- where we have worked -->
-  <WhereWeWork
-    kicker={copy.where.kicker}
-    heading={copy.where.heading}
-    body={copy.where.body}
-    countLabel={copy.where.countLabel}
-  />
-
-  <!-- testimonials -->
-  <section class="band bandDark" aria-labelledby="testimonialsTitle">
-    <div class="bandInner">
-      <div class="sectionHead">
-        <h2 class="sectionTitle" id="testimonialsTitle">{copy.testimonials.heading}</h2>
-        <p class="kicker">{copy.testimonials.kicker}</p>
-      </div>
-      {
-        reviews.length > 0 ? (
-          <>
-            <p class={bodyClass(copy.testimonials.intro, 'creditsIntro')}>{copy.testimonials.intro}</p>
-            <ul class="creditsQuoteGrid">
-              {reviews.map((review) => (
-                <li>
-                  <figure class="creditsQuote">
-                    <blockquote class="creditsQuoteText">{review.body?.trim()}</blockquote>
-                    <figcaption>
-                      <span class="creditsQuoteName">{review.data.name}</span>
-                      <span class="creditsQuoteRole">{review.data.role}</span>
-                      {(() => {
-                        const c = featuredCredit(review.data.credits, review.data.feature);
-                        if (!c) return null;
-                        return (
-                          <span class="creditsQuoteCredits">
-                            <span class={c.onDark ? 'revCredit revCreditLogo' : 'revCredit'}>
-                              {c.onDark ? (
-                                <img
-                                  src={c.onDark}
-                                  alt={c.title}
-                                  loading="lazy"
-                                  width={c.logoWidth}
-                                  height={c.logoHeight}
-                                  style={c.logoHeight ? `--logo-h:${c.logoHeight};--logo-w:${c.logoWidth}` : undefined}
-                                />
-                              ) : (
-                                c.title
-                              )}
-                            </span>
-                          </span>
-                        );
-                      })()}
-                    </figcaption>
-                  </figure>
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : (
-          <p class="todoNote">{copy.testimonials.emptyNote}</p>
-        )
+  <script is:inline>
+    /* ---------- photo cover cross-fade ----------
+       Only does anything when the cover carries more than one slide. Same
+       rotator as /dancers, including the settle-on-theme-change guard. */
+    (function () {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+      var layers = Array.prototype.slice.call(document.querySelectorAll('.creditsHero .heroLayer'));
+      if (layers.length < 2 || reduce.matches) return;
+      var hi = 0;
+      var timer = null;
+      function advance() {
+        layers[hi].classList.remove('on');
+        hi = (hi + 1) % layers.length;
+        layers[hi].classList.add('on');
       }
-    </div>
-  </section>
+      function start() {
+        if (timer) window.clearInterval(timer);
+        timer = window.setInterval(advance, 5000);
+      }
+      start();
+      document.addEventListener('t3:themechange', function () {
+        layers.forEach(function (layer) {
+          var wasOn = layer.classList.contains('on');
+          layer.style.transition = 'none';
+          layer.style.opacity = wasOn ? '1' : '0';
+        });
+        start();
+        window.setTimeout(function () {
+          layers.forEach(function (layer) {
+            layer.style.removeProperty('transition');
+            layer.style.removeProperty('opacity');
+          });
+        }, 1000);
+      });
+    })();
+
+    /* The wall is filtered in place: every card is already on the page, so a
+       discipline is a matter of hiding the ones that do not carry it. No
+       network, no reflow of anything above the grid. */
+    (function () {
+      var grid = document.querySelector('[data-work-grid]');
+      if (!grid) return;
+
+      /* Every card is in the document, so the wall still reads with no script
+         running. What changes here is which of them are visible: the pill
+         narrows the set, and "Load more" lengthens the batch shown from it. */
+      var cards = Array.prototype.slice.call(grid.querySelectorAll('[data-card]'));
+      var pills = Array.prototype.slice.call(document.querySelectorAll('.workFilter'));
+      var count = document.querySelector('[data-work-count]');
+      var empty = document.querySelector('[data-work-empty]');
+      var resetButton = document.querySelector('[data-work-reset]');
+      var moreButton = document.querySelector('[data-work-more]');
+      var moreRow = moreButton ? moreButton.parentNode : null;
+
+      var STEP = parseInt(grid.getAttribute('data-batch'), 10) || 30;
+      var shownLimit = STEP;
+      var tag = 'all';
+
+      var apply = function () {
+        var matching =
+          tag === 'all'
+            ? cards.slice()
+            : cards.filter(function (card) {
+                return (card.getAttribute('data-tags') || '').split(' ').indexOf(tag) !== -1;
+              });
+
+        var visible = Math.min(shownLimit, matching.length);
+        cards.forEach(function (card) {
+          card.hidden = true;
+        });
+        for (var i = 0; i < visible; i++) matching[i].hidden = false;
+
+        pills.forEach(function (pill) {
+          pill.setAttribute('aria-pressed', pill.getAttribute('data-filter') === tag ? 'true' : 'false');
+        });
+
+        if (count) {
+          var label = '';
+          if (tag !== 'all') {
+            var active = pills.filter(function (p) {
+              return p.getAttribute('data-filter') === tag;
+            })[0];
+            if (active) label = ' ' + active.textContent.trim().toLowerCase();
+          }
+          count.textContent = matching.length
+            ? 'Showing ' + visible + ' of ' + matching.length + label +
+              (matching.length === 1 ? ' production' : ' productions')
+            : 'Nothing in that category yet';
+        }
+        if (empty) empty.hidden = matching.length > 0;
+        if (moreRow) moreRow.hidden = visible >= matching.length;
+      };
+
+      /* Changing the pill starts the batch again, so the first thing shown is
+         the first thing that matches. */
+      pills.forEach(function (pill) {
+        pill.addEventListener('click', function () {
+          tag = pill.getAttribute('data-filter');
+          shownLimit = STEP;
+          apply();
+        });
+      });
+
+      if (resetButton) {
+        resetButton.addEventListener('click', function () {
+          tag = 'all';
+          shownLimit = STEP;
+          apply();
+          if (pills[0]) pills[0].focus();
+        });
+      }
+
+      if (moreButton) {
+        moreButton.addEventListener('click', function () {
+          /* Nothing above the button moves, so the page does not jump; the
+             button keeps focus so the keyboard can carry on loading. */
+          shownLimit += STEP;
+          apply();
+        });
+      }
+
+      apply();
+    })();
+  </script>
 
   <style is:global>
-    /* three headline figures, not the homepage's four. The section header
-       already draws a rule, so the row does not draw a second one. */
-    .stats.creditsStats {
-      grid-template-columns:repeat(3, minmax(0, 1fr));
-      border-top:0; padding-top:0; margin-top:36px;
+    /* ---------- photo cover ----------
+       Only present when credits.json carries hero.slides. display/padding/
+       filter/width/max-width reset the homepage hero rules in global.css. */
+    .creditsHero { position:relative; min-height:var(--coverPhotoH); background:#101012; overflow:hidden; display:block; padding:0; }
+    .creditsHero .heroLayer { position:absolute; inset:0; opacity:0; transition:opacity 1.8s ease; background-size:cover; background-position:center 35%; filter:none; }
+    .creditsHero .heroLayer.on { opacity:1; }
+    .creditsHero .heroScrim { position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,20,22,0.42) 0%, rgba(20,20,22,0.15) 16%, rgba(20,20,22,0.15) 55%, rgba(20,20,22,0.8) 100%); }
+    .creditsHero .heroCopy {
+      position:absolute; left:40px; right:40px; bottom:64px; top:auto; transform:none;
+      z-index:2; color:#f4f2ee; width:auto; max-width:none; text-align:left;
     }
+    .creditsHero .heroEyebrow { font-size:12px; letter-spacing:6px; color:rgba(244,242,238,0.7); }
+    .creditsHero .heroTitle {
+      font-family:'Anton', 'Jost', sans-serif; font-weight:400; text-transform:uppercase;
+      font-size:clamp(48px, 6vw, 104px); letter-spacing:0; line-height:1.02; margin:0;
+      max-width:none;
+    }
+    .creditsHero .heroLede { font-size:clamp(17px,1.5vw,21px); font-weight:400; letter-spacing:0.5px; line-height:1.6; margin-top:22px; max-width:560px; color:rgba(244,242,238,0.88); text-wrap:pretty; }
+    @media (max-width:1024px) { .creditsHero .heroCopy { left:28px; right:28px; } }
+    @media (max-width:640px) {
+      .creditsHero .heroCopy { left:20px; right:20px; bottom:36px; }
+      .creditsHero .heroEyebrow { letter-spacing:4px; }
+      .creditsHero .heroTitle { font-size:clamp(40px, 13vw, 104px); }
+      .creditsHero .heroLede { font-size:clamp(16px, 4.4vw, 22px); }
+    }
+    @media (prefers-reduced-motion: reduce) { .creditsHero .heroLayer { transition:none; } }
+
+    /* the figures live in the banner: six across on a rule, in the banner's
+       own inks. Dark in both themes, so the accent is pinned to the dark
+       theme's coral (the light theme's oxblood fails contrast on it). */
+    .stats.creditsHeroStats {
+      margin-top:44px; padding-top:28px; border-top:1px solid rgba(244,242,238,0.18);
+      grid-auto-flow:row; grid-template-columns:repeat(6, minmax(0, 1fr)); justify-content:stretch;
+      gap:24px 28px;
+    }
+    .creditsHeroStats .statNum { color:#d4704f; }
+    .creditsHeroStats .statLabel { color:rgba(244,242,238,0.62); white-space:normal; text-wrap:balance; }
+    .creditsHero .heroCopy { max-width:none; margin:0; }
+    /* the scrim sits behind the words: darker through the middle, lighter at the top */
+    .creditsHero .heroScrim { background:linear-gradient(180deg, rgba(20,20,22,0.3) 0%, rgba(20,20,22,0.1) 20%, rgba(20,20,22,0.12) 50%, rgba(20,20,22,0.62) 76%, rgba(20,20,22,0.88) 100%); }
 
     .creditsIntro { margin-top:26px; max-width:64ch; }
 
@@ -200,54 +345,121 @@ const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `ba
     .bandDark .todoNote { color:#d4704f; }
     .bandDark .todoNote { border-left-color:#d4704f; }
 
-    /* the full wall of productions. It runs long, so it holds six to a row and
-       the plates sit tighter than the homepage's five */
-    .creditsPosters { margin:36px 0 0; grid-template-columns:repeat(auto-fill, minmax(116px, 1fr)); gap:6px; }
-    .creditsPosters .posterName { padding:18px 6px 7px; font-size:9px; letter-spacing:.8px; }
-    @media (max-width:1024px) { .creditsPosters { grid-template-columns:repeat(auto-fill, minmax(104px, 1fr)); } }
-    @media (max-width:640px) { .creditsPosters { grid-template-columns:repeat(auto-fill, minmax(88px, 1fr)); gap:4px; } }
+    /* ---------- the wall of productions ---------- */
+    /* Filter pills. They sit on their own row rather than in the section head,
+       so a long heading and five buttons never fight for the same line. */
+    /* An anchor jump here is cleared of the fixed header by html{scroll-padding-top}
+       alone. It used to carry its own scroll-margin as well, and the two stacked:
+       the wall landed 216px down, with a strip of the stage — the board's
+       underside — still showing under the header. The section's own top padding
+       is all the breathing room it needs. */
+
+    .srOnly {
+      position:absolute; width:1px; height:1px; padding:0;
+      overflow:hidden; clip-path:inset(50%); white-space:nowrap;
+    }
+
+
+    /* Filter pills — the wall's only control, alongside "Load more". Built from
+       what the data actually contains, so a pill can never offer nothing. */
+    .workFilters {
+      display:flex; flex-wrap:wrap; gap:8px;
+      margin-top:32px; padding-bottom:24px; border-bottom:1px solid var(--hair);
+    }
+    .workFilter {
+      font:inherit; font-size:12px; letter-spacing:1.8px; text-transform:uppercase;
+      color:var(--ink); background:none; border:1px solid var(--ctrlBorder);
+      padding:11px 20px; cursor:pointer;
+      transition:background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    }
+    /* what it is, then what we supplied */
+    .workFilterSplit { width:1px; align-self:stretch; margin:0 6px; background:var(--hair); }
+    .workFilter:hover { border-color:var(--ink); }
+    .workFilter[aria-pressed='true'] { background:var(--ink); border-color:var(--ink); color:var(--bg); }
+
+    /* Five to a row: the artwork, then the title beneath it. The credit used to
+       sit over the foot of the poster, where it collided with whatever title
+       treatment the poster already carried. */
+    .workGrid {
+      display:grid; grid-template-columns:repeat(5, minmax(0, 1fr)); gap:36px 16px;
+      list-style:none; margin:34px 0 0; padding:0;
+    }
+    .workCard { display:flex; flex-direction:column; }
+    .workCard[hidden] { display:none; }
+    .workCardPlate {
+      position:relative; overflow:hidden; background:var(--tileBg); aspect-ratio:2 / 3;
+    }
+    .workCardImg {
+      width:100%; height:100%; object-fit:cover;
+      transition:opacity 0.4s cubic-bezier(0.3, 0, 0.2, 1);
+    }
+    /* The cards do not link anywhere yet, so the hover is a quiet
+       acknowledgement rather than anything that reads as clickable. */
+    .workCard:hover .workCardImg { opacity:0.88; }
+    .workCardBody { padding:14px 0 0; }
+    .workCardTitle {
+      font-family:'Anton', 'Jost', sans-serif; font-weight:400;
+      font-size:16px; line-height:1.24; letter-spacing:0.2px;
+      text-transform:uppercase; color:var(--ink);
+      text-wrap:balance;
+    }
+    /* What Take 3 supplied. Set wide and quiet against the condensed title —
+       this reverses the "reduce letter spacing on small text" note earlier in
+       docs/, on Tyler's instruction of 8 September 2026. */
+    .workCardRoles {
+      margin:9px 0 0;
+      font-size:11.5px; font-weight:400; letter-spacing:2.6px; text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    /* ---------- empty state and load more ---------- */
+    .workEmpty { margin:44px 0 8px; text-align:center; }
+    .workEmptyTitle { font-size:17px; color:var(--sub); }
+    .workReset {
+      margin-top:18px;
+      font:inherit; font-size:12px; font-weight:500; letter-spacing:2px; text-transform:uppercase;
+      color:var(--ink); background:none; border:1px solid var(--ctrlBorder);
+      padding:12px 22px; cursor:pointer;
+      transition:border-color 0.25s ease, background 0.25s ease;
+    }
+    .workReset:hover { border-color:var(--ink); background:var(--tileBg); }
+    .workMoreRow { display:flex; justify-content:center; margin-top:44px; }
+    .workMoreRow[hidden] { display:none; }
+    .workMore {
+      font:inherit; font-size:12px; font-weight:500; letter-spacing:2px; text-transform:uppercase;
+      color:var(--ink); background:none; border:1px solid var(--ctrlBorder);
+      padding:15px 34px; cursor:pointer;
+      transition:border-color 0.25s ease, background 0.25s ease;
+    }
+    .workMore:hover { border-color:var(--ink); background:var(--tileBg); }
+
+    @media (prefers-reduced-motion:reduce) {
+      .workCardImg { transition:none; }
+      .workCard:hover .workCardImg { transform:none; }
+    }
+
+    @media (max-width:1200px) { .workGrid { grid-template-columns:repeat(4, minmax(0, 1fr)); } }
+    @media (max-width:900px) {
+      .workGrid { grid-template-columns:repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width:640px) {
+      .workGrid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:26px 12px; }
+      .workCardBody { padding:12px 0 0; }
+      .workCardTitle { font-size:14px; }
+      .workCardRoles { font-size:10px; letter-spacing:1.9px; }
+      .workFilter { padding:9px 14px; font-size:11px; letter-spacing:1.4px; }
+      .workFilterSplit { display:none; }
+    }
 
     /* the wall runs long, so it breathes less than the homepage's two half-grids */
-    .creditsLogoWall { margin-top:44px; }
-    .creditsLogoWall .logoPage { row-gap:44px; }
-
-    /* testimonials, reproduced as given */
-    .creditsQuoteGrid {
-      list-style:none; margin:36px 0 0; padding:0;
-      display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:44px 40px;
-    }
-    .creditsQuote { margin:0; display:flex; flex-direction:column; height:100%; }
-    .creditsQuoteText {
-      margin:0; font-size:17px; font-weight:400; line-height:1.8; color:#c7c3bd;
-      text-wrap:pretty; flex:1 1 auto;
-    }
-    .creditsQuote figcaption { margin-top:22px; border-top:1px solid #3a3a3e; padding-top:18px; }
-    .creditsQuoteName {
-      display:block; white-space:pre-line;
-      font-family:'Anton', 'Jost', sans-serif; font-size:clamp(26px, 2.4vw, 34px);
-      letter-spacing:0; line-height:1.02; font-weight:400; text-transform:uppercase; color:#f4f2ee;
-    }
-    .creditsQuoteRole {
-      display:block; margin-top:10px; font-size:13px; letter-spacing:2px;
-      font-weight:500; text-transform:uppercase; color:#f4f2ee;
-    }
-    /* same production-logo row as the homepage reviews, at a quieter size to
-       suit the tighter quote grid */
-    .creditsQuoteCredits { display:flex; flex-wrap:wrap; align-items:center; gap:8px 18px; margin-top:10px; font-size:15px; font-weight:400; color:#c7c3bd; }
-    .creditsQuoteCredits .revCredit { animation:none; font-size:13px; }
-    .creditsQuoteCredits .revCredit img { --logo-scale:0.74; }
-    .creditsQuote:hover .revCredit { opacity:1; }
-
     @media (max-width:1024px) {
-      .stats.creditsStats { grid-template-columns:repeat(3, minmax(0, 1fr)); }
-      .creditsQuoteGrid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:36px 32px; }
+      .stats.creditsHeroStats { grid-template-columns:repeat(3, minmax(0, 1fr)); }
       .creditsGroup { margin-top:44px; }
     }
 
     @media (max-width:640px) {
-      .stats.creditsStats { grid-template-columns:1fr; gap:22px; }
-      .creditsQuoteGrid { grid-template-columns:1fr; gap:34px; }
-      .creditsLogoWall .logoPage { row-gap:36px; }
+      .stats.creditsHeroStats { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:22px 18px; margin-top:34px; }
+      .creditsHero .stats.creditsHeroStats { gap:20px 28px; margin-top:28px; padding-top:22px; }
     }
   </style>
 </Base>

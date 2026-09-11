@@ -1,0 +1,62 @@
+{
+  "meta": {
+    "title": "Credits | Film, TV & Commercial Productions | Take 3 Agency",
+    "description": "Productions supplied by Take 3 Agency since 2019 in film, television and commercial, with client logos and what production teams say about working with us.",
+    "ogTitle": "Credits | Take 3 Agency",
+    "ogDescription": "Productions supplied by Take 3 Agency since 2019 across film, television and commercial, and what production teams say about working with us.",
+    "footerTitle": "Tell us about your production"
+  },
+  "hero": {
+    "eyebrow": "TAKE 3 AGENCY",
+    "heading": "Credits",
+    "lede": "Since 2019 Take 3 has supplied more than 500 productions across the UK and Europe, in film, television and commercial."
+  },
+  "figures": {
+    "kicker": "BY THE NUMBERS",
+    "heading": "The work so far",
+    "items": [
+      {
+        "number": "533",
+        "label": "Productions supplied"
+      },
+      {
+        "number": "151",
+        "label": "Feature films"
+      },
+      {
+        "number": "194",
+        "label": "Television series"
+      },
+      {
+        "number": "94",
+        "label": "Commercials & campaigns"
+      },
+      {
+        "number": "54",
+        "label": "Studios & networks"
+      },
+      {
+        "number": "71",
+        "label": "Brands"
+      }
+    ]
+  },
+  "productions": {
+    "kicker": "PRODUCTION CREDITS",
+    "heading": "Film, television and commercial",
+    "intro": "Every production below has been supplied by Take 3 since 2019, across film, television and commercial. The titles speak for themselves.",
+    "clearanceNote": "TODO: clearance — check any new title against what Take 3 is contractually permitted to name, and confirm the embargo status of anything unreleased, before it is added to this wall."
+  },
+  "clients": {
+    "kicker": "WHO WE WORK WITH",
+    "heading": "Client logos",
+    "body": "TODO: copy — one short paragraph introducing the wall of clients. Keep it factual and let the marks speak.",
+    "artworkNote": "Marks without artwork supplied render as an empty plate rather than a broken image. Drop the files into public/assets/logos and each one appears in place."
+  },
+  "testimonials": {
+    "kicker": "IN THEIR WORDS",
+    "heading": "What production teams say",
+    "intro": "The people below have worked with Take 3 on set. Their words are reproduced as given.",
+    "emptyNote": "Testimonials from production teams will appear here."
+  }
+}

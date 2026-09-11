@@ -4,12 +4,19 @@
     "description": "Specialist casting from Take 3 Agency: stunt performers and doubles, circus and physical artists, unique talent and intimacy coordinators, plus anything else a brief calls for beyond the standing roster.",
     "ogTitle": "Specialists | Take 3 Agency",
     "ogDescription": "When a brief calls for a skill or a look beyond the standing roster, Take 3 sources it.",
-    "footerTitle": "Tell us what you need"
+    "footerTitle": "Tell us what you need",
+    "ogImage": "/uploads/28-years-later-bone-temple-samson.webp",
+    "ogImageAlt": "Samson, played by Chi Lewis-Parry, roaring while kneeling in a river in 28 Years Later: The Bone Temple"
   },
   "hero": {
     "eyebrow": "SPECIALISTS",
-    "heading": "If the scene needs it, we'll find it",
-    "lede": "TODO: copy. One or two sentences opening the specialist offer. This is the strongest sell on the site, so it needs the client's own words rather than a placeholder."
+    "heading": "If the scene needs it,\nwe'll find it",
+    "lede": "TODO: copy — one or two sentences opening the specialist offer. This is the strongest sell on the site, so it needs the client's own words rather than a placeholder.",
+    "image": "/uploads/28-years-later-bone-temple-samson.webp",
+    "imageAlt": "Samson, played by Chi Lewis-Parry, roaring while kneeling in a river in 28 Years Later: The Bone Temple",
+    "creditLabel": "AS SEEN ON",
+    "credit": "28 YEARS LATER: THE BONE TEMPLE",
+    "focus": "center 40%"
   },
   "promise": {
     "kicker": "THE PROMISE",
@@ -46,7 +53,6 @@
       }
     ]
   },
-
   "examples": {
     "kicker": "ILLUSTRATIVE, NOT EXHAUSTIVE",
     "heading": "And everything without a page of its own",
@@ -67,14 +73,35 @@
       "body": "The divisions above are the briefs we get most often, not the limit of what we source. A brief nobody has asked for before is still a brief. Tell us what the scene needs and we will go and find it."
     }
   },
+  "feature": {
+    "kicker": "ON SET",
+    "still": {
+      "image": "/uploads/specialists-conjuring-still.webp",
+      "alt": "A ghostly figure with wet hair and pale skin holds a finger to her lips in the dark, in a still from The Conjuring",
+      "caption": "AS SEEN ON · THE CONJURING"
+    },
+    "review": "greg-powell"
+  },
   "process": {
     "kicker": "HOW IT WORKS",
     "heading": "From brief to options",
     "steps": [
-      { "number": "01", "name": "Brief in" },
-      { "number": "02", "name": "Sourcing" },
-      { "number": "03", "name": "Vetting" },
-      { "number": "04", "name": "Options presented" }
+      {
+        "number": "01",
+        "name": "Brief in"
+      },
+      {
+        "number": "02",
+        "name": "Sourcing"
+      },
+      {
+        "number": "03",
+        "name": "Vetting"
+      },
+      {
+        "number": "04",
+        "name": "Options presented"
+      }
     ],
     "todo": "TODO: copy. One short line under each of the four steps. Keep it brief: the point is that there is a process, not a lecture on it."
   },

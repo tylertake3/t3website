@@ -9,7 +9,10 @@
   "hero": {
     "eyebrow": "TAKE 3 AGENCY",
     "heading": "Our artists",
-    "lede": "TODO: copy, one or two sentences establishing the breadth of the roster, without favouring any single discipline."
+    "lede": "TODO: copy — one or two sentences establishing the breadth of the roster, without favouring any single discipline.",
+    "video": "/assets/artists-cover.mp4",
+    "poster": "/assets/artists-cover.jpg",
+    "videoNote": "The film cover: an MP4 (H.264) in public/assets, muted and looping, with a poster still. Clear video to fall back to the plain dark cover."
   },
   "range": {
     "kicker": "THE FULL RANGE",

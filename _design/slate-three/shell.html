@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Take 3 — slate</title>
+    <style>
+      /*FONTS*/
+
+      :root {
+        --board: #f2f1ee;
+        --mark: #17171a;
+        --red: #b3261a;
+        --rule: #141418;
+        --led: #ff3d14;
+        --inkSoft: rgba(244, 242, 238, 0.6);
+        --inkFaint: rgba(244, 242, 238, 0.32);
+        --hair: rgba(244, 242, 238, 0.14);
+        --accent: #d4704f;
+        --ease: cubic-bezier(0.22, 0, 0.14, 1);
+      }
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        height: 100%;
+        background: #0a0a0b;
+        font-family: 'Jost', sans-serif;
+        overflow: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ================= the site underneath ================= */
+      #site {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        background: #101012;
+        opacity: 0;
+        transition: opacity 1s var(--ease);
+      }
+      #site.is-in { opacity: 1; }
+      #site .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 26px 40px;
+      }
+      #site .brand {
+        font-family: 'Anton', 'Jost', sans-serif;
+        font-size: 22px;
+        letter-spacing: 1px;
+        color: #f4f2ee;
+        text-transform: uppercase;
+      }
+      #site .navRight {
+        display: flex;
+        align-items: center;
+        gap: 26px;
+        font-size: 11px;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: var(--inkSoft);
+        font-weight: 500;
+      }
+      #site .navRight .tc { font-variant-numeric: tabular-nums; }
+      #site .navCta { border: 1px solid var(--hair); padding: 11px 20px; color: #f4f2ee; }
+      #site .hero { flex: 1; display: flex; align-items: flex-end; padding: 0 40px 76px; }
+      #site .kicker {
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin: 0 0 20px;
+        opacity: 0;
+        transform: translateY(12px);
+        transition: opacity 1s var(--ease) 0.45s, transform 1s var(--ease) 0.45s;
+      }
+      #site h1 {
+        margin: 0;
+        font-family: 'Anton', 'Jost', sans-serif;
+        font-weight: 400;
+        font-size: clamp(44px, 7.4vw, 104px);
+        line-height: 1.02;
+        max-width: 13ch;
+        color: #f4f2ee;
+        text-transform: uppercase;
+        opacity: 0;
+        transform: translateY(18px);
+        transition: opacity 1.2s var(--ease) 0.6s, transform 1.2s var(--ease) 0.6s;
+      }
+      #site.is-in .kicker, #site.is-in h1 { opacity: 1; transform: none; }
+
+      /* ================= loader stage ================= */
+      #stage {
+        position: fixed;
+        inset: 0;
+        background: #0a0a0b;
+        cursor: pointer;
+        transition: opacity 0.9s var(--ease);
+      }
+      #stage::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: radial-gradient(
+          72% 58% at 44% 34%,
+          rgba(255, 244, 228, 0.1) 0%,
+          rgba(10, 10, 11, 0) 60%
+        );
+      }
+      #stage.is-done { opacity: 0; pointer-events: none; }
+      #css3d { position: absolute; inset: 0; }
+      #css3d * { pointer-events: none; }
+
+      #flash {
+        position: absolute;
+        inset: 0;
+        background: #fff8ec;
+        opacity: 0;
+        pointer-events: none;
+      }
+      #flash.is-on { animation: flash 0.6s ease-out; }
+      @keyframes flash { 0% {opacity:0} 9% {opacity:0.24} 100% {opacity:0} }
+
+      #hint {
+        position: absolute;
+        left: 50%;
+        bottom: 7vh;
+        transform: translateX(-50%);
+        font-size: 10px;
+        font-weight: 500;
+        letter-spacing: 6px;
+        text-transform: uppercase;
+        color: var(--inkFaint);
+        transition: color 0.4s ease, opacity 0.3s ease;
+        white-space: nowrap;
+      }
+      #stage:hover #hint { color: var(--inkSoft); }
+      #stage.is-clapped #hint { opacity: 0; }
+
+      /* ================= the slate itself ================= */
+      /* fixed design size; three.js scales and tilts it in space */
+      #slate {
+        width: 760px;
+        user-select: none;
+      }
+
+      /* ---- arm ---- */
+      #arm {
+        position: relative;
+        height: 34px;
+        transform-origin: 3% 100%;
+        transform: rotate(-8deg);
+        transition: transform 0.55s var(--ease);
+      }
+      #stage:hover #arm { transform: rotate(-12.5deg); }
+      #stage.is-clapped #arm {
+        transform: rotate(0deg);
+        transition: transform 0.16s cubic-bezier(0.75, 0, 0.9, 1);
+      }
+      .armBody {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, #232327 0%, #303036 40%, #17171a 100%);
+        border: 1.5px solid #08080a;
+        border-radius: 4px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.09);
+        overflow: hidden;
+      }
+      .armTeeth {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 52px;
+        right: 12px;
+        display: flex;
+        overflow: hidden;
+      }
+      .armTeeth span {
+        flex: 1;
+        transform: skewX(-19deg) scaleX(1.32);
+      }
+      .armTeeth span:nth-child(odd) { background: #e9e5da; }
+      .syncBox {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 52px;
+        background: linear-gradient(180deg, #2c2c32, #101014);
+        border-right: 1.5px solid #0a0a0d;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+      }
+      .syncBox b {
+        font-size: 6px;
+        font-weight: 600;
+        letter-spacing: 1.4px;
+        color: rgba(244, 242, 238, 0.55);
+        text-transform: uppercase;
+      }
+      .syncBox i { display: flex; gap: 5px; }
+      .syncBox i span {
+        width: 3.5px; height: 3.5px; border-radius: 50%;
+        background: rgba(255, 255, 255, 0.28);
+      }
+
+      /* ---- board ---- */
+      #board {
+        margin-top: 5px;
+        background:
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E"),
+          radial-gradient(120% 90% at 30% 0%, #f7f6f3 0%, var(--board) 48%, #e7e5e0 100%);
+        border: 1.5px solid var(--rule);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow:
+          0 34px 80px rgba(0, 0, 0, 0.6),
+          inset 0 2px 0 rgba(255, 255, 255, 0.55),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+      }
+
+      .headRow {
+        display: flex;
+        align-items: stretch;
+        gap: 10px;
+        padding: 10px;
+        border-bottom: 1.5px solid var(--rule);
+        background: linear-gradient(180deg, #f7f6f3, #e6e4df);
+      }
+      .headSide {
+        position: relative;
+        width: 82px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .headSide b {
+        position: absolute;
+        top: 2px;
+        font-size: 9px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        color: var(--mark);
+        text-transform: uppercase;
+      }
+      .headSide.l b { left: 4px; }
+      .headSide.r b { right: 4px; }
+      .headSide em {
+        font-style: normal;
+        font-family: 'Caveat', cursive;
+        font-weight: 700;
+        -webkit-text-stroke: 0.8px var(--mark);
+        font-size: 46px;
+        margin-top: 10px;
+        color: var(--mark);
+      }
+      .headSide.l em { transform: rotate(-3deg); }
+      .headSide.r em { transform: rotate(2deg); }
+
+      #tcHead {
+        position: relative;
+        flex: 1;
+        background: linear-gradient(180deg, #0a0a0b, #050506 55%, #0b0b0c);
+        border: 2px solid var(--rule);
+        border-radius: 10px;
+        box-shadow:
+          inset 0 4px 22px rgba(0, 0, 0, 0.95),
+          inset 0 -1px 0 rgba(255, 255, 255, 0.06),
+          0 1px 0 rgba(255, 255, 255, 0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 15px 16px 13px;
+      }
+      #tally {
+        position: absolute;
+        top: 9px;
+        right: 12px;
+        display: flex;
+      }
+      #tally span {
+        width: 6px; height: 6px; border-radius: 50%;
+        background: #37c96a;
+        box-shadow: 0 0 7px rgba(55, 201, 106, 0.8);
+      }
+      #stage.is-clapped #tally span {
+        background: var(--led);
+        box-shadow: 0 0 7px rgba(255, 45, 20, 0.85);
+      }
+
+      #tc {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin-top: 4px;
+        transform: skewX(-3deg);
+        filter: drop-shadow(0 0 10px rgba(255, 40, 18, 0.38));
+      }
+      #tc svg { display: block; width: 33px; height: auto; }
+      #tc svg polygon { fill: rgba(255, 43, 20, 0.06); transition: fill 60ms linear; }
+      #tc svg polygon.on {
+        fill: var(--led);
+        filter: drop-shadow(0 0 5px rgba(255, 45, 20, 0.9));
+      }
+      #tc .dot { display: flex; flex-direction: column; gap: 9px; padding: 0 1px; }
+      #tc .dot i {
+        display: block; width: 5px; height: 5px; border-radius: 50%;
+        background: var(--led);
+        box-shadow: 0 0 6px rgba(255, 45, 20, 0.9);
+      }
+
+      /* ---- field rows ---- */
+      .row { display: flex; border-bottom: 1.5px solid var(--rule); }
+      .row:last-of-type { border-bottom: 0; }
+      .cell {
+        position: relative;
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-left: 1.5px solid var(--rule);
+        padding: 0 8px;
+        height: 56px;
+      }
+      .cell:first-child { border-left: 0; }
+      .cell b {
+        position: absolute;
+        left: 8px;
+        top: 5px;
+        font-size: 9px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        color: var(--mark);
+        text-transform: uppercase;
+      }
+      .cell em {
+        font-style: normal;
+        font-family: 'Caveat', cursive;
+        font-weight: 700;
+        -webkit-text-stroke: 0.7px var(--mark);
+        margin-top: 12px;
+        font-size: 37px;
+        letter-spacing: 0.5px;
+        color: var(--mark);
+        transform: rotate(-1.6deg);
+        white-space: nowrap;
+        line-height: 1;
+      }
+      .cell:nth-child(2n) em { transform: rotate(1.2deg); }
+      .rowMain .cell { height: 76px; }
+      .rowMain .cell em { font-size: 52px; margin-top: 14px; }
+      .cell em .red { color: var(--red); -webkit-text-stroke: 0.8px var(--red); }
+      .cell.take em {
+        font-size: 58px;
+        transform: rotate(2.5deg);
+        margin-top: 12px;
+      }
+
+      /* ---- production band ---- */
+      .band {
+        position: relative;
+        background: #060607;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        padding: 26px 20px 18px;
+        border-top: 1.5px solid var(--rule);
+      }
+      .band img { max-height: 52px; max-width: 68%; object-fit: contain; }
+      .credit {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-size: 9.5px;
+        font-weight: 500;
+        letter-spacing: 2.6px;
+        text-transform: uppercase;
+        color: rgba(244, 242, 238, 0.55);
+        white-space: nowrap;
+      }
+      .credit .sep { opacity: 0.35; }
+      .credit .who { font-weight: 600; color: rgba(244, 242, 238, 0.9); }
+      .credit .t3 {
+        font-family: 'Anton', sans-serif;
+        font-weight: 400;
+        font-size: 12px;
+        letter-spacing: 3.5px;
+        color: #f4f2ee;
+      }
+
+      #replay {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 30;
+        font-family: 'Jost', sans-serif;
+        font-size: 10px;
+        font-weight: 500;
+        letter-spacing: 3.5px;
+        text-transform: uppercase;
+        color: rgba(244, 242, 238, 0.75);
+        background: transparent;
+        border: 1px solid var(--hair);
+        padding: 12px 22px;
+        cursor: pointer;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s var(--ease);
+      }
+      #replay.is-in { opacity: 1; pointer-events: auto; }
+
+      @media (prefers-reduced-motion: reduce) {
+        #arm, #stage:hover #arm { transition: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="site">
+      <div class="nav">
+        <span class="brand">Take 3</span>
+        <div class="navRight">
+          <span class="tc">00:25:04:11</span>
+          <span class="navCta">Get in touch</span>
+          <span>Menu</span>
+        </div>
+      </div>
+      <div class="hero">
+        <div>
+          <p class="kicker">Casting — Models — Dancers</p>
+          <h1>People who make the frame</h1>
+        </div>
+      </div>
+    </div>
+
+    <div id="stage" role="button" tabindex="0" aria-label="Clap the slate to enter the site">
+      <div id="css3d"></div>
+      <div id="flash"></div>
+      <span id="hint">Clap to enter</span>
+
+      <!-- the slate; three.js lifts this into its scene -->
+      <div id="slate">
+        <div id="arm">
+          <div class="armBody">
+            <div class="armTeeth"><!--TEETH--></div>
+            <div class="syncBox"><b>Sync</b><i><span></span><span></span></i></div>
+          </div>
+        </div>
+
+        <div id="board">
+          <div class="headRow">
+            <div class="headSide l"><b>Fps</b><em>24</em></div>
+            <div id="tcHead">
+              <div id="tally"><span></span></div>
+              <div id="tc"></div>
+            </div>
+            <div class="headSide r"><b>Stop</b><em>2.8</em></div>
+          </div>
+
+          <div class="row rowMain">
+            <div class="cell" style="flex:1.15"><b>Roll</b><em><span class="red">A</span>001</em></div>
+            <div class="cell" style="flex:1.9"><b>Slate</b><em>VQ 27</em></div>
+            <div class="cell take" style="flex:0.95"><b>Take</b><em>3</em></div>
+          </div>
+
+          <div class="row">
+            <div class="cell"><b>Res</b><em>6K</em></div>
+            <div class="cell" style="flex:1.6"><b>Lens</b><em>45mm</em></div>
+            <div class="cell"><b>Crop %</b><em>100</em></div>
+            <div class="cell"><b>Filter</b><em>&mdash;</em></div>
+          </div>
+
+          <div class="row">
+            <div class="cell" style="flex:1.5"><b>Date</b><em id="date"></em></div>
+            <div class="cell" style="flex:1.1"><b>Shutter</b><em>172.8</em></div>
+            <div class="cell"><b>Ct &deg;</b><em>4500</em></div>
+            <div class="cell"><b>Ei</b><em>1280</em></div>
+          </div>
+
+          <div class="band">
+            <img id="prodLogo" alt="Vision Quest" src="" />
+            <div class="credit">
+              <span class="who">Casting</span>
+              <span class="sep">|</span>
+              <span class="t3">Take 3</span>
+              <span class="sep">|</span>
+              <span>Main Unit</span>
+              <span class="sep">|</span>
+              <span>London</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button id="replay">Replay</button>
+
+    <script>/*BUNDLE*/</script>
+  </body>
+</html>

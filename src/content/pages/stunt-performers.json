@@ -4,23 +4,25 @@
     "description": "Stunt performers, stunt doubles and action-trained talent for film, television and commercial productions. Take 3 Agency supplies registered stunt performers, matched doubles, fight-trained actors and drivers across the UK.",
     "ogTitle": "Stunt Performers & Stunt Doubles | Take 3 Agency",
     "ogDescription": "Registered stunt performers, matched doubles and action-trained talent for film, television and commercial productions.",
-    "ogImageAlt": "A stunt performer mid-fall against a rigged set, with crew watching from behind the safety line.",
-    "footerTitle": "Cast your action sequence"
+    "ogImageAlt": "A soldier in full kit thrown to the ground on a smoke-filled street, a building burning behind him.",
+    "footerTitle": "Cast your action sequence",
+    "ogImage": "/uploads/stunt-hero-soldier.webp"
   },
-
   "hero": {
     "eyebrow": "SPECIALISTS · STUNTS",
     "heading": "Stunt performers & stunt doubles",
-    "lede": "Action-trained talent for film, television and commercial, matched to your cast, cleared for the sequence, and safe on the day.",
-    "tags": ["STUNT PERFORMERS", "DOUBLES", "FIGHT", "DRIVING", "FALLS"]
+    "lede": "Action-trained talent for film, television and commercial — matched to your cast, cleared for the sequence, and safe on the day.",
+    "tags": [
+      "STUNT PERFORMERS",
+      "DOUBLES",
+      "FIGHT",
+      "DRIVING",
+      "FALLS"
+    ],
+    "image": "/uploads/stunt-hero-soldier.webp",
+    "imageAlt": "A soldier in full kit thrown to the ground on a smoke-filled street, a building burning behind him.",
+    "focus": "center 45%"
   },
-
-  "plate": {
-    "slotLabel": "Action still (21:9)",
-    "figNumber": "FIG. 01",
-    "figNote": "SHOT ON SET, NOT IN STUDIO"
-  },
-
   "supply": {
     "kicker": "WHAT WE SUPPLY",
     "heading": "The people behind the sequence",
@@ -47,7 +49,6 @@
       }
     ]
   },
-
   "approach": {
     "kicker": "HOW WE WORK",
     "heading": "Safety is the schedule",
@@ -55,19 +56,15 @@
     "points": [
       {
         "term": "MATCHED PROPERLY",
-        "description": "Height, build, colouring and movement checked against your cast before a name is sent, not after."
-      },
-      {
-        "term": "CLEARED FOR THE WORK",
-        "description": "Training, registration and recent credits confirmed for the specific sequence being cast."
-      },
-      {
-        "term": "COORDINATOR-LED",
-        "description": "We work to your stunt coordinator's brief and keep them in the loop from first name to call sheet."
+        "description": "Height, build, colouring and movement matched to your cast."
       }
-    ]
+    ],
+    "still": {
+      "image": "/uploads/stunt-helicopter-rig.webp",
+      "alt": "A helicopter suspended from a crane rig on a backlot, a performer sitting in its open doorway, with crew watching from the mud below and blue screens behind",
+      "caption": "ON SET · THE GORGE"
+    }
   },
-
   "briefs": {
     "kicker": "ILLUSTRATIVE, NOT EXHAUSTIVE",
     "heading": "The kind of brief this answers",
@@ -82,15 +79,18 @@
       "Motorcycle riders",
       "Horse riders"
     ],
-    "note": "Categories, not a closed list. Tell us the sequence."
+    "note": "Categories, not a closed list — tell us the sequence.",
+    "still": {
+      "image": "/uploads/stunt-wicked-broom-rig.webp",
+      "alt": "A performer in a witch's hat and black dress rides a broomstick on a motion-control rig in front of a blue screen, a camera crane in the foreground",
+      "caption": "ON SET · WICKED"
+    }
   },
-
   "credits": {
     "kicker": "SELECTED WORK",
     "heading": "Sequences we have cast",
     "todo": "TODO: copy. Two or three genuine stunt bookings, with the production's permission. Needs real examples from the client. Nothing in this section may be invented."
   },
-
   "related": {
     "kicker": "WHERE THE OVERLAP IS REAL",
     "heading": "Related disciplines",
@@ -118,6 +118,27 @@
         "href": "/specialists",
         "description": "Anything sourced to brief, beyond the standing roster.",
         "linkLabel": "View specialists"
+      }
+    ]
+  },
+  "plates": {
+    "ariaLabel": "Production stills",
+    "items": [
+      {
+        "image": "/uploads/gladiator-arena-rhino.webp",
+        "alt": "A gladiator sprints across the arena floor ahead of a charging rhinoceros and its armoured rider, the crowd on its feet behind them",
+        "width": 1280,
+        "height": 535,
+        "figNumber": "FIG. 01",
+        "figNote": "GLADIATOR II"
+      },
+      {
+        "image": "/uploads/slow-horses-platform.webp",
+        "alt": "Two figures push through a busy station platform beside a waiting train, the woman in a green coat scanning the crowd ahead",
+        "width": 1024,
+        "height": 576,
+        "figNumber": "FIG. 02",
+        "figNote": "SLOW HORSES"
       }
     ]
   }

@@ -28,6 +28,11 @@
       {
         "image": "/uploads/lotr-s2-ut-230403-00131-r2-jpg-66f4b25127687.webp",
         "production": "RINGS OF POWER"
+      },
+      {
+        "image": "/uploads/spact-acolyte-training.webp",
+        "production": "THE ACOLYTE",
+        "focus": "center 30%"
       }
     ]
   },
@@ -147,6 +152,11 @@
         "caption": "RINGS OF POWER",
         "alt": "Still from the production RINGS OF POWER",
         "image": "/uploads/lotr-s2-ut-230403-00131-r2-jpg-66f4b25127687.webp"
+      },
+      {
+        "caption": "THE SIX TRIPLE EIGHT",
+        "alt": "Still from the production THE SIX TRIPLE EIGHT — uniformed soldiers marching in formation past a bombed street",
+        "image": "/uploads/spact-six-triple-eight-march.webp"
       }
     ]
   },

@@ -19,9 +19,10 @@
       "CREATURE"
     ],
     "figure": {
-      "slotLabel": "Hero portrait (2:3)",
+      "image": "/uploads/circus-cyr-wheel.webp",
+      "alt": "Black-and-white photograph of a performer balancing inside a large wheel, holding its rim with both hands.",
       "figNumber": "FIG. 01",
-      "figNote": "AT HEIGHT, ON A RIG"
+      "figNote": "CYR WHEEL"
     }
   },
   "supply": {

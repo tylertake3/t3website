@@ -4,6 +4,11 @@ import { pageExists } from '../lib/pages';
 import copy from '../content/pages/artists.json';
 
 const specialistsBuilt = pageExists(copy.specialists.href);
+
+/* The film cover: one muted loop filling the whole 16:9 frame, named in
+   artists.json. Clear it and the page opens on the plain dark cover. */
+const heroVideo = ((copy.hero as { video?: string }).video ?? '').trim();
+const heroPoster = ((copy.hero as { poster?: string }).poster ?? '').trim();
 ---
 
 <Base
@@ -13,14 +18,30 @@ const specialistsBuilt = pageExists(copy.specialists.href);
   ogDescription={copy.meta.ogDescription}
   footerTitle={copy.meta.footerTitle}
 >
-  <!-- hero -->
-  <section class="pageHero" aria-labelledby="artistsTitle">
-    <div class="pageHeroInner">
-      <p class="kicker">{copy.hero.eyebrow}</p>
-      <h1 class="pageHeroTitle" id="artistsTitle">{copy.hero.heading}</h1>
-      <p class="pageHeroLede">{copy.hero.lede}</p>
-    </div>
-  </section>
+  <!-- hero: the film, when there is one; the plain cover otherwise -->
+  {
+    heroVideo ? (
+      <header class="hero artistsHero" aria-labelledby="artistsTitle">
+        <video class="heroVideo" autoplay muted loop playsinline preload="metadata" poster={heroPoster || undefined} aria-hidden="true" tabindex="-1">
+          <source src={heroVideo} type="video/mp4" />
+        </video>
+        <div class="heroScrim"></div>
+        <div class="heroCopy">
+          <div class="heroEyebrow">{copy.hero.eyebrow}</div>
+          <h1 class="heroTitle" id="artistsTitle">{copy.hero.heading}</h1>
+          {/* no lede over the film: the heading alone, and the picture does the talking */}
+        </div>
+      </header>
+    ) : (
+      <section class="pageHero" aria-labelledby="artistsTitle">
+        <div class="pageHeroInner">
+          <p class="kicker">{copy.hero.eyebrow}</p>
+          <h1 class="pageHeroTitle" id="artistsTitle">{copy.hero.heading}</h1>
+          <p class="pageHeroLede">{copy.hero.lede}</p>
+        </div>
+      </section>
+    )
+  }
 
   <!-- the full range -->
   <section class="band" aria-labelledby="rangeTitle">
@@ -103,4 +124,48 @@ const specialistsBuilt = pageExists(copy.specialists.href);
       <p class="bandBody">{copy.clients.body}</p>
     </div>
   </section>
+  <script is:inline>
+    /* the film holds on its first frame for anyone who has asked for less
+       motion; it never plays with sound */
+    (function () {
+      var film = document.querySelector('.artistsHero .heroVideo');
+      if (film && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        film.removeAttribute('autoplay');
+        film.removeAttribute('loop');
+        film.pause();
+      }
+    })();
+  </script>
+
+  <style is:global>
+    /* The film cover: the whole 16:9 frame, edge to edge, as tall as the window
+       allows, so nothing of the clip is lost on a desktop; it only crops at the
+       sides when the window is shorter than the frame, or on a phone where the
+       floor keeps room for the words. Dark in both themes, like every cover.
+       The scrim is lifted off the top and middle and kept at the foot, under
+       the words. */
+    .artistsHero {
+      position:relative; display:block; padding:0; overflow:hidden;
+      aspect-ratio:16 / 9; min-height:440px; max-height:100svh; height:auto;
+      background:#080809;
+    }
+    .artistsHero .heroVideo {
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center;
+      pointer-events:none;
+    }
+    .artistsHero .heroScrim {
+      position:absolute; inset:0;
+      background:linear-gradient(180deg, rgba(8,8,9,0.25) 0%, rgba(8,8,9,0) 18%, rgba(8,8,9,0) 48%, rgba(8,8,9,0.55) 74%, rgba(8,8,9,0.88) 100%);
+    }
+    .artistsHero .heroCopy { position:absolute; left:40px; right:40px; bottom:56px; z-index:2; color:#f4f2ee; width:auto; max-width:none; }
+    .artistsHero .heroEyebrow { font-size:12px; letter-spacing:6px; color:rgba(244,242,238,0.7); }
+    .artistsHero .heroTitle { font-family:'Anton',sans-serif; font-size:clamp(48px, 6vw, 104px); letter-spacing:0; line-height:1.02; margin:18px 0 0; font-weight:400; }
+    @media (max-width:1024px) { .artistsHero .heroCopy { left:28px; right:28px; bottom:48px; } }
+    @media (max-width:640px) {
+      .artistsHero { min-height:520px; }
+      .artistsHero .heroCopy { left:20px; right:20px; bottom:36px; }
+      .artistsHero .heroEyebrow { letter-spacing:4px; }
+      .artistsHero .heroTitle { font-size:clamp(40px, 13vw, 104px); }
+    }
+  </style>
 </Base>

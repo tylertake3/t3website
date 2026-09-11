@@ -35,7 +35,7 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
         </ul>
       </div>
       <figure class="cirHeroFig">
-        <div class="slot cirHeroSlot"><span class="slotLabel">{copy.hero.figure.slotLabel}</span></div>
+        <img class="cirHeroPhoto" src={copy.hero.figure.image} alt={copy.hero.figure.alt} width="1441" height="2160" fetchpriority="high" decoding="async" />
         <figcaption class="cirCap">
           <span>{copy.hero.figure.figNumber}</span><span>{copy.hero.figure.figNote}</span>
         </figcaption>
@@ -151,10 +151,10 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
 
     /* hero runs taller than the site default — height is the subject */
     .cirHero { padding-top:200px; padding-bottom:86px; }
-    .cirHeroInner { display:grid; grid-template-columns:1.35fr 0.65fr; gap:72px; align-items:end; }
+    .cirHeroInner { display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, 500px); gap:64px; align-items:center; }
     .cirHeroTitle { max-width:14ch; }
-    .cirHeroFig { margin:0; }
-    .cirHeroSlot { aspect-ratio:2/3; }
+    .cirHeroFig { margin:0; min-width:0; }
+    .cirHeroPhoto { display:block; width:100%; height:auto; object-fit:contain; }
 
     .cirTagRow { list-style:none; margin:30px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:10px 26px; }
     .cirTagRow li { font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); }
@@ -191,7 +191,7 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
 
     @media (max-width:1024px) {
       .cirHeroInner, .cirApproachInner { grid-template-columns:1fr; gap:44px; }
-      .cirHeroFig { max-width:340px; }
+      .cirHeroFig { width:100%; max-width:500px; }
       .cirTiles { gap:48px 36px; }
       .cirRelated { grid-template-columns:repeat(2, minmax(0, 1fr)); }
     }

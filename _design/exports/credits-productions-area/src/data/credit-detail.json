@@ -1,0 +1,870 @@
+{
+  "_comment": [
+    "Per-title credit detail for the credits wall, keyed by the slug in posters.json.",
+    "",
+    "format      : 'Film' | 'Television' | 'Commercial'. Drives the filter pills.",
+    "disciplines : what Take 3 supplied. Shown under the title. NOT SET HERE YET —",
+    "              see src/lib/placeholderDisciplines.ts, which is standing in.",
+    "",
+    "Both are OPTIONAL per title. A title with no format is offered by no format",
+    "pill; a title with no disciplines shows its name alone.",
+    "",
+    "The formats are the published format of each production, which is public",
+    "fact: titles carrying a season number in posters.json, plus each remaining",
+    "title classified by what it actually is. A handful are left blank because the",
+    "slug is ambiguous or the production is not identifiable with confidence — see",
+    "docs/credits-content-gaps.md. Nothing here says anything about what Take 3",
+    "supplied; that is a separate field and it is not filled in."
+  ],
+  "titles": {
+    "alex-rider-s3": {
+      "format": "Television"
+    },
+    "andor-s1": {
+      "format": "Television"
+    },
+    "andor-s2": {
+      "format": "Television"
+    },
+    "avenue-5-s2": {
+      "format": "Television"
+    },
+    "big-boys-s2": {
+      "format": "Television"
+    },
+    "black-doves-s1": {
+      "format": "Television"
+    },
+    "black-mirror-s6": {
+      "format": "Television"
+    },
+    "black-mirror-s7": {
+      "format": "Television"
+    },
+    "bridgerton-s4": {
+      "format": "Television"
+    },
+    "bridgerton-s5": {
+      "format": "Television"
+    },
+    "britannia-s3": {
+      "format": "Television"
+    },
+    "foundation-s2": {
+      "format": "Television"
+    },
+    "foundation-s3": {
+      "format": "Television"
+    },
+    "gangs-of-london-s2": {
+      "format": "Television"
+    },
+    "gangs-of-london-s3": {
+      "format": "Television"
+    },
+    "grace-s2": {
+      "format": "Television"
+    },
+    "grace-s3": {
+      "format": "Television"
+    },
+    "grace-s4": {
+      "format": "Television"
+    },
+    "grace-s5": {
+      "format": "Television"
+    },
+    "grace-s6": {
+      "format": "Television"
+    },
+    "hanna-s3": {
+      "format": "Television"
+    },
+    "harry-potter-tv-series-s1": {
+      "format": "Television"
+    },
+    "hijack-s2": {
+      "format": "Television"
+    },
+    "house-of-the-dragon-s3": {
+      "format": "Television"
+    },
+    "i-hate-suzie-s2": {
+      "format": "Television"
+    },
+    "inside-no-9-s7": {
+      "format": "Television"
+    },
+    "invasion-s2": {
+      "format": "Television"
+    },
+    "kennedys-s1": {
+      "format": "Television"
+    },
+    "killing-eve-s3": {
+      "format": "Television"
+    },
+    "killing-eve-s4": {
+      "format": "Television"
+    },
+    "loki-s2": {
+      "format": "Television"
+    },
+    "mcdonald-dodds-s2": {
+      "format": "Television"
+    },
+    "mcdonald-dodds-s3": {
+      "format": "Television"
+    },
+    "mobland-s1": {
+      "format": "Television"
+    },
+    "mobland-s2": {
+      "format": "Television"
+    },
+    "pennyworth-s1": {
+      "format": "Television"
+    },
+    "pennyworth-s2": {
+      "format": "Television"
+    },
+    "rivals-s1": {
+      "format": "Television"
+    },
+    "rivals-s2": {
+      "format": "Television"
+    },
+    "silo-s1": {
+      "format": "Television"
+    },
+    "silo-s2": {
+      "format": "Television"
+    },
+    "silo-s3": {
+      "format": "Television"
+    },
+    "slow-horses-s2": {
+      "format": "Television"
+    },
+    "slow-horses-s3": {
+      "format": "Television"
+    },
+    "slow-horses-s4": {
+      "format": "Television"
+    },
+    "slow-horses-s5": {
+      "format": "Television"
+    },
+    "slow-horses-s6": {
+      "format": "Television"
+    },
+    "surface-s2": {
+      "format": "Television"
+    },
+    "sweetpea-s2": {
+      "format": "Television"
+    },
+    "ted-lasso-s3": {
+      "format": "Television"
+    },
+    "the-capture-s3": {
+      "format": "Television"
+    },
+    "the-completely-made-up-adventures-of-dick-turpin-s1": {
+      "format": "Television"
+    },
+    "the-crown-s5": {
+      "format": "Television"
+    },
+    "the-crown-s6": {
+      "format": "Television"
+    },
+    "the-devils-hour-s2": {
+      "format": "Television"
+    },
+    "the-gentlemen-s2": {
+      "format": "Television"
+    },
+    "the-lord-of-the-rings-the-rings-of-power-s2": {
+      "format": "Television"
+    },
+    "the-sandman-s2": {
+      "format": "Television"
+    },
+    "the-tower-s2": {
+      "format": "Television"
+    },
+    "the-wheel-of-time-s2": {
+      "format": "Television"
+    },
+    "the-wheel-of-time-s3": {
+      "format": "Television"
+    },
+    "the-witcher-s1": {
+      "format": "Television"
+    },
+    "the-witcher-s2": {
+      "format": "Television"
+    },
+    "the-witcher-s3": {
+      "format": "Television"
+    },
+    "the-witcher-s4": {
+      "format": "Television"
+    },
+    "trigger-point-s2": {
+      "format": "Television"
+    },
+    "trying-s2": {
+      "format": "Television"
+    },
+    "we-are-lady-parts-s2": {
+      "format": "Television"
+    },
+    "28-years-later": {
+      "format": "Film"
+    },
+    "28-years-later-the-bone-temple": {
+      "format": "Film"
+    },
+    "a-haunting-in-venice": {
+      "format": "Film"
+    },
+    "a-working-man": {
+      "format": "Film"
+    },
+    "after-the-hunt": {
+      "format": "Film"
+    },
+    "apartment-7a": {
+      "format": "Film"
+    },
+    "aquaman-and-the-lost-kingdom": {
+      "format": "Film"
+    },
+    "argylle": {
+      "format": "Film"
+    },
+    "avengers-doomsday": {
+      "format": "Film"
+    },
+    "back-in-action": {
+      "format": "Film"
+    },
+    "back-to-black": {
+      "format": "Film"
+    },
+    "barbie": {
+      "format": "Film"
+    },
+    "beetlejuice-beetlejuice": {
+      "format": "Film"
+    },
+    "bugonia": {
+      "format": "Film"
+    },
+    "christmas-karma": {
+      "format": "Film"
+    },
+    "clayface": {
+      "format": "Film"
+    },
+    "cleaner": {
+      "format": "Film"
+    },
+    "consecration": {
+      "format": "Film"
+    },
+    "crime-101": {
+      "format": "Film"
+    },
+    "deadpool-wolverine": {
+      "format": "Film"
+    },
+    "deep-cover": {
+      "format": "Film"
+    },
+    "doctor-strange-in-the-multiverse-of-madness": {
+      "format": "Film"
+    },
+    "empire-of-light": {
+      "format": "Film"
+    },
+    "enola-holmes": {
+      "format": "Film"
+    },
+    "enola-holmes-2": {
+      "format": "Film"
+    },
+    "enola-holmes-3": {
+      "format": "Film"
+    },
+    "family-plan": {
+      "format": "Film"
+    },
+    "family-plan-2": {
+      "format": "Film"
+    },
+    "firebrand": {
+      "format": "Film"
+    },
+    "fountain-of-youth": {
+      "format": "Film"
+    },
+    "fuze": {
+      "format": "Film"
+    },
+    "gassed-up": {
+      "format": "Film"
+    },
+    "gladiator-ii": {
+      "format": "Film"
+    },
+    "greatest-days": {
+      "format": "Film"
+    },
+    "greenland-2": {
+      "format": "Film"
+    },
+    "havoc": {
+      "format": "Film"
+    },
+    "heads-of-state": {
+      "format": "Film"
+    },
+    "heart-of-stone": {
+      "format": "Film"
+    },
+    "hedda": {
+      "format": "Film"
+    },
+    "indiana-jones-and-the-dial-of-destiny": {
+      "format": "Film"
+    },
+    "kraven-the-hunter": {
+      "format": "Film"
+    },
+    "magic-mikes-last-dance": {
+      "format": "Film"
+    },
+    "masters-of-the-universe": {
+      "format": "Film"
+    },
+    "matilda-the-musical": {
+      "format": "Film"
+    },
+    "meg-2-the-trench": {
+      "format": "Film"
+    },
+    "my-oxford-year": {
+      "format": "Film"
+    },
+    "operation-fortune-ruse-de-guerre": {
+      "format": "Film"
+    },
+    "paddington-in-peru": {
+      "format": "Film"
+    },
+    "peaky-blinders-the-immortal-man": {
+      "format": "Film"
+    },
+    "pillion": {
+      "format": "Film"
+    },
+    "polite-society": {
+      "format": "Film"
+    },
+    "practical-magic-2": {
+      "format": "Film"
+    },
+    "red-notice": {
+      "format": "Film"
+    },
+    "red-white-royal-wedding": {
+      "format": "Film"
+    },
+    "rye-lane": {
+      "format": "Film"
+    },
+    "see-how-they-run": {
+      "format": "Film"
+    },
+    "snow-white": {
+      "format": "Film"
+    },
+    "something-in-the-water": {
+      "format": "Film"
+    },
+    "sonic-the-hedgehog-3": {
+      "format": "Film"
+    },
+    "spider-man-brand-new-day": {
+      "format": "Film"
+    },
+    "tarot": {
+      "format": "Film"
+    },
+    "the-beekeeper": {
+      "format": "Film"
+    },
+    "the-beekeeper-2": {
+      "format": "Film"
+    },
+    "the-boys-in-the-boat": {
+      "format": "Film"
+    },
+    "the-conjuring-last-rites": {
+      "format": "Film"
+    },
+    "the-dog-stars": {
+      "format": "Film"
+    },
+    "the-first-omen": {
+      "format": "Film"
+    },
+    "the-gorge": {
+      "format": "Film"
+    },
+    "the-man-in-my-basement": {
+      "format": "Film"
+    },
+    "the-marvels": {
+      "format": "Film"
+    },
+    "the-moment": {
+      "format": "Film"
+    },
+    "the-odyssey": {
+      "format": "Film"
+    },
+    "the-people-we-hate-at-the-wedding": {
+      "format": "Film"
+    },
+    "the-phantom-of-the-open": {
+      "format": "Film"
+    },
+    "the-railway-children-return": {
+      "format": "Film"
+    },
+    "the-roses": {
+      "format": "Film"
+    },
+    "the-running-man": {
+      "format": "Film"
+    },
+    "the-six-triple-eight": {
+      "format": "Film"
+    },
+    "the-statistical-probability-of-love-at-first-sight": {
+      "format": "Film"
+    },
+    "thursday-murder-club": {
+      "format": "Film"
+    },
+    "tom-jerry": {
+      "format": "Film"
+    },
+    "venom-the-last-dance": {
+      "format": "Film"
+    },
+    "we-live-in-time": {
+      "format": "Film"
+    },
+    "werwulf": {
+      "format": "Film"
+    },
+    "wicked": {
+      "format": "Film"
+    },
+    "wicked-for-good": {
+      "format": "Film"
+    },
+    "3-body-problem": {
+      "format": "Television"
+    },
+    "a-town-called-malice": {
+      "format": "Television"
+    },
+    "alex-rider": {
+      "format": "Television"
+    },
+    "alien-earth": {
+      "format": "Television"
+    },
+    "anansi-boys": {
+      "format": "Television"
+    },
+    "andor": {
+      "format": "Television"
+    },
+    "atlanta": {
+      "format": "Television"
+    },
+    "avenue-5": {
+      "format": "Television"
+    },
+    "bad-education": {
+      "format": "Television"
+    },
+    "big-boys": {
+      "format": "Television"
+    },
+    "black-doves": {
+      "format": "Television"
+    },
+    "black-mirror": {
+      "format": "Television"
+    },
+    "blue-lights": {
+      "format": "Television"
+    },
+    "boarders": {
+      "format": "Television"
+    },
+    "bodies": {
+      "format": "Television"
+    },
+    "bridgerton": {
+      "format": "Television"
+    },
+    "britannia": {
+      "format": "Television"
+    },
+    "champion": {
+      "format": "Television"
+    },
+    "citadel": {
+      "format": "Television"
+    },
+    "code-of-silence": {
+      "format": "Television"
+    },
+    "culprits": {
+      "format": "Television"
+    },
+    "dead-hot": {
+      "format": "Television"
+    },
+    "dear-england": {
+      "format": "Television"
+    },
+    "doctor-who": {
+      "format": "Television"
+    },
+    "dreaming-whilst-black": {
+      "format": "Television"
+    },
+    "emmerdale": {
+      "format": "Television"
+    },
+    "extraordinary": {
+      "format": "Television"
+    },
+    "finding-alice": {
+      "format": "Television"
+    },
+    "flatshare": {
+      "format": "Television"
+    },
+    "foundation": {
+      "format": "Television"
+    },
+    "gangs-of-london": {
+      "format": "Television"
+    },
+    "geek-girl": {
+      "format": "Television"
+    },
+    "get-millie-black": {
+      "format": "Television"
+    },
+    "great-expectations": {
+      "format": "Television"
+    },
+    "hanna": {
+      "format": "Television"
+    },
+    "harry-potter-tv-series": {
+      "format": "Television"
+    },
+    "hijack": {
+      "format": "Television"
+    },
+    "his-dark-materials": {
+      "format": "Television"
+    },
+    "hollington-drive": {
+      "format": "Television"
+    },
+    "hollyoaks": {
+      "format": "Television"
+    },
+    "house-of-the-dragon": {
+      "format": "Television"
+    },
+    "i-hate-suzie": {
+      "format": "Television"
+    },
+    "inside-no-9": {
+      "format": "Television"
+    },
+    "intergalactic": {
+      "format": "Television"
+    },
+    "invasion": {
+      "format": "Television"
+    },
+    "ipcress-file": {
+      "format": "Television"
+    },
+    "jerk": {
+      "format": "Television"
+    },
+    "killing-eve": {
+      "format": "Television"
+    },
+    "line-of-duty": {
+      "format": "Television"
+    },
+    "lockwood-co": {
+      "format": "Television"
+    },
+    "loki": {
+      "format": "Television"
+    },
+    "luther": {
+      "format": "Television"
+    },
+    "master-of-none": {
+      "format": "Television"
+    },
+    "masters-of-the-air": {
+      "format": "Television"
+    },
+    "mobland": {
+      "format": "Television"
+    },
+    "monarch-legacy-of-monsters": {
+      "format": "Television"
+    },
+    "mood": {
+      "format": "Television"
+    },
+    "my-lady-jane": {
+      "format": "Television"
+    },
+    "neuromancer": {
+      "format": "Television"
+    },
+    "only-murders-in-the-building": {
+      "format": "Television"
+    },
+    "outrageous": {
+      "format": "Television"
+    },
+    "pennyworth": {
+      "format": "Television"
+    },
+    "people-just-do-nothing": {
+      "format": "Television"
+    },
+    "pistol": {
+      "format": "Television"
+    },
+    "ragdoll": {
+      "format": "Television"
+    },
+    "rain-dogs": {
+      "format": "Television"
+    },
+    "renegade-nell": {
+      "format": "Television"
+    },
+    "rivals": {
+      "format": "Television"
+    },
+    "say-nothing": {
+      "format": "Television"
+    },
+    "secret-invasion": {
+      "format": "Television"
+    },
+    "sexy-beast": {
+      "format": "Television"
+    },
+    "sherlock": {
+      "format": "Television"
+    },
+    "showtrial": {
+      "format": "Television"
+    },
+    "silent-witness": {
+      "format": "Television"
+    },
+    "silo": {
+      "format": "Television"
+    },
+    "slow-horses": {
+      "format": "Television"
+    },
+    "stay-close": {
+      "format": "Television"
+    },
+    "strictly-come-dancing": {
+      "format": "Television"
+    },
+    "supacell": {
+      "format": "Television"
+    },
+    "surface": {
+      "format": "Television"
+    },
+    "sweetpea": {
+      "format": "Television"
+    },
+    "ted-lasso": {
+      "format": "Television"
+    },
+    "temple": {
+      "format": "Television"
+    },
+    "the-acolyte": {
+      "format": "Television"
+    },
+    "the-agency": {
+      "format": "Television"
+    },
+    "the-baby": {
+      "format": "Television"
+    },
+    "the-buccaneers": {
+      "format": "Television"
+    },
+    "the-burning-girls": {
+      "format": "Television"
+    },
+    "the-capture": {
+      "format": "Television"
+    },
+    "the-completely-made-up-adventures-of-dick-turpin": {
+      "format": "Television"
+    },
+    "the-crown": {
+      "format": "Television"
+    },
+    "the-death-of-bunny-munro": {
+      "format": "Television"
+    },
+    "the-devils-hour": {
+      "format": "Television"
+    },
+    "the-diplomat": {
+      "format": "Television"
+    },
+    "the-essex-serpent": {
+      "format": "Television"
+    },
+    "the-franchise": {
+      "format": "Television"
+    },
+    "the-full-monty": {
+      "format": "Television"
+    },
+    "the-gentlemen": {
+      "format": "Television"
+    },
+    "the-girl-before": {
+      "format": "Television"
+    },
+    "the-long-call": {
+      "format": "Television"
+    },
+    "the-lord-of-the-rings-the-rings-of-power": {
+      "format": "Television"
+    },
+    "the-man-who-fell-to-earth": {
+      "format": "Television"
+    },
+    "the-midwich-cuckoos": {
+      "format": "Television"
+    },
+    "the-nevers": {
+      "format": "Television"
+    },
+    "the-pursuit-of-love": {
+      "format": "Television"
+    },
+    "the-regime": {
+      "format": "Television"
+    },
+    "the-road-trip": {
+      "format": "Television"
+    },
+    "the-sandman": {
+      "format": "Television"
+    },
+    "the-split": {
+      "format": "Television"
+    },
+    "the-walk-in": {
+      "format": "Television"
+    },
+    "the-wheel-of-time": {
+      "format": "Television"
+    },
+    "the-windsors": {
+      "format": "Television"
+    },
+    "the-witcher": {
+      "format": "Television"
+    },
+    "the-witcher-blood-origin": {
+      "format": "Television"
+    },
+    "three-little-birds": {
+      "format": "Television"
+    },
+    "tommy-tuppence": {
+      "format": "Television"
+    },
+    "too-much": {
+      "format": "Television"
+    },
+    "top-boy": {
+      "format": "Television"
+    },
+    "treason": {
+      "format": "Television"
+    },
+    "trigger-point": {
+      "format": "Television"
+    },
+    "trying": {
+      "format": "Television"
+    },
+    "under-salt-marsh": {
+      "format": "Television"
+    },
+    "vera": {
+      "format": "Television"
+    },
+    "visionquest": {
+      "format": "Television"
+    },
+    "we-are-lady-parts": {
+      "format": "Television"
+    },
+    "why-didnt-they-ask-evans": {
+      "format": "Television"
+    },
+    "you": {
+      "format": "Television"
+    },
+    "young-sherlock": {
+      "format": "Television"
+    },
+    "zero-chill": {
+      "format": "Television"
+    }
+  }
+}

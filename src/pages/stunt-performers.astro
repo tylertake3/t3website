@@ -22,11 +22,20 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
   description={copy.meta.description}
   ogTitle={copy.meta.ogTitle}
   ogDescription={copy.meta.ogDescription}
+  ogImage={copy.meta.ogImage}
   ogImageAlt={copy.meta.ogImageAlt}
   footerTitle={copy.meta.footerTitle}
 >
   <!-- hero -->
   <section class="pageHero stuHero" aria-labelledby="stuTitle">
+    {/* the photo sits behind the copy, under the same scrim the homepage hero uses */}
+    <div
+      class="stuHeroPhoto"
+      role="img"
+      aria-label={copy.hero.imageAlt}
+      style={`background-image:url("${encodeURI(copy.hero.image)}"); background-position:${copy.hero.focus};`}
+    />
+    <div class="stuHeroScrim"></div>
     <div class="pageHeroInner">
       <p class="kicker">{copy.hero.eyebrow}</p>
       <h1 class="pageHeroTitle" id="stuTitle">{copy.hero.heading}</h1>
@@ -35,16 +44,6 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
         {copy.hero.tags.map((tag) => <li>{tag}</li>)}
       </ul>
     </div>
-  </section>
-
-  <!-- wide action still, sitting hard under the hero -->
-  <section class="stuPlateBand" aria-label={copy.plate.figNote}>
-    <figure class="stuPlate">
-      <div class="slot stuPlateSlot"><span class="slotLabel">{copy.plate.slotLabel}</span></div>
-      <figcaption class="stuPlateCap">
-        <span>{copy.plate.figNumber}</span><span>{copy.plate.figNote}</span>
-      </figcaption>
-    </figure>
   </section>
 
   <!-- what we supply: an ordered index rather than cards -->
@@ -68,22 +67,57 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
     </div>
   </section>
 
-  <!-- safety: the heaviest band on the page, by design -->
-  <section class="band bandDark stuDark" aria-labelledby="stuApproach">
-    <div class="bandInner">
-      <p class="kicker">{copy.approach.kicker}</p>
-      <h2 class="stuApproachTitle" id="stuApproach">{copy.approach.heading}</h2>
-      <p class="bandBody stuApproachBody">{copy.approach.body}</p>
-      <dl class="stuPoints">
+  <!-- action stills: one full-width frame, cross-fading from one production
+       to the next like the homepage banner -->
+  <section class="stuPlateBand" aria-label={copy.plates.ariaLabel}>
+    <figure class="stuPlate">
+      <div class="stuPlateStage" id="stuPlateStage">
         {
-          copy.approach.points.map((point) => (
-            <div class="stuPoint">
-              <dt class="stuPointTerm">{point.term}</dt>
-              <dd class="stuPointDesc">{point.description}</dd>
-            </div>
+          copy.plates.items.map((plate, i) => (
+            <img
+              class={i === 0 ? 'stuPlateImg on' : 'stuPlateImg'}
+              src={plate.image}
+              alt={plate.alt}
+              width={plate.width}
+              height={plate.height}
+              loading={i === 0 ? 'lazy' : 'eager'}
+              decoding="async"
+              data-fig={plate.figNumber}
+              data-note={plate.figNote}
+              aria-hidden={i === 0 ? undefined : 'true'}
+            />
           ))
         }
-      </dl>
+      </div>
+      <figcaption class="stuPlateCap">
+        <span id="stuPlateFig">{copy.plates.items[0]?.figNumber}</span>
+        <span id="stuPlateNote">{copy.plates.items[0]?.figNote}</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- safety: the heaviest band on the page, by design -->
+  <section class="band bandDark stuDark" aria-labelledby="stuApproach">
+    <div class="bandInner stuApproachGrid">
+      <div>
+        <p class="kicker">{copy.approach.kicker}</p>
+        <h2 class="stuApproachTitle" id="stuApproach">{copy.approach.heading}</h2>
+        <p class="bandBody stuApproachBody">{copy.approach.body}</p>
+        <dl class="stuPoints">
+          {
+            copy.approach.points.map((point) => (
+              <div class="stuPoint">
+                <dt class="stuPointTerm">{point.term}</dt>
+                <dd class="stuPointDesc">{point.description}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+      <figure class="stuApproachStill">
+        <img src={copy.approach.still.image} alt={copy.approach.still.alt} loading="lazy" decoding="async" />
+        <figcaption class="stuCreditStillCap">{copy.approach.still.caption}</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -94,21 +128,31 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
         <h2 class="sectionTitle" id="stuBriefs">{copy.briefs.heading}</h2>
         <p class="kicker">{copy.briefs.kicker}</p>
       </div>
-      <ul class="stuBriefGrid">
-        {copy.briefs.items.map((item) => <li class="stuBriefItem">{item}</li>)}
-      </ul>
-      <p class="stuBriefNote">{copy.briefs.note}</p>
+      <div class="stuBriefLayout">
+        <figure class="stuBriefStill">
+          <div class="stuBriefStillFrame">
+            <img src={copy.briefs.still.image} alt={copy.briefs.still.alt} loading="lazy" decoding="async" />
+          </div>
+          <figcaption class="stuCreditStillCap">{copy.briefs.still.caption}</figcaption>
+        </figure>
+        <div>
+          <ul class="stuBriefGrid">
+            {copy.briefs.items.map((item) => <li class="stuBriefItem">{item}</li>)}
+          </ul>
+          <p class="stuBriefNote">{copy.briefs.note}</p>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- credits: needs the client's own booking history -->
   <section class="band" aria-labelledby="stuCredits">
-    <div class="bandInner bandSplit">
+    <div class="bandInner">
       <div>
         <p class="kicker">{copy.credits.kicker}</p>
         <h2 class="sectionTitle" id="stuCredits">{copy.credits.heading}</h2>
+        <p class="todoNote">{copy.credits.todo}</p>
       </div>
-      <p class="todoNote">{copy.credits.todo}</p>
     </div>
   </section>
 
@@ -145,7 +189,20 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
     .stuHero, .stuDark { --accent:#d4704f; --muted:#96928c; }
     .stuDark { --sub:#c7c3bd; --ink:#f4f2ee; --hair:#3a3a3e; }
 
+    /* photo hero: same recipe as the homepage banner (cover photo, dark
+       scrim, copy pinned to the bottom-left) on top of the shared pageHero */
+    .stuHero { position:relative; overflow:hidden; min-height:var(--coverPhotoH); }
+    .stuHeroPhoto { position:absolute; inset:0; background-size:cover; background-repeat:no-repeat; filter:saturate(0.92) contrast(1.05) brightness(0.96); }
+    .stuHeroScrim { position:absolute; inset:0; background:var(--heroScrim); }
+    .stuHero .pageHeroInner { position:relative; z-index:2; }
+    .stuHero .stuTagRow li { color:var(--heroInkSoft); border-left-color:var(--heroLine); }
+
     .stuHead { padding-bottom:18px; }
+
+    .stuApproachGrid { display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, 360px); gap:48px; align-items:center; }
+    .stuApproachStill { margin:0; width:100%; max-width:360px; justify-self:end; }
+    .stuApproachStill img { width:100%; height:auto; display:block; }
+    .stuCreditStillCap { margin-top:12px; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); }
 
     .stuTagRow { list-style:none; margin:30px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:0; }
     .stuTagRow li { font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); padding:0 18px; border-left:1px solid var(--hair); }
@@ -154,7 +211,12 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
     /* wide plate */
     .stuPlateBand { padding:0 0 96px; }
     .stuPlate { max-width:1280px; margin:0 auto; padding:0 40px; }
-    .stuPlateSlot { aspect-ratio:21/9; }
+    .stuPlateStage { position:relative; aspect-ratio:21/9; overflow:hidden; background:var(--tileBg); }
+    .stuPlateImg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 55%; opacity:0; transition:opacity 1.8s ease; filter:saturate(0.92) contrast(1.05) brightness(0.96); }
+    .stuPlateImg.on { opacity:1; }
+    .stuPlateCap span { transition:opacity .6s ease; }
+    .stuPlateCap.fading span { opacity:0; }
+    @media (prefers-reduced-motion: reduce) { .stuPlateImg, .stuPlateCap span { transition:none; } }
     .stuPlateCap { display:flex; justify-content:space-between; gap:24px; margin-top:12px; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); }
 
     /* index */
@@ -168,14 +230,18 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
     /* safety band */
     .stuApproachTitle { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(32px, 4.4vw, 62px); font-weight:400; letter-spacing:1px; line-height:1.05; margin-top:16px; max-width:18ch; }
     .stuApproachBody { max-width:66ch; margin-top:26px; }
-    .stuPoints { margin:52px 0 0; padding:0; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:36px; }
+    .stuPoints { margin:32px 0 0; padding:0; display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:28px; }
     .stuPoint { border-top:2px solid var(--accent); padding-top:18px; }
     .stuPointTerm { margin:0; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent); }
-    .stuPointDesc { margin:12px 0 0; font-size:15px; font-weight:300; line-height:1.6; color:var(--sub); text-wrap:pretty; }
+    .stuPointDesc { margin:12px 0 0; font-size:15px; font-weight:400; line-height:1.6; color:var(--sub); text-wrap:pretty; }
 
     /* briefs */
-    .stuBriefGrid { list-style:none; margin:34px 0 0; padding:0; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:0 48px; }
-    .stuBriefItem { border-top:1px solid var(--hair); padding:16px 0; font-size:16px; letter-spacing:1.5px; color:var(--ink); }
+    .stuBriefLayout { display:grid; grid-template-columns:minmax(0, 480px) minmax(0, 1fr); gap:48px; align-items:start; margin-top:34px; }
+    .stuBriefGrid { list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:0 28px; }
+    .stuBriefItem { border-top:1px solid var(--hair); padding:12px 0; font-size:15px; letter-spacing:1px; color:var(--ink); }
+    .stuBriefStill { width:100%; max-width:480px; margin:0; }
+    .stuBriefStillFrame { aspect-ratio:16/9; overflow:hidden; background:var(--tileBg); }
+    .stuBriefStillFrame img { width:100%; height:100%; object-fit:cover; object-position:center 45%; display:block; filter:saturate(0.92) contrast(1.05) brightness(0.96); }
     .stuBriefNote { margin:22px 0 0; font-size:12px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); }
 
     /* cross-links */
@@ -187,23 +253,79 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
     .stuRelatedDesc { margin:10px 0 0; font-size:14px; font-weight:300; line-height:1.6; color:var(--sub); text-wrap:pretty; }
 
     @media (max-width:1024px) {
+      .stuApproachGrid { gap:32px; }
       .stuIndexRow { grid-template-columns:60px minmax(0, 1fr); gap:0 24px; }
       .stuIndexBody { grid-column:2; margin-top:10px; }
       .stuPoints { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:28px; }
-      .stuBriefGrid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:0 32px; }
+      .stuBriefLayout { grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); gap:28px; }
+      .stuBriefGrid { gap:0 20px; }
       .stuRelated { grid-template-columns:repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width:640px) {
       .stuPlateBand { padding-bottom:64px; }
+      .stuApproachGrid { grid-template-columns:1fr; }
+      .stuApproachStill { max-width:280px; justify-self:end; }
+      .stuBriefLayout { grid-template-columns:1fr; gap:28px; }
       .stuPlate { padding:0 20px; }
-      .stuPlateSlot { aspect-ratio:16/10; }
+      .stuPlateStage { aspect-ratio:16/10; }
+      .stuPlateImg { object-position:55% center; }
       .stuIndexRow { grid-template-columns:1fr; padding:22px 0; }
       .stuIndexTitle { margin-top:10px; }
       .stuIndexBody { grid-column:1; }
       .stuPoints, .stuBriefGrid, .stuRelated { grid-template-columns:1fr; gap:26px; }
       .stuBriefGrid { gap:0; }
-      .stuTagRow li { padding:0 12px; }
+      /* the tag row wraps on a phone, so the dividers give way to plain gaps —
+         a wrapped line would otherwise start with a stray rule and an indent */
+      .stuTagRow { gap:10px 18px; margin-top:26px; }
+      .stuTagRow li { padding:0; border-left:0; }
     }
   </style>
+
+  <script slot="scripts" is:inline>
+    (function () {
+      'use strict';
+      var stage = document.getElementById('stuPlateStage');
+      if (!stage) return;
+      var frames = Array.prototype.slice.call(stage.querySelectorAll('.stuPlateImg'));
+      if (frames.length < 2) return;
+      var cap = stage.parentNode.querySelector('.stuPlateCap');
+      var fig = document.getElementById('stuPlateFig');
+      var note = document.getElementById('stuPlateNote');
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+      var idx = 0, timer = null;
+
+      function show(i) {
+        idx = i;
+        for (var k = 0; k < frames.length; k++) {
+          var on = k === i;
+          frames[k].classList.toggle('on', on);
+          frames[k].setAttribute('aria-hidden', on ? 'false' : 'true');
+        }
+        /* the caption dips out and back so it changes on the cross-fade rather than snapping */
+        if (cap) cap.classList.add('fading');
+        window.setTimeout(function () {
+          if (fig) fig.textContent = frames[idx].getAttribute('data-fig');
+          if (note) note.textContent = frames[idx].getAttribute('data-note');
+          if (cap) cap.classList.remove('fading');
+        }, reduce.matches ? 0 : 600);
+      }
+      function start() {
+        stop();
+        if (reduce.matches) return;
+        timer = window.setInterval(function () { show((idx + 1) % frames.length); }, 6000);
+      }
+      function stop() { if (timer) { clearInterval(timer); timer = null; } }
+
+      /* only turn over while the frame is actually on screen */
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) { if (e.isIntersecting) start(); else stop(); });
+        }, { threshold: 0.25 }).observe(stage);
+      } else {
+        start();
+      }
+      reduce.addEventListener('change', start);
+    })();
+  </script>
 </Base>

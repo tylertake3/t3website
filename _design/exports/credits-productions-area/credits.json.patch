@@ -1,0 +1,53 @@
+diff --git a/src/content/pages/credits.json b/src/content/pages/credits.json
+index 09be78b..c1ba0b7 100644
+--- a/src/content/pages/credits.json
++++ b/src/content/pages/credits.json
+@@ -16,16 +16,28 @@
+     "heading": "The work so far",
+     "items": [
+       {
+-        "number": "500+",
++        "number": "533",
+         "label": "Productions supplied"
+       },
+       {
+-        "number": "1,500+",
+-        "label": "Artists represented"
++        "number": "151",
++        "label": "Feature films"
+       },
+       {
+-        "number": "2019",
+-        "label": "Trading since"
++        "number": "194",
++        "label": "Television series"
++      },
++      {
++        "number": "94",
++        "label": "Commercials & campaigns"
++      },
++      {
++        "number": "54",
++        "label": "Studios & networks"
++      },
++      {
++        "number": "71",
++        "label": "Brands"
+       }
+     ]
+   },
+@@ -39,12 +51,12 @@
+     "kicker": "WHO WE WORK WITH",
+     "heading": "Client logos",
+     "body": "TODO: copy — one short paragraph introducing the wall of clients. Keep it factual and let the marks speak.",
+-    "artworkNote": "TODO: artwork — logo files have not been supplied yet, so every cell renders as an empty plate. Drop the artwork into public/assets/logos and each mark appears in place."
++    "artworkNote": "Marks without artwork supplied render as an empty plate rather than a broken image. Drop the files into public/assets/logos and each one appears in place."
+   },
+   "testimonials": {
+     "kicker": "IN THEIR WORDS",
+     "heading": "What production teams say",
+     "intro": "The people below have worked with Take 3 on set. Their words are reproduced as given.",
+-    "emptyNote": "TODO: content — no testimonials have been added yet. Add them under Reviews in the editor and they appear here."
++    "emptyNote": "Testimonials from production teams will appear here."
+   }
+ }
