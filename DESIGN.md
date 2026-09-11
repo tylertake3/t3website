@@ -266,7 +266,7 @@ All display headings use `font-weight:400` (never bold) and fluid `clamp()` sizi
 
 ---
 
-_Last updated 2026-08-25. Update this file whenever a token, type choice, or core pattern changes._
+_Last updated 2026-09-11. Update this file whenever a token, type choice, or core pattern changes._
 
 
 ### Launch studio (the slate on /laural)
