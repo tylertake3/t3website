@@ -235,6 +235,36 @@
       "aliases": ""
     },
     {
+      "title": "Practical Magic 2",
+      "logoOnDark": "/assets/production-logos/practical-magic-2-c.png",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "Black Mirror",
+      "logoOnDark": "/assets/production-logos/black-mirror-c.png",
+      "logoOnLight": "",
+      "aliases": ""
+    },
+    {
+      "title": "The Regime",
+      "logoOnDark": "/assets/production-logos/the-regime-c.png",
+      "logoOnLight": "/assets/production-logos/the-regime.png",
+      "aliases": "Regime"
+    },
+    {
+      "title": "Fightland",
+      "logoOnDark": "/assets/production-logos/fightland-c.png",
+      "logoOnLight": "/assets/production-logos/fightland.png",
+      "aliases": ""
+    },
+    {
+      "title": "Red White & Royal Wedding",
+      "logoOnDark": "/assets/production-logos/red-white-royal-wedding-c.png",
+      "logoOnLight": "/assets/production-logos/red-white-royal-wedding.png",
+      "aliases": "Red, White & Royal Wedding,Royal Wedding"
+    },
+    {
       "title": "The Conjuring",
       "logoOnDark": "/assets/production-logos/the-conjuring-c.png",
       "logoOnLight": "/assets/production-logos/the-conjuring.png",
