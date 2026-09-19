@@ -19,8 +19,10 @@
     "tags": ["COMMERCIAL", "CHARACTER", "FITTING", "PROMOTIONAL"],
     "figure": {
       "slotLabel": "Hero portrait (2:3)",
+      "image": "/uploads/models-hero-portrait.webp",
+      "imageAlt": "Black and white portrait of a model resting her cheek on her hand, looking straight to camera",
       "figNumber": "FIG. 01",
-      "figNote": "SHOT ON SET, NOT IN STUDIO"
+      "figNote": "STUDIO PORTRAIT"
     }
   },
 
@@ -53,6 +55,9 @@
   "brands": {
     "figure": {
       "slotLabel": "Campaign still (lifestyle)",
+      "image": "/uploads/models-campaign-still.webp",
+      "imageAlt": "Black and white campaign still of a model reclining in a laced corset and lace skirt against a white background",
+      "imageFocus": "center top",
       "figNumber": "FIG. 02",
       "figNote": "CAMPAIGN, STILLS, PRODUCT"
     },
@@ -82,6 +87,8 @@
     ],
     "figure": {
       "slotLabel": "Character portrait (in costume)",
+      "image": "/uploads/models-character-portrait.webp",
+      "imageAlt": "Black and white portrait of a model in a plumed tricorn hat and corset, hands raised mid-gesture",
       "figNumber": "FIG. 03",
       "figNote": "IN COSTUME, ON CAMERA"
     }

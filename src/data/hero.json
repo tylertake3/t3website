@@ -3,12 +3,7 @@
     {
       "title": "THE ODYSSEY",
       "alt": "A horse on the beach in a scene from The Odyssey",
-      "image": "/uploads/the-odyssey-beach-horse.webp"
-    },
-    {
-      "title": "THE MARVELS",
-      "alt": "Action scene from The Marvels",
-      "image": "/uploads/the_marvels_scene_01_c97f38da.avif"
+      "image": "/uploads/the-odyssey-beach-rider.webp"
     },
     {
       "title": "DEADPOOL & WOLVERINE",
@@ -27,8 +22,8 @@
     },
     {
       "title": "ANDOR",
-      "alt": "Scene from Andor",
-      "image": "/uploads/andor_trailer_screenshot_5.jpg.webp"
+      "alt": "Stormtroopers advancing through a wheat field in a scene from Andor",
+      "image": "/uploads/andor-wheat-field.webp"
     },
     {
       "title": "THE ODYSSEY",
@@ -36,10 +31,9 @@
       "image": "/uploads/3s1x1p3zqgtg1.webp"
     },
     {
-      "title": "THE ODYSSEY",
-      "alt": "A ship with a red sail crossing open sea in a scene from The Odyssey",
-      "image": "/uploads/the-odyssey-ship.webp",
-      "focus": "center 45%"
+      "title": "THE MARVELS",
+      "alt": "Action scene from The Marvels",
+      "image": "/uploads/the_marvels_scene_01_c97f38da.avif"
     }
   ]
 }

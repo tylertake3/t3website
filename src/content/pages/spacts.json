@@ -18,21 +18,32 @@
     "creditLabel": "AS SEEN ON",
     "slides": [
       {
-        "image": "/uploads/w1280.webp",
+        "image": "/uploads/spact-andor-plaza.webp",
         "production": "ANDOR"
-      },
-      {
-        "image": "/uploads/_dfa3c099-9b6c-45ce-8c99-e24d9e51a891.webp",
-        "production": "ODYSSEY"
       },
       {
         "image": "/uploads/lotr-s2-ut-230403-00131-r2-jpg-66f4b25127687.webp",
         "production": "RINGS OF POWER"
       },
       {
-        "image": "/uploads/spact-acolyte-training.webp",
+        "image": "/uploads/spact-acolyte-dojo.webp",
         "production": "THE ACOLYTE",
-        "focus": "center 30%"
+        "focus": "center 40%"
+      },
+      {
+        "image": "/uploads/spact-witcher-archers.webp",
+        "production": "THE WITCHER",
+        "focus": "center 45%"
+      },
+      {
+        "image": "/uploads/spact-secret-invasion-smoke.webp",
+        "production": "SECRET INVASION",
+        "focus": "center 32%"
+      },
+      {
+        "image": "/uploads/spact-doomsday-standoff.webp",
+        "production": "AVENGERS: DOOMSDAY",
+        "focus": "32% 40%"
       }
     ]
   },
@@ -139,27 +150,26 @@
     "paragraph": "SPACTs come through the crowd budget but bring featured-level action: fights that land, riders who ride, soldiers who move like soldiers. Recent productions we've supplied:",
     "tiles": [
       {
-        "caption": "ANDOR",
-        "alt": "Still from the production ANDOR",
-        "image": "/uploads/w1280.webp"
-      },
-      {
         "caption": "ODYSSEY",
-        "alt": "Still from the production ODYSSEY",
-        "image": "/uploads/_dfa3c099-9b6c-45ce-8c99-e24d9e51a891.webp"
+        "alt": "Still from the production ODYSSEY — rowers in soaked capes hauling on their oars in driving rain",
+        "image": "/uploads/spact-odyssey-rowers.webp"
       },
       {
-        "caption": "RINGS OF POWER",
-        "alt": "Still from the production RINGS OF POWER",
-        "image": "/uploads/lotr-s2-ut-230403-00131-r2-jpg-66f4b25127687.webp"
+        "caption": "BEETLEJUICE BEETLEJUICE",
+        "alt": "Still from the production BEETLEJUICE BEETLEJUICE — a line of uniformed officers in helmets and sunglasses standing to attention in a precinct office",
+        "image": "/uploads/spact-beetlejuice-lineup.webp"
+      },
+      {
+        "caption": "THE WITCHER",
+        "alt": "Still from the production THE WITCHER — a rider leading a shield wall of armoured soldiers through a rocky pass",
+        "image": "/uploads/spact-blood-origin-shieldwall.webp"
       },
       {
         "caption": "THE SIX TRIPLE EIGHT",
         "alt": "Still from the production THE SIX TRIPLE EIGHT — uniformed soldiers marching in formation past a bombed street",
         "image": "/uploads/spact-six-triple-eight-march.webp"
       }
-    ]
-  },
+    ]  },
 
   "commercial": {
     "eyebrow": "FOR COMMERCIAL & BRAND",
