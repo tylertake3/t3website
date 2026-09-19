@@ -27,13 +27,19 @@
         "name": "SPACTs",
         "href": "/spacts",
         "description": "TODO: copy, one line on who SPACTs are for.",
-        "slotLabel": "SPACTs"
+        "slotLabel": "SPACTs",
+        "image": "/uploads/artists-spacts-odyssey-ship.webp",
+        "imageAlt": "A longship under a full red sail crossing open blue sea, its crew crowded along the deck",
+        "imageFocus": "42% center"
       },
       {
         "name": "Dancers",
         "href": "/dancers",
         "description": "TODO: copy, one line on who dancers are for.",
-        "slotLabel": "Dancers"
+        "slotLabel": "Dancers",
+        "image": "/uploads/artists-dancers-barbie-floor.webp",
+        "imageAlt": "A dancer mid-turn on a bright pink dance floor, a full company of dancers moving behind her under disco lighting",
+        "imageFocus": "52% center"
       },
       {
         "name": "Models",

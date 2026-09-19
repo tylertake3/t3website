@@ -32,7 +32,14 @@ import copy from '../content/pages/models.json';
       </p>
     </div>
     <figure class="heroFig" style="margin:0;">
-      <div class="slot heroSlot" style="aspect-ratio:2/3;"><span class="slotLabel">{copy.hero.figure.slotLabel}</span></div>
+      {/* the artwork when it is in, the deliberate empty plate until then */}
+      {copy.hero.figure.image ? (
+        <div class="heroSlot slotPhoto" style="aspect-ratio:2/3;">
+          <img src={copy.hero.figure.image} alt={copy.hero.figure.imageAlt} loading="eager" decoding="async" />
+        </div>
+      ) : (
+        <div class="slot heroSlot" style="aspect-ratio:2/3;"><span class="slotLabel">{copy.hero.figure.slotLabel}</span></div>
+      )}
       <figcaption class="figCap"><span>{copy.hero.figure.figNumber}</span><span>{copy.hero.figure.figNote}</span></figcaption>
     </figure>
   </section>
@@ -57,7 +64,19 @@ import copy from '../content/pages/models.json';
   <section id="brands" class="band" aria-labelledby="brandsHead">
     <div class="rail splitInner split--brands">
       <figure class="splitFig" style="margin:0;">
-        <div class="slot" style="aspect-ratio:4/5;"><span class="slotLabel">{copy.brands.figure.slotLabel}</span></div>
+        {copy.brands.figure.image ? (
+          <div class="slotPhoto" style="aspect-ratio:4/5;">
+            <img
+              src={copy.brands.figure.image}
+              alt={copy.brands.figure.imageAlt}
+              loading="lazy"
+              decoding="async"
+              style={copy.brands.figure.imageFocus ? `object-position:${copy.brands.figure.imageFocus};` : undefined}
+            />
+          </div>
+        ) : (
+          <div class="slot" style="aspect-ratio:4/5;"><span class="slotLabel">{copy.brands.figure.slotLabel}</span></div>
+        )}
         <figcaption class="figCap"><span>{copy.brands.figure.figNumber}</span><span>{copy.brands.figure.figNote}</span></figcaption>
       </figure>
       <div class="splitCopy">
@@ -83,7 +102,13 @@ import copy from '../content/pages/models.json';
         </div>
       </div>
       <figure class="splitFig" style="margin:0;">
-        <div class="slot slot--dark" style="aspect-ratio:2/3;"><span class="slotLabel">{copy.film.figure.slotLabel}</span></div>
+        {copy.film.figure.image ? (
+          <div class="slotPhoto slot--dark" style="aspect-ratio:2/3;">
+            <img src={copy.film.figure.image} alt={copy.film.figure.imageAlt} loading="lazy" decoding="async" />
+          </div>
+        ) : (
+          <div class="slot slot--dark" style="aspect-ratio:2/3;"><span class="slotLabel">{copy.film.figure.slotLabel}</span></div>
+        )}
         <figcaption class="figCap"><span>{copy.film.figure.figNumber}</span><span>{copy.film.figure.figNote}</span></figcaption>
       </figure>
     </div>
@@ -136,6 +161,9 @@ import copy from '../content/pages/models.json';
     .slot { position:relative; background:var(--tileBg); overflow:hidden; display:flex; align-items:center; justify-content:center; }
     .slot .slotLabel { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); text-align:center; padding:0 16px; }
     .slot--dark { background:#101012; }
+    /* a filled slot: same plate and ratio, the photo covering it */
+    .slotPhoto { background:var(--tileBg); overflow:hidden; }
+    .slotPhoto img { width:100%; height:100%; object-fit:cover; display:block; }
     /* .slot--dark's #101012 plate is the same in both themes, so its label keeps
        the light-on-dark grey rather than the theme-aware token */
     .slot--dark .slotLabel { color:#96928c; }
@@ -181,6 +209,9 @@ import copy from '../content/pages/models.json';
     /* ---------- responsive: tablet ---------- */
     @media (max-width:1024px) {
       .hero { grid-template-columns:1fr; gap:40px; padding:150px 32px 0; }
+      /* stacked: the portrait is its own row now, so it fills the column
+         rather than staying a narrow plate pinned to the right */
+      .heroSlot { height:auto; width:100%; margin-left:0; }
       .heroCopy { padding-bottom:24px; }
       .heroFig { max-width:520px; }
       .splitInner { grid-template-columns:1fr !important; gap:48px; padding:72px 32px; }

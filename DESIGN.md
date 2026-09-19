@@ -191,6 +191,7 @@ All display headings use `font-weight:400` (never bold) and fluid `clamp()` sizi
 
 ### Category grid (`.catGrid` / `.catLink`)
 - Square `.catSlot` plates (a `.slot` with the artwork or an intentional empty plate), `.catName` beneath in tracked uppercase. Hover outlines the plate in `--ctrlBorder` and turns the name `--accent`. Used for the specialist category listings.
+- A route that has its artwork renders `.catSlotPhoto` instead of the empty `.slot`: same plate and aspect ratio, the photo `object-fit:cover` with the house grade (`saturate(.92) contrast(1.05) brightness(.96)`). Framing is set per item with `imageFocus` in the page JSON, so a wide still can be cropped to the portrait plate without losing its subject.
 
 ### Poster grid (`.posterGrid`)
 - Production artwork in a tight `4px`-gutter grid, 5 → 3 → 2 columns, each cell on a `--tileBg` plate. The title (`.posterName`) is revealed on hover/focus with a gentle `scale(1.04)` on the image; on touch devices the name is always visible. `.posterMore` is the tracked-uppercase link to the full Credits page.
@@ -210,6 +211,12 @@ All display headings use `font-weight:400` (never bold) and fluid `clamp()` sizi
 - Always-dark `#1a1a1c` band. Cards slide in a track (`.revTrack`, gap `--revGap`, three across), with Anton names, the quote, role, then a `.revCredits` row of production logos that fade in with the card. Arrows and dots are the thin circular controls; focus rings are pinned to `#f4f2ee`.
 - Production logos beside a quote are sized by the same optical rule as the client wall: measured sizes live in `src/data/production-logo-sizes.json` (18–48px tall, at most 215px wide) and are read by `src/lib/productionLogos.ts`; re-run `node scripts/measure-production-logos.mjs` after adding a logo. An unmeasured logo falls back to a footprint match from its file until then.
 - One card at a time on a phone, which makes the dots a long ragged double row of tiny targets: below 640px they are dropped and the `n / total` count and arrows carry the position. A horizontal drag pages the cards there; anything closer to vertical is left to scroll the page.
+
+### Before/after comparison (`.stuCompare`)
+- Two frames of the same shot, one clipped back to a `--split` custom property so the other shows through on the left of the handle. Used on `/stunt-performers` for the on-set plate against the finished frame.
+- A native `<input type="range">` fills the frame and is the real control, so the slider is keyboard-operable and announced correctly; it carries `pointer-events:none` and the drag is handled on the stage, which sets `touch-action:pan-y` so a vertical swipe still scrolls the page.
+- The divider is a 1px `#f4f2ee` hairline with a 44px circular grip (over the 24x24 minimum). Side labels use the 11px/3px uppercase caption voice on a `rgba(16,16,18,0.55)` plate.
+- The clipped photo is `alt=""` (it is the same shot); its description is given to screen readers in a visually hidden paragraph. With no JavaScript the handle rests at 50% and both photos remain visible.
 
 ### Image slots (`.slot`)
 - Where artwork isn't in place yet, render a deliberate empty plate: `--tileBg` background with a small uppercase `--muted` label. Not a broken image, an intentional placeholder.
@@ -266,7 +273,7 @@ All display headings use `font-weight:400` (never bold) and fluid `clamp()` sizi
 
 ---
 
-_Last updated 2026-09-11. Update this file whenever a token, type choice, or core pattern changes._
+_Last updated 2026-09-19. Update this file whenever a token, type choice, or core pattern changes._
 
 
 ### Launch studio (the slate on /laural)

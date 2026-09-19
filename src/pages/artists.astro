@@ -66,9 +66,22 @@ const heroPoster = ((copy.hero as { poster?: string }).poster ?? '').trim();
           copy.categories.items.map((cat) => (
             <li class="catCard">
               <a class="catLink" href={cat.href}>
-                <span class="slot catSlot" style="aspect-ratio:4/5;">
-                  <span class="slotLabel">{cat.slotLabel}</span>
-                </span>
+                {/* a route with artwork shows it; the rest keep the deliberate empty plate */}
+                {cat.image ? (
+                  <span class="catSlot catSlotPhoto" style="aspect-ratio:4/5;">
+                    <img
+                      src={cat.image}
+                      alt={cat.imageAlt}
+                      loading="lazy"
+                      decoding="async"
+                      style={cat.imageFocus ? `object-position:${cat.imageFocus};` : undefined}
+                    />
+                  </span>
+                ) : (
+                  <span class="slot catSlot" style="aspect-ratio:4/5;">
+                    <span class="slotLabel">{cat.slotLabel}</span>
+                  </span>
+                )}
                 <span class="catName">{cat.name}</span>
               </a>
               <p class="catDesc">{cat.description}</p>

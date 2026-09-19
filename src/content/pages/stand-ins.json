@@ -64,6 +64,8 @@
   },
   "whyItMatters": {
     "slotLabel": "On-set still (lighting setup)",
+    "image": "/uploads/stand-ins-lighting-setup.webp",
+    "imageAlt": "A stand-in holds a mark on a darkened stage while the crew set a large overhead soft light around them",
     "eyebrow": "WHY IT MATTERS",
     "heading": "A good match keeps the whole unit moving.",
     "rows": [
@@ -107,7 +109,9 @@
       }
     ],
     "note": "Send your leads' details or casting references. We shortlist from measured, photographed artists on our books, not self-reported stats.",
-    "slotLabel": "Side-by-side (lead and double)"
+    "slotLabel": "Side-by-side (lead and double)",
+    "image": "/uploads/stand-ins-side-by-side.webp",
+    "imageAlt": "Two performers in matching black tactical costume standing side by side on set between setups"
   },
   "commercial": {
     "eyebrow": "FOR COMMERCIAL & BRAND",

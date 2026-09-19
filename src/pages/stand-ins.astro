@@ -48,7 +48,11 @@ import copy from '../content/pages/stand-ins.json';
   <section class="band" aria-labelledby="whymatters-h">
     <div class="bandGrid">
       <div class="bandMedia">
-        <div class="slot"><span>{copy.whyItMatters.slotLabel}</span></div>
+        {copy.whyItMatters.image ? (
+          <img class="slotPhoto" src={copy.whyItMatters.image} alt={copy.whyItMatters.imageAlt} loading="lazy" decoding="async" />
+        ) : (
+          <div class="slot"><span>{copy.whyItMatters.slotLabel}</span></div>
+        )}
       </div>
       <div class="bandCopy">
         <p class="eyebrowMuted">{copy.whyItMatters.eyebrow}</p>
@@ -75,7 +79,11 @@ import copy from '../content/pages/stand-ins.json';
       <p class="matchNote">{copy.matching.note}</p>
     </div>
     <div class="matchMedia">
-      <div class="slot"><span>{copy.matching.slotLabel}</span></div>
+      {copy.matching.image ? (
+        <img class="slotPhoto" src={copy.matching.image} alt={copy.matching.imageAlt} loading="lazy" decoding="async" />
+      ) : (
+        <div class="slot"><span>{copy.matching.slotLabel}</span></div>
+      )}
     </div>
   </section>
 
@@ -174,6 +182,9 @@ import copy from '../content/pages/stand-ins.json';
     .matchName { text-transform:uppercase; font-size:clamp(17px,1.8vw,24px); font-weight:300; letter-spacing:3px; }
     .matchNote { font-size:14px; font-weight:400; color:var(--muted); line-height:1.6; margin-top:28px; max-width:520px; text-wrap:pretty; }
     .matchMedia { position:relative; background:var(--tileBg); min-height:560px; overflow:hidden; }
+
+    /* a filled plate: the photo covers the same box the placeholder held */
+    .slotPhoto { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
 
     /* unfilled photo placeholders */
     .slot { position:absolute; inset:0; background:var(--tileBg); display:flex; align-items:center; justify-content:center; text-align:center; padding:24px; }

@@ -121,6 +121,62 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
     </div>
   </section>
 
+  <!-- plate to final frame: the same shot before and after the effects, with a
+       draggable handle between them. The range input is the real control (so
+       it works on a keyboard and reads as a slider); the pointer handling is
+       on top of it. With no JavaScript the handle sits at the midpoint and
+       both photos are still visible. -->
+  <section class="band bandDark stuDark stuCompareBand" aria-labelledby="stuCompare">
+    <div class="bandInner">
+      <div class="sectionHead stuHead">
+        <h2 class="sectionTitle" id="stuCompare">{copy.compare.heading}</h2>
+        <p class="kicker">{copy.compare.kicker}</p>
+      </div>
+      <p class="bandBody stuCompareBody">{copy.compare.body}</p>
+
+      <figure class="stuCompare">
+        <div class="stuCompareStage" id="stuCompareStage" style="--split:50%;">
+          <img
+            class="stuCompareImg"
+            src={copy.compare.before.image}
+            alt={copy.compare.before.alt}
+            width={copy.compare.width}
+            height={copy.compare.height}
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="stuCompareTop" aria-hidden="true">
+            <img
+              class="stuCompareImg"
+              src={copy.compare.after.image}
+              alt=""
+              width={copy.compare.width}
+              height={copy.compare.height}
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <span class="stuCompareTag stuCompareTagA" aria-hidden="true">{copy.compare.after.label}</span>
+          <span class="stuCompareTag stuCompareTagB" aria-hidden="true">{copy.compare.before.label}</span>
+          <span class="stuCompareLine" aria-hidden="true"><span class="stuCompareGrip"></span></span>
+          <input
+            class="stuCompareRange"
+            id="stuCompareRange"
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            value="50"
+            aria-label={copy.compare.sliderLabel}
+          />
+        </div>
+        <figcaption class="stuCreditStillCap">{copy.compare.caption}</figcaption>
+        {copy.compare.captionTodo && <p class="todoNote stuCompareTodo">{copy.compare.captionTodo}</p>}
+        <p class="stuCompareAlt">{copy.compare.after.alt}</p>
+      </figure>
+    </div>
+  </section>
+
   <!-- the kind of brief this answers -->
   <section class="band" aria-labelledby="stuBriefs">
     <div class="bandInner">
@@ -236,6 +292,48 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
     .stuPointDesc { margin:12px 0 0; font-size:15px; font-weight:400; line-height:1.6; color:var(--sub); text-wrap:pretty; }
 
     /* briefs */
+    /* plate to final frame — the finished shot is clipped back to --split, so
+       the on-set plate underneath is what shows on the left of the handle */
+    /* it follows the safety band, which is also dark: drop the seam between
+       them so the two read as one dark run rather than two stacked slabs */
+    .stuCompareBand.bandDark { border-top:0; }
+    .stuCompareBody { max-width:62ch; margin-top:22px; }
+    .stuCompare { margin:30px 0 0; }
+    .stuCompareStage { position:relative; overflow:hidden; background:#101012; touch-action:pan-y; cursor:ew-resize; -webkit-user-select:none; user-select:none; }
+    /* the photos take no pointer events of their own, so a drag can never turn
+       into the browser's native "drag this image" instead of moving the handle */
+    .stuCompareImg { display:block; width:100%; height:auto; pointer-events:none; -webkit-user-drag:none; user-select:none; }
+    .stuCompareTop { position:absolute; inset:0; clip-path:inset(0 0 0 var(--split)); }
+    .stuCompareTop .stuCompareImg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+
+    /* the divider: a hairline plus a round grip, sized to the 24px minimum */
+    .stuCompareLine { position:absolute; top:0; bottom:0; left:var(--split); width:1px; background:rgba(244,242,238,0.85); transform:translateX(-0.5px); pointer-events:none; }
+    .stuCompareGrip { position:absolute; top:50%; left:50%; width:44px; height:44px; margin:-22px 0 0 -22px; border:1px solid rgba(244,242,238,0.85); border-radius:50%; background:rgba(16,16,18,0.35); backdrop-filter:blur(2px); }
+    .stuCompareGrip::before, .stuCompareGrip::after { content:''; position:absolute; top:50%; width:0; height:0; margin-top:-5px; border-top:5px solid transparent; border-bottom:5px solid transparent; }
+    .stuCompareGrip::before { left:11px; border-right:6px solid rgba(244,242,238,0.9); }
+    .stuCompareGrip::after { right:11px; border-left:6px solid rgba(244,242,238,0.9); }
+
+    /* which side is which, in the same label voice as the fig captions */
+    .stuCompareTag { position:absolute; bottom:14px; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:#f4f2ee; background:rgba(16,16,18,0.55); padding:6px 10px; pointer-events:none; }
+    .stuCompareTagA { left:14px; }
+    .stuCompareTagB { right:14px; }
+
+    /* the real control sits over the whole frame: invisible track, the thumb
+       carries the pointer affordance while the painted grip shows position */
+    /* pointer handling lives on the stage, so the input is there for the
+       keyboard and for assistive tech rather than for the mouse */
+    .stuCompareRange { position:absolute; inset:0; width:100%; height:100%; margin:0; padding:0; background:transparent; border:0; appearance:none; -webkit-appearance:none; pointer-events:none; }
+    .stuCompareRange::-webkit-slider-runnable-track { background:transparent; border:0; height:100%; }
+    .stuCompareRange::-moz-range-track { background:transparent; border:0; height:100%; }
+    .stuCompareRange::-webkit-slider-thumb { appearance:none; -webkit-appearance:none; width:44px; height:44px; border-radius:50%; background:transparent; border:0; cursor:ew-resize; }
+    .stuCompareRange::-moz-range-thumb { width:44px; height:44px; border-radius:50%; background:transparent; border:0; cursor:ew-resize; }
+    .stuCompareRange:focus-visible { outline:2px solid var(--heroInk); outline-offset:3px; }
+
+    .stuCompareTodo { margin-top:12px; }
+    /* the finished frame is decorative in the markup (it is the same shot), so
+       its description is given to screen readers here instead */
+    .stuCompareAlt { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
+
     .stuBriefLayout { display:grid; grid-template-columns:minmax(0, 480px) minmax(0, 1fr); gap:48px; align-items:start; margin-top:34px; }
     .stuBriefGrid { list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:0 28px; }
     .stuBriefItem { border-top:1px solid var(--hair); padding:12px 0; font-size:15px; letter-spacing:1px; color:var(--ink); }
@@ -277,6 +375,12 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
       .stuBriefGrid { gap:0; }
       /* the tag row wraps on a phone, so the dividers give way to plain gaps —
          a wrapped line would otherwise start with a stray rule and an indent */
+      /* the plate is very wide, so on a phone it would land about 160px tall —
+         too small to read the difference. Crop it to 3:2 there instead. */
+      .stuCompareStage { aspect-ratio:3/2; }
+      .stuCompareStage > .stuCompareImg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+      .stuCompareTag { bottom:10px; font-size:10px; letter-spacing:2px; padding:5px 8px; }
+      .stuCompareGrip { width:38px; height:38px; margin:-19px 0 0 -19px; }
       .stuTagRow { gap:10px 18px; margin-top:26px; }
       .stuTagRow li { padding:0; border-left:0; }
     }
@@ -326,6 +430,61 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
         start();
       }
       reduce.addEventListener('change', start);
+    })();
+
+    (function () {
+      'use strict';
+      var stage = document.getElementById('stuCompareStage');
+      var range = document.getElementById('stuCompareRange');
+      if (!stage || !range) return;
+
+      function paint(v) { stage.style.setProperty('--split', v + '%'); }
+      paint(range.value);
+      range.addEventListener('input', function () { paint(range.value); });
+
+      /* dragging anywhere on the photo moves the handle, not just the thumb */
+      var dragging = false;
+      function setFromX(clientX) {
+        var box = stage.getBoundingClientRect();
+        if (!box.width) return;
+        var pct = ((clientX - box.left) / box.width) * 100;
+        pct = Math.max(0, Math.min(100, pct));
+        range.value = String(Math.round(pct));
+        paint(range.value);
+      }
+      stage.addEventListener('dragstart', function (e) { e.preventDefault(); });
+
+      /* A mouse press moves the handle straight away. A finger must not: the
+         same press starts a vertical page scroll, and jumping the divider
+         under the thumb on every scroll would be maddening. So on touch we
+         wait for real sideways movement, and treat a finger that lifts
+         without moving as a tap (the browser sends pointercancel instead
+         when the gesture turned into a scroll). */
+      var startX = 0, moved = false, touch = false;
+      stage.addEventListener('pointerdown', function (e) {
+        dragging = true;
+        moved = false;
+        startX = e.clientX;
+        touch = e.pointerType === 'touch';
+        try { stage.setPointerCapture(e.pointerId); } catch (err) {}
+        if (!touch) { e.preventDefault(); setFromX(e.clientX); }
+      });
+      stage.addEventListener('pointermove', function (e) {
+        if (!dragging) return;
+        if (touch && !moved && Math.abs(e.clientX - startX) < 8) return;
+        moved = true;
+        setFromX(e.clientX);
+      });
+      function end(e, cancelled) {
+        if (!dragging) return;
+        dragging = false;
+        if (!cancelled && touch && !moved) setFromX(e.clientX);
+        try {
+          if (e && e.pointerId !== undefined && stage.hasPointerCapture(e.pointerId)) stage.releasePointerCapture(e.pointerId);
+        } catch (err) {}
+      }
+      stage.addEventListener('pointerup', function (e) { end(e, false); });
+      stage.addEventListener('pointercancel', function (e) { end(e, true); });
     })();
   </script>
 </Base>

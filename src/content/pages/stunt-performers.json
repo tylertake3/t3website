@@ -65,6 +65,27 @@
       "caption": "ON SET · THE GORGE"
     }
   },
+  "compare": {
+    "kicker": "PLATE TO FINAL FRAME",
+    "heading": "What the day looks like, and what lands on screen",
+    "body": "On the day it is performers, marks and a blue screen. Drag the handle to see the plate the performers worked to, and the frame the audience ends up watching.",
+    "ariaLabel": "Compare the on-set plate with the finished frame",
+    "sliderLabel": "Reveal the finished frame",
+    "before": {
+      "image": "/uploads/stunt-plate-on-set.webp",
+      "alt": "A line of costumed performers braced for action in front of a blue screen hung with tracking markers, smoke and fire on the set floor",
+      "label": "ON SET"
+    },
+    "after": {
+      "image": "/uploads/stunt-plate-final-frame.webp",
+      "alt": "The same line of performers in the finished shot, a vast skull-shaped gateway looming above them in falling snow",
+      "label": "FINAL FRAME"
+    },
+    "width": 1920,
+    "height": 804,
+    "caption": "AS SEEN ON · DEADPOOL & WOLVERINE"
+  },
+
   "briefs": {
     "kicker": "ILLUSTRATIVE, NOT EXHAUSTIVE",
     "heading": "The kind of brief this answers",
@@ -134,9 +155,9 @@
       },
       {
         "image": "/uploads/slow-horses-platform.webp",
-        "alt": "Two figures push through a busy station platform beside a waiting train, the woman in a green coat scanning the crowd ahead",
-        "width": 1024,
-        "height": 576,
+        "alt": "A man and a woman in a green coat walk a crowded station platform beside a waiting train, both looking sharply off to one side",
+        "width": 2400,
+        "height": 1350,
         "figNumber": "FIG. 02",
         "figNote": "SLOW HORSES"
       }
