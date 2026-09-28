@@ -1,0 +1,136 @@
+---
+/* Where Stripe sends someone after paying. Rendered on the server for each
+   visit so the booking it describes is read from Stripe, not guessed. */
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import copy from '../../content/pages/events.json';
+import { site, contactHref } from '../../data/site';
+import { formatEventDate, formatEventTime } from '../../lib/events';
+import { retrieveCheckoutSession, stripeConfigured } from '../../lib/stripe';
+
+export const prerender = false;
+
+const sessionId = Astro.url.searchParams.get('session_id') ?? '';
+
+let email: string | null = null;
+let attendee: string | null = null;
+let places = 1;
+let paidLabel = '';
+let event: { title: string; date: Date; endTime: string; location: string } | null = null;
+let found = false;
+
+if (sessionId && stripeConfigured()) {
+  try {
+    const session = await retrieveCheckoutSession(sessionId);
+    found = session.payment_status === 'paid' || session.status === 'complete';
+    if (found) {
+      email = session.customer_details?.email ?? null;
+      attendee = session.custom_fields?.find((f) => f.key === 'attendee')?.text?.value ?? session.customer_details?.name ?? null;
+      places = Number.parseInt(session.metadata?.places ?? '1', 10) || 1;
+      if (typeof session.amount_total === 'number') {
+        const pounds = session.amount_total / 100;
+        paidLabel = `£${Number.isInteger(pounds) ? pounds : pounds.toFixed(2)}`;
+      }
+      const slug = session.metadata?.event;
+      if (slug) {
+        const events = await getCollection('events');
+        const match = events.find((entry) => entry.id === slug);
+        if (match) event = match.data;
+      }
+    }
+  } catch (error) {
+    console.error('[events] could not read booking', error);
+  }
+}
+
+Astro.response.headers.set('Cache-Control', 'private, no-store');
+---
+
+<Base title={copy.booked.title} description={copy.meta.description} footerTitle={copy.meta.footerTitle} noindex={true}>
+  <section class="pageHero" aria-labelledby="bookedTitle">
+    <div class="pageHeroInner">
+      <p class="kicker">{copy.booked.eyebrow}</p>
+      {
+        found ? (
+          <>
+            <h1 class="pageHeroTitle" id="bookedTitle">{copy.booked.heading}</h1>
+            <p class="pageHeroLede">
+              {email ? (
+                <>
+                  {copy.booked.lede} <strong class="bookedEmail">{email}</strong>.
+                </>
+              ) : (
+                copy.booked.ledeNoEmail
+              )}
+            </p>
+          </>
+        ) : (
+          <>
+            <h1 class="pageHeroTitle" id="bookedTitle">{copy.booked.missingHeading}</h1>
+            <p class="pageHeroLede">{copy.booked.missingBody}</p>
+          </>
+        )
+      }
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="bandInner bandSplit">
+      <div>
+        <p class="kicker">{copy.booked.summaryLabel.toUpperCase()}</p>
+        {
+          found && event && (
+            <dl class="bookedFacts">
+              <div>
+                <dt>{copy.event.whenLabel}</dt>
+                <dd>{formatEventDate(event.date)}, {formatEventTime(event.date, event.endTime)}</dd>
+              </div>
+              <div>
+                <dt>{copy.event.whereLabel}</dt>
+                <dd>{event.location}</dd>
+              </div>
+              <div>
+                <dt>{copy.event.placesLabel}</dt>
+                <dd>{places}{attendee ? ` — ${attendee}` : ''}</dd>
+              </div>
+              {paidLabel && (
+                <div>
+                  <dt>{copy.event.priceLabel}</dt>
+                  <dd>{paidLabel}</dd>
+                </div>
+              )}
+            </dl>
+          )
+        }
+        {found && event && <h2 class="sectionTitle bookedEventTitle">{event.title}</h2>}
+      </div>
+      <div>
+        {
+          found && (
+            <>
+              <h2 class="bookedNextTitle">{copy.booked.whatNextHeading}</h2>
+              <p class="bandBody">{copy.booked.whatNextBody}</p>
+            </>
+          )
+        }
+        <p class="bookedLinks">
+          <a class="btnGhost" href="/events">{copy.booked.backLabel.toUpperCase()}</a>
+          <a class="bookedContact" href={contactHref}>{site.email}</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <style is:global>
+    .bookedEmail { font-weight:500; color:var(--heroInk); }
+    .bookedFacts { margin:26px 0 0; display:grid; gap:18px; }
+    .bookedFacts div { border-top:1px solid var(--hair); padding-top:14px; }
+    .bookedFacts dt { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
+    .bookedFacts dd { margin:8px 0 0; font-size:17px; font-weight:400; line-height:1.5; color:var(--ink); }
+    .bookedEventTitle { margin-top:32px; }
+    .bookedNextTitle { font-size:17px; letter-spacing:3px; text-transform:uppercase; color:var(--ink); margin-bottom:16px; }
+    .bookedLinks { display:flex; flex-wrap:wrap; gap:20px; align-items:center; margin-top:34px; }
+    .bookedContact { font-size:15px; color:var(--sub); text-decoration:underline; text-underline-offset:3px; }
+    .bookedContact:hover { color:var(--accent); }
+  </style>
+</Base>

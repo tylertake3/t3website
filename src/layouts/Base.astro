@@ -17,6 +17,8 @@ interface Props {
   footerTitle?: string;
   footerIntro?: string;
   footerLinks?: { label: string; href: string }[];
+  /** A page-specific inbox for the footer, in place of the main email and phone. */
+  footerEmail?: string;
   /** Which colour scheme this page opens in for a first-time visitor. */
   theme?: 'dark' | 'light';
   /** false when the page has no dark hero photo behind the header. */
@@ -35,6 +37,7 @@ const {
   footerTitle,
   footerIntro,
   footerLinks,
+  footerEmail,
   theme = 'dark',
   navOverDark = true,
   noindex = false,
@@ -95,7 +98,7 @@ const ogImageUrl = new URL(shareImage, base).toString();
       <main id="main" tabindex="-1">
         <slot />
       </main>
-      <Footer title={footerTitle} intro={footerIntro} links={footerLinks} />
+      <Footer title={footerTitle} intro={footerIntro} links={footerLinks} email={footerEmail} />
     </div>
     <script src="../scripts/site.js"></script>
     <slot name="scripts" />

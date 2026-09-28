@@ -1,130 +1,186 @@
 {
   "meta": {
-    "title": "Unique Talent & Distinctive Casting | Take 3 Agency",
-    "description": "Distinctive casting for film, television and commercial: very tall and short performers, twins, unusual features and memorable faces. Take 3 Agency represents performers whose look is the reason they are cast.",
+    "title": "Unique Talent: Amputee, Wheelchair User, Short-Statured & Distinctive Performers | Take 3 Agency",
+    "description": "Take 3 Agency represents professional performers with lived experience for film, television, commercials and modelling: amputee artists, wheelchair users, short-statured and very tall performers, people with vitiligo, tattooed and alternative looks, and distinctive faces. Trained professionals first, with accessibility considered from the first conversation.",
     "ogTitle": "Unique Talent | Take 3 Agency",
-    "ogDescription": "Performers whose look is the reason they are cast: height, stature, features and faces that hold a frame.",
-    "ogImageAlt": "A performer photographed in profile against a plain backdrop, lit to hold the character of the face.",
-    "footerTitle": "Cast a face that holds the frame"
+    "ogDescription": "Professional performers who challenge conventional casting: amputee artists, wheelchair users, short-statured and very tall performers, distinctive faces and alternative looks, represented for everything they bring to a role.",
+    "ogImage": "/uploads/supply-unique.webp",
+    "ogImageAlt": "A black-and-white studio portrait of a performer with tattooed arms and painted eyes, hands raised to the face.",
+    "footerTitle": "Tell us who you need"
   },
-
   "hero": {
     "eyebrow": "SPECIALISTS · UNIQUE TALENT",
     "heading": "Unique talent",
-    "lede": "Performers whose look is the reason they are cast, and who can act, take direction and carry a scene once they are.",
-    "tags": ["HEIGHT", "STATURE", "TWINS", "FEATURES", "CHARACTER"]
-  },
-
-  "portraits": {
-    "kicker": "THE RANGE",
-    "heading": "Some of the people on this roster",
-    "items": [
-      { "slotLabel": "Portrait (2:3)", "caption": "FIG. 01" },
-      { "slotLabel": "Portrait (2:3)", "caption": "FIG. 02" },
-      { "slotLabel": "Portrait (2:3)", "caption": "FIG. 03" },
-      { "slotLabel": "Portrait (2:3)", "caption": "FIG. 04" }
+    "lede": "Professional performers who challenge conventional casting, represented for everything they bring to a role: skill, training, presence and lived experience.",
+    "tags": [
+      "ACTORS",
+      "DOUBLES",
+      "MODELS",
+      "DANCERS",
+      "STUNT & ACTION"
     ],
-    "todo": "TODO: photography and captions. Four portraits, chosen with each performer and used with their permission. Caption each with the performer's name rather than their measurement or feature; how someone is described here is theirs to decide."
+    "figure": {
+      "image": "/uploads/supply-unique.webp",
+      "alt": "A black-and-white studio portrait of a performer with tattooed arms and painted eyes, hands raised to the face.",
+      "figNumber": "FIG. 01",
+      "figNote": "TAKE 3 ROSTER"
+    }
   },
-
-  "supply": {
-    "kicker": "WHAT WE SUPPLY",
-    "heading": "When the look is the brief",
+  "representation": {
+    "kicker": "REPRESENTATION",
+    "heading": "Space for all kinds of people",
+    "paragraphs": [
+      "At Take 3, we believe an inclusive industry is one that makes space for all kinds of people, bodies, abilities and experiences. Film and television should reflect the world around us in all its individuality and diversity. We want to create opportunities for professional artists with lived experience to bring authentic representation to screen, while celebrating the qualities that make each artist unique.",
+      "Our Unique Talent roster celebrates the people who challenge conventional casting: from extreme and varying heights to distinctive faces, alternative looks, amputees, wheelchair users, tattooed talent, characterful performers and artists with unique physicality.",
+      "Whether their background is in dance, action, modelling, acting or specialist performance, they are highly skilled, trained professionals first and foremost. That is what makes the work authentically inclusive, rather than a box ticked."
+    ],
+    "figure": {
+      "image": "/uploads/supply-unique-2.webp",
+      "alt": "A black-and-white studio photograph of a performer folded forward at the waist, arms stretched behind them, in a sheer patterned top and heavy boots.",
+      "figNumber": "FIG. 02",
+      "figNote": "TAKE 3 ROSTER"
+    }
+  },
+  "roster": {
+    "kicker": "WHO IS ON THE ROSTER",
+    "heading": "Celebrated for who they are. Cast for what they can do.",
     "items": [
       {
         "number": "01",
         "title": "Height and stature",
-        "body": "Performers at the far ends of the range, from very tall to very short, cast for roles written around their height, and represented as actors rather than as a measurement."
+        "body": "Performers at the far ends of the range, from very tall to short-statured, cast for roles written around their height and for smaller doubling work, and represented as actors rather than as a measurement."
       },
       {
         "number": "02",
-        "title": "Twins and lookalikes",
-        "body": "Identical and non-identical twins, close matches and doubles for continuity, split-screen, time-jump and multiple-role work."
+        "title": "Amputee artists and wheelchair users",
+        "body": "Performers with limb difference and wheelchair users, working as actors, doubles, models and background across major productions, with their access needs understood long before anyone reaches set."
       },
       {
         "number": "03",
-        "title": "Distinctive features",
-        "body": "Faces and figures that stay with an audience: striking bone structure, natural hair, tattoos, scarring, and looks a standard casting call rarely reaches."
+        "title": "Distinctive faces and alternative looks",
+        "body": "Heavily tattooed talent, striking bone structure, vitiligo, scarring, natural hair and looks a standard casting call rarely reaches: faces that hold a frame and stay with an audience."
       },
       {
         "number": "04",
-        "title": "Character and real people",
-        "body": "Faces with a life behind them, for productions and brands that want believable over polished, and memorable over neutral."
+        "title": "Characterful performers and unique physicality",
+        "body": "Performers whose presence, movement or physicality is unmistakably their own, for productions and brands that want believable over polished and memorable over neutral."
       }
     ]
   },
-
-  "approach": {
-    "kicker": "HOW WE WORK",
-    "heading": "Performers first, description second",
-    "body": "Everyone on this roster is here as a professional performer. We cast them for what a brief actually needs, we ask before we describe anyone in a particular way, and we do not put people forward for work that trades on their appearance at their expense. If a role is written badly or a treatment is heading somewhere we would not be comfortable sending someone into, we will raise it with you early rather than quietly decline. It has never cost a good production anything to be asked.",
-    "points": [
-      {
-        "term": "REPRESENTED PROPERLY",
-        "description": "Billed and briefed as performers, with the same credits, rates and conditions as any other booking."
-      },
-      {
-        "term": "DESCRIBED THEIR WAY",
-        "description": "How someone is described in a submission is agreed with them, not assumed by us or by a brief."
-      },
-      {
-        "term": "HONEST ABOUT FIT",
-        "description": "If a role is wrong for the person or the person is wrong for the role, you will hear it from us first."
-      }
-    ]
-  },
-
-  "briefs": {
-    "kicker": "ILLUSTRATIVE, NOT EXHAUSTIVE",
-    "heading": "The kind of brief this answers",
+  "inAction": {
+    "kicker": "IN ACTION",
+    "heading": "Where this talent has worked",
+    "hint": "Drag to browse",
     "items": [
-      "Very tall performers",
-      "Short-statured performers",
-      "Identical twins",
-      "Specific builds",
-      "Memorable faces",
-      "Heavily tattooed",
-      "Natural and distinctive hair",
-      "Older character faces",
-      "Real-people casting"
+      {
+        "term": "SMALLER STUNT DOUBLES",
+        "body": "SPACT doubles for child characters, bringing the required size, physicality and stunt ability together.",
+        "productions": [
+          {
+            "title": "Harry Potter",
+            "poster": "harry-potter-tv-series"
+          },
+          {
+            "title": "Ebenezer",
+            "poster": "ebenezer"
+          },
+          {
+            "title": "Back in Action",
+            "poster": "back-in-action"
+          }
+        ]
+      },
+      {
+        "term": "DISTINCTIVE FACES",
+        "body": "Heavily tattooed and alternative-looking artists, cast for the faces a standard call rarely reaches.",
+        "productions": [
+          {
+            "title": "Werewulf",
+            "poster": "werewulf"
+          },
+          {
+            "title": "Supergirl",
+            "poster": "supergirl"
+          },
+          {
+            "title": "Masters of the Universe",
+            "poster": "masters-of-the-universe"
+          }
+        ]
+      },
+      {
+        "term": "CHARACTER MODELS",
+        "body": "Interesting, distinctive faces booked for modelling and background roles.",
+        "productions": [
+          {
+            "title": "The Sandman",
+            "poster": "the-sandman"
+          },
+          {
+            "title": "Only Murders in the Building",
+            "poster": "only-murders-in-the-building"
+          },
+          {
+            "title": "The Witcher",
+            "poster": "the-witcher"
+          }
+        ]
+      },
+      {
+        "term": "AUTHENTIC REPRESENTATION",
+        "body": "Amputee artists working across major productions, and Wheelchair Barbie and Amputee Barbie bringing lived experience to the world of Barbieland.",
+        "productions": [
+          {
+            "title": "The Batman Part II",
+            "poster": "the-batman-part-ii"
+          },
+          {
+            "title": "28 Years Later",
+            "poster": "28-years-later"
+          },
+          {
+            "title": "Barbie",
+            "poster": "barbie"
+          }
+        ]
+      },
+      {
+        "term": "UNIQUE DOUBLES",
+        "body": "Doubles matched on height, build and physicality when a standard double cannot be found.",
+        "productions": [
+          {
+            "title": "Avengers: Doomsday",
+            "poster": "avengers-doomsday"
+          },
+          {
+            "title": "The Wheel of Time",
+            "poster": "the-wheel-of-time"
+          },
+          {
+            "title": "Kraven the Hunter",
+            "poster": "kraven-the-hunter"
+          }
+        ]
+      }
+    ]
+  },
+  "accessibility": {
+    "kicker": "ACCESSIBILITY",
+    "heading": "Considered from the first conversation",
+    "paragraphs": [
+      "We believe accessibility should be considered from the first conversation, not once an artist arrives on set.",
+      "We work closely with access specialists to develop our understanding of both visible and non-visible access needs, and to ensure our artists are supported throughout the casting and booking process.",
+      "Every artist is different. There is no one-size-fits-all approach to accessibility, so we focus on individual needs, clear communication and practical solutions."
     ],
-    "note": "Categories, not a closed list. Describe the role, not the label."
-  },
-
-  "credits": {
-    "kicker": "SELECTED WORK",
-    "heading": "Where this has been booked",
-    "todo": "TODO: copy. Two or three genuine bookings, cleared with both the performer and the production. Performer consent matters more than usual on this page. Nothing here may be invented."
-  },
-
-  "related": {
-    "kicker": "WHERE THE OVERLAP IS REAL",
-    "heading": "Related disciplines",
-    "items": [
-      {
-        "name": "Models",
-        "href": "/models",
-        "description": "Faces for campaigns, character and camera, cast from a working roster, not a lookbook.",
-        "linkLabel": "View models"
-      },
-      {
-        "name": "Stand-ins & picture doubles",
-        "href": "/stand-ins",
-        "description": "Accurate matches to your leads, experienced on set.",
-        "linkLabel": "View stand-ins"
-      },
-      {
-        "name": "SPACTs",
-        "href": "/spacts",
-        "description": "Real skills, delivered safely on camera.",
-        "linkLabel": "View SPACTs"
-      },
-      {
-        "name": "Specialists",
-        "href": "/specialists",
-        "description": "Anything sourced to brief, beyond the standing roster.",
-        "linkLabel": "View specialists"
-      }
-    ]
+    "support": {
+      "heading": "Cast the talent. Support the individual.",
+      "body": "If you are casting an artist with an access requirement, our team can help facilitate the conversation between artist and production.",
+      "lead": "WE CAN HELP WITH",
+      "points": [
+        "Understanding individual access requirements",
+        "Communicating requirements clearly and sensitively",
+        "Discussing reasonable adjustments"
+      ]
+    }
   }
 }

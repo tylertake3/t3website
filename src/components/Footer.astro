@@ -7,8 +7,12 @@ interface Props {
   intro?: string;
   /** Optional cross-links to sibling pages, shown before the Instagram button. */
   links?: { label: string; href: string }[];
+  /** A page-specific inbox (e.g. applications@) shown in place of the main
+      email and phone; the solid button mails it too. */
+  email?: string;
 }
-const { title = 'Tell us what you need', intro, links = [] } = Astro.props;
+const { title = 'Tell us what you need', intro, links = [], email } = Astro.props;
+const mailHref = email ? `mailto:${email}` : contactHref;
 const year = new Date().getFullYear();
 ---
 
@@ -18,13 +22,19 @@ const year = new Date().getFullYear();
       <h2 class="footerTitle">{title}</h2>
       {intro && <p class="footerIntro">{intro}</p>}
       <p class="footerContact">
-        <a href={contactHref}>{site.email}</a> &nbsp;&middot;&nbsp; <a href={`tel:${site.phoneHref}`}>{site.phone}</a>
+        {email ? (
+          <a href={mailHref}>{email}</a>
+        ) : (
+          <>
+            <a href={contactHref}>{site.email}</a> &nbsp;&middot;&nbsp; <a href={`tel:${site.phoneHref}`}>{site.phone}</a>
+          </>
+        )}
       </p>
     </div>
     <div class="footerBtns">
       {links.map((l) => <a class="btnGhost" href={l.href}>{l.label}</a>)}
       <a class="btnGhost" href={site.instagram} target="_blank" rel="noopener">INSTAGRAM</a>
-      <a class="btnSolid" href={contactHref}>{site.ctaLabel}</a>
+      <a class="btnSolid" href={mailHref}>{site.ctaLabel}</a>
     </div>
   </div>
   <div class="footerBottom">

@@ -1285,6 +1285,12 @@
       "src": "/posters/the-baby.webp"
     },
     {
+      "title": "The Batman Part II",
+      "season": null,
+      "slug": "the-batman-part-ii",
+      "src": "/posters/the-batman-part-ii.webp"
+    },
+    {
       "title": "The Beekeeper",
       "season": null,
       "slug": "the-beekeeper",
@@ -1781,6 +1787,12 @@
       "season": null,
       "slug": "we-live-in-time",
       "src": "/posters/we-live-in-time.webp"
+    },
+    {
+      "title": "Werewulf",
+      "season": null,
+      "slug": "werewulf",
+      "src": "/posters/werewulf.webp"
     },
     {
       "title": "Werwulf",

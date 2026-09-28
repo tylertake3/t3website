@@ -59,7 +59,8 @@ export const navLinks: NavItem[] = [
       { label: 'Intimacy', href: '/intimacy' },
     ],
   },
-  { label: 'Laural', href: '/laural' },
+  /* The artist portal lives on Laural, off-site; the menu opens it in a new tab. */
+  { label: 'Artist Portal', href: 'https://take3.laural.app/sign-in' },
   { label: 'Who We Are', href: '/about' },
   { label: 'Credits', href: '/credits' },
   { label: 'Contact', href: '/contact' },
@@ -78,4 +79,12 @@ export const insightsLink = {
   label: 'Insights',
   href: '/insights',
   note: 'Practical advice on self-tapes, first days on set and the paperwork.',
+};
+
+/** Workshops and one-off events, many of them for artists on the roster, so
+    the link sits with the other performer-facing pages in the menu. */
+export const eventsLink = {
+  label: 'Events',
+  href: '/events',
+  note: 'Workshops and one-off sessions, with places booked and paid for online.',
 };

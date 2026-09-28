@@ -95,3 +95,74 @@ collections:
       - { name: metaTitle, label: Google title, widget: string, required: false, hint: 'Optional. Leave empty to use the headline.' }
       - { name: metaDescription, label: Google description, widget: text, required: false, hint: 'Optional. Leave empty to use the short summary.' }
       - { name: body, label: The article, widget: markdown, hint: 'Use Heading 2 for section headings, and bullet lists for anything that reads as a checklist.' }
+
+  - name: events
+    label: Events & workshops
+    label_singular: Event
+    folder: src/content/events
+    create: true
+    identifier_field: title
+    format: frontmatter
+    # The web address of an event is made from its title, so leave the title
+    # alone once the link has gone out.
+    slug: '{{slug}}'
+    summary: '{{title}}, {{date}}'
+    sortable_fields: [date, title]
+    description: >-
+      Workshops and one-off sessions at /events. Places are paid for through
+      Stripe; bookings close on their own once the places are taken. The
+      members' access code is set on the host (EVENTS_MEMBER_CODE), not here,
+      because this file is public.
+    fields:
+      - { name: title, label: Event name, widget: string }
+      - { name: date, label: Date and start time, widget: datetime, date_format: 'DD/MM/YYYY', time_format: 'HH:mm', picker_utc: false, hint: 'The event leaves the listing the day after this date.' }
+      - { name: endTime, label: End time, widget: string, required: false, hint: 'e.g. 16:00. Shown next to the start time.' }
+      - { name: location, label: Where, widget: string, hint: 'A town or venue. It can be updated once the venue is confirmed.' }
+      - { name: price, label: Price per place (pounds), widget: number, value_type: float, min: 0, default: 0, hint: 'Type 0 for a free event; the button then asks people to email instead.' }
+      - { name: capacity, label: Number of places, widget: number, value_type: int, min: 1, default: 12 }
+      - { name: membersOnly, label: Members only, widget: boolean, default: false, hint: 'Switch on to ask for the members'' access code before booking.' }
+      - { name: closed, label: Close bookings now, widget: boolean, default: false, required: false, hint: 'Switch on to stop bookings early, whatever the count says.' }
+      - { name: priceNote, label: Small print under the price, widget: string, required: false, hint: 'e.g. "Including VAT".' }
+      - { name: applyUrl, label: Application form link, widget: string, required: false, hint: 'Fill this in for a workshop awarded by application. The page then leads with an "Apply now" button, and the payment form is for those offered a place.' }
+      - { name: applyDeadline, label: Application deadline, widget: datetime, required: false, date_format: 'DD/MM/YYYY', time_format: false, picker_utc: true, hint: 'The apply button disappears the day after this date.' }
+      - { name: summary, label: Short summary, widget: text, hint: 'One or two sentences. Shown on the card and at the top of the event page.' }
+      - { name: image, label: Photo, widget: image, required: false, hint: 'Optional. Without one, a plain plate carrying the date is shown.' }
+      - { name: imageAlt, label: Photo description, widget: string, required: false, hint: 'Read aloud to visitors who cannot see the photo.' }
+      - name: imageFocus
+        label: Which part of the photo to keep
+        widget: select
+        required: false
+        default: 'center center'
+        hint: The photo is cropped to a wide frame. Choose the part that must stay in view.
+        options:
+          - { label: 'Top of the photo', value: 'center top' }
+          - { label: 'Slightly high', value: 'center 30%' }
+          - { label: 'Dead centre', value: 'center center' }
+          - { label: 'Slightly low', value: 'center 65%' }
+          - { label: 'Bottom of the photo', value: 'center bottom' }
+      - name: cover
+        label: Cover stills
+        label_singular: Cover still
+        widget: list
+        required: false
+        hint: 'Optional. Wide frames from productions the guest has worked on, shown one after another behind the title at the top of the page. Leave empty for the plain cover.'
+        fields:
+          - { name: image, label: Still, widget: image }
+          - { name: alt, label: Description, widget: string, required: false, hint: 'Read aloud to visitors who cannot see the still.' }
+          - { name: credit, label: Production, widget: string, required: false, hint: 'e.g. "The Punisher: One Last Kill". Shown under the summary while that still is up.' }
+          - { name: role, label: Their role on it, widget: string, required: false, hint: 'e.g. "Action designer" — shown as "Action designer on Havoc". Leave empty for "Seen on Havoc".' }
+          - name: focus
+            label: Which part of the still to keep
+            widget: select
+            required: false
+            default: 'center center'
+            options:
+              - { label: 'Top of the still', value: 'center top' }
+              - { label: 'Slightly high', value: 'center 30%' }
+              - { label: 'Dead centre', value: 'center center' }
+              - { label: 'Slightly low', value: 'center 70%' }
+      - { name: draft, label: Hide while it is being set up, widget: boolean, default: false, required: false }
+      - { name: metaTitle, label: Google title, widget: string, required: false, hint: 'Optional. Leave empty to use the event name.' }
+      - { name: metaDescription, label: Google description, widget: text, required: false, hint: 'Optional. Leave empty to use the short summary.' }
+      - { name: body, label: Full description, widget: markdown, hint: 'What the day covers, who it is for, what is included.' }
+

@@ -1,31 +1,16 @@
 ---
 import Base from '../layouts/Base.astro';
-import { site, contactHref } from '../data/site';
 import copy from '../content/pages/join.json';
 
-/* Copy still to be written is shown as a visible note rather than passed off as
-   body text, the same rule /credits and /specialists follow. */
-const isTodo = (text: string) => text.trimStart().startsWith('TODO:');
-const bodyClass = (text: string, extra = '') => (isTodo(text) ? 'todoNote' : `bandBody ${extra}`.trim());
+/* /join — the one page written for performers rather than productions. The
+   application itself lives on the artist portal (Laural), so this page says
+   who we represent, what to have ready, and sends people there. */
 
-interface Field {
-  id: string;
-  label: string;
-  type: string;
-  required?: boolean;
-  autocomplete?: string;
-  inputmode?: string;
-  hint?: string;
-  rows?: number;
-  options?: { value: string; label: string }[];
-}
-
-const groups = copy.form.groups as { legend: string; fields: Field[] }[];
-
-/* No form handler has been chosen yet. Rather than let an applicant type out
-   their experience into something that silently drops it, the form is made
-   inert and the reason is stated above it, with the email address left live. */
-const formConnected = copy.form.formAction.trim().length > 0;
+/* The roster strip loops: three copies of the list, the view parked on the
+   middle one, so sliding in either direction always comes back round. The
+   extra copies are hidden from assistive tech. */
+const disciplines = copy.disciplines.items;
+const marquee = [...disciplines, ...disciplines, ...disciplines];
 ---
 
 <Base
@@ -33,199 +18,138 @@ const formConnected = copy.form.formAction.trim().length > 0;
   description={copy.meta.description}
   ogTitle={copy.meta.ogTitle}
   ogDescription={copy.meta.ogDescription}
+  ogImage={copy.hero.figure.image}
+  ogImageAlt={copy.hero.figure.alt}
   footerTitle={copy.meta.footerTitle}
+  footerIntro={copy.meta.footerIntro}
+  footerEmail={copy.meta.footerEmail}
 >
-  <!-- hero -->
+  <!-- hero: copy left, portrait right -->
   <section class="pageHero joinHero" aria-labelledby="joinTitle">
-    <div class="pageHeroInner">
-      <p class="kicker">{copy.hero.eyebrow}</p>
-      <h1 class="pageHeroTitle" id="joinTitle">{copy.hero.heading}</h1>
-      <p class="pageHeroLede">{copy.hero.lede}</p>
+    <div class="pageHeroInner joinHeroInner">
+      <div>
+        <p class="kicker" data-hero-line>{copy.hero.eyebrow}</p>
+        <h1 class="pageHeroTitle joinHeroTitle" id="joinTitle" data-hero-line>{copy.hero.heading}</h1>
+        <p class="pageHeroLede" data-hero-line>{copy.hero.lede}</p>
+        <a class="btnSolid joinHeroCta" data-hero-line href={copy.apply.href} target="_blank" rel="noopener">{copy.hero.linkLabel.toUpperCase()}</a>
+      </div>
+      <figure class="joinFig">
+        <span class="figPlate" data-hero-figure><img class="joinFigPhoto" src={copy.hero.figure.image} alt={copy.hero.figure.alt} width="1600" height="2121" fetchpriority="high" decoding="async" /></span>
+        <figcaption class="joinCap" data-hero-line>
+          <span>{copy.hero.figure.figNumber}</span><span>{copy.hero.figure.figNote}</span>
+        </figcaption>
+      </figure>
     </div>
   </section>
 
-  <!-- who we are looking for, by discipline -->
-  <section class="band" aria-labelledby="disciplinesTitle">
-    <div class="bandInner">
-      <div class="sectionHead joinHead">
-        <h2 class="sectionTitle" id="disciplinesTitle">{copy.disciplines.heading}</h2>
-        <p class="kicker">{copy.disciplines.kicker}</p>
-      </div>
+  <!-- who we represent: a strip to slide across, one discipline per tile.
+       It sits still until the reader scrolls or drags it, and loops round -->
+  <section class="band supply joinSupply" aria-labelledby="disciplinesTitle">
+    <div class="sectionHead joinHead" data-reveal-head>
+      <h2 class="sectionTitle" id="disciplinesTitle">{copy.disciplines.heading}</h2>
+      <p class="kicker">{copy.disciplines.kicker}</p>
+    </div>
+    <div class="supplyScroll joinRosterScroll" id="joinRosterScroll" data-reveal-group="0.07">
+      {
+        marquee.map((item, i) => (
+          <div class="supplyTile joinRosterTile" aria-hidden={i >= disciplines.length ? 'true' : undefined}>
+            <span class="catSlot catSlotPhoto joinRosterPhoto" style="aspect-ratio:4/5;" data-reveal-figure>
+              <img src={item.image} alt={item.imageAlt} loading="lazy" decoding="async" draggable="false" style={`object-position:${item.imageFocus};`} />
+            </span>
+            <h3 class="joinDisciplineName" data-reveal-item>
+              {item.name}
+              {'sub' in item && item.sub && <span class="joinDisciplineSub">{item.sub}</span>}
+            </h3>
+            <p class="bandBody joinDisciplineBody" data-reveal-item>{item.body}</p>
+          </div>
+        ))
+      }
+    </div>
+    <p class="joinDisciplineNote joinRosterNote" data-reveal>{copy.disciplines.note}</p>
+  </section>
 
-      <ul class="joinDisciplines">
+  <!-- curated: everyone on the books has been met in person -->
+  <section class="band" aria-labelledby="curatedTitle">
+    <div class="bandInner bandSplit" data-reveal-group="0.12">
+      <div>
+        <p class="kicker" data-reveal-item>{copy.curated.kicker}</p>
+        <h2 class="sectionTitle" id="curatedTitle" data-reveal-item>{copy.curated.heading}</h2>
+      </div>
+      <p class="bandBody" data-reveal-item>{copy.curated.body}</p>
+    </div>
+  </section>
+
+  <!-- three from the roster -->
+  <section class="band" aria-label="Performers from the Take 3 roster">
+    <div class="bandInner">
+      <ul class="joinGallery" data-reveal-group="0.14">
         {
-          copy.disciplines.items.map((item) => (
-            <li class="joinDiscipline">
-              <h3 class="joinDisciplineName">{item.name}</h3>
-              <p class={bodyClass(item.looksFor, 'joinDisciplineBody')}>{item.looksFor}</p>
+          copy.gallery.items.map((item) => (
+            <li class="joinGalleryItem" data-reveal-figure>
+              <img src={item.image} alt={item.alt} loading="lazy" decoding="async" />
             </li>
           ))
         }
       </ul>
-
-      <p class="joinDisciplineNote">{copy.disciplines.note}</p>
     </div>
   </section>
 
-  <!-- what the agency offers a performer -->
-  <section class="band" aria-labelledby="offerTitle">
-    <div class="bandInner bandSplit">
+  <!-- before you start: what to have ready -->
+  <section class="band bandDark joinDark" aria-labelledby="prepareTitle">
+    <div class="bandInner joinPrepare" data-reveal-group="0.08">
+      <figure class="joinFig joinPrepareFig">
+        <span class="figPlate" data-reveal-figure><img class="joinFigPhoto" src={copy.prepare.figure.image} alt={copy.prepare.figure.alt} width="1600" height="2400" loading="lazy" decoding="async" /></span>
+        <figcaption class="joinCap" data-reveal-item>
+          <span>{copy.prepare.figure.figNumber}</span><span>{copy.prepare.figure.figNote}</span>
+        </figcaption>
+      </figure>
       <div>
-        <p class="kicker">{copy.offer.kicker}</p>
-        <h2 class="sectionTitle" id="offerTitle">{copy.offer.heading}</h2>
-      </div>
-      <p class={bodyClass(copy.offer.todo)}>{copy.offer.todo}</p>
-    </div>
-  </section>
-
-  <!-- requirements and experience expectations -->
-  <section class="band" aria-labelledby="requirementsTitle">
-    <div class="bandInner bandSplit">
-      <div>
-        <p class="kicker">{copy.requirements.kicker}</p>
-        <h2 class="sectionTitle" id="requirementsTitle">{copy.requirements.heading}</h2>
-      </div>
-      <div>
-        <p class={bodyClass(copy.requirements.todo)}>{copy.requirements.todo}</p>
-        <p class="todoNote">{copy.requirements.standInsNote}</p>
+        <p class="kicker" data-reveal-item>{copy.prepare.kicker}</p>
+        <h2 class="sectionTitle joinPrepareTitle" id="prepareTitle" data-reveal-item>{copy.prepare.heading}</h2>
+        <p class="bandBody joinPrepareIntro" data-reveal-item>{copy.prepare.intro}</p>
+        <ul class="joinChecklist">
+          {copy.prepare.items.map((item) => <li data-reveal-item>{item}</li>)}
+        </ul>
+        <p class="joinPrepareNote" data-reveal-item>{copy.prepare.note}</p>
       </div>
     </div>
   </section>
 
   <!-- application process -->
-  <section class="band bandDark joinDark" aria-labelledby="processTitle">
+  <section class="band" aria-labelledby="processTitle">
     <div class="bandInner">
-      <div class="sectionHead joinHead">
+      <div class="sectionHead joinHead" data-reveal-head>
         <h2 class="sectionTitle" id="processTitle">{copy.process.heading}</h2>
         <p class="kicker">{copy.process.kicker}</p>
       </div>
-      <ol class="joinSteps">
+      <ol class="joinSteps" data-reveal-group>
         {
           copy.process.steps.map((step) => (
-            <li class="joinStep">
+            <li class="joinStep" data-reveal-item>
               <span class="joinStepNum">{step.number}</span>
               <span class="joinStepName">{step.name}</span>
             </li>
           ))
         }
       </ol>
-      <p class="todoNote">{copy.process.todo}</p>
+      <p class="joinProcessNote" data-reveal>{copy.process.note}</p>
     </div>
   </section>
 
-  <!-- the honest note sits before the form, so it is read before anyone applies -->
-  <section class="band" aria-labelledby="honestTitle">
-    <div class="bandInner bandSplit">
+  <!-- apply: the one route in is the artist portal, off-site -->
+  <section class="band" aria-labelledby="applyTitle">
+    <div class="bandInner bandSplit" data-reveal-group="0.1">
       <div>
-        <p class="kicker">{copy.honest.kicker}</p>
-        <h2 class="sectionTitle" id="honestTitle">{copy.honest.heading}</h2>
+        <p class="kicker" data-reveal-item>{copy.apply.kicker}</p>
+        <h2 class="sectionTitle" id="applyTitle" data-reveal-item>{copy.apply.heading}</h2>
       </div>
-      <p class={bodyClass(copy.honest.todo)}>{copy.honest.todo}</p>
-    </div>
-  </section>
-
-  <!-- application form -->
-  <section class="band" aria-labelledby="formTitle">
-    <div class="bandInner">
-      <div class="sectionHead joinHead">
-        <h2 class="sectionTitle" id="formTitle">{copy.form.heading}</h2>
-        <p class="kicker">{copy.form.kicker}</p>
+      <div>
+        <p class="bandBody" data-reveal-item>{copy.apply.body}</p>
+        <a class="btnSolid joinApplyCta" data-reveal-item href={copy.apply.href} target="_blank" rel="noopener">{copy.apply.linkLabel.toUpperCase()}</a>
+        <p class="joinContactNote" data-reveal-item>
+          {copy.apply.contactNote} <a href={`mailto:${copy.apply.contactEmail}`}>{copy.apply.contactEmail}</a>.
+        </p>
       </div>
-
-      <p class="bandBody joinFormIntro">{copy.form.intro}</p>
-
-      {
-        !formConnected && (
-          <div class="joinNotice" role="note">
-            <p class="joinNoticeTitle">{copy.form.notConnectedTitle}</p>
-            <p class="joinNoticeBody">{copy.form.notConnectedBody}</p>
-            <p class="joinNoticeLinks">
-              <a href={contactHref}>{site.email}</a>
-              <span aria-hidden="true">&middot;</span>
-              <a href={`tel:${site.phoneHref}`}>{site.phone}</a>
-            </p>
-          </div>
-        )
-      }
-
-      <form
-        class="joinForm"
-        method={copy.form.method}
-        action={formConnected ? copy.form.formAction : undefined}
-        {...(formConnected ? {} : { inert: true })}
-      >
-        {
-          groups.map((group) => (
-            <fieldset class="joinGroup">
-              <legend class="joinLegend">{group.legend}</legend>
-              <div class="joinFields">
-                {group.fields.map((field) => {
-                  const id = `join-${field.id}`;
-                  const hintId = field.hint ? `${id}-hint` : undefined;
-                  return (
-                    <div class={field.type === 'textarea' ? 'joinField joinFieldWide' : 'joinField'}>
-                      <label class="joinLabel" for={id}>
-                        {field.label}
-                        {!field.required && <span class="joinOptional">{copy.form.optionalLabel}</span>}
-                      </label>
-
-                      {field.type === 'textarea' && (
-                        <textarea
-                          class="joinControl"
-                          id={id}
-                          name={field.id}
-                          rows={field.rows ?? 5}
-                          required={field.required}
-                          aria-describedby={hintId}
-                        />
-                      )}
-
-                      {field.type === 'select' && (
-                        <select
-                          class="joinControl joinSelect"
-                          id={id}
-                          name={field.id}
-                          required={field.required}
-                          aria-describedby={hintId}
-                        >
-                          <option value="">{copy.form.selectPlaceholder}</option>
-                          {(field.options ?? []).map((option) => (
-                            <option value={option.value}>{option.label}</option>
-                          ))}
-                        </select>
-                      )}
-
-                      {field.type !== 'textarea' && field.type !== 'select' && (
-                        <input
-                          class="joinControl"
-                          id={id}
-                          name={field.id}
-                          type={field.type}
-                          autocomplete={field.autocomplete}
-                          inputmode={field.inputmode}
-                          required={field.required}
-                          aria-describedby={hintId}
-                        />
-                      )}
-
-                      {field.hint && (
-                        <p class="joinHint" id={hintId}>
-                          {field.hint}
-                        </p>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </fieldset>
-          ))
-        }
-
-        <button class="btnSolid joinSubmit" type="submit">{copy.form.submitLabel.toUpperCase()}</button>
-      </form>
-
-      <p class="todoNote">{copy.form.fieldsNote}</p>
-      <p class="todoNote">{copy.form.privacyNote}</p>
     </div>
   </section>
 
@@ -240,79 +164,131 @@ const formConnected = copy.form.formAction.trim().length > 0;
     .joinDark { --sub:#c7c3bd; --ink:#f4f2ee; --hair:#3a3a3e; }
 
     .joinHead { padding-bottom:18px; }
-    .joinFormIntro { margin-top:26px; max-width:60ch; }
+    .joinHeroCta { display:inline-block; margin-top:30px; }
+    .joinApplyCta { display:inline-block; margin-top:28px; }
 
-    /* who we are looking for */
-    .joinDisciplines {
-      list-style:none; margin:34px 0 0; padding:0;
-      display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:32px 40px;
-    }
-    .joinDiscipline { border-top:1px solid var(--hair); padding-top:18px; }
-    .joinDisciplineName { font-size:17px; letter-spacing:3px; text-transform:uppercase; color:var(--ink); }
+    /* hero: copy beside a portrait, the same recipe as /unique-talent */
+    .joinHero { padding-top:200px; padding-bottom:86px; }
+    .joinHeroInner { display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, 420px); gap:64px; align-items:center; }
+    .joinHeroTitle { max-width:12ch; }
+    .joinFig { margin:0; min-width:0; }
+    .joinFigPhoto { display:block; width:100%; height:auto; background:var(--tileBg); }
+    .joinCap { display:flex; justify-content:space-between; gap:20px; margin-top:12px; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); }
+
+    /* who we represent: the homepage strip recipe (.supply / .supplyScroll),
+       with text tiles instead of photos. The strip's own padding carries the
+       page inset so the head stays on the column. */
+    .joinSupply.band { padding:96px 16px; }
+    .joinSupply .sectionHead { padding:0 24px 18px; margin-bottom:0; }
+    .joinRosterScroll { padding:34px 24px 0; align-items:stretch; }
+    .joinRosterTile { flex:0 0 clamp(240px, 22vw, 320px); }
+    .joinRosterPhoto { margin-bottom:16px; }
+    /* a mouse drag scrolls the strip; the photo must not lift off as a ghost image */
+    .joinRosterPhoto img { -webkit-user-drag:none; user-select:none; }
+    .joinRosterScroll { user-select:none; }
+    .joinDisciplineName { margin:0; font-size:17px; letter-spacing:3px; text-transform:uppercase; font-weight:400; color:var(--ink); }
+    .joinDisciplineSub { display:block; margin-top:6px; font-size:11px; letter-spacing:2.5px; color:var(--muted); }
     .joinDisciplineBody { margin-top:12px; font-size:16px; }
-    .joinDiscipline .todoNote { margin-top:14px; }
-    .joinDisciplineNote { margin-top:34px; font-size:15px; font-weight:400; line-height:1.7; color:var(--muted); max-width:60ch; text-wrap:pretty; }
+    .joinDisciplineNote { font-size:15px; font-weight:400; line-height:1.7; color:var(--muted); max-width:60ch; text-wrap:pretty; }
+    .joinRosterNote { max-width:1280px; margin:34px auto 0; padding:0 24px; box-sizing:border-box; }
+
+    /* three from the roster: portrait plates on the house grade */
+    .joinGallery { list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:24px; }
+    /* the plates match the photos' own 2:3 shape, so nobody is cropped at the ankle */
+    .joinGalleryItem { aspect-ratio:5/8; overflow:hidden; background:var(--tileBg); }
+    .joinGalleryItem img { width:100%; height:100%; object-fit:cover; object-position:center; display:block; filter:saturate(0.92) contrast(1.05) brightness(0.96); }
+
+    /* before you start */
+    .joinPrepare { display:grid; grid-template-columns:minmax(0, 380px) minmax(0, 1fr); gap:72px; align-items:start; }
+    .joinPrepareTitle { margin-top:12px; }
+    .joinPrepareIntro { margin-top:22px; max-width:56ch; }
+    .joinChecklist { list-style:none; margin:30px 0 0; padding:0; max-width:56ch; border-top:1px solid var(--hair); }
+    .joinChecklist li { position:relative; border-bottom:1px solid var(--hair); padding:16px 0 16px 26px; font-size:17px; font-weight:400; line-height:1.55; color:var(--ink); text-wrap:pretty; }
+    .joinChecklist li::before { content:""; position:absolute; left:0; top:calc(16px + 0.72em); width:8px; height:1px; background:var(--accent); }
+    .joinPrepareNote { margin-top:26px; font-size:15px; font-weight:400; line-height:1.7; color:var(--sub); max-width:56ch; text-wrap:pretty; }
 
     /* application process */
     .joinSteps { list-style:none; margin:34px 0 0; padding:0; display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:32px; }
     .joinStep { border-top:1px solid var(--hair); padding-top:18px; }
     .joinStepNum { display:block; font-size:11px; letter-spacing:3px; color:var(--accent); }
     .joinStepName { display:block; margin-top:12px; font-size:17px; letter-spacing:2.5px; text-transform:uppercase; color:var(--ink); }
+    .joinProcessNote { margin-top:34px; font-size:15px; font-weight:400; line-height:1.7; color:var(--muted); max-width:60ch; text-wrap:pretty; }
 
-    /* the form is switched off until a handler exists — said plainly, with the
-       working routes repeated inside the notice */
-    .joinNotice { margin-top:30px; border:1px solid var(--accent); padding:22px 24px; max-width:72ch; }
-    .joinNoticeTitle { font-size:13px; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent); }
-    .joinNoticeBody { margin-top:12px; font-size:15px; font-weight:400; line-height:1.7; color:var(--sub); text-wrap:pretty; }
-    .joinNoticeLinks { margin-top:14px; font-size:16px; font-weight:400; display:flex; flex-wrap:wrap; gap:12px; align-items:baseline; }
-    .joinNoticeLinks a { color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
-    .joinNoticeLinks a:hover { color:var(--accent); }
-    .joinNoticeLinks span { color:var(--muted); }
-
-    /* the form itself */
-    .joinForm { margin-top:40px; max-width:960px; }
-    .joinGroup { border:0; margin:0; padding:0; }
-    .joinGroup + .joinGroup { margin-top:48px; }
-    .joinLegend {
-      padding:0 0 14px; font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--accent);
-      border-bottom:1px solid var(--hair); width:100%;
-    }
-    .joinFields { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:26px 40px; margin-top:26px; }
-    .joinField { display:flex; flex-direction:column; }
-    .joinFieldWide { grid-column:1 / -1; }
-    .joinLabel { font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--ink); }
-    .joinOptional { margin-left:10px; letter-spacing:2px; color:var(--muted); text-transform:none; font-size:11px; }
-    .joinControl {
-      margin-top:10px; width:100%;
-      background:var(--tileBg); color:var(--ink);
-      border:1px solid var(--ctrlBorder); border-radius:0;
-      /* 16px keeps iOS Safari from zooming the page on focus */
-      font-family:'Jost', sans-serif; font-size:16px; font-weight:400; line-height:1.5;
-      padding:13px 14px;
-    }
-    textarea.joinControl { resize:vertical; min-height:120px; }
-    /* the select keeps its native arrow: a hand-drawn one would have to be
-       redrawn for both themes, and the browser's already follows the text colour */
-    .joinSelect { padding-right:12px; }
-    .joinControl:hover { border-color:var(--ink); }
-    /* global.css only rings links, buttons and [tabindex]; form controls need
-       their own, and it must clear the field's own border */
-    .joinControl:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
-    .joinHint { margin-top:8px; font-size:13px; font-weight:400; line-height:1.5; color:var(--muted); text-wrap:pretty; }
-    .joinSubmit { display:inline-block; margin-top:36px; border:0; cursor:pointer; font-family:'Jost', sans-serif; }
+    /* how to get in touch about an application: the portal, not the inbox */
+    .joinContactNote { margin-top:26px; font-size:15px; font-weight:400; line-height:1.7; color:var(--muted); max-width:56ch; text-wrap:pretty; }
+    .joinContactNote a { color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
+    .joinContactNote a:hover { color:var(--accent); }
 
     @media (max-width:1024px) {
-      .joinDisciplines { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+      .joinHeroInner { grid-template-columns:1fr; gap:44px; }
+      .joinHeroInner .joinFig { width:100%; max-width:420px; }
+      .joinPrepare { grid-template-columns:1fr; gap:44px; }
+      .joinPrepareFig { max-width:420px; }
       .joinSteps { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:28px; }
     }
 
     @media (max-width:640px) {
-      .joinDisciplines { grid-template-columns:1fr; gap:26px; }
+      .joinHero { padding-top:170px; padding-bottom:60px; }
+      .joinHeroInner .joinFig, .joinPrepareFig { max-width:none; }
+      .joinSupply.band { padding:64px 0; }
+      .joinSupply .sectionHead { padding:0 20px 14px; }
+      .joinRosterScroll { padding:26px 12px 0; --supplyFade:24px; }
+      .joinRosterNote { padding:0 20px; }
+      .joinGallery { grid-template-columns:1fr; gap:16px; }
       .joinSteps { grid-template-columns:1fr; gap:26px; }
-      .joinFields { grid-template-columns:1fr; gap:22px; }
-      .joinNotice { padding:18px; }
-      .joinForm { margin-top:32px; }
-      .joinSubmit { width:100%; text-align:center; }
+      .joinHeroCta, .joinApplyCta { width:100%; text-align:center; }
     }
   </style>
+
+  <script is:inline>
+    /* The roster strip does not move on its own. It loops: the row holds
+       three identical copies, the view is kept on the middle one, and
+       crossing into a neighbour slides it back by one whole copy, which is
+       invisible because the copies match. A mouse can also drag it; touch
+       and trackpads scroll it natively. Same recipe as the homepage strip. */
+    (function () {
+      var el = document.getElementById('joinRosterScroll');
+      if (!el) return;
+      var tiles = Array.prototype.slice.call(el.querySelectorAll('.joinRosterTile'));
+      var perSet = Math.round(tiles.length / 3);
+      var cycle = 0, loopable = false;
+      function measure() {
+        cycle = tiles.length > perSet ? tiles[perSet].offsetLeft - tiles[0].offsetLeft : 0;
+        loopable = cycle > 0 && el.scrollWidth - el.clientWidth >= cycle * 2;
+      }
+      function normalise() {
+        if (!loopable) return;
+        while (el.scrollLeft >= cycle * 2) el.scrollLeft -= cycle;
+        while (el.scrollLeft < cycle) el.scrollLeft += cycle;
+      }
+      function reset() { measure(); if (loopable) { el.scrollLeft = cycle; } }
+      reset();
+      window.addEventListener('load', reset);
+      var rz = null;
+      window.addEventListener('resize', function () { window.clearTimeout(rz); rz = window.setTimeout(reset, 150); });
+      el.addEventListener('scroll', normalise, { passive: true });
+
+      var dragging = false, moved = false, lastX = 0;
+      el.addEventListener('pointerdown', function (e) {
+        if (e.pointerType !== 'mouse') return;
+        dragging = true; moved = false; lastX = e.clientX;
+      });
+      /* the browser's own image drag would otherwise take over the gesture */
+      el.addEventListener('dragstart', function (e) { e.preventDefault(); });
+      window.addEventListener('pointermove', function (e) {
+        if (!dragging) return;
+        var dx = e.clientX - lastX;
+        if (!moved && Math.abs(dx) <= 6) return;
+        moved = true;
+        lastX = e.clientX;
+        el.scrollLeft -= dx;
+        normalise();
+      }, { passive: true });
+      window.addEventListener('pointerup', function () { dragging = false; });
+      window.addEventListener('pointercancel', function () { dragging = false; });
+      el.addEventListener('click', function (e) {
+        if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; }
+      }, true);
+    })();
+  </script>
 </Base>

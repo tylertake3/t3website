@@ -1,0 +1,97 @@
+---
+import Base from '../layouts/Base.astro';
+import copy from '../content/pages/events.json';
+import { getCollection } from 'astro:content';
+import { formatEventDate, formatEventTime, formatPrice, isPast, isoDateTime, sortByDate } from '../lib/events';
+
+/* Live events only: drafts stay in the editor, and anything already over
+   leaves the listing at the next build. */
+const all = await getCollection('events', ({ data }) => !data.draft);
+const upcoming = sortByDate(all.filter((event) => !isPast(event.data.date)));
+
+const countLabel = `${upcoming.length} ${upcoming.length === 1 ? 'SESSION' : 'SESSIONS'}`;
+---
+
+<Base
+  title={copy.meta.title}
+  description={copy.meta.description}
+  ogTitle={copy.meta.ogTitle}
+  ogDescription={copy.meta.ogDescription}
+  footerTitle={copy.meta.footerTitle}
+>
+  <!-- cover -->
+  <section class="pageHero" aria-labelledby="eventsTitle">
+    <div class="pageHeroInner">
+      <p class="kicker" data-hero-line>{copy.hero.eyebrow}</p>
+      <h1 class="pageHeroTitle" id="eventsTitle" data-hero-line>{copy.hero.heading}</h1>
+      <p class="pageHeroLede" data-hero-line>{copy.hero.lede}</p>
+    </div>
+  </section>
+
+  <!-- what is coming up -->
+  <section class="band" aria-labelledby="upcomingTitle">
+    <div class="bandInner">
+      <div class="sectionHead" data-reveal-head>
+        <h2 class="sectionTitle" id="upcomingTitle">{copy.listing.heading}</h2>
+        <p class="kicker">{countLabel}</p>
+      </div>
+
+      {
+        upcoming.length > 0 ? (
+          <ul class:list={['eventGrid', { eventGridSingle: upcoming.length === 1 }]} data-reveal-group>
+            {upcoming.map((event) => (
+              <li class="eventCard" data-reveal-item>
+                <a class="eventCardLink" href={`/events/${event.id}`}>
+                  {event.data.image ? (
+                    <img class="eventCardImg" src={event.data.image} alt="" loading="lazy" decoding="async" style={`object-position:${event.data.imageFocus}`} />
+                  ) : (
+                    <span class="slot eventCardSlot" style="aspect-ratio:3/2;">
+                      <span class="slotLabel">{formatEventDate(event.data.date).toUpperCase()}</span>
+                    </span>
+                  )}
+                  <div class="eventCardBody">
+                  <p class="eventTag">
+                    {event.data.applyUrl ? copy.listing.applyLabel : event.data.membersOnly ? copy.listing.membersLabel : copy.listing.openLabel}
+                  </p>
+                  <h3 class="eventCardTitle">{event.data.title}</h3>
+                  <p class="eventCardExcerpt">{event.data.summary}</p>
+                  <dl class="eventFactsRow">
+                    <div class="eventFactsItem">
+                      <dt class="eventFactsLabel">{copy.event.whenLabel}</dt>
+                      <dd class="eventFactsValue">
+                        <time datetime={isoDateTime(event.data.date)}>{formatEventDate(event.data.date)}</time>
+                        <span class="eventFactsNote">{formatEventTime(event.data.date, event.data.endTime)}</span>
+                      </dd>
+                    </div>
+                    <div class="eventFactsItem">
+                      <dt class="eventFactsLabel">{copy.event.whereLabel}</dt>
+                      <dd class="eventFactsValue">{event.data.location}</dd>
+                    </div>
+                    <div class="eventFactsItem">
+                      <dt class="eventFactsLabel">{copy.event.priceLabel}</dt>
+                      <dd class="eventFactsValue">
+                        {formatPrice(event.data.price, copy.listing.freeLabel)}
+                        {event.data.closed && <span class="eventFactsNote">{copy.listing.closedLabel}</span>}
+                      </dd>
+                    </div>
+                  </dl>
+                  <span class="eventCardMore">
+                    {copy.listing.detailsLabel} <span aria-hidden="true">&rarr;</span>
+                  </span>
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="todoNote" data-reveal>{copy.listing.emptyNote}</p>
+        )
+      }
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { armReveal } from '../lib/reveal';
+  armReveal();
+</script>

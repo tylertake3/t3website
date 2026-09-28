@@ -1,0 +1,83 @@
+{
+  "meta": {
+    "title": "Events & Workshops | Take 3 Agency",
+    "description": "Workshops and one-off sessions from Take 3 Agency for dancers, SPACTs, models and specialist performers. Book and pay for your place online.",
+    "ogTitle": "Events & Workshops | Take 3 Agency",
+    "ogDescription": "Workshops and one-off sessions for performers, booked and paid for online.",
+    "footerTitle": "Want to collaborate?"
+  },
+  "hero": {
+    "eyebrow": "EVENTS",
+    "heading": "Workshops and one-off sessions.",
+    "lede": "Practical sessions run by the desk that books the work, with people who do it every day. Some are open to everyone; the members' workshops need the access code sent to artists on the roster."
+  },
+  "listing": {
+    "heading": "Coming up",
+    "emptyNote": "Nothing on the calendar just now. New sessions are announced to the roster first.",
+    "membersLabel": "Members' workshop",
+    "openLabel": "Open to all",
+    "freeLabel": "Free",
+    "soldOutLabel": "Sold out",
+    "closedLabel": "Bookings closed",
+    "placesLeftLabel": "places left",
+    "placeLeftLabel": "place left",
+    "detailsLabel": "Details & booking",
+    "applyLabel": "By application"
+  },
+  "event": {
+    "backLabel": "Events",
+    "coverCreditLabel": "Seen",
+    "whenLabel": "When",
+    "whereLabel": "Where",
+    "mapLabel": "Open in Maps",
+    "priceLabel": "Price",
+    "placesLabel": "Places",
+    "perPlaceLabel": "per place",
+    "bookingHeading": "Book a place",
+    "checkoutNote": "You will get a receipt by email straight away, and the joining details about a week before the session.",
+    "bookingIntro": "Payment is taken securely by Stripe. You will get a receipt by email straight away, and the details of the day a week before.",
+    "membersIntro": "This workshop is for artists on the Take 3 roster who have been offered a place. Enter the access code from your email to continue to payment, which is taken securely by Stripe.",
+    "codeLabel": "Members' access code",
+    "codeHint": "Sent to you by email with your offer of a place. Contact us if you have not received it.",
+    "quantityLabel": "Number of places",
+    "attendeeLabel": "Your name",
+    "attendeeHint": "As it should appear on the register.",
+    "emailLabel": "Your email",
+    "emailHint": "Your receipt and the joining details go here.",
+    "submitLabel": "Continue to payment",
+    "freeSubmitLabel": "Reserve a place by email",
+    "soldOutNote": "Every place is taken. Email us and we will let you know if one comes free.",
+    "closedNote": "Bookings for this session have closed.",
+    "pastNote": "This session has already happened.",
+    "notConnectedNote": "Online booking is not switched on yet. Email us to reserve a place in the meantime.",
+    "errors": {
+      "code": "That access code was not recognised. Check your invitation and try again.",
+      "full": "Sorry, the last places went while you were on this page.",
+      "quantity": "You can book between one and four places at a time.",
+      "config": "Online booking is not available right now. Please email us to reserve a place.",
+      "stripe": "Payment could not be started. Please try again, or email us to reserve a place."
+    },
+    "moreHeading": "Other sessions",
+    "allLabel": "All events",
+    "applyHeading": "Apply for a place",
+    "applyIntro": "Places on this workshop are awarded by application, not first come, first served. Applications are read by the workshop leader and the Take 3 team, and successful applicants are sent a code to secure their place.",
+    "applyDeadlineLabel": "Apply by",
+    "applyButtonLabel": "Apply now",
+    "applyClosedNote": "Applications have now closed. Successful applicants have been sent their access code.",
+    "acceptedHeading": "Offered a place?",
+    "acceptedIntro": "Enter the access code from your acceptance email to pay for your place. Payment is taken securely by Stripe and you will get a receipt straight away."
+  },
+  "booked": {
+    "title": "Booking confirmed | Take 3 Agency",
+    "eyebrow": "BOOKED",
+    "heading": "You're on the list.",
+    "lede": "Thank you. Your place is confirmed and a receipt is on its way to",
+    "ledeNoEmail": "Thank you. Your place is confirmed and a receipt is on its way to you.",
+    "whatNextHeading": "What happens next",
+    "whatNextBody": "We will send the joining details, including where to meet and what to bring, about a week before the session. If anything changes on your side, reply to the receipt email and we will sort it.",
+    "summaryLabel": "Your booking",
+    "backLabel": "Back to events",
+    "missingHeading": "We could not find that booking.",
+    "missingBody": "If you have just paid, your receipt from Stripe is the confirmation. If you are unsure whether the payment went through, email us before trying again."
+  }
+}

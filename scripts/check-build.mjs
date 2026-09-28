@@ -34,6 +34,17 @@ const EXPECTED_PAGES = [
 
 const EXPECTED_FILES = ['robots.txt', 'sitemap-index.xml'];
 
+/* Templates that build many pages at once, e.g. src/pages/events/[slug].astro,
+   keyed by the folder their pages land in. Astro names their stylesheet after
+   the template file, so every page in that folder is entitled to it. */
+const templateStyles = new Map();
+for (const template of await walk('src/pages')) {
+  const name = template.split('/').pop();
+  if (!name.startsWith('[') || !name.endsWith('.astro')) continue;
+  const folder = template.replace('src/pages/', '').replace(`/${name}`, '');
+  templateStyles.set(folder === template ? '' : folder, name.replace('.astro', '').replace(/[[\]]/g, '_'));
+}
+
 const problems = [];
 const note = (msg) => problems.push(msg);
 
@@ -120,10 +131,15 @@ for (const file of htmlFiles) {
      One page's styles landing on another silently rearranges the layout, which
      is exactly how the homepage hero once got the Models page's grid. */
   const pageName = page.replace(/\/index\.html$/, '').replace(/\.html$/, '');
+  /* Pages built from one template (events/[slug].astro and friends) all share
+     that template's stylesheet, which Astro names after the template file. */
+  const folder = pageName.includes('/') ? pageName.slice(0, pageName.lastIndexOf('/')) : '';
+  const fromTemplate = templateStyles.get(folder);
   for (const m of html.matchAll(/href="\/_astro\/([^".]+)\.[^".]+\.css"/g)) {
     const styleOwner = m[1];
     const shared = ['Base', 'index'];
     if (shared.includes(styleOwner)) continue;
+    if (styleOwner === fromTemplate) continue;
     if (styleOwner !== pageName) {
       note(`${page}: is loading ${styleOwner}'s stylesheet, which will fight its own layout`);
     }

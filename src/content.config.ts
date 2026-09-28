@@ -43,4 +43,60 @@ const insights = defineCollection({
   }),
 });
 
-export const collections = { reviews, insights };
+/* Workshops and other one-off events, each with its own page under /events.
+   Prices are in pounds; a price of 0 makes the event free and its booking
+   button an email link, since a free place needs nothing taken. The member
+   access code is NOT stored here: the site's files are public, so it lives in
+   the EVENTS_MEMBER_CODE setting on the host and is checked on the server. */
+const events = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/events' }),
+  schema: z.object({
+    title: z.string(),
+    /* When it starts. Past events drop off the listing on the next build. */
+    date: z.coerce.date(),
+    /* Spoken end time, e.g. "17:00" — shown beside the start, never computed. */
+    endTime: z.string().default(''),
+    location: z.string(),
+    /* Price per place in pounds. 0 = free. */
+    price: z.number().nonnegative(),
+    /* Total places. Bookings close on the server once these are paid for. */
+    capacity: z.number().int().positive(),
+    /* Members' workshops need the access code before the booking button works. */
+    membersOnly: z.boolean().default(false),
+    /* Hand switch to close bookings early, whatever the count says. */
+    closed: z.boolean().default(false),
+    /* Small print under the price, e.g. "Including VAT". */
+    priceNote: z.string().default(''),
+    /* Some workshops are awarded by application rather than first come, first
+       served: the page then leads with the application link until the
+       deadline, and the payment form is for those offered a place. */
+    applyUrl: z.string().default(''),
+    applyDeadline: z.coerce.date().optional(),
+    summary: z.string(),
+    image: z.string().default(''),
+    imageAlt: z.string().default(''),
+    /* Where the photo is anchored when it is cropped to the 3:2 plate, as the
+       category grid does it: "center 30%" keeps a face near the top in frame. */
+    imageFocus: z.string().default('center center'),
+    /* Stills for the page cover: production frames the guest has worked on,
+       cross-fading behind the title like the home hero, each credited. */
+    cover: z
+      .array(
+        z.object({
+          image: z.string(),
+          alt: z.string().default(''),
+          credit: z.string().default(''),
+          /* What the guest did on it, e.g. "Action designer" — read as "Action designer on Havoc". */
+          role: z.string().default(''),
+          focus: z.string().default('center center'),
+        }),
+      )
+      .default([]),
+    /* Kept out of the listing and the sitemap until it is ready. */
+    draft: z.boolean().default(false),
+    metaTitle: z.string().default(''),
+    metaDescription: z.string().default(''),
+  }),
+});
+
+export const collections = { reviews, insights, events };

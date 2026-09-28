@@ -1,5 +1,5 @@
 ---
-import { navLinks, performerLink, insightsLink, site, contactHref } from '../data/site';
+import { navLinks, performerLink, insightsLink, eventsLink, site, contactHref } from '../data/site';
 import { pageExists } from '../lib/pages';
 import Timecode from './Timecode.astro';
 
@@ -14,7 +14,8 @@ const isCurrent = (href: string) => href === currentPath;
 
 /* The menu is defined ahead of the build-out, so only show entries whose page
    actually exists. Each new page appears in the menu the moment it lands. */
-const exists = pageExists;
+const isExternal = (href: string) => /^https?:\/\//.test(href);
+const exists = (href: string) => isExternal(href) || pageExists(href);
 
 /* Menu labels animate letter by letter, so each character needs its own box.
    The split copy is hidden from assistive tech — the link carries an aria-label. */
@@ -35,6 +36,7 @@ const menuItems = navLinks
   });
 const showPerformerLink = exists(performerLink.href);
 const showInsightsLink = exists(insightsLink.href);
+const showEventsLink = exists(eventsLink.href);
 
 /* Sub-lists start closed, except the one holding the page you are on — so
    arriving on /models from search, the menu shows you where you are. */
@@ -108,7 +110,14 @@ const isOpenGroup = (item: (typeof menuItems)[number]) =>
             ) : (
               <li class="menuItem" style={`--n:${ni}`}>
                 {exists(item.href) ? (
-                  <a class="menuLink" href={item.href} aria-label={item.label} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                  <a
+                    class="menuLink"
+                    href={item.href}
+                    aria-label={item.label}
+                    aria-current={isCurrent(item.href) ? 'page' : undefined}
+                    target={isExternal(item.href) ? '_blank' : undefined}
+                    rel={isExternal(item.href) ? 'noopener' : undefined}
+                  >
                     <span class="menuDash" aria-hidden="true" />
                     <span class="menuWord" aria-hidden="true">
                       {chars(item.label).map((ch, ci) => (
@@ -128,7 +137,7 @@ const isOpenGroup = (item: (typeof menuItems)[number]) =>
     </nav>
 
     <div class="menuAside">
-      {(showPerformerLink || showInsightsLink) && (
+      {(showPerformerLink || showInsightsLink || showEventsLink) && (
       <nav class="menuPerformers" aria-label="For performers">
         <p class="menuAsideLabel">FOR PERFORMERS</p>
         {showPerformerLink && (
@@ -170,6 +179,27 @@ const isOpenGroup = (item: (typeof menuItems)[number]) =>
               </span>
             </a>
             <p class="menuJoinNote">{insightsLink.note}</p>
+          </div>
+        )}
+
+        {/* Events take the same quiet line as Insights: same audience, same voice. */}
+        {showEventsLink && (
+          <div class="menuAsideItem menuAsideItemSecondary">
+            <a
+              class="menuAsideLink"
+              href={eventsLink.href}
+              aria-label={eventsLink.label}
+              aria-current={isCurrent(eventsLink.href) ? 'page' : undefined}
+            >
+              <span class="menuAsideLinkWord" aria-hidden="true">
+                {chars(eventsLink.label).map((ch, ci) => (
+                  <span class="menuCh" style={`--i:${ci}`}>{ch === ' ' ? ' ' : ch}</span>
+                ))}
+                <span class="menuJoinRule" />
+                <span class="menuJoinRuleAccent" />
+              </span>
+            </a>
+            <p class="menuJoinNote">{eventsLink.note}</p>
           </div>
         )}
       </nav>

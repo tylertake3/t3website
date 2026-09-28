@@ -1,0 +1,545 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import copy from '../../content/pages/events.json';
+import { site, contactHref } from '../../data/site';
+import {
+  MAX_PLACES_PER_BOOKING,
+  bookingState,
+  formatEventDate,
+  formatEventTime,
+  formatPrice,
+  isPast,
+  isoDateTime,
+  mapUrl,
+  sortByDate,
+} from '../../lib/events';
+
+export async function getStaticPaths() {
+  const events = await getCollection('events', ({ data }) => !data.draft);
+  return events.map((event) => ({ params: { slug: event.id }, props: { event, events } }));
+}
+
+type EventEntry = Awaited<ReturnType<typeof getCollection<'events'>>>[number];
+
+interface Props {
+  event: EventEntry;
+  events: EventEntry[];
+}
+
+const { event, events } = Astro.props;
+const { Content } = await render(event);
+const data = event.data;
+
+/* The page is built ahead of time, so it opens on the state it can know
+   without asking Stripe (past, closed, free, or open) and a small script
+   fills in the live count once the page has loaded. */
+const initialState = bookingState(data, 0);
+const past = isPast(data.date);
+
+/* An application-led workshop: the apply button leads until the deadline has
+   gone, after which only the code-and-pay form is left. */
+const byApplication = Boolean(data.applyUrl);
+const applicationsOpen = byApplication && !(data.applyDeadline && isPast(data.applyDeadline));
+const audienceLabel = byApplication
+  ? copy.listing.applyLabel
+  : data.membersOnly
+    ? copy.listing.membersLabel
+    : copy.listing.openLabel;
+
+const others = sortByDate(events.filter((entry) => entry.id !== event.id && !isPast(entry.data.date))).slice(0, 3);
+
+/* Read defensively: a dev server started before the field existed still
+   serves the old shape until it restarts. */
+const cover = data.cover ?? [];
+/* "Action Designer on Havoc", or "Seen on Havoc" when no role is given. */
+const coverCredit = (still: { credit: string; role: string }) =>
+  still.credit ? `${still.role || copy.event.coverCreditLabel} on ${still.credit}` : '';
+
+const dateLabel = formatEventDate(data.date);
+const timeLabel = formatEventTime(data.date, data.endTime);
+const priceLabel = formatPrice(data.price, copy.listing.freeLabel);
+
+const reserveHref = `${contactHref}?subject=${encodeURIComponent(`Place on: ${data.title} (${dateLabel})`)}`;
+
+const pageTitle = data.metaTitle || `${data.title} | Events | ${site.name}`;
+const pageDescription = data.metaDescription || data.summary;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: data.title,
+  description: data.summary,
+  startDate: isoDateTime(data.date),
+  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  location: { '@type': 'Place', name: data.location },
+  organizer: { '@type': 'Organization', name: site.name },
+  offers: {
+    '@type': 'Offer',
+    price: data.price,
+    priceCurrency: 'GBP',
+    url: `https://www.take3agency.com/events/${event.id}`,
+    availability: past || data.closed ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
+  },
+};
+---
+
+<Base
+  title={pageTitle}
+  description={pageDescription}
+  ogTitle={data.title}
+  ogDescription={data.summary}
+  ogImage={data.image || undefined}
+  ogImageAlt={data.imageAlt || undefined}
+  footerTitle={copy.meta.footerTitle}
+  noindex={past}
+>
+  <script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd, null, 2)} />
+
+  <!-- cover -->
+  <section class:list={['pageHero', { eventCover: cover.length > 0 }]} aria-labelledby="eventTitle">
+    {
+      /* same recipe as the home hero: only the first still is fetched with
+         the page, the rest are attached once it has loaded */
+      cover.map((still, i) => (
+        <div
+          class="eventCoverLayer"
+          data-title={coverCredit(still)}
+          data-bg={i === 0 ? undefined : still.image}
+          role="img"
+          aria-label={still.alt}
+          aria-hidden={i === 0 ? undefined : 'true'}
+          style={`${i === 0 ? `background-image:url("${still.image}"); opacity:1;` : 'opacity:0;'} background-position:${still.focus};`}
+        />
+      ))
+    }
+    {cover.length > 0 && <div class="eventCoverScrim" />}
+    <div class="pageHeroInner">
+      <a class="eventCrumb" href="/events" data-hero-line>
+        <span aria-hidden="true">&larr;</span> {copy.event.backLabel}
+      </a>
+      <p class="eventTag eventCoverTag" data-hero-line>{audienceLabel}</p>
+      <h1 class="pageHeroTitle eventPageTitle" id="eventTitle" data-hero-line>{data.title}</h1>
+      <p class="pageHeroLede" data-hero-line>{data.summary}</p>
+      {cover.length > 0 && cover[0].credit && (
+        <p class="eventCoverCredit" data-hero-line>
+          <span id="eventCoverCredit">{coverCredit(cover[0])}</span>
+        </p>
+      )}
+    </div>
+  </section>
+
+  <!-- the facts, then the description and the booking panel -->
+  <section class="band">
+    <div class="bandInner">
+      <dl class="eventFacts" data-reveal-group>
+        <div class="eventFact" data-reveal-item>
+          <dt class="eventFactLabel">{copy.event.whenLabel}</dt>
+          <dd class="eventFactValue">
+            <time datetime={isoDateTime(data.date)}>{dateLabel}</time>
+            <span class="eventFactNote">{timeLabel}</span>
+          </dd>
+        </div>
+        <div class="eventFact" data-reveal-item>
+          <dt class="eventFactLabel">{copy.event.whereLabel}</dt>
+          <dd class="eventFactValue">
+            <a class="eventFactLink" href={mapUrl(data.location)} target="_blank" rel="noopener">{data.location}</a>
+            <span class="eventFactNote">{copy.event.mapLabel} <span aria-hidden="true">&rarr;</span></span>
+          </dd>
+        </div>
+        <div class="eventFact" data-reveal-item>
+          <dt class="eventFactLabel">{copy.event.priceLabel}</dt>
+          <dd class="eventFactValue">
+            {priceLabel}
+            {data.price > 0 && (
+              <span class="eventFactNote">
+                {copy.event.perPlaceLabel}{data.priceNote ? `, ${data.priceNote.toLowerCase()}` : ''}
+              </span>
+            )}
+          </dd>
+        </div>
+        <div class="eventFact" data-reveal-item>
+          <dt class="eventFactLabel">{copy.event.placesLabel}</dt>
+          <dd class="eventFactValue">
+            <span data-places-count>{data.capacity}</span>
+            <span
+              class="eventFactNote"
+              data-places-note
+              data-plural={copy.listing.placesLeftLabel}
+              data-singular={copy.listing.placeLeftLabel}>{copy.listing.placesLeftLabel}</span
+            >
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="bandInner eventLayout">
+      <article class="insightProse eventProse">
+        {
+          data.image && (
+            <img class="eventImg" src={data.image} alt={data.imageAlt} loading="lazy" decoding="async" style={`object-position:${data.imageFocus}`} />
+          )
+        }
+        <Content />
+      </article>
+
+      <aside class="eventBook" id="book" aria-labelledby="bookTitle" data-book data-state={initialState}>
+        <p class="eventBookTitle" id="bookTitle">
+          {byApplication ? (applicationsOpen ? copy.event.applyHeading : copy.event.acceptedHeading) : copy.event.bookingHeading}
+        </p>
+
+        {
+          byApplication && initialState === 'open' && (
+            <div class="eventApply">
+              {applicationsOpen ? (
+                <>
+                  <p class="eventBookIntro">{copy.event.applyIntro}</p>
+                  {data.applyDeadline && (
+                    <p class="eventApplyDeadline">
+                      <span>{copy.event.applyDeadlineLabel}</span>
+                      <time datetime={isoDateTime(data.applyDeadline)}>{formatEventDate(data.applyDeadline)}</time>
+                    </p>
+                  )}
+                  <a class="btnSolid eventBookBtn" href={data.applyUrl} target={data.applyUrl.startsWith('http') ? '_blank' : undefined} rel={data.applyUrl.startsWith('http') ? 'noopener' : undefined}>
+                    {copy.event.applyButtonLabel.toUpperCase()}
+                  </a>
+                  <p class="eventAcceptedTitle">{copy.event.acceptedHeading}</p>
+                </>
+              ) : (
+                <p class="eventBookNote">{copy.event.applyClosedNote}</p>
+              )}
+            </div>
+          )
+        }
+
+        {/* one sentence per state; the script shows the one that applies */}
+        <p class="eventBookNote" data-state-note="soldOut" hidden>{copy.event.soldOutNote}</p>
+        <p class="eventBookNote" data-state-note="closed" hidden={initialState !== 'closed'}>{copy.event.closedNote}</p>
+        <p class="eventBookNote" data-state-note="past" hidden={initialState !== 'past'}>{copy.event.pastNote}</p>
+        <p class="eventBookNote" data-state-note="config" hidden>{copy.event.notConnectedNote}</p>
+
+        {/* the reason a booking bounced back, filled from ?error= */}
+        <p class="eventError" role="alert" data-error-slot hidden></p>
+        {Object.entries(copy.event.errors).map(([key, text]) => <span data-error-text={key} hidden>{text}</span>)}
+
+        {
+          initialState === 'free' && (
+            <div data-book-panel>
+              <p class="eventBookIntro">{copy.event.bookingIntro}</p>
+              <a class="btnSolid eventBookBtn" href={reserveHref}>{copy.event.freeSubmitLabel.toUpperCase()}</a>
+            </div>
+          )
+        }
+
+        {
+          initialState === 'open' && (
+            <form class={applicationsOpen ? 'eventForm eventFormSecondary' : 'eventForm'} method="post" action="/api/book" data-book-panel>
+              <input type="hidden" name="event" value={event.id} />
+              <p class="eventBookIntro">
+                {byApplication ? copy.event.acceptedIntro : data.membersOnly ? copy.event.membersIntro : copy.event.bookingIntro}
+              </p>
+
+              {data.membersOnly && (
+                <div class="eventField">
+                  <label class="eventLabel" for="bookCode">{copy.event.codeLabel}</label>
+                  <input
+                    class="eventControl"
+                    id="bookCode"
+                    name="code"
+                    type="text"
+                    autocomplete="off"
+                    autocapitalize="characters"
+                    spellcheck="false"
+                    required
+                    aria-describedby="bookCodeHint"
+                  />
+                  <p class="eventHint" id="bookCodeHint">{copy.event.codeHint}</p>
+                </div>
+              )}
+
+              <div class="eventField">
+                <label class="eventLabel" for="bookAttendee">{copy.event.attendeeLabel}</label>
+                <input class="eventControl" id="bookAttendee" name="attendee" type="text" autocomplete="name" required aria-describedby="bookAttendeeHint" />
+                <p class="eventHint" id="bookAttendeeHint">{copy.event.attendeeHint}</p>
+              </div>
+
+              <div class="eventField">
+                <label class="eventLabel" for="bookEmail">{copy.event.emailLabel}</label>
+                <input class="eventControl" id="bookEmail" name="email" type="email" autocomplete="email" required aria-describedby="bookEmailHint" />
+                <p class="eventHint" id="bookEmailHint">{copy.event.emailHint}</p>
+              </div>
+
+              <div class="eventField">
+                <label class="eventLabel" for="bookQuantity">{copy.event.quantityLabel}</label>
+                <select class="eventControl eventSelect" id="bookQuantity" name="quantity" data-quantity>
+                  {Array.from({ length: MAX_PLACES_PER_BOOKING }, (_, i) => i + 1).map((n) => (
+                    <option value={n}>{n}</option>
+                  ))}
+                </select>
+              </div>
+
+              <p class="eventTotal">
+                <span>{copy.event.priceLabel}</span>
+                <span data-total data-unit={data.price}>{priceLabel}</span>
+              </p>
+
+              <button class="btnSolid eventBookBtn" type="submit" data-submit>{copy.event.submitLabel.toUpperCase()}</button>
+            </form>
+          )
+        }
+
+        <p class="eventBookContact">
+          <a href={contactHref}>{site.email}</a>
+          <span aria-hidden="true">&middot;</span>
+          <a href={`tel:${site.phoneHref}`}>{site.phone}</a>
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- other sessions -->
+  {
+    others.length > 0 && (
+      <section class="band" aria-labelledby="moreEvents">
+        <div class="bandInner">
+          <div class="sectionHead" data-reveal-head>
+            <h2 class="sectionTitle" id="moreEvents">{copy.event.moreHeading}</h2>
+            <a class="eventAllLink" href="/events">
+              {copy.event.allLabel} <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+          <ul class="eventGrid" data-reveal-group>
+            {others.map((entry) => (
+              <li class="eventCard" data-reveal-item>
+                <a class="eventCardLink" href={`/events/${entry.id}`}>
+                  <div class="eventCardBody">
+                  <p class="eventTag">{entry.data.applyUrl ? copy.listing.applyLabel : entry.data.membersOnly ? copy.listing.membersLabel : copy.listing.openLabel}</p>
+                  <h3 class="eventCardTitle">{entry.data.title}</h3>
+                  <dl class="eventFactsRow">
+                    <div class="eventFactsItem">
+                      <dt class="eventFactsLabel">{copy.event.whenLabel}</dt>
+                      <dd class="eventFactsValue"><time datetime={isoDateTime(entry.data.date)}>{formatEventDate(entry.data.date)}</time></dd>
+                    </div>
+                    <div class="eventFactsItem">
+                      <dt class="eventFactsLabel">{copy.event.priceLabel}</dt>
+                      <dd class="eventFactsValue">{formatPrice(entry.data.price, copy.listing.freeLabel)}</dd>
+                    </div>
+                  </dl>
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <style is:global>
+    /* Page-scoped patterns for an event page, prefixed `event` like /contact's. */
+    .eventCrumb { display:block; width:fit-content; font-size:12px; letter-spacing:2.5px; text-transform:uppercase; color:var(--heroInkSoft); margin-bottom:26px; }
+    .eventCrumb:hover { color:var(--heroInk); }
+    .eventCoverTag { margin-top:0; font-size:12px; padding:10px 18px; }
+    .eventCoverTag + .pageHeroTitle { margin-top:26px; }
+    .eventPageTitle { max-width:18ch; }
+    /* motion: the description and the booking panel rise in (see reveal.ts) */
+    .is-armed .eventProse > *, .is-armed .eventBook { opacity:0; transform:translateY(16px); }
+    .is-armed .eventCoverLayer { will-change:transform, opacity; }
+
+    /* cover stills: the photo-hero recipe (cover photo, scrim, copy pinned
+       bottom-left) on the shared pageHero, cross-fading like the home hero */
+    .eventCover { position:relative; overflow:hidden; min-height:var(--coverPhotoH); }
+    .eventCoverLayer { position:absolute; inset:0; opacity:0; transition:opacity 1.8s ease; background-size:cover; background-repeat:no-repeat; filter:saturate(0.92) contrast(1.05) brightness(0.96); }
+    /* the shared scrim, plus a soft left-hand shade so the small crumb and
+       kicker stay legible over a bright still */
+    .eventCoverScrim { position:absolute; inset:0; background:linear-gradient(90deg, rgba(20,20,22,0.78) 0%, rgba(20,20,22,0.45) 35%, rgba(20,20,22,0) 70%), var(--heroScrim); }
+    .eventCover .eventCrumb, .eventCover .eventCoverTag { text-shadow:0 1px 12px rgba(20,20,22,0.9); }
+    .eventCover .pageHeroInner { position:relative; z-index:2; }
+    .eventCoverCredit { margin-top:26px; font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--heroInkSoft); }
+    .eventCoverCredit span { display:inline-block; color:var(--heroInk); transition:opacity .6s ease; }
+    .eventCoverCredit span.fading { opacity:0; }
+    @media (prefers-reduced-motion: reduce) { .eventCoverLayer, .eventCoverCredit span { transition:none; } }
+
+    /* the facts row */
+    .eventFacts { margin:0; display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:32px; }
+    .eventFact { border-top:1px solid var(--hair); padding-top:18px; }
+    .eventFactLabel { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
+    .eventFactLink { color:var(--ink); text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:1px; text-decoration-color:var(--ctrlBorder); }
+    .eventFactLink:hover { color:var(--accent); text-decoration-color:currentColor; }
+    .eventFactValue { margin:12px 0 0; font-size:clamp(19px, 1.9vw, 26px); font-weight:400; letter-spacing:0.5px; color:var(--ink); line-height:1.3; text-wrap:pretty; }
+    .eventFactNote { display:block; margin-top:8px; font-size:15px; font-weight:400; line-height:1.6; color:var(--sub); letter-spacing:0; }
+
+    /* description beside the booking panel */
+    .eventLayout { display:grid; grid-template-columns:minmax(0, 1.4fr) minmax(300px, 1fr); gap:72px; align-items:start; }
+    .eventImg { display:block; width:100%; aspect-ratio:3/2; object-fit:cover; margin-bottom:36px; }
+
+    .eventBook { border:1px solid var(--hair); padding:30px 30px 26px; position:sticky; top:120px; }
+    .eventBookTitle { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; letter-spacing:0; font-size:clamp(24px, 2.4vw, 32px); font-weight:400; line-height:1.1; }
+    .eventBookIntro { margin-top:16px; font-size:15px; font-weight:400; line-height:1.7; color:var(--sub); text-wrap:pretty; }
+    .eventBookNote { margin-top:16px; font-size:15px; font-weight:400; line-height:1.7; color:var(--sub); text-wrap:pretty; }
+    .eventBookNote[hidden] { display:none; }
+    .eventError { margin-top:16px; border-left:2px solid var(--accent); padding-left:12px; font-size:14px; font-weight:400; line-height:1.6; color:var(--ink); text-wrap:pretty; }
+    .eventError[hidden] { display:none; }
+
+    .eventForm { margin-top:8px; }
+    .eventFormSecondary { margin-top:0; }
+    .eventApplyDeadline { margin-top:18px; display:flex; justify-content:space-between; align-items:baseline; gap:12px; border-top:1px solid var(--hair); padding-top:14px; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
+    .eventApplyDeadline time { font-size:15px; letter-spacing:0.5px; text-transform:none; color:var(--ink); }
+    .eventAcceptedTitle { margin-top:34px; border-top:1px solid var(--hair); padding-top:22px; font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--accent); }
+    .eventField { display:flex; flex-direction:column; margin-top:22px; }
+    .eventLabel { font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--ink); }
+    .eventControl {
+      margin-top:10px; width:100%;
+      background:var(--tileBg); color:var(--ink);
+      border:1px solid var(--ctrlBorder); border-radius:0;
+      /* 16px keeps iOS Safari from zooming the page on focus */
+      font-family:'Jost', sans-serif; font-size:16px; font-weight:400; line-height:1.5;
+      padding:13px 14px;
+    }
+    .eventSelect { padding-right:12px; }
+    .eventControl:hover { border-color:var(--ink); }
+    .eventControl:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+    .eventHint { margin-top:8px; font-size:13px; font-weight:400; line-height:1.5; color:var(--muted); text-wrap:pretty; }
+
+    .eventTotal { margin-top:26px; display:flex; justify-content:space-between; align-items:baseline; border-top:1px solid var(--hair); padding-top:16px; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
+    .eventTotal [data-total] { font-family:'Jost', sans-serif; font-weight:300; font-size:clamp(24px, 2.2vw, 32px); letter-spacing:1px; color:var(--accent); font-variant-numeric:tabular-nums; text-transform:none; }
+
+    .eventBookBtn { display:block; width:100%; text-align:center; margin-top:22px; border:0; cursor:pointer; font-family:'Jost', sans-serif; }
+    .eventBookBtn[disabled] { opacity:0.55; cursor:not-allowed; }
+    .eventBookContact { margin-top:22px; font-size:14px; font-weight:400; display:flex; flex-wrap:wrap; gap:10px; align-items:baseline; color:var(--muted); }
+    .eventBookContact a { color:var(--sub); text-decoration:underline; text-underline-offset:3px; }
+    .eventBookContact a:hover { color:var(--accent); }
+
+    .eventAllLink { font-size:12px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); padding-bottom:18px; }
+    .eventAllLink:hover { color:var(--accent); }
+
+    @media (max-width:1024px) {
+      .eventFacts { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+      .eventLayout { grid-template-columns:1fr; gap:48px; }
+      .eventBook { position:static; }
+    }
+    @media (max-width:640px) {
+      .eventFacts { grid-template-columns:1fr; gap:24px; }
+      .eventBook { padding:22px 20px 20px; }
+    }
+  </style>
+
+  <script is:inline>
+    /* Cover stills rotate every five seconds, with the credit following. */
+    (function () {
+      var layers = Array.prototype.slice.call(document.querySelectorAll('.eventCoverLayer'));
+      if (!layers.length) return;
+      var credit = document.getElementById('eventCoverCredit');
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+      var idx = 0;
+      function show(i) {
+        idx = i;
+        for (var k = 0; k < layers.length; k++) {
+          var on = k === i;
+          layers[k].style.opacity = on ? '1' : '0';
+          layers[k].setAttribute('aria-hidden', on ? 'false' : 'true');
+        }
+        if (!credit) return;
+        var next = layers[i].getAttribute('data-title') || '';
+        credit.classList.add('fading');
+        window.setTimeout(function () { credit.textContent = next; credit.classList.remove('fading'); }, 600);
+      }
+      function loadRest() {
+        for (var k = 0; k < layers.length; k++) {
+          var src = layers[k].getAttribute('data-bg');
+          if (src) { layers[k].style.backgroundImage = 'url("' + src + '")'; layers[k].removeAttribute('data-bg'); }
+        }
+      }
+      if (document.readyState === 'complete') loadRest();
+      else window.addEventListener('load', loadRest);
+      if (reduce.matches || layers.length < 2) return;
+      window.setInterval(function () { show((idx + 1) % layers.length); }, 5000);
+    })();
+  </script>
+  <script is:inline>
+    /* Progressive enhancement. Without it the form still posts and the
+       server still checks everything; this only shows the live count, the
+       total for the number of places, and why a booking came back. */
+    (function () {
+      var panel = document.querySelector('[data-book]');
+      if (!panel) return;
+
+      /* why the booking bounced back */
+      var error = new URLSearchParams(location.search).get('error');
+      var slot = panel.querySelector('[data-error-slot]');
+      var text = error && panel.querySelector('[data-error-text="' + error + '"]');
+      if (slot && text) { slot.textContent = text.textContent; slot.hidden = false; }
+
+      /* the total, as the number of places changes */
+      var qty = panel.querySelector('[data-quantity]');
+      var total = panel.querySelector('[data-total]');
+      var unit = total ? Number(total.getAttribute('data-unit')) : 0;
+      function pounds(n) { return '£' + (Number.isInteger(n) ? n : n.toFixed(2)); }
+      if (qty && total && unit > 0) {
+        qty.addEventListener('change', function () { total.textContent = pounds(unit * Number(qty.value)); });
+      }
+
+      /* the live count */
+      var slug = panel.querySelector('input[name="event"]');
+      var count = document.querySelector('[data-places-count]');
+      var note = document.querySelector('[data-places-note]');
+      var eventId = slug ? slug.value : location.pathname.split('/').pop();
+      if (panel.getAttribute('data-state') === 'past') return;
+
+      fetch('/api/places?event=' + encodeURIComponent(eventId), { headers: { Accept: 'application/json' } })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (data) {
+          if (!data) return;
+          var state = data.state;
+          if (typeof data.left === 'number' && count) {
+            count.textContent = String(data.left);
+            if (note) note.textContent = note.getAttribute(data.left === 1 ? 'data-singular' : 'data-plural');
+            if (qty) {
+              Array.prototype.forEach.call(qty.options, function (opt) { opt.disabled = Number(opt.value) > data.left; });
+              if (Number(qty.value) > data.left && data.left > 0) qty.value = String(data.left);
+            }
+          }
+          if (state && state !== 'open' && state !== 'free') {
+            panel.setAttribute('data-state', state);
+            var form = panel.querySelector('[data-book-panel]');
+            if (form) form.hidden = true;
+            var submit = panel.querySelector('[data-submit]');
+            if (submit) submit.disabled = true;
+            Array.prototype.forEach.call(panel.querySelectorAll('[data-state-note]'), function (p) {
+              p.hidden = p.getAttribute('data-state-note') !== state;
+            });
+          }
+        })
+        .catch(function () { /* the page already says what it can */ });
+    })();
+  </script>
+</Base>
+
+<script>
+  import { armReveal } from '../../lib/reveal';
+
+  /* The shared pass, plus this page's own beats: the first cover still
+     settles from a touch closer and drifts as you scroll, the description
+     and the booking panel rise in. */
+  const m = armReveal();
+  if (m) {
+    const layers = Array.from(document.querySelectorAll<HTMLElement>('.eventCoverLayer'));
+    const cover = document.querySelector<HTMLElement>('.eventCover');
+    if (layers.length && cover) {
+      m.animate(layers[0], { scale: [1.06, 1] }, { duration: 2.4, ease: [0.2, 0, 0.1, 1] });
+      m.scroll(
+        (progress: number) => {
+          const y = `0 ${Math.round(progress * 100)}px`;
+          layers.forEach((layer) => { layer.style.translate = y; });
+        },
+        { target: cover, offset: ['start start', 'end start'] },
+      );
+    }
+    const prose = document.querySelector<HTMLElement>('.eventProse');
+    if (prose) m.inView(prose, () => { m.rise(prose.children, 0.06); }, { amount: 0.1 });
+    const book = document.querySelector<HTMLElement>('.eventBook');
+    if (book) m.inView(book, () => { m.rise([book], 0, 0.15); }, { amount: 0.2 });
+  }
+</script>
