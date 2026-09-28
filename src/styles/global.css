@@ -402,6 +402,8 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   mask-image: linear-gradient(to right, transparent 0, #000 var(--supplyFade), #000 calc(100% - var(--supplyFade)), transparent 100%);
 }
 .supplyScroll:active { cursor:grabbing; }
+/* a drag moves the row, never lifts a picture or a link out of it */
+.supplyScroll img, .supplyScroll a { -webkit-user-drag:none; user-select:none; }
 .supplyScroll::-webkit-scrollbar { display:none; }
 /* sized so a tile never dominates the page on a wide screen: the old
    28vw ran to nearly 800px tall on a large display */
@@ -909,3 +911,113 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 @media (max-width:640px) {
   .insightGrid { grid-template-columns:1fr; gap:36px; }
 }
+
+/* ---------- event cards (/events and the "other sessions" row) ---------- */
+/* The insight card's cousin: hairline top, optional 3:2 image or a dated
+   plate, accent label, Anton title, summary, then a ruled facts table. */
+.eventGrid {
+  list-style:none; margin:40px 0 0; padding:0;
+  display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:48px 40px;
+}
+/* Each session sits in its own hairline box (same frame as the booking panel),
+   photo flush to the top edge, the rest padded inside. */
+.eventCard { border:1px solid var(--hair); }
+.eventCardLink { display:block; height:100%; }
+.eventCard:hover { border-color:var(--ctrlBorder); }
+.eventCardImg { display:block; width:100%; aspect-ratio:3/2; object-fit:cover; }
+.eventCardBody { padding:24px 26px 26px; }
+/* Audience badge: the Insights topic-chip recipe (pill, hairline border) in
+   the accent, so a members' workshop is unmistakable on the card and cover. */
+.eventTag { display:inline-block; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent); border:1px solid var(--accent); border-radius:999px; padding:8px 14px; line-height:1; }
+.eventCardTitle { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(24px, 2.2vw, 32px); font-weight:400; letter-spacing:0; line-height:1.08; margin-top:12px; color:var(--ink); text-wrap:balance; }
+.eventCardLink:hover .eventCardTitle { color:var(--accent); }
+.eventCardExcerpt { font-size:15px; font-weight:400; line-height:1.65; color:var(--sub); margin-top:14px; text-wrap:pretty; }
+/* Facts sit in a small ruled table: tracked label on the left, value on the
+   right, one hairline between rows. Same voice as the event page's facts row. */
+.eventFactsRow { margin:22px 0 0; padding:0; border-top:1px solid var(--hair); }
+.eventFactsItem { display:grid; grid-template-columns:72px minmax(0, 1fr); gap:16px; align-items:baseline; padding:10px 0; border-bottom:1px solid var(--hair); }
+.eventFactsLabel { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
+.eventFactsValue { margin:0; font-size:15px; line-height:1.5; color:var(--ink); font-variant-numeric:tabular-nums; }
+.eventFactsNote { display:block; font-size:13px; letter-spacing:1px; color:var(--muted); margin-top:2px; }
+.eventCardMore { display:inline-block; margin-top:18px; font-size:12px; letter-spacing:2.5px; text-transform:uppercase; color:var(--ink); border-bottom:1px solid var(--ctrlBorder); padding-bottom:4px; }
+.eventCardLink:hover .eventCardMore { border-bottom-color:var(--ink); color:var(--accent); }
+/* A lone session is featured: the same card opened out across the column,
+   photo left and details right, so the listing never reads as two-thirds
+   empty. The moment a second session is added it falls back to the grid. */
+.eventGridSingle { grid-template-columns:1fr; }
+.eventGridSingle .eventCardLink { display:grid; grid-template-columns:minmax(0, 1.1fr) minmax(0, 1fr); }
+.eventGridSingle .eventCardImg,
+.eventGridSingle .eventCardSlot { height:100%; min-height:480px; aspect-ratio:auto; }
+.eventGridSingle .eventCardBody { padding:44px 48px; display:flex; flex-direction:column; justify-content:center; }
+.eventGridSingle .eventTag, .eventGridSingle .eventCardMore { align-self:flex-start; }
+.eventGridSingle .eventCardTitle { font-size:clamp(30px, 3.4vw, 48px); }
+.eventGridSingle .eventCardExcerpt { font-size:17px; max-width:48ch; }
+@media (max-width:1024px) {
+  .eventGrid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+  .eventGridSingle .eventCardLink { grid-template-columns:1fr; }
+  .eventGridSingle .eventCardImg,
+  .eventGridSingle .eventCardSlot { height:auto; min-height:0; aspect-ratio:3/2; }
+  .eventGridSingle .eventCardBody { padding:28px 32px 32px; }
+}
+@media (max-width:640px) {
+  .eventGrid { grid-template-columns:1fr; gap:28px; }
+  .eventCardBody, .eventGridSingle .eventCardBody { padding:20px 18px 20px; }
+}
+
+/* ---------- article prose (insight articles and event descriptions) ---------- */
+.insightProse { max-width:68ch; }
+.insightProse p { font-size:18px; font-weight:400; line-height:1.8; color:var(--sub); text-wrap:pretty; }
+.insightProse p + p, .insightProse ul + p, .insightProse ol + p { margin-top:22px; }
+.insightProse h2 {
+  font-size:clamp(22px, 2.2vw, 30px); font-weight:400; text-transform:uppercase;
+  letter-spacing:1px; line-height:1.25; margin-top:52px; color:var(--ink); text-wrap:pretty;
+}
+.insightProse h2 + p { margin-top:18px; }
+.insightProse h3 {
+  font-size:16px; font-weight:400; letter-spacing:2px; text-transform:uppercase;
+  margin-top:38px; color:var(--ink);
+}
+.insightProse ul, .insightProse ol { margin:22px 0 0; padding:0; list-style:none; display:grid; gap:14px; }
+.insightProse li { position:relative; font-size:17px; line-height:1.7; color:var(--sub); padding-left:22px; text-wrap:pretty; }
+/* a hairline dash instead of a bullet, to match the site's rules */
+.insightProse li::before { content:""; position:absolute; left:0; top:12px; width:8px; height:1px; background:var(--accent); }
+.insightProse blockquote { margin:52px 0; padding:32px 0; border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); }
+.insightProse blockquote p {
+  font-size:clamp(22px, 2.4vw, 32px); line-height:1.3; text-transform:uppercase;
+  letter-spacing:0.5px; color:var(--ink);
+}
+.insightProse hr { border:0; border-top:1px solid var(--hair); margin:52px 0; }
+/* prose links must not be colour-only (WCAG 1.4.1) */
+.insightProse a { text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1px; color:var(--ink); }
+.insightProse a:hover { color:var(--accent); }
+.insightProse img { display:block; width:100%; margin:44px 0 0; }
+.insightProse strong { font-weight:500; color:var(--ink); }
+
+/* ---------- scroll reveals (src/lib/reveal.ts) ---------- */
+/* Hidden only once the script has confirmed it can bring them back (the page
+   gets .is-armed), so with no JavaScript or reduced motion everything is
+   simply on the page. */
+.is-armed [data-hero-line] { opacity:0; transform:translateY(0.5em); }
+.is-armed [data-reveal],
+.is-armed [data-reveal-item] { opacity:0; transform:translateY(16px); }
+/* section headings: the title rises, then the rule under it draws across */
+[data-reveal-head] { position:relative; }
+.is-armed [data-reveal-head] { border-bottom-color:transparent; }
+.is-armed [data-reveal-head] > * { opacity:0; transform:translateY(12px); }
+.is-armed [data-reveal-head]::after {
+  content:''; position:absolute; left:0; right:0; bottom:-1px; height:1px;
+  background:var(--hair); transform-origin:left center; transform:scaleX(0);
+  transition:transform 1s cubic-bezier(0.3, 0, 0.2, 1) 0.15s;
+}
+.is-armed [data-reveal-head].is-ruled::after { transform:scaleX(1); }
+/* photographs are unveiled: the plate is shut until the script wipes it open
+   from the top, and the picture inside waits a touch closer than its rest */
+.is-armed [data-hero-figure],
+.is-armed [data-reveal-figure] { clip-path:inset(0 0 100% 0); }
+.is-armed [data-hero-figure] img,
+.is-armed [data-reveal-figure] img,
+.is-armed img[data-hero-figure],
+.is-armed img[data-reveal-figure] { transform:scale(1.06); }
+/* a plate around a lone photograph, so its settle stays inside its own edges */
+.figPlate { display:block; overflow:hidden; min-width:0; }
+.figPlate > img { display:block; width:100%; height:auto; }

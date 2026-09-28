@@ -153,7 +153,7 @@ All display headings use `font-weight:400` (never bold) and fluid `clamp()` sizi
 - **`.btnGhost`** — transparent with a `1px solid var(--ctrlBorder)` border; border darkens to `--ink` on hover. Secondary action. The outline of a control is not a hairline: it has to clear 3:1 against the surface behind it (WCAG 1.4.11), which `--hair` does not.
 - **`.navCta`** — outlined, square-cornered button in the nav, uses hero border tokens.
 - All button-ish text is `12–13px`, uppercase-feel, `letter-spacing:2px`.
-- **Corners: every rectangular button, chip or tag is square (`border-radius:0`).** No pills, no soft radii. The only round controls on the site are icon-only ones — carousel arrows, dots and the theme toggle — which are full circles (`border-radius:50%`). Native `<button>` elements must carry the same reset so browsers never add their own rounding.
+- **Corners: every rectangular button is square (`border-radius:0`).** No soft radii. The two pills on the site are the Insights topic chips (`.insightChip`) and the event audience badge (`.eventTag`), which share one recipe. The only round controls on the site are icon-only ones — carousel arrows, dots and the theme toggle — which are full circles (`border-radius:50%`). Native `<button>` elements must carry the same reset so browsers never add their own rounding.
 
 ### Header (`.nav`)
 - Fixed, with its own gradient scrim (`.nav::before`) so controls stay legible over any hero photograph. The scrim is removed on light pages (`.navOnLight`) and while the overlay menu is open.
@@ -228,8 +228,16 @@ All display headings use `font-weight:400` (never bold) and fluid `clamp()` sizi
 ### Insights cards (`.insightGrid` / `.insightCard`)
 - The listing at `/insights` and the "more insights" row at the foot of an article share one card: hairline top border, 3:2 image (or a `.slot` plate), accent topic label, 22px title, excerpt, then a `--muted` meta line. Grid is 3 → 2 → 1 columns.
 - Topic filters (`.insightChip`) are pill buttons carrying `aria-pressed`; they are progressive enhancement, so every article stays visible without JavaScript.
-- Article prose (`.insightProse`) is capped at `68ch`, 18px/1.8 in `--sub`; `h2` is uppercase Jost at `clamp(22px,2.2vw,30px)`; list items take a 8x1px accent dash instead of a bullet; a `blockquote` becomes the hairline-ruled pull quote.
+- Article prose (`.insightProse`, shared in `global.css` and used by both insight articles and event descriptions) is capped at `68ch`, 18px/1.8 in `--sub`; `h2` is uppercase Jost at `clamp(22px,2.2vw,30px)`; list items take a 8x1px accent dash instead of a bullet; `strong` is Jost 500 in `--ink` for the one or two phrases a reader must not miss; a `blockquote` becomes the hairline-ruled pull quote.
 - Reading time is counted from the body in `src/lib/insights.ts`, never authored.
+
+### Event cards and the booking panel (`.eventGrid` / `.eventCard` / `.eventBook`)
+- `/events` lists upcoming sessions on the insight card's cousin, framed in a full `--hair` box (`--ctrlBorder` on hover, matching the booking panel) with the photo flush to the top edge and 26px padding inside (18px on phone): a 3:2 photo or a `.slot` plate carrying the date, an accent pill badge (`.eventTag`: the `.insightChip` recipe with a `--accent` border and text, 11px/2.5px tracking, `8px 14px`; on the cover 12px and `10px 18px` — always smaller than the title beside it) reading members' workshop / open to all / by application, Anton title at `clamp(24px, 2.2vw, 32px)` (uppercase, `letter-spacing:0`), summary, then a small ruled facts table (`.eventFactsRow`): 11px tracked `--muted` label in a 72px column, 15px `--ink` value beside it, one hairline between rows, with the time or a "closed" note as a 13px `--muted` line under its value. Grid is 3 → 2 → 1 columns. With exactly one session the grid takes `.eventGridSingle` and the card is featured: the link becomes a two-column grid (photo `1.1fr` left, `.eventCardBody` right, `44px 48px` padding, title `clamp(30px, 3.4vw, 48px)`, excerpt 17px/48ch), stacking back to photo-over-text at ≤1024. Card body padding is `24px 26px 26px` (`20px 18px` on phone). Past events leave the listing at the next build; drafts never appear.
+- An event page opens on the standard cover — or, when the event carries `cover` stills, on the photo-hero recipe (`.eventCover`: `--coverPhotoH`, stills cross-fading every 5s under `--heroScrim` plus a left-hand shade (`rgba(20,20,22,.78)` → `.45` at 35% → transparent at 70%) and a soft text-shadow on the crumb and kicker so they read over a bright frame, a tracked credit under the lede ("Action Designer on Havoc", or "Seen on …" without a role) that follows the current still; only the first still loads with the page) — then a four-up facts row (When / Where / Price / Places, 11px tracked labels over `clamp(19px,1.9vw,26px)` values, 4 → 2 → 1 columns); the Where value is an underlined `--ink` link to a Google Maps search for the venue as written (`mapUrl()` in `src/lib/events.ts`), opening in a new tab with an "Open in Maps →" note beneath, then the description in `.insightProse` beside a hairline-bordered booking panel that sticks at `top:120px` on desktop and stacks beneath on tablet and phone.
+- The booking form reuses the contact form's control voice (`--tileBg` field, `--ctrlBorder` outline, 16px Jost, square corners) and the solid CTA at full width. The total is a `.statNum`-style Jost 300 accent figure. Payment itself happens on Stripe's hosted page, never on the site.
+- One sentence per state (sold out, closed, past, payment not set up) is in the markup and the script shows the one that applies; a bounced booking's reason arrives as `?error=` and is shown in an accent-ruled `.eventError` line. Without JavaScript the form still posts and the server still enforces every rule.
+- A workshop awarded by application (`applyUrl` set) leads its panel with the application paragraph, an "Apply by" date row and a solid "Apply now" button; the code-and-pay form follows under a tracked accent sub-heading for those offered a place. After the deadline the apply block gives way to one closing sentence. Cards and cover carry a "By application" label instead of members/open.
+- Content lives in `src/content/events/*.md`; wording in `src/content/pages/events.json`. The members' access code is a host setting (`EVENTS_MEMBER_CODE`), never a content field, because the repository is public.
 
 ### Footer (`.footer`)
 - Big uppercase title, contact line, ghost + solid button pair, then a thin divider and fine print row with the logo.
@@ -240,7 +248,9 @@ All display headings use `font-weight:400` (never bold) and fluid `clamp()` sizi
 
 - **Easing:** `cubic-bezier(0.3, 0, 0.2, 1)` for carousels; `ease` for fades.
 - **Durations:** theme/page transitions `0.5s`; hero layer cross-fade `1.8s`; logo cross-fade `3s`; carousel slide `0.65s`; menu items stagger in over `0.5s` (aside delayed `340ms`); poster hover `scale(1.04)`.
-- **Scroll-triggered reveals** (counters, map pins) are armed with IntersectionObserver and run once. If the observer or `customElements` is unavailable, the final state is simply shown.
+- **Scroll-triggered reveals** (counters, map pins) are armed with IntersectionObserver and run once.
+- **Page reveals with motion** (`src/lib/reveal.ts`, used by /events, each event page, /specialists, /unique-talent and /join; About carries the same recipe): cover lines tagged `data-hero-line` rise in on load (0.9s, 140ms apart); `data-reveal` rises when 40% in view; a `.sectionHead` tagged `data-reveal-head` rises its title, then draws its rule across (1s); a `data-reveal-group` brings its `data-reveal-item` and `data-reveal-figure` descendants in, in DOM order, 90ms apart (or the gap given as its value, e.g. `data-reveal-group="0.06"`). Everything moves 16px up on the `cubic-bezier(0.3, 0, 0.2, 1)` ease. The hiding styles sit under `.is-armed` in `global.css`, so nothing is hidden until the script has confirmed it can bring it back. If the observer or `customElements` is unavailable, the final state is simply shown.
+- **Photographs are unveiled, not faded.** A picture (or the frame holding it) tagged `data-hero-figure` (on load, 1.5s, 250ms after the first cover line) or `data-reveal-figure` (25% in view, 1.3s) has its plate wiped open from the top edge (`clip-path` from `inset(0 0 100% 0)`) while the image inside settles from `scale(1.06)` on the `[0.2, 0, 0.1, 1]` settle curve. Tag the element whose box should be wiped — a frame with `overflow:hidden`, or the `img` itself — never a figure that also holds a caption. A cross-fading photo cover instead settles its first still from `scale(1.06)` over 2.4s and drifts every still 100px as it scrolls out.
 - **Nav scroll** is rAF-throttled and proportional to scroll position.
 - **Always honour `prefers-reduced-motion: reduce`** — transitions are disabled and smooth scroll turned off in that media query. Any new animation must be wrapped the same way.
 
@@ -273,7 +283,7 @@ All display headings use `font-weight:400` (never bold) and fluid `clamp()` sizi
 
 ---
 
-_Last updated 2026-09-19. Update this file whenever a token, type choice, or core pattern changes._
+_Last updated 2026-09-28. Update this file whenever a token, type choice, or core pattern changes._
 
 
 ### Launch studio (the slate on /laural)

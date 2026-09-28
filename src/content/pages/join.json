@@ -4,153 +4,162 @@
     "description": "Applications to join Take 3 Agency: dancers, SPACTs, models, stand-ins and specialist performers with professional experience on film, television and commercial sets.",
     "ogTitle": "Join the roster | Take 3 Agency",
     "ogDescription": "Applications from dancers, SPACTs, models, stand-ins and specialist performers with professional experience.",
-    "footerTitle": "Questions before you apply?"
+    "footerTitle": "Questions about applying?",
+    "footerIntro": "Every application is made through the artist portal, so please do not email or phone the agency about yours. If you have a question about applying that the portal cannot answer, write to the applications address below.",
+    "footerEmail": "applications@take3agency.com"
   },
   "hero": {
     "eyebrow": "FOR PERFORMERS",
     "heading": "Join the roster",
-    "lede": "Applications are open to dancers, SPACTs, models, stand-ins and specialist performers with professional experience. This is the one page on the site written for performers rather than productions."
+    "lede": "We represent SPACTs, actors, dancers, models, stunt performers, stand-ins, circus and aerial performers, sports and specialists, intimacy artists and creatives.",
+    "linkLabel": "Apply now",
+    "figure": {
+      "image": "/uploads/join-coat-kick.webp",
+      "alt": "A performer in a long black leather coat and patent boots kicks one leg straight up against a deep red backdrop.",
+      "figNumber": "FIG. 01",
+      "figNote": "TAKE 3 ROSTER"
+    }
   },
   "disciplines": {
-    "kicker": "WHO WE ARE LOOKING FOR",
-    "heading": "By discipline",
+    "kicker": "THE ROSTER",
+    "heading": "Who we represent",
     "items": [
       {
-        "name": "SPACTs",
-        "looksFor": "TODO: copy, what Take 3 looks for in a SPACT, and which skills are in demand."
+        "name": "SPACT",
+        "sub": "Special Action Performer",
+        "body": "Fight scenes, weapons handling and military drills for film and TV. Often booked under crowd.",
+        "image": "/uploads/supply-military.webp",
+        "imageAlt": "A performer in black tactical kit and body armour carrying a rifle, turning to look over his shoulder.",
+        "imageFocus": "center 30%"
       },
       {
-        "name": "Dancers",
-        "looksFor": "TODO: copy, what Take 3 looks for in a dancer, and which styles are in demand."
+        "name": "Actor",
+        "body": "Scripted roles across film, TV, commercials and theatre.",
+        "image": "/uploads/join-actor-portrait.webp",
+        "imageAlt": "A black-and-white portrait of a long-haired, bearded actor sitting shirtless in dark trousers, looking off to one side.",
+        "imageFocus": "center 30%"
       },
       {
-        "name": "Models",
-        "looksFor": "TODO: copy, what Take 3 looks for in a model, and the kind of work it leads to."
+        "name": "Dancer",
+        "body": "Choreographed movement for film, TV, commercials, music videos and live events.",
+        "image": "/uploads/supply-dance.webp",
+        "imageAlt": "A dancer in loose black clothing and boots arched backwards with one leg kicked straight up, photographed in black and white.",
+        "imageFocus": "center 40%"
       },
       {
-        "name": "Stand-ins & picture doubles",
-        "looksFor": "TODO: copy, what Take 3 looks for in a stand-in or picture double."
+        "name": "Model",
+        "body": "Featured and crowd roles for film and TV, plus commercial and promotional campaigns.",
+        "image": "/uploads/supply-models.webp",
+        "imageAlt": "A black-and-white portrait of a model with a fringe resting her cheek on her hand, looking to camera.",
+        "imageFocus": "center 35%"
       },
       {
-        "name": "Specialists",
-        "looksFor": "TODO: copy, what counts as a specialist skill worth applying with."
+        "name": "Stunt performer",
+        "body": "Stunts and action sequences for film and TV, for performers with recognised stunt training or a professional stunt career under way.",
+        "image": "/uploads/stunt-hero-soldier.webp",
+        "imageAlt": "A soldier in full kit thrown to the ground on a smoke-filled street, a building burning behind him.",
+        "imageFocus": "center 45%"
+      },
+      {
+        "name": "Stand-in",
+        "body": "Standing in for principal actors of a similar height and build during camera and lighting setup, including photo, body and picture doubles.",
+        "image": "/uploads/stand-ins-lighting-setup.webp",
+        "imageAlt": "A stand-in holds a mark on a darkened stage while the crew set a large overhead soft light around them.",
+        "imageFocus": "center"
+      },
+      {
+        "name": "Intimacy artist",
+        "body": "Intimate, nude or semi-nude scenes for film and TV, with boundaries and consent always agreed in advance.",
+        "image": "/uploads/supply-intimacy.webp",
+        "imageAlt": "Two performers in a close, choreographed scene.",
+        "imageFocus": "center 35%"
+      },
+      {
+        "name": "Circus & aerial",
+        "body": "Circus, aerial and acrobatic performance for film, TV and stage, including fire performers.",
+        "image": "/uploads/supply-circus.webp",
+        "imageAlt": "A circus performer in a rigged studio space.",
+        "imageFocus": "center 40%"
+      },
+      {
+        "name": "Sports & specialists",
+        "body": "Professional and semi-professional athletes: footballers, BMX riders, skaters, boxers and more.",
+        "image": "/uploads/supply-bmx.webp",
+        "imageAlt": "A BMX rider mid-air on his bike, photographed in black and white against a white backdrop.",
+        "imageFocus": "center 45%"
       }
     ],
-    "note": "Every artist is assessed and interviewed by the Take 3 team before joining."
+    "note": "Every artist meets the agency in person, at an interview or an audition, before joining."
   },
-  "offer": {
-    "kicker": "WHAT WE OFFER",
-    "heading": "What representation gives you",
-    "todo": "TODO: copy, what Take 3 actually does for an artist on the books. Only the client can set this out, since it decides what the agency is committing to. Do not describe fees, rates or payment terms here without sign-off."
+  "curated": {
+    "kicker": "CURATED, NOT COLLECTED",
+    "heading": "Everyone on our books, we have met",
+    "body": "Take 3's books are a carefully curated roster of exceptional talent. Every performer on them has been through our audition or interview process before joining, so we can guarantee productions and our clients high-quality performers we have seen and trust."
   },
-  "requirements": {
-    "kicker": "REQUIREMENTS",
-    "heading": "Experience we expect",
-    "todo": "TODO: copy, the minimum experience expected, any training, union or licence requirements, and what an applicant needs to have ready before applying.",
-    "standInsNote": "TODO: content, the stand-ins recruitment criteria belong in this section. Nothing recruitment-facing was found on /stand-ins in the current build, so the original wording needs to be supplied before this section is written."
+  "gallery": {
+    "items": [
+      {
+        "image": "/uploads/join-heels-kick.webp",
+        "alt": "A performer in black trousers and stilettos balances on one leg with the other kicked high, hand to her face, against a red backdrop."
+      },
+      {
+        "image": "/uploads/join-flip.webp",
+        "alt": "A performer in white cargo trousers and a red and black jacket caught upside down mid-flip against a red backdrop."
+      },
+      {
+        "image": "/uploads/join-pinstripe-leap.webp",
+        "alt": "A performer in pinstripe trousers and a mesh vest leaps sideways, jacket flying, against a red backdrop."
+      }
+    ]
+  },
+  "prepare": {
+    "kicker": "BEFORE YOU START",
+    "heading": "What to have to hand",
+    "intro": "The application should take approximately 10–15 minutes to complete. Before you start, please make sure you have the following information and materials to hand:",
+    "items": [
+      "Your current measurements and a measuring tape, in case anything needs checking",
+      "A selection of your current professional photographs",
+      "Your latest showreel or a link to view it online",
+      "An up-to-date CV"
+    ],
+    "note": "Don't worry if you can't complete everything in one go. Your application will save automatically, so you can leave at any point and return to finish it later using the same account.",
+    "figure": {
+      "image": "/uploads/join-velvet-portrait.webp",
+      "alt": "A performer in a black velvet dress with tattooed arms, hands crossed at the waist, looking straight to camera against a red backdrop.",
+      "figNumber": "FIG. 02",
+      "figNote": "TAKE 3 ROSTER"
+    }
   },
   "process": {
     "kicker": "HOW IT WORKS",
     "heading": "Applying, step by step",
     "steps": [
-      { "number": "01", "name": "Apply" },
-      { "number": "02", "name": "Assessment" },
-      { "number": "03", "name": "Interview" },
-      { "number": "04", "name": "Decision" }
-    ],
-    "todo": "TODO: copy, one short line under each step, and what happens after a decision is made. The only part already on record is that every artist is assessed and interviewed before joining."
-  },
-  "form": {
-    "kicker": "APPLICATION",
-    "heading": "Apply to join",
-    "intro": "A short application to start with. Anything marked optional can be left blank. If it looks like a fit, we will come back to you for more.",
-    "formAction": "",
-    "method": "post",
-    "notConnectedTitle": "This form is not connected yet",
-    "notConnectedBody": "TODO: setup, no form handler has been chosen, so nothing typed below would reach us. The form is switched off until one is in place. Please email your application in the meantime.",
-    "optionalLabel": "Optional",
-    "selectPlaceholder": "Please choose",
-    "submitLabel": "Send application",
-    "privacyNote": "TODO: copy, one line on what happens to an application once it is sent, how long details are kept, and a link to the privacy policy once it exists.",
-    "fieldsNote": "TODO: sign-off, this field list is a proposal, not the client's. It deliberately asks for nothing sensitive: no date of birth, no health, and nothing else that counts as special category data under UK GDPR.",
-    "groups": [
       {
-        "legend": "About you",
-        "fields": [
-          {
-            "id": "name",
-            "label": "Your name",
-            "type": "text",
-            "autocomplete": "name",
-            "required": true
-          },
-          {
-            "id": "email",
-            "label": "Email",
-            "type": "email",
-            "autocomplete": "email",
-            "inputmode": "email",
-            "required": true
-          },
-          {
-            "id": "phone",
-            "label": "Phone",
-            "type": "tel",
-            "autocomplete": "tel",
-            "inputmode": "tel",
-            "required": false
-          },
-          {
-            "id": "location",
-            "label": "Where you are based",
-            "type": "text",
-            "autocomplete": "address-level2",
-            "required": false,
-            "hint": "City or region is enough."
-          }
-        ]
+        "number": "01",
+        "name": "Apply"
       },
       {
-        "legend": "Your work",
-        "fields": [
-          {
-            "id": "discipline",
-            "label": "Discipline",
-            "type": "select",
-            "required": true,
-            "hint": "Pick the closest fit. If you work across more than one, say so below.",
-            "options": [
-              { "value": "spact", "label": "SPACT" },
-              { "value": "dancer", "label": "Dancer" },
-              { "value": "model", "label": "Model" },
-              { "value": "stand-in", "label": "Stand-in or picture double" },
-              { "value": "specialist", "label": "Specialist skill" },
-              { "value": "other", "label": "Other" }
-            ]
-          },
-          {
-            "id": "experience",
-            "label": "Experience",
-            "type": "textarea",
-            "rows": 6,
-            "required": false,
-            "hint": "Training, recent credits and the sets you have worked on. A few lines is plenty."
-          },
-          {
-            "id": "links",
-            "label": "Links",
-            "type": "textarea",
-            "rows": 4,
-            "required": false,
-            "hint": "Showreel, portfolio, Spotlight or social profiles. One per line."
-          }
-        ]
+        "number": "02",
+        "name": "Review"
+      },
+      {
+        "number": "03",
+        "name": "Interview or audition"
+      },
+      {
+        "number": "04",
+        "name": "Decision"
       }
-    ]
+    ],
+    "note": "Everyone who joins comes in to meet us, either for an interview with the agency or an in-person audition."
   },
-  "honest": {
-    "kicker": "BEFORE YOU APPLY",
-    "heading": "An honest note",
-    "todo": "TODO: copy, how long applicants should expect to wait for a reply, whether everyone is replied to, and that the roster is selective so not every applicant is taken on. Only the client can state any of this, and it should not be guessed at."
+  "apply": {
+    "kicker": "APPLICATION",
+    "heading": "Apply on the artist portal",
+    "body": "Applications are made through our artist portal. Create an account, fill in your profile and submit it: that is the only route onto the roster, and every application that comes through it is read.",
+    "linkLabel": "Apply now",
+    "href": "https://take3.laural.app/register",
+    "contactNote": "Please do not email or phone the agency about your application: all applications must be made through the portal. Questions about applying can go to",
+    "contactEmail": "applications@take3agency.com"
   }
 }

@@ -36,3 +36,6 @@ _originals/
 --clip
 --full-page
 mobile-top.png
+
+# Local build output (never commit — it can contain baked-in secrets)
+.vercel

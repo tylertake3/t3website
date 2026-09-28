@@ -1,0 +1,103 @@
+- name: page-events
+  label: Events page text
+  file: src/content/pages/events.json
+  description: >-
+    The wording around the events — the top of the page, the labels on each
+    card, the booking panel and the thank-you page. The events themselves live
+    under "Events & workshops".
+  fields:
+    - name: meta
+      label: Search & sharing
+      widget: object
+      collapsed: true
+      hint: The words Google and social media show. Not visible on the page itself.
+      fields:
+        - { name: title, label: Browser tab & Google title, widget: string }
+        - { name: description, label: Google description, widget: text, hint: Around 150-160 characters works best. }
+        - { name: ogTitle, label: Title when shared on social, widget: string }
+        - { name: ogDescription, label: Description when shared on social, widget: text }
+        - { name: footerTitle, label: Footer headline, widget: string, hint: The big line in the contact strip at the bottom of the page. }
+    - name: hero
+      label: Top of the page
+      widget: object
+      fields:
+        - { name: eyebrow, label: Small line above the headline, widget: string }
+        - { name: heading, label: Headline, widget: string }
+        - { name: lede, label: Opening paragraph, widget: text }
+    - name: listing
+      label: The list of events
+      widget: object
+      fields:
+        - { name: heading, label: Heading above the list, widget: string }
+        - { name: emptyNote, label: Wording when nothing is coming up, widget: string }
+        - { name: membersLabel, label: Label on a members-only event, widget: string }
+        - { name: openLabel, label: Label on an event open to all, widget: string }
+        - { name: freeLabel, label: Wording used instead of a price for a free event, widget: string }
+        - { name: soldOutLabel, label: '"Sold out" label', widget: string }
+        - { name: closedLabel, label: '"Bookings closed" label', widget: string }
+        - { name: placesLeftLabel, label: 'Word after the count (plural)', widget: string, hint: 'e.g. "places left"' }
+        - { name: placeLeftLabel, label: 'Word after the count (singular)', widget: string, hint: 'e.g. "place left"' }
+        - { name: applyLabel, label: Label on an event awarded by application, widget: string }
+        - { name: detailsLabel, label: Link text on each card, widget: string }
+    - name: event
+      label: Wording on an event page
+      widget: object
+      collapsed: true
+      fields:
+        - { name: backLabel, label: '"Back" link text', widget: string }
+        - { name: whenLabel, label: '"When" label', widget: string }
+        - { name: whereLabel, label: '"Where" label', widget: string }
+        - { name: priceLabel, label: '"Price" label', widget: string }
+        - { name: placesLabel, label: '"Places" label', widget: string }
+        - { name: perPlaceLabel, label: Small print under the price, widget: string }
+        - { name: bookingHeading, label: Heading on the booking panel, widget: string }
+        - { name: bookingIntro, label: Paragraph on the booking panel, widget: text }
+        - { name: membersIntro, label: Paragraph on a members-only booking panel, widget: text }
+        - { name: codeLabel, label: Access code field label, widget: string }
+        - { name: codeHint, label: Access code hint, widget: string }
+        - { name: quantityLabel, label: Number of places label, widget: string }
+        - { name: attendeeLabel, label: Name field label, widget: string }
+        - { name: attendeeHint, label: Name field hint, widget: string }
+        - { name: emailLabel, label: Email field label, widget: string }
+        - { name: emailHint, label: Email field hint, widget: string }
+        - { name: submitLabel, label: Button text, widget: string }
+        - { name: freeSubmitLabel, label: Button text on a free event, widget: string }
+        - { name: soldOutNote, label: Wording when sold out, widget: text }
+        - { name: closedNote, label: Wording when bookings are closed, widget: text }
+        - { name: pastNote, label: Wording once the event has happened, widget: text }
+        - { name: notConnectedNote, label: Wording when online payment is unavailable, widget: text }
+        - name: errors
+          label: Messages when a booking cannot go ahead
+          widget: object
+          collapsed: true
+          fields:
+            - { name: code, label: Wrong access code, widget: text }
+            - { name: full, label: No places left, widget: text }
+            - { name: quantity, label: Too many places asked for, widget: text }
+            - { name: config, label: Payment not set up, widget: text }
+            - { name: stripe, label: Payment could not start, widget: text }
+        - { name: applyHeading, label: Heading when applications are open, widget: string }
+        - { name: applyIntro, label: Paragraph when applications are open, widget: text }
+        - { name: applyDeadlineLabel, label: '"Apply by" label', widget: string }
+        - { name: applyButtonLabel, label: Apply button text, widget: string }
+        - { name: applyClosedNote, label: Wording once applications have closed, widget: text }
+        - { name: acceptedHeading, label: Heading above the code-and-pay form, widget: string }
+        - { name: acceptedIntro, label: Paragraph above the code-and-pay form, widget: text }
+        - { name: moreHeading, label: Heading above other events, widget: string }
+        - { name: allLabel, label: '"All events" link text', widget: string }
+    - name: booked
+      label: Thank-you page
+      widget: object
+      collapsed: true
+      fields:
+        - { name: title, label: Browser tab title, widget: string }
+        - { name: eyebrow, label: Small line above the headline, widget: string }
+        - { name: heading, label: Headline, widget: string }
+        - { name: lede, label: Opening line (followed by their email address), widget: string }
+        - { name: ledeNoEmail, label: Opening line when no email is known, widget: string }
+        - { name: whatNextHeading, label: '"What happens next" heading', widget: string }
+        - { name: whatNextBody, label: '"What happens next" paragraph', widget: text }
+        - { name: summaryLabel, label: Label above the booking summary, widget: string }
+        - { name: backLabel, label: '"Back to events" button', widget: string }
+        - { name: missingHeading, label: Headline when the booking cannot be found, widget: string }
+        - { name: missingBody, label: Paragraph when the booking cannot be found, widget: text }

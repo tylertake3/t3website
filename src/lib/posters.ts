@@ -27,6 +27,7 @@ const featuredSlugs = [
   'deadpool-wolverine',
   'house-of-the-dragon-s3',
   'barbie',
+  'the-batman-part-ii',
   'andor',
   'the-sandman',
   '28-years-later',

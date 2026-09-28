@@ -190,7 +190,7 @@ const organizationSchema = {
           marquee.map((cat, i) => (
             <div class="supplyTile" aria-hidden={i >= categories.length ? 'true' : undefined}>
               {cat.image ? (
-                <img class="supplyImg" src={cat.image} alt={cat.label} loading="lazy" decoding="async" />
+                <img class="supplyImg" src={cat.image} alt={cat.label} loading="lazy" decoding="async" draggable="false" />
               ) : (
                 <div class="slot" style="aspect-ratio:3/4;">
                   <span class="slotLabel">{cat.label}</span>
@@ -591,6 +591,8 @@ const organizationSchema = {
         el.addEventListener('pointerdown', function (e) {
           dragging = true; moved = false; lastX = e.clientX;
         });
+        /* the row is what moves under a drag, never a picture or a link */
+        el.addEventListener('dragstart', function (e) { e.preventDefault(); });
         window.addEventListener('pointermove', function (e) {
           if (!dragging) return;
           var dx = e.clientX - lastX;

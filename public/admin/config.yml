@@ -97,6 +97,77 @@ collections:
       - { name: metaDescription, label: Google description, widget: text, required: false, hint: 'Optional. Leave empty to use the short summary.' }
       - { name: body, label: The article, widget: markdown, hint: 'Use Heading 2 for section headings, and bullet lists for anything that reads as a checklist.' }
 
+  - name: events
+    label: Events & workshops
+    label_singular: Event
+    folder: src/content/events
+    create: true
+    identifier_field: title
+    format: frontmatter
+    # The web address of an event is made from its title, so leave the title
+    # alone once the link has gone out.
+    slug: '{{slug}}'
+    summary: '{{title}}, {{date}}'
+    sortable_fields: [date, title]
+    description: >-
+      Workshops and one-off sessions at /events. Places are paid for through
+      Stripe; bookings close on their own once the places are taken. The
+      members' access code is set on the host (EVENTS_MEMBER_CODE), not here,
+      because this file is public.
+    fields:
+      - { name: title, label: Event name, widget: string }
+      - { name: date, label: Date and start time, widget: datetime, date_format: 'DD/MM/YYYY', time_format: 'HH:mm', picker_utc: false, hint: 'The event leaves the listing the day after this date.' }
+      - { name: endTime, label: End time, widget: string, required: false, hint: 'e.g. 16:00. Shown next to the start time.' }
+      - { name: location, label: Where, widget: string, hint: 'A town or venue. It can be updated once the venue is confirmed.' }
+      - { name: price, label: Price per place (pounds), widget: number, value_type: float, min: 0, default: 0, hint: 'Type 0 for a free event; the button then asks people to email instead.' }
+      - { name: capacity, label: Number of places, widget: number, value_type: int, min: 1, default: 12 }
+      - { name: membersOnly, label: Members only, widget: boolean, default: false, hint: 'Switch on to ask for the members'' access code before booking.' }
+      - { name: closed, label: Close bookings now, widget: boolean, default: false, required: false, hint: 'Switch on to stop bookings early, whatever the count says.' }
+      - { name: priceNote, label: Small print under the price, widget: string, required: false, hint: 'e.g. "Including VAT".' }
+      - { name: applyUrl, label: Application form link, widget: string, required: false, hint: 'Fill this in for a workshop awarded by application. The page then leads with an "Apply now" button, and the payment form is for those offered a place.' }
+      - { name: applyDeadline, label: Application deadline, widget: datetime, required: false, date_format: 'DD/MM/YYYY', time_format: false, picker_utc: true, hint: 'The apply button disappears the day after this date.' }
+      - { name: summary, label: Short summary, widget: text, hint: 'One or two sentences. Shown on the card and at the top of the event page.' }
+      - { name: image, label: Photo, widget: image, required: false, hint: 'Optional. Without one, a plain plate carrying the date is shown.' }
+      - { name: imageAlt, label: Photo description, widget: string, required: false, hint: 'Read aloud to visitors who cannot see the photo.' }
+      - name: imageFocus
+        label: Which part of the photo to keep
+        widget: select
+        required: false
+        default: 'center center'
+        hint: The photo is cropped to a wide frame. Choose the part that must stay in view.
+        options:
+          - { label: 'Top of the photo', value: 'center top' }
+          - { label: 'Slightly high', value: 'center 30%' }
+          - { label: 'Dead centre', value: 'center center' }
+          - { label: 'Slightly low', value: 'center 65%' }
+          - { label: 'Bottom of the photo', value: 'center bottom' }
+      - name: cover
+        label: Cover stills
+        label_singular: Cover still
+        widget: list
+        required: false
+        hint: 'Optional. Wide frames from productions the guest has worked on, shown one after another behind the title at the top of the page. Leave empty for the plain cover.'
+        fields:
+          - { name: image, label: Still, widget: image }
+          - { name: alt, label: Description, widget: string, required: false, hint: 'Read aloud to visitors who cannot see the still.' }
+          - { name: credit, label: Production, widget: string, required: false, hint: 'e.g. "The Punisher: One Last Kill". Shown under the summary while that still is up.' }
+          - { name: role, label: Their role on it, widget: string, required: false, hint: 'e.g. "Action designer" — shown as "Action designer on Havoc". Leave empty for "Seen on Havoc".' }
+          - name: focus
+            label: Which part of the still to keep
+            widget: select
+            required: false
+            default: 'center center'
+            options:
+              - { label: 'Top of the still', value: 'center top' }
+              - { label: 'Slightly high', value: 'center 30%' }
+              - { label: 'Dead centre', value: 'center center' }
+              - { label: 'Slightly low', value: 'center 70%' }
+      - { name: draft, label: Hide while it is being set up, widget: boolean, default: false, required: false }
+      - { name: metaTitle, label: Google title, widget: string, required: false, hint: 'Optional. Leave empty to use the event name.' }
+      - { name: metaDescription, label: Google description, widget: text, required: false, hint: 'Optional. Leave empty to use the short summary.' }
+      - { name: body, label: Full description, widget: markdown, hint: 'What the day covers, who it is for, what is included.' }
+
+
 
   - name: pages
     label: Page text
@@ -1541,6 +1612,109 @@ collections:
               - { name: joinHeading, label: Heading on the join-us box, widget: string }
               - { name: joinBody, label: Paragraph on the join-us box, widget: text }
               - { name: joinLabel, label: Button on the join-us box, widget: string }
+      - name: page-events
+        label: Events page text
+        file: src/content/pages/events.json
+        description: >-
+          The wording around the events — the top of the page, the labels on each
+          card, the booking panel and the thank-you page. The events themselves live
+          under "Events & workshops".
+        fields:
+          - name: meta
+            label: Search & sharing
+            widget: object
+            collapsed: true
+            hint: The words Google and social media show. Not visible on the page itself.
+            fields:
+              - { name: title, label: Browser tab & Google title, widget: string }
+              - { name: description, label: Google description, widget: text, hint: Around 150-160 characters works best. }
+              - { name: ogTitle, label: Title when shared on social, widget: string }
+              - { name: ogDescription, label: Description when shared on social, widget: text }
+              - { name: footerTitle, label: Footer headline, widget: string, hint: The big line in the contact strip at the bottom of the page. }
+          - name: hero
+            label: Top of the page
+            widget: object
+            fields:
+              - { name: eyebrow, label: Small line above the headline, widget: string }
+              - { name: heading, label: Headline, widget: string }
+              - { name: lede, label: Opening paragraph, widget: text }
+          - name: listing
+            label: The list of events
+            widget: object
+            fields:
+              - { name: heading, label: Heading above the list, widget: string }
+              - { name: emptyNote, label: Wording when nothing is coming up, widget: string }
+              - { name: membersLabel, label: Label on a members-only event, widget: string }
+              - { name: openLabel, label: Label on an event open to all, widget: string }
+              - { name: freeLabel, label: Wording used instead of a price for a free event, widget: string }
+              - { name: soldOutLabel, label: '"Sold out" label', widget: string }
+              - { name: closedLabel, label: '"Bookings closed" label', widget: string }
+              - { name: placesLeftLabel, label: 'Word after the count (plural)', widget: string, hint: 'e.g. "places left"' }
+              - { name: placeLeftLabel, label: 'Word after the count (singular)', widget: string, hint: 'e.g. "place left"' }
+              - { name: applyLabel, label: Label on an event awarded by application, widget: string }
+              - { name: detailsLabel, label: Link text on each card, widget: string }
+          - name: event
+            label: Wording on an event page
+            widget: object
+            collapsed: true
+            fields:
+              - { name: backLabel, label: '"Back" link text', widget: string }
+              - { name: whenLabel, label: '"When" label', widget: string }
+              - { name: whereLabel, label: '"Where" label', widget: string }
+              - { name: priceLabel, label: '"Price" label', widget: string }
+              - { name: placesLabel, label: '"Places" label', widget: string }
+              - { name: perPlaceLabel, label: Small print under the price, widget: string }
+              - { name: bookingHeading, label: Heading on the booking panel, widget: string }
+              - { name: bookingIntro, label: Paragraph on the booking panel, widget: text }
+              - { name: membersIntro, label: Paragraph on a members-only booking panel, widget: text }
+              - { name: codeLabel, label: Access code field label, widget: string }
+              - { name: codeHint, label: Access code hint, widget: string }
+              - { name: quantityLabel, label: Number of places label, widget: string }
+              - { name: attendeeLabel, label: Name field label, widget: string }
+              - { name: attendeeHint, label: Name field hint, widget: string }
+              - { name: emailLabel, label: Email field label, widget: string }
+              - { name: emailHint, label: Email field hint, widget: string }
+              - { name: submitLabel, label: Button text, widget: string }
+              - { name: freeSubmitLabel, label: Button text on a free event, widget: string }
+              - { name: soldOutNote, label: Wording when sold out, widget: text }
+              - { name: closedNote, label: Wording when bookings are closed, widget: text }
+              - { name: pastNote, label: Wording once the event has happened, widget: text }
+              - { name: notConnectedNote, label: Wording when online payment is unavailable, widget: text }
+              - name: errors
+                label: Messages when a booking cannot go ahead
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: code, label: Wrong access code, widget: text }
+                  - { name: full, label: No places left, widget: text }
+                  - { name: quantity, label: Too many places asked for, widget: text }
+                  - { name: config, label: Payment not set up, widget: text }
+                  - { name: stripe, label: Payment could not start, widget: text }
+              - { name: applyHeading, label: Heading when applications are open, widget: string }
+              - { name: applyIntro, label: Paragraph when applications are open, widget: text }
+              - { name: applyDeadlineLabel, label: '"Apply by" label', widget: string }
+              - { name: applyButtonLabel, label: Apply button text, widget: string }
+              - { name: applyClosedNote, label: Wording once applications have closed, widget: text }
+              - { name: acceptedHeading, label: Heading above the code-and-pay form, widget: string }
+              - { name: acceptedIntro, label: Paragraph above the code-and-pay form, widget: text }
+              - { name: moreHeading, label: Heading above other events, widget: string }
+              - { name: allLabel, label: '"All events" link text', widget: string }
+          - name: booked
+            label: Thank-you page
+            widget: object
+            collapsed: true
+            fields:
+              - { name: title, label: Browser tab title, widget: string }
+              - { name: eyebrow, label: Small line above the headline, widget: string }
+              - { name: heading, label: Headline, widget: string }
+              - { name: lede, label: Opening line (followed by their email address), widget: string }
+              - { name: ledeNoEmail, label: Opening line when no email is known, widget: string }
+              - { name: whatNextHeading, label: '"What happens next" heading', widget: string }
+              - { name: whatNextBody, label: '"What happens next" paragraph', widget: text }
+              - { name: summaryLabel, label: Label above the booking summary, widget: string }
+              - { name: backLabel, label: '"Back to events" button', widget: string }
+              - { name: missingHeading, label: Headline when the booking cannot be found, widget: string }
+              - { name: missingBody, label: Paragraph when the booking cannot be found, widget: text }
 
   - name: homepage
     label: Homepage
