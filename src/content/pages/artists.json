@@ -17,7 +17,133 @@
   "range": {
     "kicker": "THE FULL RANGE",
     "heading": "What we supply across the board",
-    "body": "TODO: copy, a short, balanced introduction to what Take 3 supplies. No single discipline should dominate the reading."
+    "body": "Take 3 supplies the performers who make a scene feel real: special action performers for the physical work in your background, trained dancers, models for campaign and character work, and stand-ins and picture doubles matched carefully to your leads. Each discipline is cast by people who understand what it demands on set.",
+    "cta": {
+      "label": "Send us your brief",
+      "href": "/contact"
+    },
+    "briefs": {
+      "label": "Recent briefs",
+      "hint": "Click for the next",
+      "productionLabel": "Production",
+      "briefLabel": "The brief",
+      "note": "Each brief is a real production. `details` are the two rows under the brief; each label can be anything (Duration, Location, Style, Discipline), and a detail with an `href` becomes a link to that page. `note` is the short paragraph beneath: what we did on that production and how.",
+      "items": [
+        {
+          "production": "The Odyssey",
+          "brief": "70 SPACT rowers",
+          "note": "Seventy special action performers cast for the oars, rehearsed as crews until they pulled as one, and kept on the water for four months of shooting.",
+          "details": [
+            {
+              "label": "Duration",
+              "value": "4 months"
+            },
+            {
+              "label": "Discipline",
+              "value": "SPACTs",
+              "href": "/spacts"
+            }
+          ]
+        },
+        {
+          "production": "Supergirl",
+          "brief": "Core SPACT soldiers",
+          "note": "A core unit of SPACT soldiers who drilled together before the first day at Pinewood, so the background action held up under the camera.",
+          "details": [
+            {
+              "label": "Location",
+              "value": "Pinewood Studios"
+            },
+            {
+              "label": "Discipline",
+              "value": "SPACTs",
+              "href": "/spacts"
+            }
+          ]
+        },
+        {
+          "production": "Geek Girl",
+          "brief": "Catwalk models",
+          "note": "Catwalk models cast from a working roster for the runway sequences in London, fitted and on set for the shoot days.",
+          "details": [
+            {
+              "label": "Location",
+              "value": "London"
+            },
+            {
+              "label": "Discipline",
+              "value": "Models",
+              "href": "/models"
+            }
+          ]
+        },
+        {
+          "production": "The Witcher",
+          "brief": "30 dancers",
+          "note": "Thirty contemporary dancers cast and rehearsed with our choreographer, screen-ready for the sequence.",
+          "details": [
+            {
+              "label": "Style",
+              "value": "Contemporary"
+            },
+            {
+              "label": "Discipline",
+              "value": "Dancers",
+              "href": "/dancers"
+            }
+          ]
+        }
+      ]
+    },
+    "sheet": {
+      "kicker": "Your brief",
+      "count": "05",
+      "intro": "Fill in what you know. It opens as an email to us, ready to send.",
+      "fields": [
+        {
+          "id": "production",
+          "label": "Production",
+          "placeholder": "The title, or the brand",
+          "required": true
+        },
+        {
+          "id": "brief",
+          "label": "The brief",
+          "placeholder": "What the scene needs, in a line",
+          "required": true
+        },
+        {
+          "id": "when",
+          "label": "When",
+          "placeholder": "Shoot dates, or how much notice"
+        },
+        {
+          "id": "where",
+          "label": "Where",
+          "placeholder": "Studio, city or location"
+        }
+      ],
+      "notesLabel": "Notes",
+      "notesPlaceholder": "Anything else: numbers, skills, looks, references, budget.",
+      "nameLabel": "Your name",
+      "sendLabel": "Send the brief",
+      "cancelLabel": "Back to the briefs",
+      "hint": "Opens in your email app",
+      "subject": "Brief for Take 3",
+      "note": "The blank call sheet that replaces the slate when \"Send us your brief\" is pressed. It composes an email to the address in src/data/site.ts.",
+      "countLabel": "New",
+      "namePlaceholder": "So we know who to reply to",
+      "roleLabel": "Your role",
+      "rolePlaceholder": "Producer, first AD, coordinator",
+      "email": {
+        "greeting": "Hello Take 3,",
+        "intro": "I have a brief I would like you to look at. The details are below.",
+        "notesHeading": "Notes",
+        "ask": "Could you let me know whether this is something you can cast, and what you would need from me to take it forward?",
+        "signoff": "Thanks,",
+        "footer": "Sent from the brief sheet at take3agency.com/artists"
+      }
+    }
   },
   "categories": {
     "kicker": "FOUR CORE ROUTES",
@@ -26,54 +152,131 @@
       {
         "name": "SPACTs",
         "href": "/spacts",
-        "description": "TODO: copy, one line on who SPACTs are for.",
+        "description": "Skilled performers for the action in your background: rowing, riding, fighting and drilling, delivered safely on camera.",
         "slotLabel": "SPACTs",
         "image": "/uploads/artists-spacts-odyssey-ship.webp",
         "imageAlt": "A longship under a full red sail crossing open blue sea, its crew crowded along the deck",
-        "imageFocus": "42% center"
+        "imageFocus": "42% center",
+        "stills": [
+          {
+            "image": "/uploads/spact-odyssey-rowers.webp",
+            "alt": "Rowers in soaked capes hauling on their oars in driving rain, in The Odyssey",
+            "focus": "center"
+          },
+          {
+            "image": "/uploads/spact-blood-origin-shieldwall.webp",
+            "alt": "A rider leading a shield wall of armoured soldiers through a rocky pass, in The Witcher",
+            "focus": "center"
+          },
+          {
+            "image": "/uploads/spact-witcher-archers.webp",
+            "alt": "A line of archers drawing their bows, in The Witcher",
+            "focus": "center 45%"
+          }
+        ]
       },
       {
         "name": "Dancers",
         "href": "/dancers",
-        "description": "TODO: copy, one line on who dancers are for.",
+        "description": "Trained dancers for film, television, commercial and live, in every style and screen-ready.",
         "slotLabel": "Dancers",
         "image": "/uploads/artists-dancers-barbie-floor.webp",
         "imageAlt": "A dancer mid-turn on a bright pink dance floor, a full company of dancers moving behind her under disco lighting",
-        "imageFocus": "52% center"
+        "imageFocus": "52% center",
+        "stills": [
+          {
+            "image": "/uploads/dancers-hero-spider-man-brand-new-day.webp",
+            "alt": "Dancers on set in Spider-Man: Brand New Day",
+            "focus": "58% 12%"
+          },
+          {
+            "image": "/uploads/dancers-hero-practical-magic-2.webp",
+            "alt": "Dancers on set in Practical Magic 2",
+            "focus": "50% 12%"
+          },
+          {
+            "image": "/uploads/dancers-hero-six-triple-eight.webp",
+            "alt": "Dancers on set in The Six Triple Eight",
+            "focus": "45% 12%"
+          }
+        ]
       },
       {
         "name": "Models",
         "href": "/models",
-        "description": "TODO: copy, one line on who models are for.",
-        "slotLabel": "Models"
+        "description": "Faces for campaigns, character and camera, cast from a working roster rather than a lookbook.",
+        "slotLabel": "Models",
+        "image": "/uploads/models-hero-portrait.webp",
+        "imageAlt": "Black and white portrait of a model resting her cheek on her hand, looking straight to camera",
+        "imageFocus": "center top",
+        "stills": [
+          {
+            "image": "/uploads/models-campaign-still.webp",
+            "alt": "Black and white campaign still of a model reclining in a laced corset and lace skirt against a white background",
+            "focus": "center top"
+          },
+          {
+            "image": "/uploads/models-character-portrait.webp",
+            "alt": "Black and white portrait of a model in a plumed tricorn hat and corset, hands raised mid-gesture",
+            "focus": "center top"
+          }
+        ]
       },
       {
         "name": "Stand-ins & Picture Doubles",
         "href": "/stand-ins",
-        "description": "TODO: copy, one line on who stand-ins and picture doubles are for.",
-        "slotLabel": "Stand-ins"
+        "description": "Accurate matches to your leads, so lighting holds, cameras keep turning and your actors' hours go where they matter.",
+        "slotLabel": "Stand-ins",
+        "image": "/uploads/stand-ins-hero-set.webp",
+        "imageAlt": "Behind the scenes on a lit kitchen set: an actor sits in shot on a wooden chair while the camera on its dolly track and a boom operator hold position",
+        "imageFocus": "38% center",
+        "stills": [
+          {
+            "image": "/uploads/stand-ins-lighting-setup.webp",
+            "alt": "A stand-in holds a mark on a darkened stage while the crew set a large overhead soft light around them",
+            "focus": "center"
+          },
+          {
+            "image": "/uploads/stand-ins-side-by-side.webp",
+            "alt": "Two performers in matching black tactical costume standing side by side on set between setups",
+            "focus": "center"
+          }
+        ]
+      }
+    ],
+    "stillsNote": "`image` is the tile's first picture; `stills` are the ones it fades through after it, every few seconds, each tile on its own beat."
+  },
+  "howWeWork": {
+    "kicker": "ARTISTS, TEAM, CLIENTS",
+    "heading": "How we work",
+    "items": [
+      {
+        "number": "01",
+        "label": "Our artists",
+        "heading": "A chosen roster, not an open directory",
+        "paragraphs": [
+          "Every artist is scouted, auditioned or assessed in person by the Take 3 team before they join, so when we put someone forward, we know how they work.",
+          "Not just quantity. An agency built on quality."
+        ]
+      },
+      {
+        "number": "02",
+        "label": "Our team",
+        "heading": "Briefs move fast. So do we.",
+        "paragraphs": [
+          "We understand briefs, and the clock behind them. A call at short notice gets a considered answer the same day, not a holding email, and the people we put forward are ready to work.",
+          "Film and television do not keep office hours, and neither do we. Someone from the team is on hand whenever a production needs them: before the shoot, on the day, and when the schedule changes."
+        ]
+      },
+      {
+        "number": "03",
+        "label": "Our clients",
+        "heading": "Film, television and commercial",
+        "paragraphs": [
+          "Production companies, assistant directors, choreographers, stunt coordinators and brands.",
+          "Feature films, television drama and entertainment, commercials and campaigns. Each asks something different of a performer, and each runs differently on the day. We cast with both in mind."
+        ]
       }
     ]
-  },
-  "specialists": {
-    "kicker": "BEYOND THE FOUR",
-    "heading": "Whatever the brief needs, we will find it",
-    "body": "TODO: copy, the flexible tier. What happens when a brief asks for something the four core categories do not cover, and how the crossover between disciplines is handled.",
-    "linkLabel": "Specialists",
-    "href": "/specialists",
-    "pendingNote": "TODO: link. This page is still to be built."
-  },
-  "represented": {
-    "kicker": "REPRESENTED, NOT LISTED",
-    "heading": "A chosen roster, not an open directory",
-    "paragraphs": [
-      "Every artist is assessed and interviewed by the Take 3 team before joining.",
-      "The roster is not published in full. Tell us what the production needs and we will put the right people in front of you."
-    ]
-  },
-  "clients": {
-    "kicker": "WHO WE WORK WITH",
-    "heading": "Film, television and commercial",
-    "body": "TODO: copy, productions and brands, briefly, with a light line covering film, television and commercial so no single format dominates."
   }
 }

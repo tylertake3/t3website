@@ -325,10 +325,23 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .heroCopy { position:absolute; left:60px; bottom:110px; z-index:2; color:var(--heroInk); width:fit-content; max-width:calc(100vw - 400px); }
 .heroKicker { font-size:19px; letter-spacing:7px; font-weight:400; color:var(--heroInk); }
 .heroTitle { font-family:'Anton', 'Jost', sans-serif; font-size:clamp(44px, 5.4vw, 92px); font-weight:400; letter-spacing:0; line-height:1.06; margin-top:18px; max-width:1000px; white-space:pre-line; text-transform:uppercase; }
+/* the headline is one box per letter so each can lean away from the pointer (index.astro) */
+.heroLine { display:block; }
+.heroCh { display:inline-block; white-space:pre; will-change:transform; }
 .heroProd { position:absolute; right:40px; bottom:104px; z-index:2; text-align:right; color:rgba(244,242,238,0.75); font-size:12px; letter-spacing:3px; white-space:nowrap; }
 .heroProdName { display:block; font-size:30px; letter-spacing:5px; font-weight:400; color:#f4f2ee; }
-.heroStrip { position:absolute; left:0; right:0; bottom:0; z-index:2; border-top:1px solid var(--heroLine); }
-.heroStrip div { display:flex; flex-wrap:wrap; justify-content:center; column-gap:14px; row-gap:8px; padding:20px 40px; font-size:13px; letter-spacing:3px; color:var(--heroInkSoft); }
+.heroStrip { position:absolute; left:0; right:0; bottom:0; z-index:2; border-top:1px solid var(--heroLine); --stripPad:40px; }
+/* One row, always. When the words do not fit they scroll sideways (no bar,
+   soft edges) rather than wrapping onto a second line over the credit. The
+   first and last items carry auto margins so the row is centred whenever
+   there is room, and simply starts at the left edge when there is not; the
+   spacers at either end stand in for padding, which a scrolling box drops
+   at its far edge. */
+.heroStrip div { display:flex; flex-wrap:nowrap; align-items:center; column-gap:14px; padding:20px 0; font-size:13px; letter-spacing:3px; color:var(--heroInkSoft); overflow-x:auto; overflow-y:hidden; scrollbar-width:none; -webkit-overflow-scrolling:touch; -webkit-mask-image:linear-gradient(to right, transparent, #000 var(--stripPad), #000 calc(100% - var(--stripPad)), transparent); mask-image:linear-gradient(to right, transparent, #000 var(--stripPad), #000 calc(100% - var(--stripPad)), transparent); }
+.heroStrip div::-webkit-scrollbar { display:none; }
+.heroStrip div::before, .heroStrip div::after { content:""; flex:none; width:var(--stripPad); }
+.heroStrip .genreItem:first-child { margin-left:auto; }
+.heroStrip .genreItem:last-child { margin-right:auto; }
 .heroStrip .sep { color:var(--heroInkFaint); }
 
 /* genre strip: opens from the centre of the row outwards, gentle lift on hover.
@@ -604,7 +617,8 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   .heroTitle { font-size:clamp(32px,9vw,50px); letter-spacing:0; margin-top:14px; }
   .heroProd { position:relative; right:auto; bottom:auto; text-align:left; margin-top:26px; white-space:normal; }
   .heroProdName { font-size:clamp(20px,6.4vw,26px); letter-spacing:3px; }
-  .heroStrip div { padding:14px 20px; font-size:11px; letter-spacing:2px; column-gap:10px; }
+  .heroStrip { --stripPad:20px; }
+  .heroStrip div { padding:14px 0; font-size:11px; letter-spacing:2px; column-gap:10px; }
   .aboutWrap { padding:64px 0 32px; }
   .about { padding:0 20px 40px; }
   .aboutBody { font-size:16px; }
@@ -749,6 +763,120 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .bandDark a:focus-visible, .bandDark button:focus-visible { outline-color:#f4f2ee; }
 .specialistsBlock { display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start; }
 .specialistsCta { display:inline-block; margin-top:26px; }
+/* The slate of briefs on the Artists page: a hairline card that fills itself
+   in, one real brief after another. Small tracked labels, Anton values, a big
+   count in the corner and a thin accent timer along the top edge while a
+   brief holds. Follows the theme. */
+.rangeBody { margin-top:28px; }
+.rangeCta { display:inline-block; margin-top:26px; }
+.briefCard { position:relative; display:flex; flex-direction:column; border:1px solid var(--hair); background:var(--bg); padding:34px 30px 26px; transition:border-color .3s cubic-bezier(0.3, 0, 0.2, 1); }
+.briefCard > .briefNote { flex:1; }
+.briefCard[hidden] { display:none; }
+.briefCard:hover { border-color:var(--ctrlBorder); }
+.briefTimer { position:absolute; left:-1px; right:-1px; top:-1px; height:2px; background:var(--accent); transform-origin:left; transform:scaleX(0); }
+.briefTop { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:8px; }
+.briefNum { font-family:'Anton', 'Jost', sans-serif; font-size:clamp(40px, 4.4vw, 64px); line-height:.9; letter-spacing:0; margin:0; color:var(--ink); }
+.briefNum small { font-family:'Jost', sans-serif; font-size:13px; letter-spacing:3px; color:var(--muted); margin-left:8px; }
+/* the production's logo in the top-right corner, drawn at its measured size
+   (see productionLogos.ts) like the logos beside a review; one ink per theme */
+.briefLogo { display:inline-flex; align-items:flex-end; justify-content:flex-end; max-width:46%; }
+.briefLogo img { --logo-scale:.9; height:calc(var(--logo-h, 34) * var(--logo-scale) * 1px); width:auto; max-width:calc(var(--logo-w, 190) * var(--logo-scale) * 1px); object-fit:contain; object-position:right center; }
+.briefLogoLight { display:none; }
+[data-theme="light"] .briefLogoDark { display:none; }
+[data-theme="light"] .briefLogoLight { display:block; }
+.briefLogoText { font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); text-align:right; }
+.briefRow { display:grid; grid-template-columns:104px 1fr; gap:20px; align-items:baseline; padding:14px 0; border-bottom:1px solid var(--hair); }
+.briefKey { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
+.briefVal { position:relative; font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(20px, 2vw, 30px); line-height:1.1; letter-spacing:0; min-height:1.1em; color:var(--ink); }
+.briefValLink { color:var(--ink); }
+.briefValLink[href] { cursor:pointer; transition:color .3s cubic-bezier(0.3, 0, 0.2, 1); }
+.briefValLink[href]:hover { color:var(--accent); }
+.briefValLink[href]::after { content:" →"; font-family:'Jost', sans-serif; font-size:.5em; letter-spacing:2px; vertical-align:.25em; color:var(--muted); opacity:0; transition:opacity .3s cubic-bezier(0.3, 0, 0.2, 1); }
+.briefValLink[href]:hover::after { opacity:1; color:var(--accent); }
+.briefValLink[href]:focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
+/* the caret sits in the flow's place but out of the flow, so the line it is on never grows or shrinks around it */
+.briefCaret { position:absolute; display:inline-block; width:.45ch; height:.9em; margin:.1em 0 0 3px; background:var(--accent); animation:briefBlink 1s steps(1) infinite; }
+@keyframes briefBlink { 50% { opacity:0; } }
+.briefNote { margin:22px 0 0; font-size:16px; line-height:1.65; color:var(--sub); min-height:3.3em; text-wrap:pretty; }
+.briefFoot { display:flex; justify-content:space-between; align-items:center; margin-top:22px; }
+.briefHint { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
+.briefNext { background:none; border:0; border-radius:0; padding:0; cursor:pointer; font-family:inherit; transition:color .3s cubic-bezier(0.3, 0, 0.2, 1); }
+.briefNext:hover { color:var(--ink); }
+.briefNext:focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
+.briefDots { display:flex; gap:6px; }
+.briefDots i { width:6px; height:6px; border-radius:50%; background:var(--hair); display:block; transition:background .3s; }
+.briefDots i.is-on { background:var(--accent); }
+@media (prefers-reduced-motion: reduce) { .briefValLink { color:var(--ink); }
+.briefValLink[href] { cursor:pointer; transition:color .3s cubic-bezier(0.3, 0, 0.2, 1); }
+.briefValLink[href]:hover { color:var(--accent); }
+.briefValLink[href]::after { content:" →"; font-family:'Jost', sans-serif; font-size:.5em; letter-spacing:2px; vertical-align:.25em; color:var(--muted); opacity:0; transition:opacity .3s cubic-bezier(0.3, 0, 0.2, 1); }
+.briefValLink[href]:hover::after { opacity:1; color:var(--accent); }
+.briefValLink[href]:focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
+.briefCaret { animation:none; } .briefCard, .briefDots i { transition:none; } }
+/* The blank sheet: the same card, with the values typed by the visitor. The
+   inputs sit bare on the rows in the slate's own voice, so the sheet reads
+   as the slate with the answers missing rather than as a form dropped in. */
+.briefForm { cursor:auto; user-select:auto; }
+.briefForm .briefNum small { text-transform:uppercase; }
+.briefInput, .briefTextarea { width:100%; background:none; border:0; border-radius:0; padding:0; margin:0; color:var(--ink); }
+.briefInput { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(20px, 2vw, 30px); line-height:1.1; letter-spacing:0; }
+.briefInput::placeholder, .briefTextarea::placeholder { color:var(--muted); font-family:'Jost', sans-serif; text-transform:none; font-size:16px; letter-spacing:0; }
+.briefInput::placeholder { position:relative; top:-0.15em; }
+.briefInputPlain { font-family:'Jost', sans-serif; text-transform:none; font-size:16px; letter-spacing:0; margin-top:8px; }
+.briefRowWho { grid-template-columns:1fr 1fr; gap:28px; }
+.briefWho { display:flex; flex-direction:column; }
+.briefRowNotes { grid-template-columns:104px 1fr; align-items:start; }
+.briefTextarea { margin:0; min-height:0; font-family:'Jost', sans-serif; font-size:16px; line-height:1.65; resize:none; }
+.briefForm .briefNote { min-height:0; }
+.briefInput:focus-visible, .briefTextarea:focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
+.briefFormFoot { align-items:center; flex-wrap:wrap; gap:14px 24px; }
+.briefActions { display:flex; align-items:center; gap:22px; flex-wrap:wrap; }
+.briefSend { border:0; cursor:pointer; font-family:'Jost', sans-serif; }
+.briefCancel { background:none; border:0; border-radius:0; padding:0; cursor:pointer; font:inherit; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
+.briefCancel:hover { color:var(--ink); }
+
+/* How we work (Artists page): three numbered columns on the dark band,
+   artists / team / clients. An accent rule draws along the top of each
+   column as it arrives (.is-ruled, set by the page script). */
+.howBand .sectionHead { padding-bottom:18px; }
+.pillars { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); }
+.pillar { position:relative; padding:44px 36px 8px 0; border-right:1px solid var(--hair); }
+.pillar + .pillar { padding-left:36px; }
+.pillar:last-child { border-right:0; padding-right:0; }
+.pillar::after { content:""; position:absolute; left:0; right:0; top:0; height:1px; background:var(--accent); transform:scaleX(0); transform-origin:left; transition:transform .8s cubic-bezier(0.3, 0, 0.2, 1); }
+.pillar.is-ruled::after { transform:scaleX(1); }
+.pillNum { display:block; font-family:'Anton', 'Jost', sans-serif; font-size:clamp(48px, 5vw, 72px); line-height:.9; letter-spacing:0; color:var(--accent); }
+.pillInner { will-change:transform; }
+.pillLabel { margin:22px 0 0; font-size:11px; letter-spacing:3px; text-transform:uppercase; font-weight:400; color:var(--muted); }
+.pillTitle { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(24px, 2.3vw, 34px); line-height:1.08; letter-spacing:0; margin:10px 0 0; }
+.pillBody { margin-top:22px; font-size:16px; line-height:1.7; }
+.pillBody p + p { margin-top:14px; }
+@media (prefers-reduced-motion: reduce) { .pillar::after { transition:none; } }
+
+/* The specialists statement on the Artists page: one big line whose middle
+   word keeps changing (.stmtSlot), the divisions as a short ruled list, and
+   the roster tape along the foot. A normal band, so it follows the theme. */
+.specialistsBand { padding-bottom:0; }
+.specialistsBand + .band { padding-top:96px; }
+/* as the opening of a page (Specialists) it takes the page cover's top
+   padding so the header lands where it does everywhere else */
+.specOpener { padding-top:170px; }
+.stmt { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(40px, 7.4vw, 112px); line-height:1.02; letter-spacing:0; margin:18px 0 0; }
+.stmtLine { display:block; }
+.stmtSlot { display:inline-grid; vertical-align:top; position:relative; color:var(--accent); min-height:1em; }
+.stmtSlot > span { grid-area:1 / 1; white-space:nowrap; }
+.stmtFoot { margin-top:48px; display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start; }
+.divList { list-style:none; margin:0; padding:0; border-top:1px solid var(--hair); }
+.divList li { padding:18px 0; border-bottom:1px solid var(--hair); }
+.divList a { display:block; text-align:right; font-size:17px; letter-spacing:3px; text-transform:uppercase; color:var(--ink); transition:color .3s cubic-bezier(0.3, 0, 0.2, 1); }
+.divList a:hover { color:var(--accent); }
+.tape { margin-top:72px; border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); padding:22px 0 26px; overflow:hidden; white-space:nowrap; }
+.tapeLabel { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin:0 auto 16px; }
+.tapeTrack { display:inline-flex; will-change:transform; }
+.tapeItem { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(28px, 3.6vw, 52px); line-height:1; color:var(--ink); padding:0 .55em; display:inline-flex; align-items:center; gap:1.1em; }
+.tapeItem::after { content:""; width:.16em; height:.16em; border-radius:50%; background:var(--accent); display:inline-block; }
+.tapeItem:nth-child(3n+2) { color:var(--muted); }
+.visuallyHidden { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
 
 /* category tiles: four equal routes, no discipline favoured */
 .catGrid { list-style:none; margin:32px 0 0; padding:0; display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:24px; }
@@ -756,7 +884,11 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .catSlot { display:flex; align-items:center; justify-content:center; }
 .catLink:hover .catSlot { outline:1px solid var(--ctrlBorder); outline-offset:-1px; }
 /* a route that has its artwork: same plate, filled with the photo */
-.catSlotPhoto { display:block; overflow:hidden; background:var(--tileBg); width:100%; }
+.catSlotPhoto { display:block; position:relative; overflow:hidden; background:var(--tileBg); width:100%; }
+/* the stills a tile fades through sit over the first picture and take turns */
+.catSlotPhoto img.catStill { position:absolute; inset:0; opacity:0; transition:opacity 2.8s cubic-bezier(0.3, 0, 0.2, 1); }
+.catSlotPhoto img.catStill.is-on { opacity:1; }
+@media (prefers-reduced-motion: reduce) { .catSlotPhoto img.catStill { transition:none; } }
 .catSlotPhoto img { width:100%; height:100%; object-fit:cover; object-position:center; display:block; filter:saturate(0.92) contrast(1.05) brightness(0.96); }
 .catName { display:block; margin-top:14px; font-size:17px; letter-spacing:3px; text-transform:uppercase; color:var(--ink); }
 .catLink:hover .catName { color:var(--accent); }
@@ -770,6 +902,13 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   .pageHeroInner, .bandInner { padding:0 32px; }
   .band { padding:72px 0; }
   .bandSplit, .specialistsBlock { grid-template-columns:1fr; gap:36px; }
+  .stmtFoot { grid-template-columns:1fr; gap:36px; }
+  .tape { margin-top:56px; }
+  .pillars { grid-template-columns:1fr; }
+  .pillar { border-right:0; border-bottom:1px solid var(--hair); padding:36px 0; }
+  .pillar + .pillar { padding-left:0; }
+  .pillar:last-child { border-bottom:0; padding-bottom:0; }
+  .specOpener { padding-top:150px; }
   .catGrid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
 }
 
@@ -779,6 +918,18 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   .band { padding:56px 0; }
   .bandBody { font-size:16px; }
   .catGrid { grid-template-columns:1fr; gap:28px; }
+  .stmt { font-size:clamp(30px, 8.6vw, 64px); }
+  .specOpener { padding-top:130px; }
+  .stmtSlot > span { white-space:normal; }
+  .briefNote { min-height:6.6em; font-size:15px; }
+  .briefCard { padding:26px 20px 20px; }
+  .briefLogo img { --logo-scale:.7; }
+  .briefRow, .briefRowNotes, .briefRowWho { grid-template-columns:1fr; gap:6px; }
+  .briefRowWho { gap:14px; }
+  .stmtFoot { margin-top:36px; }
+  .divList li { padding:14px 0; }
+  .divList a { font-size:15px; text-align:left; }
+  .tape { margin-top:44px; }
 }
 
 /* ---------- where we have worked ---------- */

@@ -269,6 +269,12 @@
       "logoOnDark": "/assets/production-logos/the-conjuring-c.png",
       "logoOnLight": "/assets/production-logos/the-conjuring.png",
       "aliases": "The Conjuring: Last Rites, Conjuring"
+    },
+    {
+      "title": "Supergirl",
+      "logoOnDark": "/assets/production-logos/supergirl-c.png",
+      "logoOnLight": "/assets/production-logos/supergirl.png",
+      "aliases": ""
     }
   ]
 }

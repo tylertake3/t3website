@@ -6,30 +6,86 @@
     "ogDescription": "Trained dancers for film, television, commercial and live: every style, screen-ready.",
     "footerTitle": "Book dancers for your production",
     "footerLinks": [
-      { "label": "SPACTS →", "href": "/spacts" },
-      { "label": "SPECIALISTS →", "href": "/stand-ins" }
+      {
+        "label": "SPACTS →",
+        "href": "/spacts"
+      },
+      {
+        "label": "SPECIALISTS →",
+        "href": "/stand-ins"
+      }
     ]
   },
   "hero": {
-    "eyebrow": "TAKE 3 AGENCY · DANCE",
+    "eyebrow": "ARTISTS: DANCERS",
     "title": "DANCERS",
     "lede": "Trained dancers for film, television, commercial and live: every style, screen-ready.",
     "slides": [
       {
-        "image": "/uploads/Codex Image 21 Aug 2026, 14_20_03-91201516.webp",
-        "focus": "center 60%",
-        "wide": "/uploads/dancers-hero-02-wide.webp",
-        "wideFocus": "center center",
-        "narrowFocus": "72% center"
+        "production": "SPIDER-MAN: BRAND NEW DAY",
+        "image": "/uploads/dancers-hero-spider-man-brand-new-day.webp",
+        "wide": "/uploads/dancers-hero-spider-man-brand-new-day.webp",
+        "wideFocus": "center 12%",
+        "narrowFocus": "58% 12%"
       },
       {
-        "image": "/uploads/Codex Image 21 Aug 2026, 14_20_10-8028981e.webp",
-        "focus": "center 75%",
-        "wide": "/uploads/dancers-hero-04-wide.webp",
-        "wideFocus": "70% center",
-        "narrowFocus": "85% center"
+        "production": "THE SIX TRIPLE EIGHT",
+        "image": "/uploads/dancers-hero-six-triple-eight.webp",
+        "wide": "/uploads/dancers-hero-six-triple-eight.webp",
+        "wideFocus": "center 12%",
+        "narrowFocus": "45% 12%"
+      },
+      {
+        "production": "BARBIE",
+        "image": "/uploads/dancers-hero-barbie.webp",
+        "wide": "/uploads/dancers-hero-barbie.webp",
+        "wideFocus": "center 12%",
+        "narrowFocus": "50% 12%"
+      },
+      {
+        "production": "THE SANDMAN",
+        "image": "/uploads/dancers-hero-sandman.webp",
+        "wide": "/uploads/dancers-hero-sandman.webp",
+        "wideFocus": "center 12%",
+        "narrowFocus": "50% 12%"
+      },
+      {
+        "production": "CHRISTMAS KARMA",
+        "image": "/uploads/dancers-hero-christmas-karma.webp",
+        "wide": "/uploads/dancers-hero-christmas-karma.webp",
+        "wideFocus": "center 12%",
+        "narrowFocus": "50% 12%"
+      },
+      {
+        "production": "PRACTICAL MAGIC 2",
+        "image": "/uploads/dancers-hero-practical-magic-2.webp",
+        "wide": "/uploads/dancers-hero-practical-magic-2.webp",
+        "wideFocus": "center 12%",
+        "narrowFocus": "50% 12%"
+      },
+      {
+        "production": "BEETLEJUICE BEETLEJUICE",
+        "image": "/uploads/dancers-hero-beetlejuice-beetlejuice.webp",
+        "wide": "/uploads/dancers-hero-beetlejuice-beetlejuice.webp",
+        "wideFocus": "center 12%",
+        "narrowFocus": "45% 12%"
+      },
+      {
+        "production": "THE MOMENT",
+        "image": "/uploads/dancers-hero-the-moment.webp",
+        "wide": "/uploads/dancers-hero-the-moment.webp",
+        "wideFocus": "center 12%",
+        "narrowFocus": "60% 12%"
+      },
+      {
+        "production": "10 DANCE",
+        "image": "/uploads/dancers-hero-10-dance.webp",
+        "wide": "/uploads/dancers-hero-10-dance.webp",
+        "wideFocus": "center 12%",
+        "narrowFocus": "45% 12%"
       }
-    ]
+    ],
+    "creditLabel": "DANCERS SUPPLIED ON"
   },
   "supply": {
     "heading": "WHAT WE SUPPLY",
@@ -43,6 +99,10 @@
         "blurb": "Sharp, camera-ready commercial dancers for promos, campaigns and live performance, fast with choreography and consistent take to take."
       },
       {
+        "name": "Jazz & musical theatre",
+        "blurb": "Triple-threat jazz and musical theatre dancers who sing, act and hold a line: ensemble numbers, featured spots and stage-to-screen adaptations."
+      },
+      {
         "name": "Period & historical",
         "blurb": "Dancers drilled in court, regency, ragtime, swing and other era-specific social dance, styled and rehearsed to the production’s period."
       },
@@ -51,43 +111,67 @@
         "blurb": "Competition-level ballroom and Latin couples (waltz, foxtrot, tango, quickstep and more), able to perform full routines or background social dancing."
       },
       {
+        "name": "Latin",
+        "blurb": "Salsa, bachata, samba and Argentine tango specialists, from competition couples to social-dance crowds with the real feel of the floor."
+      },
+      {
         "name": "Street",
         "blurb": "Breakers, hip hop, popping, locking and krump artists from the UK battle scene, with the power moves and freestyle depth to hold a featured frame."
       },
       {
-        "name": "Choreographed ensemble work",
-        "blurb": "Full ensembles cast to move as one: musical numbers, ceremonies and crowd choreography, matched for height, look and partnering experience."
+        "name": "Heels",
+        "blurb": "Commercial heels and femme-style dancers with the technique to perform full routines in heels for promos, campaigns and live shows."
+      },
+      {
+        "name": "Bollywood & cultural",
+        "blurb": "Bollywood, bhangra, Afrobeats and other culturally specific styles, cast from artists trained in the tradition rather than approximating it."
       }
     ],
-    "note": "Solo artists to full ensembles, matched to the brief: style, look, height and partnering experience.",
-    "imageAlt": "Breaker in a one-arm freeze",
-    "imageCaption": "TAKE 3 ROSTER · BREAKING"
-  },
-  "filmTv": {
-    "eyebrow": "FOR FILM & TELEVISION",
-    "heading": "Movement that holds the frame.",
-    "imageAlt": "Dancer spinning in leather coat",
-    "rows": [
-      { "label": "PERIOD SEQUENCES", "text": "Court dances, balls and social dance, drilled to the era." },
-      { "label": "MUSICAL NUMBERS", "text": "Featured and ensemble dancers who take choreography fast." },
-      { "label": "BACKGROUND", "text": "Dancers in crowd who move with intent, not filler." }
-    ]
-  },
-  "commercial": {
-    "eyebrow": "FOR COMMERCIAL & BRAND",
-    "heading": "From treatment to wrap.",
-    "imageAlt": "Dancer in heels, hair in motion",
-    "rows": [
-      { "label": "CAMPAIGN FILMS", "text": "Real movement quality on camera, cast to the brief." },
-      { "label": "MUSIC PROMOS", "text": "Commercial, street and contemporary artists." },
-      { "label": "LIVE & EVENTS", "text": "Activations from a single featured dancer to a cast." }
-    ]
-  },
-  "choreographers": {
-    "eyebrow": "WORKING WITH CHOREOGRAPHERS",
-    "heading": "We supply the talent. You keep the room.",
-    "paragraph1": "Send us the brief (style, numbers, dates and look) and we shortlist from the roster, hold availability and handle contracts, fees and on-the-day coordination. You audition and direct as you always would; we take the admin off your desk.",
-    "paragraph2": "Our commission comes from the artist’s fee, not from the client or the choreographer. Booking through Take 3 costs your production nothing extra."
+    "stills": [
+      {
+        "image": "/uploads/DSC01767.webp",
+        "imageAlt": "Dancer spinning in leather coat",
+        "width": 1306,
+        "height": 2048
+      },
+      {
+        "image": "/uploads/3W8A3054.webp",
+        "imageAlt": "Breaker in a one-arm freeze",
+        "width": 1366,
+        "height": 2048
+      },
+      {
+        "image": "/uploads/dancers-commercial-hair-in-motion.webp",
+        "imageAlt": "Dancer in heels, hair in motion",
+        "width": 1440,
+        "height": 2160
+      },
+      {
+        "image": "/uploads/dancers-supply-arch-back.webp",
+        "imageAlt": "Dancer arching back, shirt slipping from his shoulders",
+        "width": 1568,
+        "height": 2160
+      },
+      {
+        "image": "/uploads/dancers-filmtv-backbend.webp",
+        "imageAlt": "Dancer with pink hair arching back in leather trousers",
+        "width": 1506,
+        "height": 2160
+      },
+      {
+        "image": "/uploads/dancers-supply-fringe-reach.webp",
+        "imageAlt": "Dancer in a fringed vest reaching across the frame",
+        "width": 1440,
+        "height": 2160
+      },
+      {
+        "image": "/uploads/dancers-commercial-lift.webp",
+        "imageAlt": "Dancer lifting his partner, her arm raised",
+        "width": 1597,
+        "height": 2160
+      }
+    ],
+    "imageCaption": "TAKE 3 ROSTER"
   },
   "reviews": {
     "heading": "Reviews",
@@ -139,24 +223,55 @@
       }
     ]
   },
-  "roster": {
-    "sectionLabel": "Take 3 roster still",
-    "imageAlt": "Two dancers crouching in profile"
-  },
   "credits": {
     "eyebrow": "CREDITS",
     "heading": "We have supplied dancers for",
     "note": "Film · Television · Commercial · Music",
     "cards": [
       {
-        "label": "SPIDER-MAN",
-        "alt": "Spider-Man",
-        "image": "/uploads/upload_fba01478540cf4034ae0e81967110fe9_8190d99b-f0e0-4c79-b9ee-f47f42b6aeda.webp"
+        "label": "WICKED",
+        "alt": "Wicked",
+        "image": "/uploads/dancers-credit-wicked.webp"
+      },
+      {
+        "label": "STRICTLY COME DANCING",
+        "alt": "A dancer mid-leap above the company on the Strictly Come Dancing floor",
+        "image": "/uploads/dancers-credit-strictly-come-dancing.webp"
+      },
+      {
+        "label": "ED SHEERAN: AZIZAM",
+        "alt": "Dancers in 1970s dress mid-step across a mosaic floor in Ed Sheeran’s Azizam video",
+        "image": "/uploads/dancers-credit-ed-sheeran-azizam.webp"
+      },
+      {
+        "label": "DUA LIPA × O2",
+        "alt": "Dua Lipa on a windswept beach in the O2 advert",
+        "image": "/uploads/dancers-credit-dua-lipa-o2.webp"
+      },
+      {
+        "label": "BARBIE",
+        "alt": "Barbie",
+        "image": "/uploads/dancers-hero-barbie.webp"
       },
       {
         "label": "THE WITCHER",
-        "alt": "The Witcher",
-        "image": "/uploads/witcher_season_3_conclave_ball.webp"
+        "alt": "Festival dancers in flowers and lace in The Witcher",
+        "image": "/uploads/dancers-credit-the-witcher.webp"
+      },
+      {
+        "label": "SUGABABES: GHOST",
+        "alt": "Three performers in black and red walking between church pews in the Sugababes’ Ghost video",
+        "image": "/uploads/dancers-credit-sugababes-ghost.webp"
+      },
+      {
+        "label": "MAGIC MIKE’S LAST DANCE",
+        "alt": "Magic Mike’s Last Dance",
+        "image": "/uploads/dancers-credit-magic-mikes-last-dance.webp"
+      },
+      {
+        "label": "THE SIX TRIPLE EIGHT",
+        "alt": "The Six Triple Eight",
+        "image": "/uploads/dancers-hero-six-triple-eight.webp"
       },
       {
         "label": "10 DANCE",
@@ -164,9 +279,14 @@
         "image": "/uploads/587814346_18330318445213259_7568090946314122385_n.webp"
       },
       {
-        "label": "10 DANCE",
-        "alt": "10 Dance, Blackpool",
-        "image": "/uploads/10-dance-takeuchi-ryoma-new-ig-caption-in-the-blackpool-an-v0-s6hgudm85x8g1.webp"
+        "label": "THE REGIME",
+        "alt": "Showgirls in silver on a glittering ice-palace staircase behind a singer in a red Santa dress, in The Regime",
+        "image": "/uploads/dancers-credit-the-regime.webp"
+      },
+      {
+        "label": "SPIDER-MAN: BRAND NEW DAY",
+        "alt": "Spider-Man: Brand New Day",
+        "image": "/uploads/upload_fba01478540cf4034ae0e81967110fe9_8190d99b-f0e0-4c79-b9ee-f47f42b6aeda.webp"
       },
       {
         "label": "THE MARVELS",
@@ -174,21 +294,11 @@
         "image": "/uploads/planetdance1.webp"
       },
       {
-        "label": "WICKED",
-        "alt": "Wicked",
-        "image": "/uploads/one-character-hangs-from-a-ladder-while-the-others-dance-in-the-tornado-wheel-in-wicked-s-dancing-through-life-musical-number.avif"
-      },
-      {
-        "label": "BARBIE",
-        "alt": "Barbie",
-        "image": "/uploads/barbie-film-040623-1-bfbbf50d182642318a6285aef36e1552.jpg"
-      },
-      {
-        "label": "THE SIX TRIPLE EIGHT",
-        "alt": "The Six Triple Eight",
-        "image": "/uploads/The-Six-Triple-Eight-Soundtrack-Netflix-Every-Song-One.webp"
+        "label": "THE WITCHER",
+        "alt": "The conclave ball in The Witcher",
+        "image": "/uploads/witcher_season_3_conclave_ball.webp"
       }
     ],
-    "foot": "A SELECTION OF PRODUCTIONS SUPPLIED SINCE 2019"
+    "nextLabel": "Show the next productions"
   }
 }

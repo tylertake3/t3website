@@ -1,9 +1,16 @@
 ---
 import Base from '../layouts/Base.astro';
-import { pageExists } from '../lib/pages';
 import copy from '../content/pages/artists.json';
+import { site } from '../data/site';
+import { resolveCredits } from '../lib/productionLogos';
 
-const specialistsBuilt = pageExists(copy.specialists.href);
+/* Each brief carries its production's logo from the shared library (both inks,
+   at its measured size), so it can fade in beside the note. A production with
+   no artwork yet shows its title in type instead, the rule the reviews follow. */
+const briefsWithLogos = copy.range.briefs.items.map((b) => {
+  const credit = resolveCredits(b.production)[0];
+  return { ...b, logo: credit ? { title: credit.title, onDark: credit.onDark, onLight: credit.onLight, w: credit.logoWidth, h: credit.logoHeight } : { title: b.production } };
+});
 
 /* The film cover: one muted loop filling the whole 16:9 frame, named in
    artists.json. Clear it and the page opens on the plain dark cover. */
@@ -43,14 +50,101 @@ const heroPoster = ((copy.hero as { poster?: string }).poster ?? '').trim();
     )
   }
 
-  <!-- the full range -->
+  <!-- the full range: the copy and the brief button on the left, and on the
+       right a slate of real briefs that fills itself in, one after another -->
   <section class="band" aria-labelledby="rangeTitle">
-    <div class="bandInner bandSplit">
-      <div>
-        <p class="kicker">{copy.range.kicker}</p>
-        <h2 class="sectionTitle" id="rangeTitle">{copy.range.heading}</h2>
+    <div class="bandInner bandSplit rangeSplit">
+      <div data-reveal-group="0.08">
+        <p class="kicker" data-reveal-item>{copy.range.kicker}</p>
+        <h2 class="sectionTitle" id="rangeTitle" data-reveal-item>{copy.range.heading}</h2>
+        <p class="bandBody rangeBody" data-reveal-item>{copy.range.body}</p>
+        <a class="btnSolid rangeCta" href={copy.range.cta.href} data-reveal-item data-brief-open>{copy.range.cta.label.toUpperCase()}</a>
       </div>
-      <p class="bandBody">{copy.range.body}</p>
+      <div data-reveal data-brief-stage>
+        <div
+          class="briefCard"
+          data-brief-card
+          data-briefs={JSON.stringify(briefsWithLogos)}
+          role="group"
+          aria-label={copy.range.briefs.label}
+        >
+          <span class="briefTimer" data-brief-timer aria-hidden="true"></span>
+          <div class="briefTop">
+            <p class="briefNum" aria-hidden="true"><span data-brief-num>01</span><small>/ {String(copy.range.briefs.items.length).padStart(2, '0')}</small></p>
+            {/* the production's logo, arriving with the note; the first is in the markup */}
+            <span class="briefLogo" data-brief-logo style={briefsWithLogos[0].logo.w ? `--logo-w:${briefsWithLogos[0].logo.w}; --logo-h:${briefsWithLogos[0].logo.h};` : undefined}>
+              {briefsWithLogos[0].logo.onDark ? <img class="briefLogoDark" src={briefsWithLogos[0].logo.onDark} alt="" loading="lazy" /> : null}
+              {briefsWithLogos[0].logo.onLight ? <img class="briefLogoLight" src={briefsWithLogos[0].logo.onLight} alt="" loading="lazy" /> : null}
+              {!briefsWithLogos[0].logo.onDark && !briefsWithLogos[0].logo.onLight ? <span class="briefLogoText">{briefsWithLogos[0].logo.title}</span> : null}
+            </span>
+          </div>
+          {/* the first brief is in the markup, so it reads with no JavaScript */}
+          <div class="briefRow"><span class="briefKey">{copy.range.briefs.productionLabel}</span><span class="briefVal" data-brief-f="production">{copy.range.briefs.items[0].production}</span></div>
+          <div class="briefRow"><span class="briefKey">{copy.range.briefs.briefLabel}</span><span class="briefVal" data-brief-f="brief">{copy.range.briefs.items[0].brief}</span></div>
+          {copy.range.briefs.items[0].details.map((det, i) => (
+            <div class="briefRow">
+              <span class="briefKey" data-brief-f={`label${i}`}>{det.label}</span>
+              {/* only a detail with a page behind it (the discipline) is a link */}
+              {det.href ? (
+                <a class="briefVal briefValLink" data-brief-f={`value${i}`} href={det.href}>{det.value}</a>
+              ) : (
+                <span class="briefVal" data-brief-f={`value${i}`}>{det.value}</span>
+              )}
+            </div>
+          ))}
+          <p class="briefNote" data-brief-f="note">{copy.range.briefs.items[0].note}</p>
+          <div class="briefFoot">
+            {/* the one control: steps to the next brief */}
+            <button class="briefHint briefNext" type="button" data-brief-next>{copy.range.briefs.hint} →</button>
+            <span class="briefDots" data-brief-dots aria-hidden="true">
+              {copy.range.briefs.items.map((_, i) => <i class={i === 0 ? 'is-on' : undefined}></i>)}
+            </span>
+          </div>
+        </div>
+        {/* the whole set, once, for anyone reading rather than watching */}
+        <ul class="visuallyHidden">
+          {copy.range.briefs.items.map((b) => <li>{b.production}: {b.brief}. {b.details.map((det) => `${det.label}: ${det.value}.`).join(' ')} {b.note}</li>)}
+        </ul>
+
+        {/* the blank sheet: takes the slate's place when "Send us your brief" is
+            pressed, and composes an email from what is typed. Hidden until then;
+            with no JavaScript the button simply goes to the contact page */}
+        <form class="briefCard briefForm" data-brief-form data-to={site.email} data-subject={copy.range.sheet.subject} data-email={JSON.stringify(copy.range.sheet.email)} hidden aria-labelledby="briefSheetTitle">
+          <div class="briefTop">
+            <p class="briefNum" aria-hidden="true"><span>{copy.range.sheet.count}</span><small>/ {copy.range.sheet.countLabel}</small></p>
+            <p class="kicker" id="briefSheetTitle">{copy.range.sheet.kicker}</p>
+          </div>
+          {
+            copy.range.sheet.fields.map((f) => (
+              <div class="briefRow">
+                <label class="briefKey" for={`brief-${f.id}`}>{f.label}</label>
+                <input class="briefVal briefInput" id={`brief-${f.id}`} name={f.id} type="text" placeholder={f.placeholder} required={f.required} autocomplete="off" />
+              </div>
+            ))
+          }
+          <div class="briefRow briefRowNotes">
+            <label class="briefKey" for="brief-notes">{copy.range.sheet.notesLabel}</label>
+            <textarea class="briefNote briefTextarea" id="brief-notes" name="notes" rows="2" placeholder={copy.range.sheet.notesPlaceholder}></textarea>
+          </div>
+          <div class="briefRow briefRowWho">
+            <div class="briefWho">
+              <label class="briefKey" for="brief-name">{copy.range.sheet.nameLabel}</label>
+              <input class="briefInput briefInputPlain" id="brief-name" name="name" type="text" autocomplete="name" placeholder={copy.range.sheet.namePlaceholder} />
+            </div>
+            <div class="briefWho">
+              <label class="briefKey" for="brief-role">{copy.range.sheet.roleLabel}</label>
+              <input class="briefInput briefInputPlain" id="brief-role" name="role" type="text" autocomplete="organization-title" placeholder={copy.range.sheet.rolePlaceholder} />
+            </div>
+          </div>
+          <div class="briefFoot briefFormFoot">
+            <div class="briefActions">
+              <button class="btnSolid briefSend" type="submit">{copy.range.sheet.sendLabel.toUpperCase()}</button>
+              <button class="briefCancel" type="button" data-brief-cancel>{copy.range.sheet.cancelLabel}</button>
+            </div>
+            <span class="briefHint">{copy.range.sheet.hint}</span>
+          </div>
+        </form>
+      </div>
     </div>
   </section>
 
@@ -68,7 +162,7 @@ const heroPoster = ((copy.hero as { poster?: string }).poster ?? '').trim();
               <a class="catLink" href={cat.href}>
                 {/* a route with artwork shows it; the rest keep the deliberate empty plate */}
                 {cat.image ? (
-                  <span class="catSlot catSlotPhoto" style="aspect-ratio:4/5;">
+                  <span class="catSlot catSlotPhoto" style="aspect-ratio:4/5;" data-cat-stills>
                     <img
                       src={cat.image}
                       alt={cat.imageAlt}
@@ -76,6 +170,17 @@ const heroPoster = ((copy.hero as { poster?: string }).poster ?? '').trim();
                       decoding="async"
                       style={cat.imageFocus ? `object-position:${cat.imageFocus};` : undefined}
                     />
+                    {/* the pictures the tile fades through; fetched after the page has loaded */}
+                    {(cat.stills ?? []).map((still) => (
+                      <img
+                        class="catStill"
+                        data-src={still.image}
+                        alt={still.alt}
+                        decoding="async"
+                        aria-hidden="true"
+                        style={still.focus ? `object-position:${still.focus};` : undefined}
+                      />
+                    ))}
                   </span>
                 ) : (
                   <span class="slot catSlot" style="aspect-ratio:4/5;">
@@ -92,51 +197,281 @@ const heroPoster = ((copy.hero as { poster?: string }).poster ?? '').trim();
     </div>
   </section>
 
-  <!-- specialists: deliberately given more room than a tile -->
-  <section class="band bandDark" aria-labelledby="specialistsTitle">
-    <div class="bandInner specialistsBlock">
-      <div>
-        <p class="kicker">{copy.specialists.kicker}</p>
-        <h2 class="displayTitle" id="specialistsTitle">{copy.specialists.heading}</h2>
+  <!-- how we work: artists, team, clients as three numbered columns on one dark band -->
+  <section class="band bandDark howBand" aria-labelledby="howTitle">
+    <div class="bandInner">
+      <div class="sectionHead" data-reveal-head>
+        <h2 class="sectionTitle" id="howTitle">{copy.howWeWork.heading}</h2>
+        <p class="kicker">{copy.howWeWork.kicker}</p>
       </div>
-      <div>
-        <p class="bandBody">{copy.specialists.body}</p>
+      <div class="pillars" data-reveal-group="0.14" data-pillars>
         {
-          specialistsBuilt ? (
-            <a class="btnSolid specialistsCta" href={copy.specialists.href}>
-              {copy.specialists.linkLabel.toUpperCase()}
-            </a>
-          ) : (
-            <p class="todoNote">{copy.specialists.pendingNote}</p>
-          )
+          copy.howWeWork.items.map((item) => (
+            <article class="pillar" data-reveal-item>
+              {/* the copy lifts on hover; the rule along the top stays put */}
+              <div class="pillInner">
+                <span class="pillNum" aria-hidden="true">{item.number}</span>
+                <h3 class="pillLabel">{item.label}</h3>
+                <p class="pillTitle">{item.heading}</p>
+                <div class="bandBody pillBody">
+                  {item.paragraphs.map((para) => <p>{para}</p>)}
+                </div>
+              </div>
+            </article>
+          ))
         }
       </div>
     </div>
   </section>
 
-  <!-- represented, not listed -->
-  <section class="band" aria-labelledby="representedTitle">
-    <div class="bandInner bandSplit">
-      <div>
-        <p class="kicker">{copy.represented.kicker}</p>
-        <h2 class="sectionTitle" id="representedTitle">{copy.represented.heading}</h2>
-      </div>
-      <div class="bandBody">
-        {copy.represented.paragraphs.map((para) => <p>{para}</p>)}
-      </div>
-    </div>
-  </section>
+  <script>
+    import { armReveal } from '../lib/reveal';
 
-  <!-- who we work with -->
-  <section class="band" aria-labelledby="clientsTitle">
-    <div class="bandInner bandSplit">
-      <div>
-        <p class="kicker">{copy.clients.kicker}</p>
-        <h2 class="sectionTitle" id="clientsTitle">{copy.clients.heading}</h2>
-      </div>
-      <p class="bandBody">{copy.clients.body}</p>
-    </div>
-  </section>
+    /* The shared pass (see reveal.ts), plus this page's own beats: the slate
+       of briefs, the blank sheet behind "Send us your brief", and the rule
+       that draws along the top of each pillar. */
+    const m = armReveal();
+    const EASE: [number, number, number, number] = [0.3, 0, 0.2, 1];
+
+    /* The slate of briefs. Each one types in row by row, the note beneath
+       fades up, then it holds while a thin accent line creeps along the top
+       edge before the next takes its place. Click (or Enter) skips ahead;
+       hovering holds it. Under reduced motion the briefs simply swap. */
+    const card = document.querySelector<HTMLElement>('[data-brief-card]');
+    if (card) {
+      type Brief = { production: string; brief: string; details: { label: string; value: string; href?: string }[]; note?: string; logo: { title: string; onDark?: string; onLight?: string; w?: number; h?: number } };
+      const briefs: Brief[] = JSON.parse(card.dataset.briefs || '[]');
+      const f = (k: string) => card.querySelector<HTMLElement>(`[data-brief-f="${k}"]`)!;
+      const num = card.querySelector<HTMLElement>('[data-brief-num]')!;
+      const timer = card.querySelector<HTMLElement>('[data-brief-timer]')!;
+      const logoBox = card.querySelector<HTMLElement>('[data-brief-logo]')!;
+      const setLogo = (b: Brief) => {
+        logoBox.textContent = '';
+        logoBox.style.cssText = b.logo.w ? `--logo-w:${b.logo.w}; --logo-h:${b.logo.h};` : '';
+        if (b.logo.onDark || b.logo.onLight) {
+          for (const [cls, src] of [['briefLogoDark', b.logo.onDark], ['briefLogoLight', b.logo.onLight]] as const) {
+            if (!src) continue;
+            const img = document.createElement('img'); img.className = cls; img.src = src; img.alt = ''; logoBox.appendChild(img);
+          }
+        } else {
+          const t = document.createElement('span'); t.className = 'briefLogoText'; t.textContent = b.logo.title; logoBox.appendChild(t);
+        }
+      };
+      const dots = Array.from(card.querySelectorAll<HTMLElement>('[data-brief-dots] i'));
+      const HOLD = 4.5;
+      let idx = 0;
+      let token = 0;
+      let paused = false;
+      let timerAnim: { stop: () => void } | null = null;
+      card.addEventListener('mouseenter', () => { paused = true; });
+      card.addEventListener('mouseleave', () => { paused = false; });
+
+      const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+      /* a detail row's value is an anchor; it only becomes a link when the
+         brief gives it somewhere to go */
+      const link = (el: HTMLElement, href?: string) => { if (el.tagName !== 'A') return; if (href) el.setAttribute('href', href); else el.removeAttribute('href'); };
+      const type = (el: HTMLElement, text: string, speed: number) =>
+        new Promise<void>((res) => {
+          el.textContent = '';
+          if (!m) { el.textContent = text; return res(); }
+          const caret = document.createElement('span');
+          caret.className = 'briefCaret';
+          let i = 0;
+          const step = () => {
+            if (i <= text.length) { el.textContent = text.slice(0, i) || '\u00a0'; el.appendChild(caret); i++; setTimeout(step, paused ? 110 : speed); }
+            else { caret.remove(); res(); }
+          };
+          step();
+        });
+
+      const show = (i: number) => {
+        const my = ++token;
+        idx = i;
+        const b = briefs[i];
+        dots.forEach((d, n) => d.classList.toggle('is-on', n === i));
+        if (timerAnim) timerAnim.stop();
+        timer.style.transform = 'scaleX(0)';
+        num.textContent = String(i + 1).padStart(2, '0');
+        /* the count and the logo arrive together, before the rows type */
+        setLogo(b);
+        if (m) m.animate([num, logoBox], { opacity: [0, 1], transform: ['translateY(6px)', 'translateY(0)'] }, { duration: 0.4, ease: EASE });
+        /* a blank row keeps a non-breaking space so its baseline, and so the
+           row's height, is exactly what it will be once the words arrive */
+        ['production', 'brief', 'label0', 'value0', 'label1', 'value1'].forEach((k) => { f(k).textContent = '\u00a0'; });
+        f('note').textContent = '';
+        link(f('value1')); /* no link until its row has typed */
+        type(f('production'), b.production, 55)
+          .then(() => { if (my !== token) return; return type(f('brief'), b.brief, 60); })
+          .then(() => { if (my !== token) return; f('label0').textContent = b.details[0].label; return type(f('value0'), b.details[0].value, 65); })
+          .then(() => { if (my !== token) return; f('label1').textContent = b.details[1].label; link(f('value1'), b.details[1].href); return type(f('value1'), b.details[1].value, 65); })
+          .then(() => {
+            if (my !== token) return;
+            f('note').textContent = b.note || '';
+            if (!m) return;
+            return m.animate(f('note'), { opacity: [0, 1], transform: ['translateY(6px)', 'translateY(0)'] }, { duration: 0.7, delay: 0.15, ease: EASE }).finished;
+          })
+          .then(() => {
+            if (my !== token) return;
+            if (m) timerAnim = m.animate(timer, { scaleX: [0, 1] }, { duration: HOLD, ease: 'linear' });
+            return wait(HOLD * 1000);
+          })
+          .then(() => {
+            const go = () => { if (my !== token) return; if (paused) { setTimeout(go, 300); return; } show((idx + 1) % briefs.length); };
+            go();
+          });
+      };
+      const next = () => show((idx + 1) % briefs.length);
+      /* the blank sheet stops the slate while it is open, and restarts it after */
+      let sleeping = false;
+      card.addEventListener('brief:sleep', () => { sleeping = true; token++; if (timerAnim) timerAnim.stop(); });
+      card.addEventListener('brief:wake', () => { if (sleeping) { sleeping = false; show(idx); } });
+      card.querySelector('[data-brief-next]')?.addEventListener('click', next);
+      if (briefs.length > 1) {
+        const start = () => { show(0); return () => { token++; if (timerAnim) timerAnim.stop(); }; };
+        if (m) m.inView(card, start, { amount: 0.4 });
+        else start();
+      }
+    }
+
+    /* The blank sheet. "Send us your brief" swaps the slate for an empty call
+       sheet in the same frame; "Send the brief" turns what was typed into an
+       email in the visitor's own mail app. Nothing is stored or sent from here. */
+    const opener = document.querySelector<HTMLAnchorElement>('[data-brief-open]');
+    const sheet = document.querySelector<HTMLFormElement>('[data-brief-form]');
+    const slate = document.querySelector<HTMLElement>('[data-brief-card]');
+    if (opener && sheet && slate) {
+      const swap = (out: HTMLElement, into: HTMLElement, focus?: HTMLElement | null) => {
+        const finish = () => {
+          out.hidden = true;
+          into.hidden = false;
+          if (m) m.animate(into, { opacity: [0, 1], transform: ['translateY(10px)', 'translateY(0)'] }, { duration: 0.5, ease: EASE });
+          focus?.focus({ preventScroll: true });
+        };
+        if (m) m.animate(out, { opacity: [1, 0], transform: ['translateY(0)', 'translateY(-8px)'] }, { duration: 0.3, ease: EASE }).finished.then(finish);
+        else finish();
+      };
+      const open = () => {
+        slate.dispatchEvent(new Event('brief:sleep'));
+        swap(slate, sheet, sheet.querySelector<HTMLElement>('input'));
+        opener.setAttribute('aria-expanded', 'true');
+        /* one call to action at a time: the button that opened the sheet steps aside */
+        if (m) m.animate(opener, { opacity: 0 }, { duration: 0.3, ease: EASE }).finished.then(() => { opener.style.visibility = 'hidden'; });
+        else opener.style.visibility = 'hidden';
+        if (window.innerWidth <= 1024) sheet.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      };
+      const close = () => {
+        swap(sheet, slate, opener);
+        opener.setAttribute('aria-expanded', 'false');
+        opener.style.visibility = '';
+        if (m) m.animate(opener, { opacity: [0, 1] }, { duration: 0.4, ease: EASE });
+        slate.dispatchEvent(new Event('brief:wake'));
+      };
+      opener.setAttribute('aria-expanded', 'false');
+      /* the slate is held to the sheet's height, so nothing below moves when
+         one takes the other's place */
+      const level = () => {
+        const wasHidden = sheet.hidden;
+        if (wasHidden) { sheet.hidden = false; sheet.style.position = 'absolute'; sheet.style.visibility = 'hidden'; sheet.style.width = `${slate.offsetWidth}px`; }
+        slate.style.minHeight = `${sheet.offsetHeight}px`;
+        if (wasHidden) { sheet.hidden = true; sheet.style.position = ''; sheet.style.visibility = ''; sheet.style.width = ''; }
+      };
+      level();
+      window.addEventListener('resize', level, { passive: true });
+      opener.addEventListener('click', (e) => { e.preventDefault(); if (sheet.hidden) open(); else sheet.querySelector<HTMLElement>('input')?.focus(); });
+      sheet.querySelector('[data-brief-cancel]')?.addEventListener('click', close);
+      sheet.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+      sheet.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!sheet.reportValidity()) return;
+        const val = (name: string) => (sheet.elements.namedItem(name) as HTMLInputElement | HTMLTextAreaElement | null)?.value.trim() ?? '';
+        const words = JSON.parse(sheet.dataset.email || '{}') as Record<string, string>;
+        const facts: [string, string][] = [];
+        sheet.querySelectorAll<HTMLElement>('.briefInput:not(.briefInputPlain)').forEach((field) => {
+          const label = sheet.querySelector<HTMLElement>(`label[for="${field.id}"]`)?.textContent?.trim() ?? '';
+          const value = (field as HTMLInputElement).value.trim();
+          if (value) facts.push([label, value]);
+        });
+        const rule = '——————————————';
+        const who = [val('name'), val('role')].filter(Boolean).join('\n');
+        const parts = [
+          words.greeting,
+          words.intro,
+          [rule, ...facts.map(([k, v]) => `${k}: ${v}`), rule].join('\n'),
+          val('notes') ? `${words.notesHeading}\n${val('notes')}` : '',
+          words.ask,
+          [words.signoff, who].filter(Boolean).join('\n'),
+          words.footer,
+        ].filter(Boolean);
+        const subject = `${sheet.dataset.subject}: ${val('production')} — ${val('brief')}`;
+        window.location.href = `mailto:${sheet.dataset.to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(parts.join('\n\n'))}`;
+      });
+    }
+
+    /* The four route tiles fade through a few stills each, every seven
+       seconds, each tile on its own beat so they never all change at once.
+       Only while the grid is on screen and the tab is visible; the extra
+       pictures are fetched after load; still under reduced motion. */
+    const tiles = Array.from(document.querySelectorAll<HTMLElement>('[data-cat-stills]'));
+    if (tiles.length && m) {
+      const loadRest = () => tiles.forEach((t) => t.querySelectorAll<HTMLImageElement>('img[data-src]').forEach((img) => { img.src = img.dataset.src!; img.removeAttribute('data-src'); }));
+      if (document.readyState === 'complete') loadRest(); else window.addEventListener('load', loadRest);
+      let running = false;
+      const timers: number[] = [];
+      const stop = () => { running = false; timers.forEach((t) => window.clearInterval(t)); timers.length = 0; };
+      const start = () => {
+        if (running) return;
+        running = true;
+        tiles.forEach((tile, k) => {
+          const layers = Array.from(tile.querySelectorAll<HTMLImageElement>('img'));
+          if (layers.length < 2) return;
+          let i = layers.findIndex((l) => l.classList.contains('is-on'));
+          if (i < 0) i = 0;
+          const step = () => {
+            i = (i + 1) % layers.length;
+            layers.forEach((l, n) => l.classList.toggle('is-on', n === i && n > 0));
+          };
+          /* tiles are offset by a quarter of the interval each */
+          timers.push(window.setTimeout(() => { step(); timers.push(window.setInterval(step, 7000)); }, 7000 + k * 1750));
+        });
+      };
+      const grid = tiles[0].closest('.catGrid') as HTMLElement;
+      m.inView(grid, () => { if (!document.hidden) start(); return stop; }, { amount: 0.2 });
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stop();
+        else if (grid.getBoundingClientRect().top < window.innerHeight && grid.getBoundingClientRect().bottom > 0) start();
+      });
+    }
+
+    const pillars = document.querySelector<HTMLElement>('[data-pillars]');
+    if (pillars) {
+      const cols = Array.from(pillars.querySelectorAll<HTMLElement>('.pillar'));
+      if (!m) cols.forEach((c) => c.classList.add('is-ruled'));
+      else {
+        m.inView(pillars, () => { cols.forEach((c, i) => setTimeout(() => c.classList.add('is-ruled'), 250 + i * 140)); }, { amount: 0.25 });
+
+        /* Hover: the column's copy lifts a touch and brightens while the other
+           two settle back, so the one under the pointer reads as the one in
+           focus. Pointer only: there is nothing to hover on touch. */
+        if (window.matchMedia('(hover: hover)').matches) {
+          const inner = (c: HTMLElement) => c.querySelector<HTMLElement>('.pillInner')!;
+          const body = (c: HTMLElement) => c.querySelector<HTMLElement>('.pillBody')!;
+          cols.forEach((col) => {
+            col.addEventListener('mouseenter', () => {
+              m.animate(inner(col), { transform: 'translateY(-8px)' }, { duration: 0.55, ease: EASE });
+              m.animate(body(col), { color: '#f4f2ee' }, { duration: 0.4, ease: EASE });
+              cols.filter((o) => o !== col).forEach((o) => m.animate(o, { opacity: 0.55 }, { duration: 0.45, ease: EASE }));
+            });
+            col.addEventListener('mouseleave', () => {
+              m.animate(inner(col), { transform: 'translateY(0px)' }, { duration: 0.6, ease: EASE });
+              m.animate(body(col), { color: '#c7c3bd' }, { duration: 0.5, ease: EASE });
+              cols.forEach((o) => m.animate(o, { opacity: 1 }, { duration: 0.5, ease: EASE }));
+            });
+          });
+        }
+      }
+    }
+
+  </script>
   <script is:inline>
     /* the film holds on its first frame for anyone who has asked for less
        motion; it never plays with sound */
