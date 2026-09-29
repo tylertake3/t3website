@@ -31,7 +31,7 @@ const heroSlides = copy.hero.slides as Array<{ image: string; production: string
     <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.15) 30%, rgba(20,20,22,0.15) 55%, rgba(20,20,22,0.8) 100%);"></div>
 
     <div class="heroPad" style="position:absolute; left:40px; right:40px; bottom:64px; z-index:2; color:#f4f2ee;">
-      <div style="font-size:12px; letter-spacing:6px; color:rgba(244,242,238,0.7);">{copy.hero.eyebrow}</div>
+      <div style="font-size:12px; letter-spacing:6px; color:var(--accent);">{copy.hero.eyebrow}</div>
       <h1 class="heroTitle" style="font-family:'Anton','Jost',sans-serif; font-size:clamp(48px, 6vw, 104px); font-weight:400; letter-spacing:0; line-height:1.02; margin:18px 0 0; text-transform:uppercase;">{copy.hero.title}</h1>
       <p style="font-size:clamp(17px,1.6vw,22px); font-weight:400; letter-spacing:1px; margin:18px 0 0; max-width:640px; color:rgba(244,242,238,0.9); text-wrap:pretty;">{copy.hero.strapline}</p>
       <div class="heroCredit" style="position:absolute; right:0; bottom:-24px; z-index:2; text-align:right; color:rgba(244,242,238,0.75); font-size:11px; letter-spacing:3px;">

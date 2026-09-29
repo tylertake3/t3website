@@ -28,13 +28,22 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
 >
   <!-- hero -->
   <section class="pageHero stuHero" aria-labelledby="stuTitle">
-    {/* the photo sits behind the copy, under the same scrim the homepage hero uses */}
-    <div
-      class="stuHeroPhoto"
-      role="img"
-      aria-label={copy.hero.imageAlt}
-      style={`background-image:url("${encodeURI(copy.hero.image)}"); background-position:${copy.hero.focus};`}
-    />
+    {/* the stills sit behind the copy under the homepage hero's scrim, cross-fading
+        every five seconds with the credit following; only the first loads with the page */}
+    {
+      copy.hero.stills.map((still, i) => (
+        <div
+          class="stuHeroPhoto"
+          data-label={still.creditLabel}
+          data-credit={still.credit}
+          data-bg={i === 0 ? undefined : still.image}
+          role="img"
+          aria-label={still.alt}
+          aria-hidden={i === 0 ? undefined : 'true'}
+          style={`${i === 0 ? `background-image:url("${encodeURI(still.image)}"); opacity:1;` : 'opacity:0;'} background-position:${still.focus};`}
+        />
+      ))
+    }
     <div class="stuHeroScrim"></div>
     <div class="pageHeroInner">
       <p class="kicker">{copy.hero.eyebrow}</p>
@@ -43,6 +52,12 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
       <ul class="stuTagRow">
         {copy.hero.tags.map((tag) => <li>{tag}</li>)}
       </ul>
+      {/* production credit for the current still, bottom-right */}
+      <p class="stuHeroCredit">
+        <span class="stuHeroCreditText" id="stuHeroCredit">
+          {copy.hero.stills[0].creditLabel}<br /><span class="stuHeroCreditName">{copy.hero.stills[0].credit}</span>
+        </span>
+      </p>
     </div>
   </section>
 
@@ -248,7 +263,14 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
     /* photo hero: same recipe as the homepage banner (cover photo, dark
        scrim, copy pinned to the bottom-left) on top of the shared pageHero */
     .stuHero { position:relative; overflow:hidden; min-height:var(--coverPhotoH); }
-    .stuHeroPhoto { position:absolute; inset:0; background-size:cover; background-repeat:no-repeat; filter:saturate(0.92) contrast(1.05) brightness(0.96); }
+    .stuHeroPhoto { position:absolute; inset:0; opacity:0; transition:opacity 1.8s ease; background-size:cover; background-repeat:no-repeat; filter:saturate(0.92) contrast(1.05) brightness(0.96); }
+    .stuHeroCredit { position:absolute; right:40px; bottom:0; margin:0; text-align:right; color:var(--heroInkSoft); font-size:11px; letter-spacing:3px; line-height:1.5; }
+    .stuHeroCreditText { display:inline-block; transition:opacity .6s ease; }
+    .stuHeroCreditText.fading { opacity:0; }
+    .stuHeroCreditName { display:block; margin-top:4px; font-size:18px; letter-spacing:5px; font-weight:300; color:var(--heroInk); }
+    @media (prefers-reduced-motion: reduce) { .stuHeroPhoto, .stuHeroCreditText { transition:none; } }
+    @media (max-width:1024px) { .stuHeroCredit { right:32px; } }
+    @media (max-width:640px) { .stuHeroCredit { position:static; text-align:left; margin-top:28px; } .stuHeroCreditName { font-size:15px; letter-spacing:3px; } }
     .stuHeroScrim { position:absolute; inset:0; background:var(--heroScrim); }
     .stuHero .pageHeroInner { position:relative; z-index:2; }
     .stuHero .stuTagRow li { color:var(--heroInkSoft); border-left-color:var(--heroLine); }
@@ -386,6 +408,48 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
     }
   </style>
 
+  <script is:inline>
+    /* Cover stills rotate every five seconds, with the credit following. */
+    (function () {
+      var layers = Array.prototype.slice.call(document.querySelectorAll('.stuHeroPhoto'));
+      if (!layers.length) return;
+      var credit = document.getElementById('stuHeroCredit');
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+      var idx = 0;
+      function show(i) {
+        idx = i;
+        for (var k = 0; k < layers.length; k++) {
+          var on = k === i;
+          layers[k].style.opacity = on ? '1' : '0';
+          layers[k].setAttribute('aria-hidden', on ? 'false' : 'true');
+        }
+        if (!credit) return;
+        var label = layers[i].getAttribute('data-label') || '';
+        var name = layers[i].getAttribute('data-credit') || '';
+        credit.classList.add('fading');
+        window.setTimeout(function () {
+          credit.textContent = '';
+          credit.appendChild(document.createTextNode(label));
+          credit.appendChild(document.createElement('br'));
+          var strong = document.createElement('span');
+          strong.className = 'stuHeroCreditName';
+          strong.textContent = name;
+          credit.appendChild(strong);
+          credit.classList.remove('fading');
+        }, 600);
+      }
+      function loadRest() {
+        for (var k = 0; k < layers.length; k++) {
+          var src = layers[k].getAttribute('data-bg');
+          if (src) { layers[k].style.backgroundImage = 'url("' + encodeURI(src) + '")'; layers[k].removeAttribute('data-bg'); }
+        }
+      }
+      if (document.readyState === 'complete') loadRest();
+      else window.addEventListener('load', loadRest);
+      if (reduce.matches || layers.length < 2) return;
+      window.setInterval(function () { show((idx + 1) % layers.length); }, 5000);
+    })();
+  </script>
   <script slot="scripts" is:inline>
     (function () {
       'use strict';

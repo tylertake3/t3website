@@ -20,7 +20,9 @@ export const posterLabel = (p: Poster) => (p.season ? `${p.title}, Series ${p.se
 const headlineSlugs = ['the-odyssey', 'avengers-doomsday', 'harry-potter-tv-series-s1', 'the-witcher'];
 
 /* The rest of the titles that pull the eye. They fill the grid beneath the
-   top row, in a scattered order rather than a ranked one. */
+   top row, in a scattered order rather than a ranked one. With the four
+   headline titles this makes 30, which divides evenly into the five-, three-
+   and two-column grids, so no width is left with a half-empty last row. */
 const featuredSlugs = [
   'wicked',
   'gladiator-ii',
@@ -39,6 +41,15 @@ const featuredSlugs = [
   'black-mirror',
   '3-body-problem',
   'thursday-murder-club',
+  'spider-man-brand-new-day',
+  'beetlejuice-beetlejuice',
+  'the-six-triple-eight',
+  'ted-lasso',
+  'the-crown',
+  'silo',
+  'the-gentlemen',
+  'paddington-in-peru',
+  'practical-magic-2',
 ];
 
 /* A fixed seed, so the order is scattered but identical on every build — the

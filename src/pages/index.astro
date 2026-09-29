@@ -106,7 +106,15 @@ const organizationSchema = {
     <div class="heroScrim"></div>
     <div class="heroCopy">
       <p class="heroKicker">{copy.hero.kicker}</p>
-      <h1 class="heroTitle">{copy.hero.title}</h1>
+      {/* the title is split into letters so they can move under the cursor;
+          the heading itself carries the readable line */}
+      <h1 class="heroTitle" aria-label={copy.hero.title.replace(/\n/g, ' ')} data-hero-letters>
+        {copy.hero.title.split('\n').map((line) => (
+          <span class="heroLine" aria-hidden="true">
+            {Array.from(line).map((ch) => <span class="heroCh">{ch === ' ' ? ' ' : ch}</span>)}
+          </span>
+        ))}
+      </h1>
     </div>
     <p class="heroProd">{copy.hero.seenOnLabel}<span class="heroProdName" id="heroProd">{heroSlides[0]?.title}</span></p>
     <div class="heroStrip">
@@ -452,8 +460,8 @@ const organizationSchema = {
          the column after the credit, full-bleed, and the hero grows to fit. */
       .hero { padding:130px 0 0; }
       .heroCopy, .heroProd { margin-left:20px; margin-right:20px; }
-      .heroStrip { position:relative; margin-top:40px; }
-      .heroStrip div { padding:6px 12px; row-gap:0; column-gap:8px; }
+      .heroStrip { position:relative; margin-top:40px; --stripPad:12px; }
+      .heroStrip div { padding:6px 0; column-gap:8px; }
       .heroStrip .genreItem { gap:8px; }
       .heroStrip .genre { padding:10px 2px; margin:0; }
 
@@ -494,6 +502,120 @@ const organizationSchema = {
     }
   </style>
 
+  <script>
+    /* ---------- the title under the cursor ----------
+       Each letter of the headline leans away from the pointer as it passes,
+       a touch more the closer it is, and eases back when it leaves: a small
+       physical response rather than a hover state. Pointer only; nothing
+       moves under reduced motion. */
+    const title = document.querySelector<HTMLElement>('[data-hero-letters]');
+    const hero = title?.closest<HTMLElement>('.hero');
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (title && hero && canHover && !still) {
+      const letters = Array.from(title.querySelectorAll<HTMLElement>('.heroCh')).filter((l) => l.textContent?.trim());
+      const RADIUS = 170;   /* px around the pointer that letters feel */
+      const PUSH = 8;       /* px a letter moves at most: a lean, not a leap */
+      const EASE = 0.1;     /* how quickly a letter follows its target each frame */
+      let centres: { x: number; y: number }[] = [];
+      const cur = letters.map(() => ({ x: 0, y: 0 }));
+      const target = letters.map(() => ({ x: 0, y: 0 }));
+      let raf = 0;
+      let measured = false;
+      const measure = () => {
+        centres = letters.map((l) => { const r = l.getBoundingClientRect(); return { x: r.left + r.width / 2 + window.scrollX, y: r.top + r.height / 2 + window.scrollY }; });
+        measured = true;
+      };
+      const tick = () => {
+        let moving = false;
+        letters.forEach((l, i) => {
+          const c = cur[i], t = target[i];
+          c.x += (t.x - c.x) * EASE;
+          c.y += (t.y - c.y) * EASE;
+          if (Math.abs(t.x - c.x) > 0.05 || Math.abs(t.y - c.y) > 0.05 || t.x || t.y) moving = true;
+          l.style.transform = `translate(${c.x.toFixed(2)}px, ${c.y.toFixed(2)}px)`;
+        });
+        raf = moving ? requestAnimationFrame(tick) : 0;
+      };
+      const wake = () => { if (!raf) raf = requestAnimationFrame(tick); };
+      hero.addEventListener('pointermove', (e) => {
+        if (!measured) measure();
+        const px = e.pageX, py = e.pageY;
+        letters.forEach((_, i) => {
+          const dx = centres[i].x - px, dy = centres[i].y - py;
+          const d = Math.hypot(dx, dy);
+          if (d < RADIUS && d > 0) {
+            const f = (1 - d / RADIUS) ** 2 * PUSH;
+            target[i].x = (dx / d) * f;
+            target[i].y = (dy / d) * f;
+          } else { target[i].x = 0; target[i].y = 0; }
+        });
+        wake();
+      });
+      hero.addEventListener('pointerleave', () => { target.forEach((t) => { t.x = 0; t.y = 0; }); wake(); });
+      /* the letters' own entrance changes where they sit, so measure fresh
+         after it, and again whenever the page reflows */
+      window.addEventListener('resize', () => { measured = false; }, { passive: true });
+      window.addEventListener('load', () => { measured = false; });
+      hero.addEventListener('pointerenter', () => { measured = false; });
+    }
+
+    /* ---------- the logo wall under the cursor ----------
+       The same lean, one mark at a time: each logo eases away from the
+       pointer as it passes and settles back when it leaves. It rides on the
+       `translate` property, which sits apart from the `transform` the wall's
+       turn uses, so the lift-blur-fade of a turn and the click to advance are
+       untouched. Cells are re-measured on entering the wall, since the wall
+       can gain or lose cells when the window is resized. Pointer only. */
+    const stack = document.getElementById('logoStack');
+    if (stack && canHover && !still) {
+      const RADIUS = 220;
+      const PUSH = 10;
+      const EASE = 0.1;
+      let cells: HTMLElement[] = [];
+      let centres: { x: number; y: number }[] = [];
+      let cur: { x: number; y: number }[] = [];
+      let target: { x: number; y: number }[] = [];
+      let raf = 0;
+      let measured = false;
+      const measure = () => {
+        cells = Array.from(stack.querySelectorAll<HTMLElement>('.logoCell'));
+        centres = cells.map((c) => { const r = c.getBoundingClientRect(); return { x: r.left + r.width / 2 + window.scrollX, y: r.top + r.height / 2 + window.scrollY }; });
+        cur = cells.map((c, i) => cur[i] ?? { x: 0, y: 0 });
+        target = cells.map(() => ({ x: 0, y: 0 }));
+        measured = true;
+      };
+      const tick = () => {
+        let moving = false;
+        cells.forEach((c, i) => {
+          const a = cur[i], t = target[i];
+          a.x += (t.x - a.x) * EASE;
+          a.y += (t.y - a.y) * EASE;
+          if (Math.abs(t.x - a.x) > 0.05 || Math.abs(t.y - a.y) > 0.05 || t.x || t.y) moving = true;
+          c.style.translate = `${a.x.toFixed(2)}px ${a.y.toFixed(2)}px`;
+        });
+        raf = moving ? requestAnimationFrame(tick) : 0;
+      };
+      const wake = () => { if (!raf) raf = requestAnimationFrame(tick); };
+      stack.addEventListener('pointerenter', () => { measured = false; });
+      window.addEventListener('resize', () => { measured = false; }, { passive: true });
+      stack.addEventListener('pointermove', (e) => {
+        if (!measured) measure();
+        const px = e.pageX, py = e.pageY;
+        cells.forEach((_, i) => {
+          const dx = centres[i].x - px, dy = centres[i].y - py;
+          const d = Math.hypot(dx, dy);
+          if (d < RADIUS && d > 0) {
+            const f = (1 - d / RADIUS) ** 2 * PUSH;
+            target[i].x = (dx / d) * f;
+            target[i].y = (dy / d) * f;
+          } else { target[i].x = 0; target[i].y = 0; }
+        });
+        wake();
+      });
+      stack.addEventListener('pointerleave', () => { target.forEach((t) => { t.x = 0; t.y = 0; }); wake(); });
+    }
+  </script>
   <script slot="scripts" is:inline>
     (function () {
       'use strict';

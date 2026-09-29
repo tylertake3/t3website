@@ -4,9 +4,9 @@
     "description": "Stunt performers, stunt doubles and action-trained talent for film, television and commercial productions. Take 3 Agency supplies registered stunt performers, matched doubles, fight-trained actors and drivers across the UK.",
     "ogTitle": "Stunt Performers & Stunt Doubles | Take 3 Agency",
     "ogDescription": "Registered stunt performers, matched doubles and action-trained talent for film, television and commercial productions.",
-    "ogImageAlt": "A soldier in full kit thrown to the ground on a smoke-filled street, a building burning behind him.",
+    "ogImageAlt": "Samson, played by Chi Lewis-Parry, kneeling on a rock in a fast river and roaring, trees on both banks, in 28 Years Later: The Bone Temple",
     "footerTitle": "Cast your action sequence",
-    "ogImage": "/uploads/stunt-hero-soldier.webp"
+    "ogImage": "/uploads/28-years-later-bone-temple-samson-river.webp"
   },
   "hero": {
     "eyebrow": "SPECIALISTS · STUNTS",
@@ -19,9 +19,23 @@
       "DRIVING",
       "FALLS"
     ],
-    "image": "/uploads/stunt-hero-soldier.webp",
-    "imageAlt": "A soldier in full kit thrown to the ground on a smoke-filled street, a building burning behind him.",
-    "focus": "center 45%"
+    "stills": [
+      {
+        "image": "/uploads/28-years-later-bone-temple-samson-river.webp",
+        "alt": "Samson, played by Chi Lewis-Parry, kneeling on a rock in a fast river and roaring, trees on both banks, in 28 Years Later: The Bone Temple",
+        "focus": "center 45%",
+        "creditLabel": "CHI LEWIS-PARRY IN",
+        "credit": "28 YEARS LATER: THE BONE TEMPLE"
+      },
+      {
+        "image": "/uploads/masters-of-the-universe-james-wilkinson.webp",
+        "alt": "James Wilkinson in a red and blue armoured suit with a cabled neck and glowing goggles, sparks drifting past, in Masters of the Universe",
+        "focus": "center 30%",
+        "creditLabel": "JAMES WILKINSON IN",
+        "credit": "MASTERS OF THE UNIVERSE"
+      }
+    ],
+    "stillsNote": "Cover stills cross-fade every five seconds with the credit following; only the first loads with the page."
   },
   "supply": {
     "kicker": "WHAT WE SUPPLY",
@@ -85,7 +99,6 @@
     "height": 804,
     "caption": "AS SEEN ON · DEADPOOL & WOLVERINE"
   },
-
   "briefs": {
     "kicker": "ILLUSTRATIVE, NOT EXHAUSTIVE",
     "heading": "The kind of brief this answers",

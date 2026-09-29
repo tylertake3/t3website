@@ -2,9 +2,6 @@
 import Base from '../layouts/Base.astro';
 import copy from '../content/pages/dancers.json';
 
-/* "01", "02" … numbering for the genre accordion, derived from the list order */
-const twoDigit = (n: number) => String(n).padStart(2, '0');
-
 /* Hero photos. A slide's `wide` is the letterbox version of the shot, its
    backdrop extended sideways so the banner has nothing to trim; `image` is the
    upright original, used only for slides that have no wide version yet.
@@ -13,9 +10,13 @@ const twoDigit = (n: number) => String(n).padStart(2, '0');
    frame of the same shoot to narrow windows made the photo appear to change
    as the window was resized. `wideFocus` is the hold point that keeps the
    performer in shot on whichever axis the banner has to crop — a narrow window
-   crops the sides, a very wide one the top and bottom. */
+   crops the sides, a very wide one the top and bottom. The vertical hold is
+   kept near the top (12%) on every slide, because the heads sit at the top
+   of these stills and a wide, short window would otherwise crop them off. */
 type HeroSlide = {
   image: string;
+  /* production the still is from, shown bottom-right while the slide is up */
+  production?: string;
   focus?: string;
   wide?: string;
   wideFocus?: string;
@@ -24,6 +25,8 @@ type HeroSlide = {
   narrowFocus?: string;
 };
 const heroSlides = copy.hero.slides as HeroSlide[];
+/* the credits grid shows this many productions at once and turns through the rest */
+const CREDITS_VISIBLE = 4;
 const NARROW_UNTIL = 900;
 
 const layerRule = (i: number, src: string | null, position?: string) =>
@@ -70,19 +73,36 @@ const heroCss = [
       <h1 class="heroTitle">{copy.hero.title}</h1>
       <p class="heroLede">{copy.hero.lede}</p>
     </div>
+    <!-- production credit for the slide on screen, in the home hero's
+         "AS SEEN ON / production" recipe; the name swaps with the rotator -->
+    <p class="heroCredit">
+      {copy.hero.creditLabel}
+      <span class="heroCreditNames" aria-live="polite">
+        {heroSlides.map((slide, i) => (
+          <span class={i === 0 ? 'heroCreditItem on' : 'heroCreditItem'} data-hero-credit={i}>{slide.production}</span>
+        ))}
+      </span>
+    </p>
   </header>
 
-  <!-- what we supply: index list + tall still -->
+  <!-- what we supply: index list + tall still that fades through the roster -->
   <section id="supply" class="supply" aria-labelledby="supplyHead">
     <div class="supplyCol">
-      <h2 id="supplyHead" class="eyebrowAccent" style="margin:0; font-weight:400;">{copy.supply.heading}</h2>
-      <div class="supplyList" id="genreList">
+      <h2 id="supplyHead" class="dispHead supplyHead" data-reveal>{copy.supply.heading}</h2>
+      <!-- the genres arrive one after another as the list scrolls into view (reveal.ts) -->
+      <div class="supplyList" id="genreList" data-reveal-group="0.07">
         {
           copy.supply.genres.map((genre, i) => (
-            <div class="genre">
-              <button class="genreBtn" type="button" aria-expanded="false" aria-controls={`genrePanel${i + 1}`}>
-                <span class="genreNum">{twoDigit(i + 1)}</span>
-                <span class="genreName">{genre.name}</span>
+            <div class="genre" data-reveal-item>
+              {/* the name is split into letters so it can lift under the cursor like
+                  the menu; the button carries the readable name itself */}
+              <button class="genreBtn" type="button" aria-expanded="false" aria-controls={`genrePanel${i + 1}`} aria-label={genre.name} data-genre-btn>
+                <span class="genreDash" aria-hidden="true"></span>
+                <span class="genreName" aria-hidden="true">
+                  {Array.from(genre.name).map((ch, ci) => (
+                    <span class="genreCh" style={`--i:${ci}`}>{ch === ' ' ? ' ' : ch}</span>
+                  ))}
+                </span>
                 <span class="genreMark" aria-hidden="true">+</span>
               </button>
               <div class="genrePanel" id={`genrePanel${i + 1}`}><div><div class="genreBlurb">{genre.blurb}</div></div></div>
@@ -90,63 +110,26 @@ const heroCss = [
           ))
         }
       </div>
-      <p class="supplyNote">{copy.supply.note}</p>
     </div>
     <div class="supplyStill">
-      <img src="/uploads/3W8A3054.webp" alt={copy.supply.imageAlt} width="1366" height="2048" loading="lazy" decoding="async" />
-      <div class="stillCaption">{copy.supply.imageCaption}</div>
-    </div>
-  </section>
-
-  <!-- for film and television: still + rows -->
-  <section class="bandDark" aria-labelledby="filmTvHead">
-    <div class="split split--filmTv">
-      <div class="splitStill">
-        <img src="/uploads/DSC01767.webp" alt={copy.filmTv.imageAlt} width="1306" height="2048" loading="lazy" decoding="async" />
-      </div>
-      <div class="splitBody">
-        <div class="eyebrowMuted">{copy.filmTv.eyebrow}</div>
-        <h2 id="filmTvHead" class="dispHead">{copy.filmTv.heading}</h2>
-        <div class="rows rows--dark">
-          {
-            copy.filmTv.rows.map((row) => (
-              <div class="row"><span class="rowLabel">{row.label}</span><span>{row.text}</span></div>
-            ))
-          }
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- for commercial and brand: rows + still, mirrored -->
-  <section class="split split--commercial" aria-labelledby="commercialHead">
-    <div class="splitBody">
-      <div class="eyebrowAccent">{copy.commercial.eyebrow}</div>
-      <h2 id="commercialHead" class="dispHead">{copy.commercial.heading}</h2>
-      <div class="rows rows--light">
+      <!-- roster portraits, slowly cross-fading through the set; the first
+           sits in the flow and sets the frame's size -->
+      <div class="fadeStill" data-fade-still>
         {
-          copy.commercial.rows.map((row) => (
-            <div class="row"><span class="rowLabel">{row.label}</span><span>{row.text}</span></div>
+          copy.supply.stills.map((still, i) => (
+            <img
+              src={still.image}
+              alt={still.imageAlt}
+              width={still.width}
+              height={still.height}
+              loading="lazy"
+              decoding="async"
+              class={i === 0 ? 'on' : undefined}
+            />
           ))
         }
       </div>
-    </div>
-    <div class="splitStill">
-      <img src="/uploads/DSC09954(1)-dc08728a.webp" alt={copy.commercial.imageAlt} width="2400" height="3600" loading="lazy" decoding="async" />
-    </div>
-  </section>
-
-  <!-- working with choreographers -->
-  <section id="choreographers" class="choreo" aria-labelledby="choreoHead">
-    <div class="choreoGrid">
-      <div>
-        <div class="eyebrowAccent">{copy.choreographers.eyebrow}</div>
-        <h2 id="choreoHead" class="dispHead">{copy.choreographers.heading}</h2>
-      </div>
-      <div class="choreoBody">
-        <p style="margin:0;">{copy.choreographers.paragraph1}</p>
-        <p style="margin:18px 0 0;">{copy.choreographers.paragraph2}</p>
-      </div>
+      <div class="stillCaption">{copy.supply.imageCaption}</div>
     </div>
   </section>
 
@@ -186,11 +169,6 @@ const heroCss = [
     </div>
   </section>
 
-  <!-- roster stills -->
-  <section class="roster" aria-label={copy.roster.sectionLabel}>
-    <div class="rosterFrame"><img src="/uploads/3W8A9961.webp" alt={copy.roster.imageAlt} loading="lazy" decoding="async" /></div>
-  </section>
-
   <!-- supplied dancers for -->
   <section id="credits" class="credits" aria-labelledby="creditsHead">
     <div class="creditsInner">
@@ -199,14 +177,17 @@ const heroCss = [
         <h2 id="creditsHead" class="dispHead" style="margin:0; max-width:none; font-size:clamp(26px,3vw,40px);">{copy.credits.heading}</h2>
         <div class="creditsNote">{copy.credits.note}</div>
       </div>
-      <div class="creditsGrid">
+      <!-- four productions on screen; the grid turns through the rest, card
+           by card along the diagonal, on its own clock or when a card is
+           clicked (see the script at the foot of the page) -->
+      <div class="creditsGrid" id="creditsGrid" aria-live="polite">
         {
-          copy.credits.cards.map((card) => (
-            <div class="creditCard"><div class="creditFrame"><img src={card.image} alt={card.alt} loading="lazy" decoding="async" /></div><div class="creditLabel">{card.label}</div></div>
+          copy.credits.cards.slice(0, CREDITS_VISIBLE).map((card, i) => (
+            <button type="button" class="creditCard" data-credit-slot={i} title={copy.credits.nextLabel}><div class="creditFrame"><img src={card.image} alt={card.alt} loading="lazy" decoding="async" /></div><div class="creditLabel">{card.label}</div></button>
           ))
         }
       </div>
-      <div class="creditsFoot">{copy.credits.foot}</div>
+      <script type="application/json" id="creditsPool" set:html={JSON.stringify(copy.credits.cards)} />
     </div>
   </section>
 
@@ -225,7 +206,7 @@ const heroCss = [
     .hero { position:relative; min-height:var(--coverPhotoH); background:#101012; overflow:hidden; display:block; padding:0; }
     /* background-position is the default hold point for a photo with no `focus`
        of its own; an inline focus from dancers.json overrides it */
-    .heroLayer { position:absolute; inset:0; opacity:0; transition:opacity 1.8s ease; background-size:cover; background-position:center 35%; filter:none; }
+    .heroLayer { position:absolute; inset:0; opacity:0; transition:opacity 1.8s ease; background-size:cover; background-position:center 12%; filter:none; }
     .heroLayer.on { opacity:1; }
     /* the top wash finishes high, at 16% rather than 30% of the banner, and is
        lighter to begin with: the banner photos put a face in the upper third,
@@ -234,28 +215,42 @@ const heroCss = [
     .heroScrim { position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,20,22,0.42) 0%, rgba(20,20,22,0.15) 16%, rgba(20,20,22,0.15) 55%, rgba(20,20,22,0.8) 100%); }
 
     .heroCopy { position:absolute; left:40px; right:40px; bottom:64px; z-index:2; color:#f4f2ee; width:auto; max-width:none; }
-    .heroEyebrow { font-size:12px; letter-spacing:6px; color:rgba(244,242,238,0.7); }
+    .heroEyebrow { font-size:12px; letter-spacing:6px; color:var(--accent); }
     .heroTitle { font-family:'Anton',sans-serif; font-size:clamp(48px, 6vw, 104px); letter-spacing:0; line-height:1.02; margin:18px 0 0; font-weight:400; }
     .heroLede { font-size:clamp(17px,1.6vw,22px); font-weight:400; letter-spacing:1px; margin-top:18px; max-width:640px; color:rgba(244,242,238,0.9); text-wrap:pretty; }
+    /* production credit, bottom-right on the same inset as the copy, in the
+       same type as the Specialists cover's .specHeroCredit: small label,
+       production name a step larger beneath it. Each slide's name is stacked
+       in one grid cell and cross-faded with its photo */
+    .heroCredit { position:absolute; right:40px; bottom:64px; z-index:2; margin:0; text-align:right; color:rgba(244,242,238,0.75); font-size:11px; letter-spacing:3px; line-height:1.5; max-width:min(42vw, 520px); }
+    .heroCreditNames { display:grid; margin-top:4px; }
+    .heroCreditItem { grid-area:1/1; font-size:18px; letter-spacing:5px; font-weight:300; color:#f4f2ee; line-height:1.3; opacity:0; transition:opacity 1.8s ease; text-wrap:balance; }
+    .heroCreditItem.on { opacity:1; }
 
     /* ---------- what we supply ---------- */
     .supply { max-width:1280px; margin:0 auto; padding:96px 40px; display:grid; grid-template-columns:1.25fr 1fr; gap:72px; align-items:stretch; }
     .supplyCol { display:flex; flex-direction:column; }
     .eyebrowAccent { font-size:11px; letter-spacing:3px; color:var(--accent); }
-    /* only used inside .bandDark, whose #1a1a1c background is the same in both
-       themes — so this keeps the light-on-dark grey rather than var(--muted),
-       which would go near-black and disappear in the light theme */
-    .eyebrowMuted { font-size:11px; letter-spacing:3px; color:#96928c; }
-    .supplyList { flex:1; display:flex; flex-direction:column; justify-content:center; margin-top:24px; border-bottom:1px solid var(--hair); }
+    .supplyHead { margin:0; max-width:none; }
+    .supplyList { flex:1; display:flex; flex-direction:column; justify-content:center; margin-top:24px; }
     .genre { border-top:1px solid var(--hair); }
+    .genre:last-child { border-bottom:1px solid var(--hair); }
     .genreBtn {
       width:100%; background:transparent; border:none; color:inherit; font:inherit; text-align:left;
-      padding:20px 0; cursor:pointer; display:flex; align-items:baseline; gap:28px;
+      padding:14px 0; cursor:pointer; display:flex; align-items:baseline; gap:28px;
     }
-    .genreBtn:hover .genreName { color:#b8b4ae; }
-    .genreNum { font-size:12px; letter-spacing:2px; color:var(--muted); width:28px; flex:0 0 28px; }
-    .genreName { text-transform:uppercase; font-size:clamp(18px,1.9vw,26px); font-weight:300; letter-spacing:3px; flex:1; }
-    .genreMark { font-size:18px; font-weight:300; color:var(--muted); }
+    /* Hover borrows the menu's recipe (see .menuDash / .menuCh in global.css):
+       a short accent dash draws in ahead of the word, the letters lift one
+       after another into the accent, and the plus turns with them. The open
+       genre holds the accent. */
+    .genreDash { display:block; flex:none; align-self:center; width:0; height:2px; margin-right:0; background:var(--accent); opacity:0; transition:width 0.42s cubic-bezier(0.3, 0, 0.2, 1), margin-right 0.42s cubic-bezier(0.3, 0, 0.2, 1), opacity 0.42s cubic-bezier(0.3, 0, 0.2, 1); }
+    .genreBtn:hover .genreDash, .genreBtn:focus-visible .genreDash, .genre.open .genreDash { width:14px; margin-right:12px; opacity:1; }
+    .genreName { display:inline-flex; text-transform:uppercase; font-size:clamp(15px,1.25vw,18px); font-weight:300; letter-spacing:3px; flex:1; }
+    .genreCh { display:inline-block; white-space:pre; will-change:transform; }
+    .genre.open .genreCh, .genre.open .genreMark { color:var(--accent); }
+    .genreMark { font-size:16px; font-weight:300; color:var(--muted); transition:color 0.34s cubic-bezier(0.3, 0, 0.2, 1), transform 0.42s cubic-bezier(0.3, 0, 0.2, 1); }
+    .genre:not(.open) .genreBtn:hover .genreMark, .genre:not(.open) .genreBtn:focus-visible .genreMark { color:var(--accent); transform:rotate(90deg); }
+    @media (prefers-reduced-motion: reduce) { .genreDash, .genreMark { transition:none; } }
     /* visibility (not just zero height) keeps a collapsed blurb out of the
        accessibility tree, matching the button's aria-expanded="false".
        It transitions alongside grid-template-rows: opening flips to visible
@@ -263,47 +258,27 @@ const heroCss = [
     .genrePanel { display:grid; grid-template-rows:0fr; visibility:hidden; transition:grid-template-rows 0.35s ease, visibility 0.35s ease; }
     .genrePanel > div { overflow:hidden; }
     .genre.open .genrePanel { grid-template-rows:1fr; visibility:visible; }
-    .genreBlurb { font-size:15px; font-weight:400; line-height:1.7; color:var(--sub); padding:14px 0 20px 56px; max-width:520px; text-wrap:pretty; }
-    .supplyNote { font-size:14px; font-weight:400; color:var(--muted); line-height:1.6; margin-top:28px; max-width:520px; text-wrap:pretty; }
+    .genreBlurb { font-size:15px; font-weight:400; line-height:1.7; color:var(--sub); padding:14px 0 20px; max-width:520px; text-wrap:pretty; }
     .supplyStill { align-self:center; position:relative; }
     /* aspect-ratio matches the file's intrinsic 1366x2048, so the space is
        reserved before the image arrives and the page does not jump */
-    .supplyStill img { width:100%; height:auto; display:block; aspect-ratio:1366 / 2048; }
+    .supplyStill img { width:100%; height:auto; display:block; aspect-ratio:1366 / 2048; object-fit:cover; }
     .stillCaption { position:absolute; left:20px; bottom:16px; font-size:11px; letter-spacing:3px; color:rgba(244,242,238,0.8); }
+    /* a frame holding a set of stills that cross-fade on the hero's 1.8s ease:
+       the first sits in the flow and sets the size, the rest are laid over
+       it and cropped to the same box */
+    .fadeStill { position:relative; overflow:hidden; }
+    .fadeStill img { transition:opacity 1.8s ease; }
+    .fadeStill img + img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; }
+    .fadeStill img.on { opacity:1; }
+    .fadeStill img:first-child:not(.on) { opacity:0; }
 
-    /* ---------- split feature bands ---------- */
-    .bandDark { border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); background:#1a1a1c; color:#f4f2ee; }
-    .split { max-width:1280px; margin:0 auto; padding:0 40px; display:grid; gap:72px; align-items:stretch; }
-    .split--filmTv { grid-template-columns:1fr 1.3fr; }
-    .split--commercial { grid-template-columns:1.3fr 1fr; }
-    .splitStill { align-self:center; padding:56px 0; }
-    /* both stills reserve their space from the files' intrinsic dimensions */
-    .splitStill img { width:100%; height:auto; display:block; }
-    .split--filmTv .splitStill img { aspect-ratio:1306 / 2048; }
-    .split--commercial .splitStill img { aspect-ratio:2400 / 3600; }
-    .splitBody { padding:88px 0; }
+
     .dispHead {
       font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3vw,44px);
       font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0; max-width:520px;
     }
-    .rows { display:grid; row-gap:0; font-size:16px; font-weight:400; line-height:1.7; margin-top:36px; }
-    .rows--dark { color:#c7c3bd; }
-    .rows--light { color:var(--sub); }
-    .row { padding:20px 0; display:grid; grid-template-columns:170px 1fr; gap:24px; }
-    .rows--dark .row { border-top:1px solid #35353a; }
-    .rows--dark .row:last-child { border-bottom:1px solid #35353a; }
-    .rows--light .row { border-top:1px solid var(--hair); }
-    .rows--light .row:last-child { border-bottom:1px solid var(--hair); }
-    .rowLabel { font-size:12px; letter-spacing:2px; color:var(--muted); padding-top:4px; }
-    /* .rows--dark sits on the permanently dark #1a1a1c band, so it keeps the
-       light-on-dark grey instead of the theme-aware token */
-    .rows--dark .rowLabel { color:#96928c; }
 
-    /* ---------- choreographers ---------- */
-    .choreo { border-top:1px solid var(--hair); }
-    .choreoGrid { max-width:1280px; margin:0 auto; padding:88px 40px; display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start; }
-    .choreoGrid .dispHead { max-width:none; }
-    .choreoBody { font-size:17px; font-weight:400; line-height:1.75; color:var(--sub); text-wrap:pretty; }
 
     /* ---------- reviews carousel ---------- */
     .quotes { background:#1a1a1c; color:#f4f2ee; border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); }
@@ -335,11 +310,6 @@ const heroCss = [
     }
     .revArrow:hover, .revArrow:active { border-color:#f4f2ee; }
 
-    /* ---------- roster still ---------- */
-    .roster { max-width:1280px; margin:0 auto; padding:0 40px 96px; }
-    .rosterFrame { position:relative; aspect-ratio:3/2; background:var(--tileBg); overflow:hidden; }
-    .rosterFrame img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
-
     /* ---------- credits ---------- */
     /* padding:0 resets the homepage .credits padding in global.css */
     .credits { border-top:1px solid var(--hair); padding:0; }
@@ -347,39 +317,43 @@ const heroCss = [
     .creditsHead { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:16px; margin-top:16px; }
     .creditsNote { font-size:14px; font-weight:400; color:var(--sub); letter-spacing:1px; }
     .creditsGrid { display:grid; grid-template-columns:repeat(2,1fr); gap:36px 24px; margin-top:44px; }
-    .creditCard { display:grid; gap:10px; }
+    /* each card is a button: clicking any of the four turns the grid to the next set */
+    .creditCard { display:grid; gap:10px; width:100%; padding:0; border:none; background:transparent; color:inherit; font:inherit; text-align:left; cursor:pointer; }
+    .creditCard:focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
     .creditFrame { aspect-ratio:16/9; background:var(--tileBg); position:relative; overflow:hidden; }
     .creditFrame img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    /* the same turn as the homepage logo wall: a card mid-turn lifts away
+       upward, blurring as it fades, each waiting out its own --d both ways */
+    .creditCard { transition:opacity 0.5s ease, transform 0.5s cubic-bezier(0.3, 0, 0.2, 1), filter 0.5s ease; transition-delay:var(--d, 0ms); }
+    .creditCard.is-turning { opacity:0; transform:translateY(-14px); filter:blur(6px); }
     .creditLabel { font-size:12px; letter-spacing:2px; color:var(--sub); }
-    .creditsFoot { font-size:12px; letter-spacing:2px; color:var(--muted); margin-top:20px; }
 
     /* ---------- responsive ---------- */
     @media (max-width:1024px) {
-      .heroCopy { left:28px; right:28px; bottom:48px; }
+      /* below 1024px the lede and the credit would share a line and collide,
+         so the credit gives up the corner and sits under the lede */
+      .heroCopy { left:28px; right:28px; bottom:48px; padding-bottom:56px; }
+      .heroCredit { left:28px; right:28px; bottom:48px; max-width:none; text-align:left; }
       .supply { padding:72px 28px; grid-template-columns:1fr; gap:48px; }
-      .split { padding:0 28px; grid-template-columns:1fr !important; gap:0; }
-      .splitStill { padding:48px 0 0; }
-      .splitBody { padding:48px 0 64px; }
-      .choreoGrid { padding:72px 28px; grid-template-columns:1fr; gap:32px; }
+      /* one column here: hold the still to a sensible portrait width rather
+         than letting it fill the page edge to edge */
+      .supplyStill { max-width:520px; }
       .quotesInner { padding:48px 28px; }
       .revTrack { --per:2; --revgap:40px; }
-      .roster { padding:0 28px 72px; }
       .creditsInner { padding:72px 28px; }
     }
 
     @media (max-width:640px) {
-      .heroCopy { left:20px; right:20px; bottom:36px; }
+      .heroCopy { left:20px; right:20px; bottom:36px; padding-bottom:64px; }
+      .heroCredit { left:20px; right:20px; bottom:36px; }
+      .heroCreditItem { font-size:15px; letter-spacing:3px; }
       .heroEyebrow { letter-spacing:4px; }
       .heroTitle { font-size:clamp(40px, 13vw, 104px); letter-spacing:0; }
       .heroLede { font-size:clamp(16px, 4.4vw, 22px); }
       .supply { padding:56px 20px; gap:36px; }
       .genreBtn { gap:16px; }
-      .genreName { font-size:clamp(17px, 5vw, 26px); letter-spacing:2px; }
-      .genreBlurb { padding-left:44px; }
-      .split { padding:0 20px; }
-      .row { grid-template-columns:1fr; gap:6px; }
+      .genreName { font-size:clamp(14px, 4vw, 18px); letter-spacing:2px; }
       .dispHead { font-size:clamp(24px, 7.5vw, 44px); }
-      .choreoGrid { padding:56px 20px; }
       .quotesInner { padding:40px 20px; }
       .quotesHead { flex-direction:column; align-items:flex-start; gap:8px; }
       .quotesTitle { font-size:clamp(24px, 8vw, 40px); }
@@ -387,7 +361,6 @@ const heroCss = [
       .revName { font-size:clamp(30px, 9vw, 48px); }
       .revFoot { flex-wrap:wrap; justify-content:center; row-gap:18px; column-gap:16px; }
       .revCounter { order:3; width:100%; text-align:center; }
-      .roster { padding:0 20px 56px; }
       .creditsInner { padding:56px 20px 72px; }
       .creditsGrid { grid-template-columns:1fr; gap:28px; margin-top:32px; }
     }
@@ -395,9 +368,132 @@ const heroCss = [
     @media (prefers-reduced-motion: reduce) {
       * { transition-duration:0.01ms !important; animation-duration:0.01ms !important; animation-iteration-count:1 !important; }
       .revTrack { transition:none; }
-      .heroLayer { transition:none; }
+      .heroLayer, .heroCreditItem, .creditCard, .fadeStill img { transition:none; }
     }
   </style>
+
+  <script>
+    import { inView, animate, stagger } from 'motion';
+    import { armReveal } from '../lib/reveal';
+
+    /* the shared scroll-reveal pass (reveal.ts): the What we supply heading
+       rises in, then the genres arrive one after another */
+    const m = armReveal();
+
+    /* ---------- genre rows: the menu's hover, letter by letter ----------
+       Under the cursor (or keyboard focus) each letter lifts in turn and takes
+       the accent, 26ms apart like the menu; on leave they settle back in the
+       same order. The open row keeps its accent. Nothing moves under reduced
+       motion (armReveal returns null there), the colours simply swap. */
+    const EASE: [number, number, number, number] = [0.3, 0, 0.2, 1];
+    const accent = () => getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+    const ink = () => getComputedStyle(document.documentElement).getPropertyValue('--ink').trim();
+    document.querySelectorAll<HTMLButtonElement>('[data-genre-btn]').forEach((btn) => {
+      const chars = Array.from(btn.querySelectorAll<HTMLElement>('.genreCh'));
+      const row = btn.closest('.genre');
+      const lift = () => {
+        if (!m) { chars.forEach((c) => { c.style.color = accent(); }); return; }
+        animate(chars, { transform: 'translateY(-4px)', color: accent() }, { duration: 0.34, ease: EASE, delay: stagger(0.026) });
+      };
+      const settle = () => {
+        const open = row?.classList.contains('open');
+        if (!m) { chars.forEach((c) => { c.style.color = open ? accent() : ''; }); return; }
+        animate(chars, { transform: 'translateY(0px)', color: open ? accent() : ink() }, { duration: 0.34, ease: EASE, delay: stagger(0.026) })
+          .finished.then(() => { if (!open) chars.forEach((c) => { c.style.color = ''; }); });
+      };
+      btn.addEventListener('mouseenter', lift);
+      btn.addEventListener('focus', lift);
+      btn.addEventListener('mouseleave', settle);
+      btn.addEventListener('blur', settle);
+    });
+
+    /* ---------- credits grid: diagonal turn ----------
+       The same turn as the homepage logo wall (.logoCell / .is-turning in
+       global.css): four productions are on screen; every few seconds each card
+       lifts away upward, blurring as it fades, one after another down the
+       diagonal; the artwork changes over while nothing is on show; then the
+       cards settle back in on the same diagonal with the next four. --d is
+       each card's wait in the diagonal, measured from where it sits so a
+       one-column phone grid simply runs top to bottom. The turn only runs
+       while the grid is in view and the tab is visible, and not at all under
+       reduced motion. */
+    type Card = { label: string; alt: string; image: string };
+    const grid = document.getElementById('creditsGrid');
+    const poolEl = document.getElementById('creditsPool');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (grid && poolEl) {
+      const pool: Card[] = JSON.parse(poolEl.textContent || '[]');
+      const cards = Array.from(grid.querySelectorAll<HTMLElement>('[data-credit-slot]'));
+      const n = cards.length;
+      if (pool.length > n) {
+        const SPREAD = 480; /* ms for the diagonal to cross the grid */
+        const LIFT = 560;   /* a card's own fade is 500ms; wait it out before swapping */
+        const EVERY = 6200; /* how long a set holds before the next turn */
+        let next = n;
+        let timer: number | null = null;
+        let turning = false;
+        let pending: number[] = [];
+
+        const preload = (src: string) => { const img = new Image(); img.src = src; };
+        const upcoming = () => Array.from({ length: n }, (_, i) => pool[(next + i) % pool.length]);
+
+        const stagger = () => {
+          const width = grid.offsetWidth || 1;
+          const height = grid.offsetHeight || 1;
+          const reach = cards.map((c) => c.offsetLeft / width + c.offsetTop / height);
+          const far = Math.max(...reach, 0);
+          const scale = far > 0 ? SPREAD / far : 0;
+          cards.forEach((c, i) => c.style.setProperty('--d', Math.round(reach[i] * scale) + 'ms'));
+        };
+
+        const dress = (card: HTMLElement, item: Card) => {
+          const img = card.querySelector<HTMLImageElement>('img');
+          const label = card.querySelector<HTMLElement>('.creditLabel');
+          if (img) { img.src = item.image; img.alt = item.alt; }
+          if (label) label.textContent = item.label;
+        };
+
+        const hide = (on: boolean) => cards.forEach((c) => c.classList.toggle('is-turning', on));
+
+        const clearPending = () => { pending.forEach((t) => window.clearTimeout(t)); pending = []; };
+
+        /* abandons a turn wherever it got to and puts every card back on show */
+        const settle = () => { clearPending(); turning = false; hide(false); };
+
+        const swap = () => {
+          cards.forEach((c) => { dress(c, pool[next % pool.length]); next++; });
+          upcoming().forEach((c) => preload(c.image));
+        };
+
+        const turn = () => {
+          if (turning) return;
+          if (reduce.matches) { swap(); return; }
+          turning = true;
+          stagger();
+          hide(true);
+          pending.push(window.setTimeout(() => {
+            swap();
+            hide(false);
+            pending.push(window.setTimeout(() => { turning = false; }, SPREAD + LIFT));
+          }, SPREAD + LIFT));
+        };
+
+        /* the clock only runs with motion: under reduced motion the grid
+           holds still and turns only when a card is clicked */
+        const start = () => { if (!reduce.matches && timer === null) timer = window.setInterval(turn, EVERY); };
+        const stop = () => { if (timer !== null) { window.clearInterval(timer); timer = null; } settle(); };
+
+        /* clicking any card turns the grid to the next four straight away,
+           and the clock starts again from that moment */
+        cards.forEach((c) => c.addEventListener('click', () => { stop(); turn(); start(); }));
+
+        upcoming().forEach((c) => preload(c.image));
+        inView(grid, () => { start(); return stop; }, { amount: 0.25 });
+        document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+        window.addEventListener('pageshow', settle);
+      }
+    }
+  </script>
 
   <script slot="scripts" is:inline>
     (function () {
@@ -406,13 +502,16 @@ const heroCss = [
 
       /* ---------- hero cross-fade rotator ---------- */
       var layers = Array.prototype.slice.call(document.querySelectorAll('.heroLayer'));
+      var creditLines = Array.prototype.slice.call(document.querySelectorAll('.heroCreditItem'));
       if (layers.length > 1 && !reduce.matches) {
         var hi = 0;
         var timer = null;
         function advance() {
           layers[hi].classList.remove('on');
+          if (creditLines[hi]) creditLines[hi].classList.remove('on');
           hi = (hi + 1) % layers.length;
           layers[hi].classList.add('on');
+          if (creditLines[hi]) creditLines[hi].classList.add('on');
         }
         function start() {
           if (timer) window.clearInterval(timer);
@@ -427,18 +526,38 @@ const heroCss = [
            fade instantly, then restart the clock so the next one is a clean
            five seconds away and cannot overlap the transition. */
         document.addEventListener('t3:themechange', function () {
-          layers.forEach(function (layer) {
+          layers.concat(creditLines).forEach(function (layer) {
             var wasOn = layer.classList.contains('on');
             layer.style.transition = 'none';
             layer.style.opacity = wasOn ? '1' : '0';
           });
           start();
           window.setTimeout(function () {
-            layers.forEach(function (layer) {
+            layers.concat(creditLines).forEach(function (layer) {
               layer.style.removeProperty('transition');
               layer.style.removeProperty('opacity');
             });
           }, 1000);
+        });
+      }
+
+      /* ---------- cross-fading stills ----------
+         each [data-fade-still] frame turns slowly through its pictures,
+         and only while it is on screen */
+      if (!reduce.matches && 'IntersectionObserver' in window) {
+        Array.prototype.slice.call(document.querySelectorAll('[data-fade-still]')).forEach(function (frame) {
+          var pics = Array.prototype.slice.call(frame.querySelectorAll('img'));
+          if (pics.length < 2) return;
+          var at = 0, tick = null;
+          function flip() {
+            pics[at].classList.remove('on');
+            at = (at + 1) % pics.length;
+            pics[at].classList.add('on');
+          }
+          new IntersectionObserver(function (entries) {
+            if (entries[0].isIntersecting) { if (tick === null) tick = window.setInterval(flip, 6000); }
+            else if (tick !== null) { window.clearInterval(tick); tick = null; }
+          }, { threshold: 0.2 }).observe(frame);
         });
       }
 

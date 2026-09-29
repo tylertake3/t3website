@@ -44,102 +44,55 @@ const divisions = copy.divisions.items.filter((item) => pageExists(item.href) ||
   ogImage={copy.meta.ogImage}
   ogImageAlt={copy.meta.ogImageAlt}
   footerTitle={copy.meta.footerTitle}
+  navOverDark={false}
 >
-  <!-- hero: the title carries the page on its own. The cover stills cross-fade
-       every five seconds with the credit following, the event cover's recipe;
-       only the first still is fetched with the page -->
-  <section class="pageHero specHero" aria-labelledby="specialistsTitle">
-    {
-      copy.hero.stills.map((still, i) => (
-        <div
-          class="specHeroPhoto"
-          data-label={still.creditLabel}
-          data-credit={still.credit}
-          data-bg={i === 0 ? undefined : still.image}
-          role="img"
-          aria-label={still.alt}
-          aria-hidden={i === 0 ? undefined : 'true'}
-          style={`${i === 0 ? `background-image:url("${encodeURI(still.image)}"); opacity:1;` : 'opacity:0;'} background-position:${still.focus};`}
-        />
-      ))
-    }
-    <div class="specHeroScrim"></div>
-    <div class="pageHeroInner">
-      <p class="kicker" data-hero-line>{copy.hero.eyebrow}</p>
-      <h1 class="pageHeroTitle" id="specialistsTitle" data-hero-line>{copy.hero.heading}</h1>
-      {/* production credit for the current still, bottom-right like the SPACTs cover */}
-      <p class="specHeroCredit" data-hero-line>
-        <span class="specHeroCreditText" id="specHeroCredit">
-          {copy.hero.stills[0].creditLabel}<br /><span class="specHeroCreditName">{copy.hero.stills[0].credit}</span>
-        </span>
-      </p>
-    </div>
-  </section>
-
-  <!-- the divisions: pictures first, one line each. Same category grid the
-       Artists page uses, so the hub reads as a set of doors rather than a page of copy -->
-  {
-    divisions.length > 0 && (
-      <section class="band" aria-labelledby="divisionsTitle">
-        <div class="bandInner">
-          <div class="sectionHead specHead" data-reveal-head>
-            <h2 class="sectionTitle" id="divisionsTitle">
-              {copy.divisions.heading}
-            </h2>
-            <p class="kicker">{copy.divisions.kicker}</p>
-          </div>
-          <ul class="catGrid" data-reveal-group="0.07">
-            {divisions.map((item) => (
-              <li class="catCard">
-                <a class="catLink" href={item.href}>
-                  <span class="catSlot catSlotPhoto" style="aspect-ratio:4/5;" data-reveal-figure>
-                    <img
-                      src={item.image}
-                      alt={item.imageAlt}
-                      loading="lazy"
-                      decoding="async"
-                      style={item.imageFocus ? `object-position:${item.imageFocus};` : undefined}
-                    />
-                  </span>
-                  <span class="catName" data-reveal-item>{item.name}</span>
-                </a>
-                <p class="catDesc" data-reveal-item>{item.description}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-    )
-  }
-
-  <!-- everything else: a two-column read. The intro on the left says these
-       people are already on the books; on the right each one opens to a line
-       of detail, so the list stays short until someone wants more -->
-  <section class="band" aria-labelledby="examplesTitle">
+  <!-- the page opens straight on the statement: one line that keeps changing,
+       the divisions as a ruled list beside the copy, and the wider roster
+       running past along the foot. No photo cover; the type is the cover -->
+  <section class="band specialistsBand specOpener" aria-labelledby="specialistsTitle">
     <div class="bandInner">
-      <div class="sectionHead specHead" data-reveal-head>
-        <h2 class="sectionTitle" id="examplesTitle">{copy.examples.heading}</h2>
-        <p class="kicker">{copy.examples.kicker}</p>
-      </div>
-      <div class="specAsk" data-reveal-group="0.08">
-        <div class="specAskIntro">
-          <p class="bandBody" data-reveal-item>{copy.examples.intro}</p>
+      <p class="kicker" data-hero-line>{copy.statement.kicker}</p>
+      <h1 class="stmt" id="specialistsTitle" aria-label={`${copy.statement.lead} ${copy.statement.words.join(', ')}, ${copy.statement.tail}`}>
+        <span class="stmtLine" data-hero-line>{copy.statement.lead}</span>
+        <span class="stmtLine" data-hero-line>
+          <span class="stmtSlot" data-stmt-slot data-words={JSON.stringify(copy.statement.words)}>
+            <span>{copy.statement.words[0]}</span>
+          </span>
+        </span>
+        <span class="stmtLine" data-hero-line>{copy.statement.tail}</span>
+      </h1>
+      <div class="stmtFoot" data-reveal-group="0.08">
+        <div>
+          <p class="bandBody" data-reveal-item>{copy.statement.body}</p>
+          <a class="btnSolid specialistsCta" href={copy.statement.cta.href} data-reveal-item>{copy.statement.cta.label.toUpperCase()}</a>
         </div>
-        <ul class="specAskList">
-          {copy.examples.items.map((item) => (
-            <li class="specAskItem" data-reveal-item>
-              <details class="specAskRow">
-                <summary class="specAskName">
-                  <span>{item.name}</span>
-                  <span class="specAskMark" aria-hidden="true"></span>
-                </summary>
-                <p class="specAskBody">{item.body}</p>
-              </details>
-            </li>
-          ))}
-        </ul>
+        {
+          divisions.length > 0 && (
+            <ul class="divList" aria-label={copy.divisions.heading}>
+              {divisions.map((item) => (
+                <li data-reveal-item>
+                  <a href={item.href}>{item.name}</a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
       </div>
     </div>
+    {
+      copy.examples.items.length > 0 && (
+        <div class="tape" data-reveal>
+          <p class="tapeLabel bandInner">{copy.statement.tapeLabel}</p>
+          {/* the readable list, once; the moving copies below are decoration */}
+          <ul class="visuallyHidden">
+            {copy.examples.items.map((item) => <li>{item.name}</li>)}
+          </ul>
+          <div class="tapeTrack" data-tape aria-hidden="true">
+            {[0, 1, 2].map(() => copy.examples.items.map((item) => <span class="tapeItem">{item.name}</span>))}
+          </div>
+        </div>
+      )
+    }
   </section>
 
   <!-- on set: a production still beside a client's words -->
@@ -177,7 +130,7 @@ const divisions = copy.divisions.items.filter((item) => pageExists(item.href) ||
        --muted (#605d57) measure roughly 1.4:1 and 2.3:1 on #1a1a1c. Same
        "pin the value to the surface, not the theme" rule global.css applies
        to the always-dark reviews band. */
-    .specHero, .specDark { --accent:#d4704f; --muted:#96928c; }
+    .specDark { --accent:#d4704f; --muted:#96928c; }
     .specDark { --sub:#c7c3bd; --ink:#f4f2ee; --hair:#3a3a3e; }
 
     .specHead { padding-bottom:18px; }
@@ -197,38 +150,9 @@ const divisions = copy.divisions.items.filter((item) => pageExists(item.href) ||
     .specFeature .revCard { flex:none; }
     .specFeature .revCredit { animation:none; }
 
-    /* photo hero: same recipe as the homepage banner (cover photo, dark
-       scrim, copy pinned to the bottom-left) on top of the shared pageHero */
-    .specHero { position:relative; overflow:hidden; min-height:var(--coverPhotoH); }
-    .specHeroPhoto { position:absolute; inset:0; opacity:0; transition:opacity 1.8s ease; background-size:cover; background-repeat:no-repeat; filter:saturate(0.92) contrast(1.05) brightness(0.96); }
-    .specHeroCreditText { display:inline-block; transition:opacity .6s ease; }
-    .specHeroCreditText.fading { opacity:0; }
-    @media (prefers-reduced-motion: reduce) { .specHeroPhoto, .specHeroCreditText { transition:none; } }
-    .is-armed .specHeroPhoto { will-change:transform, opacity; }
-    .specHeroScrim { position:absolute; inset:0; background:var(--heroScrim); }
-    .specHero .pageHeroInner { position:relative; z-index:2; }
-    /* the cover title breaks where the copy says, not where the window does */
-    .specHero .pageHeroTitle { white-space:pre-line; }
-    .specHeroCredit { position:absolute; right:40px; bottom:0; margin:0; text-align:right; color:var(--heroInkSoft); font-size:11px; letter-spacing:3px; line-height:1.5; }
-    .specHeroCreditName { display:block; margin-top:4px; font-size:18px; letter-spacing:5px; font-weight:300; color:var(--heroInk); }
 
     /* everything else: intro left, disclosure rows right. One hairline per
        row and none around the columns, so the band stays quiet */
-    .specAsk { display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start; margin-top:34px; }
-    .specAskIntro { max-width:44ch; }
-    .specAskList { list-style:none; margin:0; padding:0; border-top:1px solid var(--hair); }
-    .specAskItem { border-bottom:1px solid var(--hair); }
-    .specAskName { display:flex; align-items:center; justify-content:space-between; gap:24px; padding:18px 0; cursor:pointer; list-style:none; font-size:17px; letter-spacing:2.5px; text-transform:uppercase; color:var(--ink); }
-    .specAskName::-webkit-details-marker { display:none; }
-    .specAskName:hover, .specAskRow[open] .specAskName { color:var(--accent); }
-    .specAskName:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
-    /* the mark is a plus drawn from two hairlines; it turns to a minus when open */
-    .specAskMark { position:relative; flex:none; width:14px; height:14px; }
-    .specAskMark::before, .specAskMark::after { content:""; position:absolute; left:0; top:50%; width:100%; height:1px; background:currentColor; transform:translateY(-50%); transition:transform 0.3s cubic-bezier(0.3, 0, 0.2, 1); }
-    .specAskMark::after { transform:translateY(-50%) rotate(90deg); }
-    .specAskRow[open] .specAskMark::after { transform:translateY(-50%) rotate(0deg); }
-    .specAskBody { margin:0; padding:0 48px 22px 0; font-size:16px; font-weight:400; line-height:1.65; color:var(--sub); text-wrap:pretty; max-width:52ch; }
-    @media (prefers-reduced-motion: reduce) { .specAskMark::before, .specAskMark::after { transition:none; } }
 
     @media (max-width:1024px) {
       /* stacked: nothing to line up with, so the still goes back to a
@@ -238,82 +162,78 @@ const divisions = copy.divisions.items.filter((item) => pageExists(item.href) ||
          item it would shrink-wrap to the photo's own pixel width */
       .specStill { display:block; }
       .specStillFrame { min-height:0; aspect-ratio:16/9; }
-      .specHeroCredit { right:32px; }
-      .specAsk { grid-template-columns:1fr; gap:36px; }
     }
 
     @media (max-width:640px) {
-      .specHeroCredit { position:static; text-align:left; margin-top:28px; }
-      .specHeroCreditName { font-size:15px; letter-spacing:3px; }
       .specStillFrame { aspect-ratio:16/10; }
-      /* on a phone the title wraps on its own; the forced break would orphan a word */
-      .specHero .pageHeroTitle { white-space:normal; }
     }
   </style>
 
-  <script is:inline>
-    /* Cover stills rotate every five seconds, with the credit following. */
-    (function () {
-      var layers = Array.prototype.slice.call(document.querySelectorAll('.specHeroPhoto'));
-      if (!layers.length) return;
-      var credit = document.getElementById('specHeroCredit');
-      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-      var idx = 0;
-      function show(i) {
-        idx = i;
-        for (var k = 0; k < layers.length; k++) {
-          var on = k === i;
-          layers[k].style.opacity = on ? '1' : '0';
-          layers[k].setAttribute('aria-hidden', on ? 'false' : 'true');
-        }
-        if (!credit) return;
-        var label = layers[i].getAttribute('data-label') || '';
-        var name = layers[i].getAttribute('data-credit') || '';
-        credit.classList.add('fading');
-        window.setTimeout(function () {
-          credit.textContent = '';
-          credit.appendChild(document.createTextNode(label));
-          credit.appendChild(document.createElement('br'));
-          var strong = document.createElement('span');
-          strong.className = 'specHeroCreditName';
-          strong.textContent = name;
-          credit.appendChild(strong);
-          credit.classList.remove('fading');
-        }, 600);
-      }
-      function loadRest() {
-        for (var k = 0; k < layers.length; k++) {
-          var src = layers[k].getAttribute('data-bg');
-          if (src) { layers[k].style.backgroundImage = 'url("' + encodeURI(src) + '")'; layers[k].removeAttribute('data-bg'); }
-        }
-      }
-      if (document.readyState === 'complete') loadRest();
-      else window.addEventListener('load', loadRest);
-      if (reduce.matches || layers.length < 2) return;
-      window.setInterval(function () { show((idx + 1) % layers.length); }, 5000);
-    })();
-  </script>
 </Base>
 
 <script>
   import { armReveal } from '../lib/reveal';
 
-  /* The shared pass (see reveal.ts), plus this page's own beats: the first
-     cover still settles from a touch closer and every still drifts as the
-     cover scrolls out, so the title reads as sitting in front of the picture. */
+  /* The shared pass (see reveal.ts), plus this page's own beats: the
+     changing word in the opening statement and the roster tape. */
   const m = armReveal();
-  if (m) {
-    const layers = Array.from(document.querySelectorAll<HTMLElement>('.specHeroPhoto'));
-    const hero = document.querySelector<HTMLElement>('.specHero');
-    if (layers.length && hero) {
-      m.animate(layers[0], { scale: [1.06, 1] }, { duration: 2.4, ease: [0.2, 0, 0.1, 1] });
-      m.scroll(
-        (progress: number) => {
-          const y = `0 ${Math.round(progress * 100)}px`;
-          layers.forEach((layer) => { layer.style.translate = y; });
-        },
-        { target: hero, offset: ['start start', 'end start'] },
-      );
+  const EASE: [number, number, number, number] = [0.3, 0, 0.2, 1];
+
+  /* The changing word. Each discipline rolls up into place, holds, then
+     rolls out as the next arrives. Under reduced motion the words still
+     take their turn, but simply swap. */
+  const slot = document.querySelector<HTMLElement>('[data-stmt-slot]');
+  if (slot) {
+    const words: string[] = JSON.parse(slot.dataset.words || '[]');
+    let i = 0;
+    let cur = slot.firstElementChild as HTMLElement;
+    const HOLD = 1.9;
+    const next = () => {
+      i = (i + 1) % words.length;
+      const nx = document.createElement('span');
+      nx.textContent = words[i];
+      slot.appendChild(nx);
+      if (!m) { cur.remove(); cur = nx; return; }
+      const out = cur;
+      m.animate(out, { transform: ['translateY(0)', 'translateY(-70%)'], opacity: [1, 0], filter: ['blur(0px)', 'blur(4px)'] }, { duration: 0.45, ease: EASE })
+        .finished.then(() => out.remove());
+      m.animate(nx, { transform: ['translateY(70%)', 'translateY(0)'], opacity: [0, 1], filter: ['blur(4px)', 'blur(0px)'] }, { duration: 0.55, delay: 0.08, ease: EASE });
+      cur = nx;
+    };
+    if (words.length > 1) {
+      let timer = window.setInterval(next, (HOLD + 0.6) * 1000);
+      /* rests in a background tab so it never runs ahead unseen */
+      document.addEventListener('visibilitychange', () => {
+        window.clearInterval(timer);
+        if (!document.hidden) timer = window.setInterval(next, (HOLD + 0.6) * 1000);
+      });
     }
+  }
+
+  /* The tape: an endless line of the roster, slowly, nudged along by
+     scrolling. Still under reduced motion, where it is a plain long line. */
+  const tape = document.querySelector<HTMLElement>('[data-tape]');
+  if (tape && m) {
+    let x = 0;
+    const speed = 0.6;
+    let boost = 0;
+    let last = window.scrollY;
+    let running = false;
+    const tick = () => {
+      if (!running) return;
+      const w = tape.scrollWidth / 3;
+      x -= speed + boost;
+      boost *= 0.92;
+      if (-x >= w) x += w;
+      tape.style.transform = `translateX(${x}px)`;
+      requestAnimationFrame(tick);
+    };
+    m.scroll(() => { const d = Math.abs(window.scrollY - last); last = window.scrollY; boost = Math.min(boost + d * 0.08, 14); });
+    /* only moves while it is on screen and the tab is visible */
+    m.inView(tape, () => { running = true; tick(); return () => { running = false; }; });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) running = false;
+      else if (!running && tape.getBoundingClientRect().top < window.innerHeight) { running = true; tick(); }
+    });
   }
 </script>

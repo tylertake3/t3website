@@ -10,23 +10,38 @@
   },
   "hero": {
     "eyebrow": "SPECIALISTS",
-    "heading": "If the scene needs it,\nwe'll find it",
-    "stills": [
-      {
-        "image": "/uploads/28-years-later-bone-temple-samson-river.webp",
-        "alt": "Samson, played by Chi Lewis-Parry, kneeling on a rock in a fast river and roaring, trees on both banks, in 28 Years Later: The Bone Temple",
-        "focus": "center 45%",
-        "creditLabel": "CHI LEWIS-PARRY IN",
-        "credit": "28 YEARS LATER: THE BONE TEMPLE"
-      },
-      {
-        "image": "/uploads/masters-of-the-universe-james-wilkinson.webp",
-        "alt": "James Wilkinson in a red and blue armoured suit with a cabled neck and glowing goggles, sparks drifting past, in Masters of the Universe",
-        "focus": "center 30%",
-        "creditLabel": "JAMES WILKINSON IN",
-        "credit": "MASTERS OF THE UNIVERSE"
-      }
-    ]
+    "note": "The page opens straight on the statement below; there is no photo cover. The stills that used to sit here are on /stunt-performers."
+  },
+  "statement": {
+    "kicker": "SPECIALISTS",
+    "lead": "If the scene needs",
+    "words": [
+      "a stunt double",
+      "an aerialist",
+      "a footballer",
+      "a creature performer",
+      "a face nobody forgets",
+      "a precision driver",
+      "a contortionist",
+      "a motion-capture artist",
+      "an intimacy coordinator",
+      "twins",
+      "a skateboarder",
+      "a BMX rider",
+      "a gymnast",
+      "a fighter",
+      "a figure skater",
+      "a firearms-trained performer",
+      "something else entirely"
+    ],
+    "tail": "we will find it.",
+    "note": "The middle line takes each of these in turn. The first is what shows with no JavaScript, so lead it with the strongest.",
+    "body": "The divisions below are the briefs we are asked for most often, not the limit of who we represent. Behind them is a wider roster that is on our books and booked just as often. When a scene crosses disciplines, a dancer who can fight or a SPACT who can ride, the same team casts the whole of it.",
+    "cta": {
+      "label": "Send us your brief",
+      "href": "/contact"
+    },
+    "tapeLabel": "Also on the roster"
   },
   "divisions": {
     "kicker": "ASKED FOR BY NAME",
@@ -92,8 +107,37 @@
       {
         "name": "Drivers and riders",
         "body": "Precision drivers and motorbike and horse riders for action on the road and on set."
+      },
+      {
+        "name": "BMX riders",
+        "body": "Riders who can land the line on camera, for commercials and film."
+      },
+      {
+        "name": "Fighters",
+        "body": "Trained fighters across boxing, MMA and martial arts, safe to work at speed."
+      },
+      {
+        "name": "Military",
+        "body": "Ex-forces performers who drill, carry and move like the real thing."
+      },
+      {
+        "name": "Gymnasts",
+        "body": "Competition-standard gymnasts for tumbling, vaulting and set pieces."
+      },
+      {
+        "name": "Figure skaters",
+        "body": "Skaters for ice sequences and rinks, trained to performance standard."
+      },
+      {
+        "name": "Firearms",
+        "body": "Performers trained and cleared to handle weapons on set."
+      },
+      {
+        "name": "Contortionists",
+        "body": "Contortion and extreme flexibility for the shot that needs it."
       }
-    ]
+    ],
+    "note": "The names run along the roster tape under the statement. `body` is kept for each so a line of detail is on hand if the section ever lists them again."
   },
   "feature": {
     "kicker": "ON SET",
