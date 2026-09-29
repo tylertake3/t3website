@@ -305,6 +305,11 @@ const channels: Record<string, { value: string; href: string; external?: boolean
       text-decoration:underline; text-underline-offset:4px;
     }
     .contactRouteLink:hover { color:var(--ink); }
+    /* a finger needs more than the line of type: the hit area grows, the layout does not */
+    @media (hover: none) {
+      .contactRouteLink { padding:12px 0; margin-top:6px; margin-bottom:-12px; }
+      .contactNoticeLinks a { display:inline-block; padding:10px 0; margin:-10px 0; }
+    }
 
     @media (max-width:1024px) {
       .contactChannels { grid-template-columns:repeat(2, minmax(0, 1fr)); }

@@ -313,7 +313,12 @@ const heroCss = [
       max-width:none;
     }
     .creditsHero .heroLede { font-size:clamp(17px,1.5vw,21px); font-weight:400; letter-spacing:0.5px; line-height:1.6; margin-top:22px; max-width:560px; color:rgba(244,242,238,0.88); text-wrap:pretty; }
-    @media (max-width:1024px) { .creditsHero .heroCopy { left:28px; right:28px; } }
+    /* 32px, the tablet rung of the padding ladder; and the copy moves over the
+       middle of the still here, so the shade starts higher (DESIGN.md §5) */
+    @media (max-width:1024px) {
+      .creditsHero .heroCopy { left:32px; right:32px; }
+      .creditsHero .heroEyebrow { text-shadow:0 1px 12px rgba(20,20,22,0.9); }
+    }
     @media (max-width:640px) {
       .creditsHero .heroCopy { left:20px; right:20px; bottom:36px; }
       .creditsHero .heroEyebrow { letter-spacing:4px; }
@@ -335,6 +340,10 @@ const heroCss = [
     .creditsHero .heroCopy { max-width:none; margin:0; }
     /* the scrim sits behind the words: darker through the middle, lighter at the top */
     .creditsHero .heroScrim { background:linear-gradient(180deg, rgba(20,20,22,0.3) 0%, rgba(20,20,22,0.1) 20%, rgba(20,20,22,0.12) 50%, rgba(20,20,22,0.62) 76%, rgba(20,20,22,0.88) 100%); }
+    /* below a desktop the words sit higher on the still: shade from higher up */
+    @media (max-width:1024px) {
+      .creditsHero .heroScrim { background:linear-gradient(180deg, rgba(20,20,22,0.42) 0%, rgba(20,20,22,0.3) 18%, rgba(20,20,22,0.66) 40%, rgba(20,20,22,0.9) 100%); }
+    }
 
     .creditsIntro { margin-top:26px; max-width:64ch; }
 
@@ -446,7 +455,7 @@ const heroCss = [
       .workGrid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:26px 12px; }
       .workCardBody { padding:12px 0 0; }
       .workCardTitle { font-size:14px; }
-      .workCardRoles { font-size:10px; letter-spacing:1.9px; }
+      .workCardRoles { font-size:11px; letter-spacing:1.5px; }
       .workFilter { padding:9px 14px; font-size:11px; letter-spacing:1.4px; }
       .workFilterSplit { display:none; }
     }

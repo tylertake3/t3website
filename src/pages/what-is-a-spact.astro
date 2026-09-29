@@ -58,37 +58,37 @@ const jsonLd = {
           <div class="tann" style="left:13.5%; top:13%; width:8%; height:17%; animation-delay:0.6s;">
             <div class="tannBox"></div>
             <div class="tannTick" style="bottom:100%;"></div>
-            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:var(--accent);">●</span>&nbsp; {copy.hero.annotations[0].label}</div>
+            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:var(--accent);">●</span>&nbsp; <span class="tannWord">{copy.hero.annotations[0].label.replace(/\s*\d+$/, '')}</span> {copy.hero.annotations[0].label.match(/\d+$/)?.[0]}</div>
           </div>
           <div class="tann" style="left:25.5%; top:18%; width:6.5%; height:12%; animation-delay:4.8s;">
             <div class="tannBox"></div>
             <div class="tannTick" style="top:100%;"></div>
-            <div class="tannLabel" style="top:calc(100% + 9px); transform:translateX(calc(-50% - 20px));"><span style="color:var(--accent);">●</span>&nbsp; {copy.hero.annotations[1].label}</div>
+            <div class="tannLabel" style="top:calc(100% + 9px); transform:translateX(calc(-50% - 20px));"><span style="color:var(--accent);">●</span>&nbsp; <span class="tannWord">{copy.hero.annotations[1].label.replace(/\s*\d+$/, '')}</span> {copy.hero.annotations[1].label.match(/\d+$/)?.[0]}</div>
           </div>
           <div class="tann" style="left:34.5%; top:21%; width:9%; height:15%; animation-delay:2s;">
             <div class="tannBox"></div>
             <div class="tannTick" style="bottom:100%;"></div>
-            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:var(--accent);">●</span>&nbsp; {copy.hero.annotations[2].label}</div>
+            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:var(--accent);">●</span>&nbsp; <span class="tannWord">{copy.hero.annotations[2].label.replace(/\s*\d+$/, '')}</span> {copy.hero.annotations[2].label.match(/\d+$/)?.[0]}</div>
           </div>
           <div class="tann" style="left:50.5%; top:18.5%; width:6.5%; height:12%; animation-delay:6.2s;">
             <div class="tannBox"></div>
             <div class="tannTick" style="top:100%;"></div>
-            <div class="tannLabel" style="top:calc(100% + 9px);"><span style="color:var(--accent);">●</span>&nbsp; {copy.hero.annotations[3].label}</div>
+            <div class="tannLabel" style="top:calc(100% + 9px);"><span style="color:var(--accent);">●</span>&nbsp; <span class="tannWord">{copy.hero.annotations[3].label.replace(/\s*\d+$/, '')}</span> {copy.hero.annotations[3].label.match(/\d+$/)?.[0]}</div>
           </div>
           <div class="tann" style="left:62%; top:12.5%; width:9%; height:17%; animation-delay:3.4s;">
             <div class="tannBox"></div>
             <div class="tannTick" style="bottom:100%;"></div>
-            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:var(--accent);">●</span>&nbsp; {copy.hero.annotations[4].label}</div>
+            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:var(--accent);">●</span>&nbsp; <span class="tannWord">{copy.hero.annotations[4].label.replace(/\s*\d+$/, '')}</span> {copy.hero.annotations[4].label.match(/\d+$/)?.[0]}</div>
           </div>
           <div class="tann" style="left:78.5%; top:20%; width:7.5%; height:13%; animation-delay:7.6s;">
             <div class="tannBox"></div>
             <div class="tannTick" style="bottom:100%;"></div>
-            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:var(--accent);">●</span>&nbsp; {copy.hero.annotations[5].label}</div>
+            <div class="tannLabel" style="bottom:calc(100% + 9px);"><span style="color:var(--accent);">●</span>&nbsp; <span class="tannWord">{copy.hero.annotations[5].label.replace(/\s*\d+$/, '')}</span> {copy.hero.annotations[5].label.match(/\d+$/)?.[0]}</div>
           </div>
         </div>
         <figcaption style="display:flex; justify-content:space-between; align-items:baseline; gap:16px; margin-top:12px; flex-wrap:wrap;">
-          <span style="font-size:10px; letter-spacing:3px; color:var(--muted);">{copy.hero.captionLeft}</span>
-          <span style="font-size:10px; letter-spacing:3px; color:var(--accent);">{copy.hero.captionRight}</span>
+          <span style="font-size:11px; letter-spacing:3px; color:var(--muted);">{copy.hero.captionLeft}</span>
+          <span style="font-size:11px; letter-spacing:3px; color:var(--accent);">{copy.hero.captionRight}</span>
         </figcaption>
       </figure>
     </div>
@@ -198,7 +198,9 @@ p { text-wrap:pretty; }
 
 /* ---------- layout helpers ---------- */
 .wrap { max-width:1280px; margin:0 auto; }
-.pad { padding-left:60px; padding-right:60px; }
+/* 40px: the desktop rung of the padding ladder, the edge every other page
+   and the footer take (DESIGN.md §4) */
+.pad { padding-left:40px; padding-right:40px; }
 .split { display:grid; grid-template-columns:1fr 1.6fr; gap:72px; align-items:start; }
 .titleSplit { display:flex; justify-content:space-between; align-items:flex-start; gap:56px; flex-wrap:wrap; }
 .rule { border-top:1px solid var(--hair); }
@@ -221,12 +223,12 @@ p { text-wrap:pretty; }
 .tann { position:absolute; opacity:0; animation:annIn 14s linear infinite; }
 .tannBox { position:absolute; inset:0; border:1px solid rgba(244,242,238,0.85); box-shadow:0 0 0 1px rgba(20,20,22,0.35); }
 .tannTick { position:absolute; left:50%; width:1px; height:9px; background:rgba(244,242,238,0.85); }
-.tannLabel { position:absolute; left:50%; transform:translateX(-50%); background:rgba(22,22,24,0.92); border:1px solid #3a3a3e; padding:4px 9px; font-size:9px; letter-spacing:2.5px; color:#f4f2ee; white-space:nowrap; }
+.tannLabel { position:absolute; left:50%; transform:translateX(-50%); background:rgba(22,22,24,0.92); border:1px solid #3a3a3e; padding:4px 9px; font-size:11px; letter-spacing:2.5px; color:#f4f2ee; white-space:nowrap; }
 
 /* ---------- in practice ---------- */
 .caseGrid { display:grid; grid-template-columns:repeat(2,1fr); gap:40px 56px; margin-top:44px; }
 .caseCard { border-top:1px solid var(--hair); padding-top:20px; }
-.caseKicker { font-size:10px; letter-spacing:3px; color:var(--accent); margin:0; }
+.caseKicker { font-size:11px; letter-spacing:3px; color:var(--accent); margin:0; }
 .caseTitle { font-size:15px; letter-spacing:0.2px; font-weight:500; color:var(--ink); margin:12px 0 0; }
 .caseBody { font-size:15px; font-weight:400; line-height:1.7; color:var(--sub); margin:10px 0 0; }
 .creditStrip { border-top:1px solid var(--hair); margin-top:52px; padding-top:22px; }
@@ -239,6 +241,11 @@ p { text-wrap:pretty; }
 /* ---------- pointer to the frame on /spacts ---------- */
 .frameLink { display:inline-block; margin-top:22px; font-size:11px; letter-spacing:2.5px; color:var(--accent); text-decoration:none; border-bottom:1px solid currentColor; padding-bottom:3px; }
 .frameLink:hover { color:var(--ink); }
+/* a finger needs more than the line of type: the hit area grows, the layout does not */
+@media (hover: none) {
+  .frameLink, .creditLink { position:relative; }
+  .frameLink::after, .creditLink::after { content:''; position:absolute; left:0; right:0; top:-12px; bottom:-12px; }
+}
 
 /* ---------- work table ---------- */
 .workRow { border-top:1px solid var(--hair); padding:18px 0; display:grid; grid-template-columns:220px 1fr; gap:24px; }
@@ -250,7 +257,9 @@ p { text-wrap:pretty; }
 @media (max-width:1024px) {
   .pad { padding-left:32px; padding-right:32px; }
   .titleSplit { flex-direction:column; gap:48px; }
-  .titleSplit > * { max-width:none !important; width:100%; }
+  /* stacked, the columns' 420/460px flex bases became heights, leaving a
+     gap under the words and another under the picture */
+  .titleSplit > * { max-width:none !important; width:100%; flex:none !important; }
   .split { grid-template-columns:1fr; gap:36px; }
 }
 @media (max-width:640px) {
@@ -263,8 +272,14 @@ p { text-wrap:pretty; }
   .standfirst { font-size:clamp(16px,4.4vw,19px) !important; }
   .caseGrid { grid-template-columns:1fr !important; gap:28px; margin-top:32px; }
   .workRow { grid-template-columns:1fr; gap:8px; }
-  .tannLabel { font-size:7px; letter-spacing:1px; padding:2px 5px; }
-  .tannTick { height:6px; }
+  /* six callouts at a readable 11px would overlap in a 350px frame, so a
+     phone shows the number alone (as /spacts names the role alone) */
+  .tannLabel { font-size:11px; letter-spacing:0.5px; padding:1px 5px; }
+  .tannWord { display:none; }
+  /* the faces sit near the top of the still: the callouts above them hang
+     closer, so none is clipped by the frame's top edge */
+  .tannLabel[style*="bottom"] { bottom:calc(100% + 4px) !important; }
+  .tannTick[style*="bottom"] { height:4px; }
 }
 @media (max-height:640px) and (orientation:landscape) {
   /* clears the fixed site header on small screens */

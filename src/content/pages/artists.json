@@ -27,6 +27,7 @@
       "hint": "Click for the next",
       "productionLabel": "Production",
       "briefLabel": "The brief",
+      "notesLabel": "Notes",
       "note": "Each brief is a real production. `details` are the two rows under the brief; each label can be anything (Duration, Location, Style, Discipline), and a detail with an `href` becomes a link to that page. `note` is the short paragraph beneath: what we did on that production and how.",
       "items": [
         {
@@ -125,16 +126,12 @@
       ],
       "notesLabel": "Notes",
       "notesPlaceholder": "Anything else: numbers, skills, looks, references, budget.",
-      "nameLabel": "Your name",
       "sendLabel": "Send the brief",
       "cancelLabel": "Back to the briefs",
       "hint": "Opens in your email app",
       "subject": "Brief for Take 3",
       "note": "The blank call sheet that replaces the slate when \"Send us your brief\" is pressed. It composes an email to the address in src/data/site.ts.",
       "countLabel": "New",
-      "namePlaceholder": "So we know who to reply to",
-      "roleLabel": "Your role",
-      "rolePlaceholder": "Producer, first AD, coordinator",
       "email": {
         "greeting": "Hello Take 3,",
         "intro": "I have a brief I would like you to look at. The details are below.",

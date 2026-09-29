@@ -201,23 +201,29 @@ import copy from '../content/pages/stand-ins.json';
     .whyBody { font-size:15px; font-weight:400; line-height:1.7; color:var(--sub); margin-top:10px; text-wrap:pretty; }
 
     /* ---------- responsive (desktop rendering unchanged) ---------- */
+    /* 32px: the tablet rung of the padding ladder */
     @media (max-width:1024px) {
       .cards3 { grid-template-columns:repeat(2,1fr); gap:40px; }
       .why3 { grid-template-columns:repeat(2,1fr); gap:40px; }
       .bandGrid, .matchGrid, .commGrid { grid-template-columns:1fr; gap:48px; }
       .bandGrid { padding:0 0 0; }
       .bandMedia { min-height:420px; }
-      .bandCopy { padding:64px 40px 88px; }
+      .bandCopy { padding:64px 32px 88px; }
       .matchMedia { min-height:420px; order:2; }
-      .matchGrid { padding:72px 40px; }
-      .commGrid { padding:72px 40px 80px; }
-      .whyPad { padding:72px 40px 80px; }
-      .sectionPad { padding:72px 40px; }
+      .matchGrid { padding:72px 32px; }
+      .commGrid { padding:72px 32px 80px; }
+      .whyPad { padding:72px 32px 80px; }
+      .sectionPad { padding:72px 32px; }
+      /* the cover copy moves over the middle of the still: shade it from
+         higher up and lift the small accent label off the picture */
+      .heroScrim { background:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.3) 18%, rgba(20,20,22,0.66) 40%, rgba(20,20,22,0.9) 100%); }
+      .heroEyebrow { text-shadow:0 1px 12px rgba(20,20,22,0.9); }
+      .heroCopy { padding-left:32px; padding-right:32px; }
     }
     @media (max-width:640px) {
       .hero { padding:0; }
       .heroCopy { padding:120px 20px 48px; }
-      .heroEyebrow { letter-spacing:3px; font-size:10px; line-height:1.6; }
+      .heroEyebrow { letter-spacing:3px; font-size:11px; line-height:1.6; }
       .heroTitle { font-size:clamp(30px, 9.5vw, 46px); letter-spacing:0; }
       .heroLede { font-size:clamp(16px, 4.4vw, 19px); letter-spacing:0.5px; }
       .display { font-size:clamp(24px, 7.5vw, 34px); }

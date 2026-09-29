@@ -427,6 +427,15 @@ const organizationSchema = {
     /* a finger taps; only a cursor clicks */
     .hintTouch { display:none; }
 
+    /* ---- touch: the roster is a plain row swiped with a thumb ----
+       The drift and the drag fought the phone's own momentum scrolling and
+       the row stuttered. On touch the browser scrolls it natively, each tile
+       settling at the edge, and the page still scrolls under a vertical swipe. */
+    @media (hover: none) and (pointer: coarse) {
+      .supplyScroll { cursor:auto; touch-action:pan-x pan-y; scroll-snap-type:x proximity; scroll-padding-inline:12px; -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain; }
+      .supplyTile { scroll-snap-align:start; }
+    }
+
     /* ---- touch: nothing may depend on hover ---- */
     @media (hover: none) {
       /* the marquee's stop control was hover-revealed; a finger can't hover */
@@ -448,9 +457,14 @@ const organizationSchema = {
          under ~800px; the credit now sits under the copy, as it does on a
          phone, and both take the page's own 40px edge. */
       .hero { min-height:max(var(--coverPhotoH), 580px); }
-      .heroCopy { left:40px; bottom:190px; max-width:calc(100% - 80px); }
-      .heroProd { left:40px; right:auto; bottom:96px; text-align:left; }
+      .heroCopy { left:32px; bottom:190px; max-width:calc(100% - 64px); }
+      .heroProd { left:32px; right:auto; bottom:96px; text-align:left; }
       .heroProdName { font-size:24px; letter-spacing:4px; }
+
+      /* the tablet rung of the padding ladder (40 / 32 / 20), the same edge
+         every inner page and the footer take at this width */
+      .about, .reviewsInner, .clientsBody, .logoStack, .logoHint, .posterMore { padding-left:32px; padding-right:32px; }
+      .supply .sectionHead, .clients .sectionHead, .credits .sectionHead { padding-left:32px; padding-right:32px; --headInset:32px; }
     }
 
     /* ---- phone: ≤640 ---- */
@@ -481,6 +495,9 @@ const organizationSchema = {
       .supply { padding:0 0 32px; }
       .supply .sectionHead { padding:0 20px 14px; }
       .supplyScroll { padding:0 12px; --supplyFade:24px; }
+      /* nothing moves on its own here (see the marquee script), so there is
+         nothing to pause */
+      .marqueeToggle { display:none; }
       .supply .sectionHead,
       .clients .sectionHead,
       .credits .sectionHead { --headInset:20px; }
@@ -490,12 +507,17 @@ const organizationSchema = {
       .supplyMeta { gap:12px; }
 
       .posterMore { padding:22px 20px 0; }
+      /* twelve posters, six rows, on a phone: all thirty ran to fifteen rows
+         and four screens before the footer. "See all credits" has the rest. */
+      .posterGrid .posterCell:nth-child(n+13) { display:none; }
       /* the count's caption wrapped with "2019" stranded on its own line */
       .creditsCountLabel { text-wrap:balance; }
     }
 
     @media (max-width:400px) {
       .stats { gap:24px 10px; }
+      /* a third of a 320px screen is 85px; "1,500+" at 26px ran into "2019" */
+      .statNum { font-size:clamp(20px, 6.6vw, 28px); }
       .statLabel { font-size:11px; letter-spacing:0.5px; }
       /* three columns left 77px for a wordmark; two reads */
       .logoPage { grid-template-columns:repeat(2, 1fr); column-gap:32px; }
@@ -670,6 +692,17 @@ const organizationSchema = {
         var dragging = false, hover = false, focused = false, paused = false, moved = false;
         var lastX = 0, raf = null;
 
+        /* On a touchscreen the row is left to the browser: no drift, no drag,
+           no endless loop. The extra copies of the roster go, so the row is
+           the roster once, swiped with a thumb and stopping at its ends. */
+        var touchOnly = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+        if (touchOnly) {
+          Array.prototype.slice.call(el.querySelectorAll('.supplyTile[aria-hidden="true"]')).forEach(function (t) { t.parentNode.removeChild(t); });
+          var tg = document.getElementById('supplyToggle');
+          if (tg) tg.hidden = true;
+          return;
+        }
+
         /* The row holds three identical copies of the roster. `cycle` is the
            width of one copy, measured from the markup so the gap between tiles
            is included exactly; the view is kept parked on the middle copy, and
@@ -803,6 +836,17 @@ const organizationSchema = {
             var visible = j >= page * perPage && j < (page + 1) * perPage;
             cards[j].setAttribute('aria-hidden', visible ? 'false' : 'true');
           }
+          fit();
+        }
+        /* The row was as tall as the longest quote of the fifteen, so a page
+           of short reviews sat over a screen of nothing. The window follows
+           the tallest card on show instead, at every width. */
+        function fit() {
+          var tallest = 0;
+          for (var k = page * perPage; k < Math.min(cards.length, (page + 1) * perPage); k++) {
+            tallest = Math.max(tallest, cards[k].offsetHeight);
+          }
+          viewport.style.height = tallest ? tallest + 'px' : '';
         }
         function go(i) { page = ((i % pages) + pages) % pages; paint(); }
 
@@ -841,6 +885,9 @@ const organizationSchema = {
         });
 
         measure(); buildDots(); paint();
+        /* the logos beside a quote arrive after first paint and can change a card's height */
+        window.addEventListener('load', fit);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
       })();
 
       /* ---------------- client logo wall: cascade ----------------

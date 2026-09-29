@@ -224,6 +224,11 @@ const marquee = [...disciplines, ...disciplines, ...disciplines];
       .joinHeroInner .joinFig { width:100%; max-width:420px; }
       .joinPrepare { grid-template-columns:1fr; gap:44px; }
       .joinPrepareFig { max-width:420px; }
+    }
+    /* a tablet keeps the picture beside the words (DESIGN.md §4) */
+    @media (min-width:641px) and (max-width:1024px) {
+      .joinPrepare { grid-template-columns:minmax(0, 0.9fr) minmax(0, 1.1fr); gap:36px; align-items:start; }
+      .joinPrepareFig { max-width:none; }
       .joinSteps { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:28px; }
     }
 
@@ -234,7 +239,11 @@ const marquee = [...disciplines, ...disciplines, ...disciplines];
       .joinSupply .sectionHead { padding:0 20px 14px; }
       .joinRosterScroll { padding:26px 12px 0; --supplyFade:24px; }
       .joinRosterNote { padding:0 20px; }
-      .joinGallery { grid-template-columns:1fr; gap:16px; }
+      /* one row swiped with a thumb, as After Dark's routes are: stacked full
+         width, the three portraits ran to three screens */
+      .joinGallery { display:flex; gap:14px; overflow-x:auto; scrollbar-width:none; scroll-snap-type:x mandatory; scroll-padding-inline:20px; overscroll-behavior-x:contain; margin:0 -20px; padding:0 20px; }
+      .joinGallery::-webkit-scrollbar { display:none; }
+      .joinGalleryItem { flex:0 0 72%; scroll-snap-align:start; }
       .joinSteps { grid-template-columns:1fr; gap:26px; }
       .joinHeroCta, .joinApplyCta { width:100%; text-align:center; }
     }

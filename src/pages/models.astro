@@ -224,6 +224,16 @@ import copy from '../content/pages/models.json';
       .cards { grid-template-columns:repeat(2,1fr); gap:36px; }
     }
 
+    /* a tablet has room for the picture and its words side by side, as on a
+       desktop: stacked, each portrait ran taller than the screen with an
+       empty half beside it */
+    @media (min-width:641px) and (max-width:1024px) {
+      .splitInner { grid-template-columns:1fr 1fr !important; gap:36px; align-items:center; }
+      .split--film .splitCopy { order:0; }
+      .split--film .splitFig, .split--brands .splitFig { order:0; max-width:none; }
+      .heroFig { max-width:400px; }
+    }
+
     /* ---------- responsive: phone ---------- */
     @media (max-width:640px) {
       /* clears the fixed site header once the hero stacks */

@@ -405,7 +405,7 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .supply { padding:0 16px 48px; }
 .sectionHead { max-width:1280px; margin:0 auto; display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid var(--hair); }
 .supply .sectionHead { padding:0 24px 18px; margin-bottom:16px; }
-.sectionTitle { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(26px,3vw,40px); font-weight:400; letter-spacing:0; }
+.sectionTitle { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(26px,3vw,40px); font-weight:400; letter-spacing:0; line-height:1.1; padding-block:0.2em; }
 /* soft fade at both edges so the marquee dissolves into the page background
    instead of ending on a hard cut */
 .supplyScroll {
@@ -428,7 +428,7 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 
 /* image slots — no artwork available yet, rendered as deliberate empty plates */
 .slot { background:var(--tileBg); display:flex; align-items:center; justify-content:center; width:100%; }
-.slotLabel { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); font-weight:400; }
+.slotLabel { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); font-weight:400; text-align:center; padding:0 8px; }
 
 /* ---------- reviews ---------- */
 .reviews { background:#1a1a1c; color:#f4f2ee; border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); }
@@ -436,7 +436,10 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .reviewsHead { display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid #3a3a3e; padding-bottom:18px; }
 .reviewsHead .sub { font-size:12px; letter-spacing:3px; color:var(--muted); }
 .revViewport { overflow:hidden; margin-top:40px; }
-.revTrack { display:flex; gap:var(--revGap); transition:transform 0.65s cubic-bezier(0.3, 0, 0.2, 1); }
+.revTrack { display:flex; align-items:flex-start; gap:var(--revGap); transition:transform 0.65s cubic-bezier(0.3, 0, 0.2, 1); }
+/* the window is as tall as the cards on show (set by the homepage script), not
+   the longest of all fifteen, so a short page never sits over a gap */
+.revViewport { transition:height 0.45s cubic-bezier(0.3, 0, 0.2, 1); }
 .revCard { flex:0 0 calc((100% - (var(--revGap) * 2)) / 3); min-width:0; }
 .revName { white-space:pre-line; font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(32px,3vw,48px); letter-spacing:0; line-height:1.02; font-weight:400; }
 /* The line holds its height even when a job title hasn't been confirmed yet, so
@@ -553,6 +556,12 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .footerTop { max-width:1280px; margin:0 auto; padding:72px 40px; display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:40px; }
 .footerTitle { font-family:'Jost', sans-serif; text-transform:uppercase; font-size:clamp(28px,3.6vw,50px); font-weight:400; letter-spacing:1px; line-height:1.05; }
 .footerContact { font-size:16px; margin-top:18px; }
+/* a finger needs a little more than the line of type */
+@media (hover: none) {
+  .footerContact a, .eventBookContact a, .bookedContact, .eventCrumb { display:inline-block; padding:8px 0; margin:-8px 0; }
+  /* the clock is a button (it changes city); 23px of type is too small to aim at */
+  .slate { padding:10px 0; margin:-6px 0; }
+}
 .footerBtns { display:flex; gap:12px; flex-wrap:wrap; justify-content:flex-end; margin-left:auto; }
 .footerIntro { font-size:17px; font-weight:400; line-height:1.65; color:var(--sub); margin-top:16px; max-width:46ch; text-wrap:pretty; }
 /* Every rectangular button on the site is square-cornered. Only icon-only
@@ -606,6 +615,8 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   .logoPage { grid-template-columns:repeat(4, 1fr); column-gap:48px; row-gap:64px; }
   .posterGrid { grid-template-columns:repeat(3, minmax(0, 1fr)); }
   .revCard { flex:0 0 calc((100% - var(--revGap)) / 2); }
+  /* the footer keeps the page's edge: 32px here, like every band above it */
+  .footerTop, .footerBottom { padding-left:32px; padding-right:32px; }
 }
 
 /* ---------- phone ---------- */
@@ -613,10 +624,12 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   :root { --revGap:28px; }
   .hero { display:flex; flex-direction:column; justify-content:flex-end; padding:130px 20px 96px; }
   .heroCopy { position:relative; left:auto; bottom:auto; max-width:100%; width:auto; }
-  .heroKicker { font-size:clamp(11px,3.2vw,14px); letter-spacing:0.28em; }
+  .heroKicker { font-size:clamp(11px,3.2vw,14px); letter-spacing:0.28em; text-wrap:balance; }
   .heroTitle { font-size:clamp(32px,9vw,50px); letter-spacing:0; margin-top:14px; }
-  .heroProd { position:relative; right:auto; bottom:auto; text-align:left; margin-top:26px; white-space:normal; }
-  .heroProdName { font-size:clamp(20px,6.4vw,26px); letter-spacing:3px; }
+  /* the production credit is a footnote to the headline, not a second one:
+     it sits on the right, small and tracked, the way it does on a desktop */
+  .heroProd { position:relative; right:auto; bottom:auto; text-align:right; margin-top:22px; white-space:normal; font-size:11px; letter-spacing:2.5px; }
+  .heroProdName { font-size:14px; letter-spacing:3px; margin-top:4px; }
   .heroStrip { --stripPad:20px; }
   .heroStrip div { padding:14px 0; font-size:11px; letter-spacing:2px; column-gap:10px; }
   .aboutWrap { padding:64px 0 32px; }
@@ -626,9 +639,16 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   .supply { padding:0 12px 32px; }
   .supply .sectionHead { padding:0 8px 14px; }
   .sectionHead { flex-direction:column; align-items:flex-start; gap:8px; }
-  .reviewsInner { padding:40px 20px; }
+  .reviewsInner { padding:40px 20px 36px; }
+  .revViewport { margin-top:28px; }
   .revCard { flex:0 0 100%; }
-  .revFoot { flex-wrap:wrap; justify-content:center; gap:20px; }
+  /* one card fills the phone, so it is set a size down: the name was the
+     largest thing on the screen and the quote read as a page of body copy */
+  .revName { font-size:clamp(24px, 7vw, 30px); }
+  .revRole { font-size:12px; margin-top:10px; }
+  .revCredits { min-height:44px; margin-top:8px; }
+  .revQuote { font-size:15px; line-height:1.7; margin-top:16px; }
+  .revFoot { flex-wrap:wrap; justify-content:center; gap:14px 20px; margin-top:24px; padding-top:16px; }
   .revCount { order:3; width:100%; text-align:center; }
   .clients { padding:64px 0; }
   .clients .sectionHead { padding:0 20px 14px; }
@@ -637,7 +657,7 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   .logoHint { padding:0 20px; margin-top:24px; }
   .logoPage { grid-template-columns:repeat(3, 1fr); column-gap:24px; row-gap:40px; }
   .credits .sectionHead { padding:0 20px 14px; }
-  .posterGrid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+  .posterGrid { grid-template-columns:repeat(3, minmax(0, 1fr)); }
   .footerTop { padding:48px 20px; }
   .footerBottom { padding:24px 20px 40px; }
   .footerBtns { width:100%; }
@@ -645,7 +665,7 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .heroLayer, .logoPage, .logoCell, .revTrack, .page, .hero, .menu, .menuBtnBars span { transition:none !important; }
+  .heroLayer, .logoPage, .logoCell, .revTrack, .revViewport, .page, .hero, .menu, .menuBtnBars span { transition:none !important; }
   /* the wall still turns over on a click, it just does it in one step */
   .logoCell { transform:none !important; filter:none !important; }
   /* production logos stay put and stay visible */
@@ -714,9 +734,14 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   .nav { padding:12px 14px; gap:8px; }
   .navRight { gap:10px; }
   .navLogo { height:54px; }
-  .navCta { padding:7px 9px; font-size:10px; letter-spacing:1px; }
+  .navCta { padding:7px 9px; font-size:11px; letter-spacing:1px; }
   .menuBtn { gap:6px; }
   .menuBtnLabel { font-size:11px; }
+}
+/* the narrowest phones: the logo, toggle, button and Menu only just fit, so
+   the button's label is the one thing allowed under 11px */
+@media (max-width:360px) {
+  .navCta { font-size:10px; }
 }
 
 /* ---------- page patterns (shared by the pages built from BUILD-SPEC) ---------- */
@@ -724,6 +749,7 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 /* Always-dark surfaces keep the dark palette whatever the theme: in light mode
    the oxblood accent on near-black fails contrast badly. Pages had each been
    patching this locally, so it belongs here once. */
+[data-theme="light"] .hero,
 [data-theme="light"] .pageHero,
 [data-theme="light"] .bandDark {
   --accent:#d4704f;
@@ -738,7 +764,7 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 /* text-led hero for pages without a full-bleed photograph */
 .pageHero { background:var(--heroBg); color:var(--heroInk); min-height:var(--coverH); display:flex; align-items:flex-end; padding:170px 0 64px; }
 .pageHeroInner { max-width:1280px; width:100%; margin:0 auto; padding:0 40px; }
-.pageHeroTitle { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(44px, 5.4vw, 92px); font-weight:400; letter-spacing:0; line-height:1.06; margin-top:18px; }
+.pageHeroTitle { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(44px, 5.4vw, 92px); font-weight:400; letter-spacing:0; line-height:1.06; margin-top:18px; white-space:pre-line; }
 .pageHeroLede { font-size:clamp(17px, 1.6vw, 21px); font-weight:400; line-height:1.7; color:var(--heroInkSoft); margin-top:22px; max-width:56ch; text-wrap:pretty; }
 .pageHero .kicker { color:var(--accent); }
 
@@ -769,12 +795,12 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
    brief holds. Follows the theme. */
 .rangeBody { margin-top:28px; }
 .rangeCta { display:inline-block; margin-top:26px; }
-.briefCard { position:relative; display:flex; flex-direction:column; border:1px solid var(--hair); background:var(--bg); padding:34px 30px 26px; transition:border-color .3s cubic-bezier(0.3, 0, 0.2, 1); }
+.briefCard { position:relative; display:flex; flex-direction:column; border:1px solid var(--hair); background:var(--bg); padding:28px 28px 22px; transition:border-color .3s cubic-bezier(0.3, 0, 0.2, 1); }
 .briefCard > .briefNote { flex:1; }
 .briefCard[hidden] { display:none; }
 .briefCard:hover { border-color:var(--ctrlBorder); }
 .briefTimer { position:absolute; left:-1px; right:-1px; top:-1px; height:2px; background:var(--accent); transform-origin:left; transform:scaleX(0); }
-.briefTop { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:8px; }
+.briefTop { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:4px; }
 .briefNum { font-family:'Anton', 'Jost', sans-serif; font-size:clamp(40px, 4.4vw, 64px); line-height:.9; letter-spacing:0; margin:0; color:var(--ink); }
 .briefNum small { font-family:'Jost', sans-serif; font-size:13px; letter-spacing:3px; color:var(--muted); margin-left:8px; }
 /* the production's logo in the top-right corner, drawn at its measured size
@@ -785,48 +811,49 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 [data-theme="light"] .briefLogoDark { display:none; }
 [data-theme="light"] .briefLogoLight { display:block; }
 .briefLogoText { font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); text-align:right; }
-.briefRow { display:grid; grid-template-columns:104px 1fr; gap:20px; align-items:baseline; padding:14px 0; border-bottom:1px solid var(--hair); }
+/* the rows are the call sheet proper: the site's own small label, then the answer
+   typed in the accent ink in the typewriter face, with dashed rules between */
+.briefRow { display:grid; grid-template-columns:132px 1fr; gap:20px; align-items:baseline; padding:12px 0; border-bottom:1px dashed var(--hair); }
 .briefKey { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
-.briefVal { position:relative; font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(20px, 2vw, 30px); line-height:1.1; letter-spacing:0; min-height:1.1em; color:var(--ink); }
-.briefValLink { color:var(--ink); }
+.briefVal { position:relative; font-family:'Courier Prime', 'Courier New', Courier, monospace; text-transform:uppercase; font-size:13px; font-weight:700; line-height:1.4; letter-spacing:2px; min-height:1.4em; color:var(--accent); }
+.briefValLink { color:var(--accent); }
 .briefValLink[href] { cursor:pointer; transition:color .3s cubic-bezier(0.3, 0, 0.2, 1); }
-.briefValLink[href]:hover { color:var(--accent); }
-.briefValLink[href]::after { content:" →"; font-family:'Jost', sans-serif; font-size:.5em; letter-spacing:2px; vertical-align:.25em; color:var(--muted); opacity:0; transition:opacity .3s cubic-bezier(0.3, 0, 0.2, 1); }
-.briefValLink[href]:hover::after { opacity:1; color:var(--accent); }
+.briefValLink[href]:hover { color:var(--ink); }
+.briefValLink[href]::after { content:" →"; color:var(--muted); opacity:0; transition:opacity .3s cubic-bezier(0.3, 0, 0.2, 1); }
+.briefValLink[href]:hover::after { opacity:1; color:var(--ink); }
 .briefValLink[href]:focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
 /* the caret sits in the flow's place but out of the flow, so the line it is on never grows or shrinks around it */
-.briefCaret { position:absolute; display:inline-block; width:.45ch; height:.9em; margin:.1em 0 0 3px; background:var(--accent); animation:briefBlink 1s steps(1) infinite; }
+.briefCaret { position:absolute; display:inline-block; width:.6ch; height:1em; margin:.2em 0 0 2px; background:var(--accent); animation:briefBlink 1s steps(1) infinite; }
 @keyframes briefBlink { 50% { opacity:0; } }
-.briefNote { margin:22px 0 0; font-size:16px; line-height:1.65; color:var(--sub); min-height:3.3em; text-wrap:pretty; }
-.briefFoot { display:flex; justify-content:space-between; align-items:center; margin-top:22px; }
+.briefNote { margin:18px 0 0; font-family:'Courier Prime', 'Courier New', Courier, monospace; font-size:14px; line-height:1.7; color:var(--sub); min-height:3.4em; text-wrap:pretty; }
+/* the NOTES label is drawn from the note's own attribute so the typed copy can be swapped underneath it */
+.briefNote[data-label]::before { content:attr(data-label) "  "; font-family:'Jost', sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); white-space:pre; }
+.briefFoot { display:flex; justify-content:space-between; align-items:center; margin-top:18px; }
 .briefHint { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
 .briefNext { background:none; border:0; border-radius:0; padding:0; cursor:pointer; font-family:inherit; transition:color .3s cubic-bezier(0.3, 0, 0.2, 1); }
 .briefNext:hover { color:var(--ink); }
 .briefNext:focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
+/* a finger needs more than the 16px line of type: the hit area grows, the
+   layout does not */
+@media (hover: none) {
+  .briefNext { padding:14px 0; margin:-14px 0; }
+  .briefValLink { display:inline-block; padding:6px 0; margin:-6px 0; }
+}
 .briefDots { display:flex; gap:6px; }
 .briefDots i { width:6px; height:6px; border-radius:50%; background:var(--hair); display:block; transition:background .3s; }
 .briefDots i.is-on { background:var(--accent); }
-@media (prefers-reduced-motion: reduce) { .briefValLink { color:var(--ink); }
-.briefValLink[href] { cursor:pointer; transition:color .3s cubic-bezier(0.3, 0, 0.2, 1); }
-.briefValLink[href]:hover { color:var(--accent); }
-.briefValLink[href]::after { content:" →"; font-family:'Jost', sans-serif; font-size:.5em; letter-spacing:2px; vertical-align:.25em; color:var(--muted); opacity:0; transition:opacity .3s cubic-bezier(0.3, 0, 0.2, 1); }
-.briefValLink[href]:hover::after { opacity:1; color:var(--accent); }
-.briefValLink[href]:focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
-.briefCaret { animation:none; } .briefCard, .briefDots i { transition:none; } }
+@media (prefers-reduced-motion: reduce) { .briefCaret { animation:none; } .briefCard, .briefDots i { transition:none; } }
 /* The blank sheet: the same card, with the values typed by the visitor. The
    inputs sit bare on the rows in the slate's own voice, so the sheet reads
    as the slate with the answers missing rather than as a form dropped in. */
 .briefForm { cursor:auto; user-select:auto; }
 .briefForm .briefNum small { text-transform:uppercase; }
 .briefInput, .briefTextarea { width:100%; background:none; border:0; border-radius:0; padding:0; margin:0; color:var(--ink); }
-.briefInput { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(20px, 2vw, 30px); line-height:1.1; letter-spacing:0; }
-.briefInput::placeholder, .briefTextarea::placeholder { color:var(--muted); font-family:'Jost', sans-serif; text-transform:none; font-size:16px; letter-spacing:0; }
-.briefInput::placeholder { position:relative; top:-0.15em; }
-.briefInputPlain { font-family:'Jost', sans-serif; text-transform:none; font-size:16px; letter-spacing:0; margin-top:8px; }
-.briefRowWho { grid-template-columns:1fr 1fr; gap:28px; }
-.briefWho { display:flex; flex-direction:column; }
-.briefRowNotes { grid-template-columns:104px 1fr; align-items:start; }
-.briefTextarea { margin:0; min-height:0; font-family:'Jost', sans-serif; font-size:16px; line-height:1.65; resize:none; }
+/* the fields are set exactly as the slate's answers and note, so the sheet reads as the slate with the answers missing */
+.briefInput { font-family:'Courier Prime', 'Courier New', Courier, monospace; text-transform:uppercase; font-size:13px; font-weight:700; line-height:1.4; letter-spacing:2px; color:var(--accent); }
+.briefInput::placeholder, .briefTextarea::placeholder { color:var(--muted); font-weight:400; text-transform:none; letter-spacing:0; }
+.briefRowNotes { grid-template-columns:132px 1fr; align-items:start; }
+.briefTextarea { margin:0; min-height:0; font-family:'Courier Prime', 'Courier New', Courier, monospace; font-size:14px; line-height:1.7; resize:none; }
 .briefForm .briefNote { min-height:0; }
 .briefInput:focus-visible, .briefTextarea:focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
 .briefFormFoot { align-items:center; flex-wrap:wrap; gap:14px 24px; }
@@ -856,7 +883,9 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 /* The specialists statement on the Artists page: one big line whose middle
    word keeps changing (.stmtSlot), the divisions as a short ruled list, and
    the roster tape along the foot. A normal band, so it follows the theme. */
-.specialistsBand { padding-bottom:0; }
+/* the tape closes the band on its own rule: the tablet and phone .band padding
+   was winning over this and leaving an empty strip under it */
+.band.specialistsBand { padding-bottom:0; }
 .specialistsBand + .band { padding-top:96px; }
 /* as the opening of a page (Specialists) it takes the page cover's top
    padding so the header lands where it does everywhere else */
@@ -867,8 +896,9 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .stmtSlot > span { grid-area:1 / 1; white-space:nowrap; }
 .stmtFoot { margin-top:48px; display:grid; grid-template-columns:1fr 1.4fr; gap:72px; align-items:start; }
 .divList { list-style:none; margin:0; padding:0; border-top:1px solid var(--hair); }
-.divList li { padding:18px 0; border-bottom:1px solid var(--hair); }
-.divList a { display:block; text-align:right; font-size:17px; letter-spacing:3px; text-transform:uppercase; color:var(--ink); transition:color .3s cubic-bezier(0.3, 0, 0.2, 1); }
+/* the row's padding lives on the link, so the whole ruled row is the target */
+.divList li { padding:0; border-bottom:1px solid var(--hair); }
+.divList a { display:block; padding:18px 0; text-align:right; font-size:17px; letter-spacing:3px; text-transform:uppercase; color:var(--ink); transition:color .3s cubic-bezier(0.3, 0, 0.2, 1); }
 .divList a:hover { color:var(--accent); }
 .tape { margin-top:72px; border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); padding:22px 0 26px; overflow:hidden; white-space:nowrap; }
 .tapeLabel { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin:0 auto 16px; }
@@ -903,6 +933,8 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   .band { padding:72px 0; }
   .bandSplit, .specialistsBlock { grid-template-columns:1fr; gap:36px; }
   .stmtFoot { grid-template-columns:1fr; gap:36px; }
+  /* stacked under the copy, the divisions read from the same left edge */
+  .divList a { text-align:left; }
   .tape { margin-top:56px; }
   .pillars { grid-template-columns:1fr; }
   .pillar { border-right:0; border-bottom:1px solid var(--hair); padding:36px 0; }
@@ -917,18 +949,30 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
   .pageHeroInner, .bandInner { padding:0 20px; }
   .band { padding:56px 0; }
   .bandBody { font-size:16px; }
-  .catGrid { grid-template-columns:1fr; gap:28px; }
+  /* two routes across: a single column ran each plate the full width of the
+     screen, so the four routes took four screens to read */
+  .catGrid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:24px 14px; }
+  .catName { font-size:13px; letter-spacing:2px; margin-top:10px; }
+  .catDesc { font-size:13px; line-height:1.55; margin-top:6px; }
   .stmt { font-size:clamp(30px, 8.6vw, 64px); }
   .specOpener { padding-top:130px; }
   .stmtSlot > span { white-space:normal; }
-  .briefNote { min-height:6.6em; font-size:15px; }
-  .briefCard { padding:26px 20px 20px; }
+  /* the slate a size down: count, values and rows tighter, and the note holds
+     room for four lines rather than the six that left the card mostly empty */
+  .briefNote { min-height:4.4em; font-size:13px; line-height:1.7; margin-top:16px; }
+  /* the sheet's fields share the slate's sizes, but a field under 16px
+     makes an iPhone zoom in when it is tapped */
+  .briefInput, .briefTextarea { font-size:16px; }
+  .briefCard { padding:22px 18px 18px; }
+  .briefNum { font-size:34px; }
+  .briefNum small { font-size:11px; }
+  .briefRow { padding:10px 0; }
+  .briefVal { font-size:12px; }
+  .briefFoot { margin-top:16px; }
   .briefLogo img { --logo-scale:.7; }
-  .briefRow, .briefRowNotes, .briefRowWho { grid-template-columns:1fr; gap:6px; }
-  .briefRowWho { gap:14px; }
+  .briefRow, .briefRowNotes { grid-template-columns:1fr; gap:6px; }
   .stmtFoot { margin-top:36px; }
-  .divList li { padding:14px 0; }
-  .divList a { font-size:15px; text-align:left; }
+  .divList a { font-size:15px; padding:14px 0; }
   .tape { margin-top:44px; }
 }
 
@@ -1061,6 +1105,9 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 }
 @media (max-width:640px) {
   .insightGrid { grid-template-columns:1fr; gap:36px; }
+  /* an article without its picture yet shows no plate on a phone: a
+     screen-wide grey box per card only pushed the words apart */
+  .insightCardSlot { display:none; }
 }
 
 /* ---------- event cards (/events and the "other sessions" row) ---------- */
@@ -1105,13 +1152,20 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .eventGridSingle .eventCardExcerpt { font-size:17px; max-width:48ch; }
 @media (max-width:1024px) {
   .eventGrid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
-  .eventGridSingle .eventCardLink { grid-template-columns:1fr; }
+  /* the featured session keeps the full width; the two-up rule above was
+     winning and leaving it in half the row beside an empty column. On a
+     tablet the photo and details stay side by side, as on a desktop */
+  .eventGrid.eventGridSingle { grid-template-columns:1fr; }
   .eventGridSingle .eventCardImg,
-  .eventGridSingle .eventCardSlot { height:auto; min-height:0; aspect-ratio:3/2; }
+  .eventGridSingle .eventCardSlot { min-height:360px; }
   .eventGridSingle .eventCardBody { padding:28px 32px 32px; }
 }
 @media (max-width:640px) {
   .eventGrid { grid-template-columns:1fr; gap:28px; }
+  /* a phone stacks the featured session photo over text */
+  .eventGridSingle .eventCardLink { grid-template-columns:1fr; }
+  .eventGridSingle .eventCardImg,
+  .eventGridSingle .eventCardSlot { height:auto; min-height:0; aspect-ratio:3/2; }
   .eventCardBody, .eventGridSingle .eventCardBody { padding:20px 18px 20px; }
 }
 
@@ -1142,6 +1196,8 @@ body.menu-open { position:fixed; left:0; right:0; width:100%; overflow:hidden; }
 .insightProse a { text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1px; color:var(--ink); }
 .insightProse a:hover { color:var(--accent); }
 .insightProse img { display:block; width:100%; margin:44px 0 0; }
+/* the words after a picture start a paragraph's distance below it, not flush */
+.insightProse img + p { margin-top:24px; }
 .insightProse strong { font-weight:500; color:var(--ink); }
 
 /* ---------- scroll reveals (src/lib/reveal.ts) ---------- */
