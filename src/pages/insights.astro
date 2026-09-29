@@ -66,7 +66,7 @@ const countLabel = `${articles.length} ${articles.length === 1 ? 'ARTICLE' : 'AR
                 featured.data.image ? (
                   <img src={featured.data.image} alt="" loading="lazy" decoding="async" />
                 ) : (
-                  <span class="slot" style="aspect-ratio:4/3;">
+                  <span class="slot insightFeatureSlot" style="aspect-ratio:4/3;">
                     <span class="slotLabel">FEATURED IMAGE</span>
                   </span>
                 )
@@ -176,6 +176,8 @@ const countLabel = `${articles.length} ${articles.length === 1 ? 'ARTICLE' : 'AR
     .insightFeature { display:grid; grid-template-columns:1.15fr 1fr; gap:48px; align-items:center; margin-top:40px; }
     /* [hidden] alone loses to the display above it, so say it explicitly */
     .insightFeature[hidden] { display:none; }
+    /* as with the cards: no empty plate on a phone until the picture exists */
+    @media (max-width:640px) { .insightFeatureMedia:has(.insightFeatureSlot) { display:none; } }
     .insightFeatureMedia { display:block; }
     .insightFeatureMedia img { display:block; width:100%; aspect-ratio:4/3; object-fit:cover; }
     .insightFeatureTitle {

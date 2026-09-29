@@ -100,7 +100,7 @@ const jsonLd = {
       <aside class="insightAside" aria-label={copy.article.relatedHeading}>
         {
           related.length > 0 && (
-            <div>
+            <div class="insightAsideRelated">
               <p class="insightAsideTitle">{copy.article.relatedHeading}</p>
               <ul class="insightAsideList">
                 {
@@ -203,6 +203,15 @@ const jsonLd = {
     @media (max-width:1024px) {
       .insightArticleLayout { grid-template-columns:1fr; gap:48px; }
       .insightAside { position:static; }
+    }
+    @media (max-width:640px) {
+      /* stacked under the article, the related links repeated the "more
+         insights" cards straight after them; the cards carry them on a phone */
+      .insightAsideRelated { display:none; }
+    }
+    /* a finger needs more than the 16px line: the hit area grows, the layout does not */
+    @media (hover: none) {
+      .insightCrumb, .insightAllLink, .insightAsideList a { display:inline-block; padding:10px 0; margin:-10px 0; }
     }
   </style>
 </Base>

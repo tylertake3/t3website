@@ -92,7 +92,7 @@ const heroPoster = ((copy.hero as { poster?: string }).poster ?? '').trim();
               )}
             </div>
           ))}
-          <p class="briefNote" data-brief-f="note">{copy.range.briefs.items[0].note}</p>
+          <p class="briefNote" data-brief-f="note" data-label={copy.range.briefs.notesLabel}>{copy.range.briefs.items[0].note}</p>
           <div class="briefFoot">
             {/* the one control: steps to the next brief */}
             <button class="briefHint briefNext" type="button" data-brief-next>{copy.range.briefs.hint} →</button>
@@ -125,16 +125,6 @@ const heroPoster = ((copy.hero as { poster?: string }).poster ?? '').trim();
           <div class="briefRow briefRowNotes">
             <label class="briefKey" for="brief-notes">{copy.range.sheet.notesLabel}</label>
             <textarea class="briefNote briefTextarea" id="brief-notes" name="notes" rows="2" placeholder={copy.range.sheet.notesPlaceholder}></textarea>
-          </div>
-          <div class="briefRow briefRowWho">
-            <div class="briefWho">
-              <label class="briefKey" for="brief-name">{copy.range.sheet.nameLabel}</label>
-              <input class="briefInput briefInputPlain" id="brief-name" name="name" type="text" autocomplete="name" placeholder={copy.range.sheet.namePlaceholder} />
-            </div>
-            <div class="briefWho">
-              <label class="briefKey" for="brief-role">{copy.range.sheet.roleLabel}</label>
-              <input class="briefInput briefInputPlain" id="brief-role" name="role" type="text" autocomplete="organization-title" placeholder={copy.range.sheet.rolePlaceholder} />
-            </div>
           </div>
           <div class="briefFoot briefFormFoot">
             <div class="briefActions">
@@ -295,15 +285,19 @@ const heroPoster = ((copy.hero as { poster?: string }).poster ?? '').trim();
         /* the count and the logo arrive together, before the rows type */
         setLogo(b);
         if (m) m.animate([num, logoBox], { opacity: [0, 1], transform: ['translateY(6px)', 'translateY(0)'] }, { duration: 0.4, ease: EASE });
-        /* a blank row keeps a non-breaking space so its baseline, and so the
+        /* the left column is printed on the sheet from the start: the labels
+           change with the brief but never blank or type. Only the answers do.
+           A blank answer keeps a non-breaking space so its baseline, and so the
            row's height, is exactly what it will be once the words arrive */
-        ['production', 'brief', 'label0', 'value0', 'label1', 'value1'].forEach((k) => { f(k).textContent = '\u00a0'; });
+        f('label0').textContent = b.details[0].label;
+        f('label1').textContent = b.details[1].label;
+        ['production', 'brief', 'value0', 'value1'].forEach((k) => { f(k).textContent = '\u00a0'; });
         f('note').textContent = '';
         link(f('value1')); /* no link until its row has typed */
         type(f('production'), b.production, 55)
           .then(() => { if (my !== token) return; return type(f('brief'), b.brief, 60); })
-          .then(() => { if (my !== token) return; f('label0').textContent = b.details[0].label; return type(f('value0'), b.details[0].value, 65); })
-          .then(() => { if (my !== token) return; f('label1').textContent = b.details[1].label; link(f('value1'), b.details[1].href); return type(f('value1'), b.details[1].value, 65); })
+          .then(() => { if (my !== token) return; return type(f('value0'), b.details[0].value, 65); })
+          .then(() => { if (my !== token) return; link(f('value1'), b.details[1].href); return type(f('value1'), b.details[1].value, 65); })
           .then(() => {
             if (my !== token) return;
             f('note').textContent = b.note || '';
@@ -370,6 +364,9 @@ const heroPoster = ((copy.hero as { poster?: string }).poster ?? '').trim();
       /* the slate is held to the sheet's height, so nothing below moves when
          one takes the other's place */
       const level = () => {
+        /* not on a phone: the sheet's stacked rows run far taller than the
+           slate there, and holding the slate to them left it mostly empty */
+        if (window.matchMedia('(max-width: 640px)').matches) { slate.style.minHeight = ''; return; }
         const wasHidden = sheet.hidden;
         if (wasHidden) { sheet.hidden = false; sheet.style.position = 'absolute'; sheet.style.visibility = 'hidden'; sheet.style.width = `${slate.offsetWidth}px`; }
         slate.style.minHeight = `${sheet.offsetHeight}px`;
@@ -386,20 +383,19 @@ const heroPoster = ((copy.hero as { poster?: string }).poster ?? '').trim();
         const val = (name: string) => (sheet.elements.namedItem(name) as HTMLInputElement | HTMLTextAreaElement | null)?.value.trim() ?? '';
         const words = JSON.parse(sheet.dataset.email || '{}') as Record<string, string>;
         const facts: [string, string][] = [];
-        sheet.querySelectorAll<HTMLElement>('.briefInput:not(.briefInputPlain)').forEach((field) => {
+        sheet.querySelectorAll<HTMLElement>('.briefInput').forEach((field) => {
           const label = sheet.querySelector<HTMLElement>(`label[for="${field.id}"]`)?.textContent?.trim() ?? '';
           const value = (field as HTMLInputElement).value.trim();
           if (value) facts.push([label, value]);
         });
         const rule = '——————————————';
-        const who = [val('name'), val('role')].filter(Boolean).join('\n');
         const parts = [
           words.greeting,
           words.intro,
           [rule, ...facts.map(([k, v]) => `${k}: ${v}`), rule].join('\n'),
           val('notes') ? `${words.notesHeading}\n${val('notes')}` : '',
           words.ask,
-          [words.signoff, who].filter(Boolean).join('\n'),
+          words.signoff,
           words.footer,
         ].filter(Boolean);
         const subject = `${sheet.dataset.subject}: ${val('production')} — ${val('brief')}`;
@@ -494,7 +490,10 @@ const heroPoster = ((copy.hero as { poster?: string }).poster ?? '').trim();
        the words. */
     .artistsHero {
       position:relative; display:block; padding:0; overflow:hidden;
-      aspect-ratio:16 / 9; min-height:440px; max-height:100svh; height:auto;
+      /* width is pinned to the window: left to itself, the 16:9 ratio turned
+         the height floor into a 782–924px width on tablets and phones, and the
+         film was framed on its left edge rather than its centre */
+      width:100%; aspect-ratio:16 / 9; min-height:440px; max-height:100svh; height:auto;
       background:#080809;
     }
     .artistsHero .heroVideo {
@@ -506,7 +505,7 @@ const heroPoster = ((copy.hero as { poster?: string }).poster ?? '').trim();
       background:linear-gradient(180deg, rgba(8,8,9,0.25) 0%, rgba(8,8,9,0) 18%, rgba(8,8,9,0) 48%, rgba(8,8,9,0.55) 74%, rgba(8,8,9,0.88) 100%);
     }
     .artistsHero .heroCopy { position:absolute; left:40px; right:40px; bottom:56px; z-index:2; color:#f4f2ee; width:auto; max-width:none; }
-    .artistsHero .heroEyebrow { font-size:12px; letter-spacing:6px; color:rgba(244,242,238,0.7); }
+    .artistsHero .heroEyebrow { font-size:12px; letter-spacing:6px; color:var(--accent); }
     .artistsHero .heroTitle { font-family:'Anton',sans-serif; font-size:clamp(48px, 6vw, 104px); letter-spacing:0; line-height:1.02; margin:18px 0 0; font-weight:400; }
     @media (max-width:1024px) { .artistsHero .heroCopy { left:28px; right:28px; bottom:48px; } }
     @media (max-width:640px) {

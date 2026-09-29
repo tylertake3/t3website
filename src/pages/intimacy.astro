@@ -375,7 +375,7 @@ const productionPosters = copy.productions.slugs
     .split--brands { grid-template-columns:0.9fr 1.1fr; }
     .splitCopy { padding-top:12px; }
     .h2Anton { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(28px,3.2vw,46px); font-weight:400; letter-spacing:1px; line-height:1.15; margin:16px 0 0; max-width:520px; }
-    .para { font-size:16px; font-weight:300; line-height:1.75; color:var(--sub); margin-top:28px; max-width:520px; text-wrap:pretty; }
+    .para { font-size:16px; font-weight:400; line-height:1.75; color:var(--sub); margin-top:28px; max-width:520px; text-wrap:pretty; }
 
 
     /* ---------- photos in slots ---------- */
@@ -466,7 +466,7 @@ const productionPosters = copy.productions.slugs
     .adCopy { padding:0; }
     .adEyebrow { font-size:11px; letter-spacing:3px; color:#d4704f; margin:0; }
     .adHead { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(40px, 5.6vw, 84px); font-weight:400; letter-spacing:0; line-height:0.96; margin:18px 0 0; max-width:12ch; }
-    .adBody { font-size:17px; font-weight:300; line-height:1.7; color:#c7c3bd; margin:24px 0 0; max-width:52ch; text-wrap:pretty; }
+    .adBody { font-size:17px; font-weight:400; line-height:1.7; color:#c7c3bd; margin:24px 0 0; max-width:52ch; text-wrap:pretty; }
     .adTags { display:flex; gap:14px; flex-wrap:wrap; margin:28px 0 0; font-size:11px; letter-spacing:3px; color:#96928c; }
     .adTagSep { color:rgba(244,242,238,0.35); }
     .adCtaRow { margin:32px 0 0; }
@@ -500,6 +500,13 @@ const productionPosters = copy.productions.slugs
     }
 
     /* ---------- responsive: phone ---------- */
+    /* a tablet has room for the workshop clip beside the words, as on a
+       desktop: stacked, it ran a screen tall with an empty half beside it */
+    @media (min-width:641px) and (max-width:1024px) {
+      .split--trained { grid-template-columns:1fr 1fr !important; gap:36px; align-items:start; }
+      .split--trained .splitFig { max-width:none; }
+    }
+
     @media (max-width:640px) {
       /* clears the fixed site header once the hero stacks */
       .heroOverlay { padding:20px 20px 0; }

@@ -157,7 +157,7 @@ const hotspots = scene1.spots
               <div
                 class="rf-spotLabel"
                 style={`${above ? 'bottom' : 'top'}:calc(100% + 10px); border-color:${labBorderFor(s.role)};`}
-              ><span style={`color:${dotFor(s.role)};`}>●</span>&nbsp; {s.label}</div>
+              ><span style={`color:${dotFor(s.role)};`}>●</span>&nbsp; <span class="rf-labFull">{s.label}</span><span class="rf-labShort">{copy.legend[s.role as 'stunt' | 'spact' | 'sa'] ?? s.label}</span></div>
             </div>
           );
         })}
@@ -214,7 +214,7 @@ const hotspots = scene1.spots
   .rf-eyebrow { font-size:12px; letter-spacing:3px; color:var(--accent); font-weight:400; margin:0; }
   .rf-heading { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(24px,2.4vw,36px); font-weight:400; letter-spacing:0; line-height:1.2; margin:14px 0 0; }
   .rf-intro { font-size:15px; font-weight:400; line-height:1.7; color:#c7c3bd; margin:16px 0 0; max-width:720px; text-wrap:pretty; }
-  .rf-prompt { font-size:10px; letter-spacing:2.5px; color:var(--muted); margin:22px 0 0; }
+  .rf-prompt { font-size:11px; letter-spacing:2.5px; color:var(--muted); margin:22px 0 0; }
 
   /* ---------- role cards ---------- */
   .rf-roleGrid { display:grid; grid-template-columns:repeat(3,1fr); gap:40px; margin-top:30px; }
@@ -223,7 +223,7 @@ const hotspots = scene1.spots
   .rf-roleCard--spact:hover { background:color-mix(in srgb, var(--accent) 4%, transparent); }
   .rf-roleTitle { font-size:13px; letter-spacing:2.5px; font-weight:500; color:#f4f2ee; transition:color .25s; }
   .rf-roleBody { display:block; font-size:14px; font-weight:400; line-height:1.7; color:#c7c3bd; margin:12px 0 0; text-wrap:pretty; }
-  .rf-roleFlag { display:block; font-size:9px; letter-spacing:2.5px; color:var(--accent); margin-top:12px; opacity:0; transition:opacity .25s; }
+  .rf-roleFlag { display:block; font-size:11px; letter-spacing:2.5px; color:var(--accent); margin-top:12px; opacity:0; transition:opacity .25s; }
 
   /* ---------- annotated scene frame ---------- */
   /* The callouts are positioned as percentages of this frame, so the 3:2 shape
@@ -238,7 +238,9 @@ const hotspots = scene1.spots
   .rf-spotImg img { position:absolute; max-width:none; object-fit:cover; display:block; }
   .rf-spotBox { position:absolute; inset:0; }
   .rf-spotTick { position:absolute; left:50%; width:1px; height:10px; }
-  .rf-spotLabel { position:absolute; left:50%; transform:translateX(-50%); background:rgba(22,22,24,0.92); border:1px solid #3a3a3e; padding:4px 10px; font-size:10px; letter-spacing:2.5px; color:#f4f2ee; white-space:nowrap; }
+  .rf-spotLabel { position:absolute; left:50%; transform:translateX(-50%); background:rgba(22,22,24,0.92); border:1px solid #3a3a3e; padding:4px 10px; font-size:11px; letter-spacing:2.5px; color:#f4f2ee; white-space:nowrap; }
+  /* a phone names the role only (see the ≤640 rules); everywhere else, the full callout */
+  .rf-labShort { display:none; }
 
   /* ---------- clickable performers ---------- */
   .rf-hot { position:absolute; background:none; border:1px solid transparent; padding:0; margin:0; cursor:pointer; -webkit-appearance:none; appearance:none; }
@@ -249,8 +251,8 @@ const hotspots = scene1.spots
 
   /* ---------- caption + key ---------- */
   .rf-frameMeta { display:flex; justify-content:space-between; align-items:baseline; gap:24px; margin-top:14px; flex-wrap:wrap; }
-  .rf-sceneTitle { font-size:10px; letter-spacing:3px; color:var(--muted); margin:0; }
-  .rf-legend { display:flex; gap:28px; font-size:10px; letter-spacing:2.5px; color:var(--muted); flex-wrap:wrap; align-items:baseline; }
+  .rf-sceneTitle { font-size:11px; letter-spacing:3px; color:var(--muted); margin:0; }
+  .rf-legend { display:flex; gap:28px; font-size:11px; letter-spacing:2.5px; color:var(--muted); flex-wrap:wrap; align-items:baseline; }
   /* the label text is only 15px tall; 5px of vertical padding carries the
      24x24 target (WCAG 2.2 AA) without moving a pixel of it — the key is
      baseline-aligned, so padding grows the hit box around the text rather than
@@ -262,16 +264,21 @@ const hotspots = scene1.spots
   .rf-note { font-size:14px; font-weight:400; color:var(--muted); line-height:1.7; margin:44px 0 0; max-width:760px; text-wrap:pretty; }
 
   /* ---------- responsive ---------- */
+  /* the page's padding ladder: 32px on a tablet, 20px on a phone */
   @media (max-width:1024px) {
-    .rf-wrap { padding-left:24px; padding-right:24px; }
+    .rf-wrap { padding-left:32px; padding-right:32px; }
     .rf-roleGrid { gap:28px; }
-    .rf-spotLabel { font-size:9px; letter-spacing:1.8px; padding:3px 7px; }
+    .rf-spotLabel { font-size:11px; letter-spacing:1.8px; padding:3px 7px; }
   }
   @media (max-width:640px) {
-    .rf-wrap { padding:56px 24px; }
+    .rf-wrap { padding:56px 20px; }
     .rf-heading { font-size:clamp(22px,6.6vw,32px); }
     .rf-roleGrid { grid-template-columns:1fr; gap:28px; margin-top:28px; }
-    .rf-spotLabel { font-size:7px; letter-spacing:1px; padding:2px 5px; }
+    /* seven full callouts at a readable size would overlap in a 350px frame,
+       so a phone names the role alone, at the 11px floor */
+    .rf-spotLabel { font-size:11px; letter-spacing:1.5px; padding:2px 6px; }
+    .rf-labFull { display:none; }
+    .rf-labShort { display:inline; }
     .rf-spotTick { height:6px; }
     .rf-legend { gap:16px; }
     .rf-frameMeta { flex-direction:column; align-items:flex-start; gap:14px; }
@@ -281,7 +288,7 @@ const hotspots = scene1.spots
   }
 </style>
 
-<script is:inline define:vars={{ SCENES: copy.scenes }}>
+<script is:inline define:vars={{ SCENES: copy.scenes, LEGEND: copy.legend }}>
 (function () {
   'use strict';
 
@@ -369,7 +376,16 @@ const hotspots = scene1.spots
       dotEl.style.color = dotFor(s.role);
       dotEl.textContent = '●';
       lab.appendChild(dotEl);
-      lab.appendChild(document.createTextNode('  ' + s.label));
+      lab.appendChild(document.createTextNode('  '));
+      /* the full callout, and the bare role a phone shows in its place */
+      var full = document.createElement('span');
+      full.className = 'rf-labFull';
+      full.textContent = s.label;
+      var short = document.createElement('span');
+      short.className = 'rf-labShort';
+      short.textContent = (LEGEND && LEGEND[s.role]) || s.label;
+      lab.appendChild(full);
+      lab.appendChild(short);
 
       spot.appendChild(mask);
       spot.appendChild(box);
@@ -380,7 +396,56 @@ const hotspots = scene1.spots
 
     buildHotspots(scene);
     applyRole();
+    fitLabels();
   }
+
+  /* Keep every callout inside the frame. Each label is centred on its
+     performer, so one near an edge ran off it (the frame clips), and on a
+     phone a label set above a performer near the top lost its head. Slide it
+     back along the edge it crossed; if there is no room above, hang it below. */
+  function fitLabels() {
+    var frame = document.getElementById('sceneFrame');
+    if (!frame || !layer) return;
+    var f = frame.getBoundingClientRect();
+    if (!f.width) return;
+    var PAD = 4;
+    Array.prototype.forEach.call(layer.querySelectorAll('.rf-spot'), function (spot) {
+      var lab = spot.querySelector('.rf-spotLabel');
+      var tick = spot.querySelector('.rf-spotTick');
+      if (!lab) return;
+      /* start from the side the scene asked for, so a re-fit after a resize
+         can put a flipped label back */
+      if (!lab.dataset.side) lab.dataset.side = lab.style.bottom ? 'above' : 'below';
+      var above = lab.dataset.side === 'above';
+      lab.style.transform = '';
+      lab.style.top = above ? '' : 'calc(100% + 10px)';
+      lab.style.bottom = above ? 'calc(100% + 10px)' : '';
+      if (tick) { tick.style.top = above ? '' : '100%'; tick.style.bottom = above ? '100%' : ''; }
+      var r = lab.getBoundingClientRect();
+      var dx = 0;
+      if (r.left < f.left + PAD) dx = f.left + PAD - r.left;
+      else if (r.right > f.right - PAD) dx = f.right - PAD - r.right;
+      if (dx) lab.style.transform = 'translateX(calc(-50% + ' + Math.round(dx) + 'px))';
+      if (r.top < f.top + PAD && lab.style.bottom) {
+        lab.style.bottom = ''; lab.style.top = 'calc(100% + 10px)';
+        if (tick) { tick.style.bottom = ''; tick.style.top = '100%'; }
+      } else if (r.bottom > f.bottom - PAD && lab.style.top) {
+        lab.style.top = ''; lab.style.bottom = 'calc(100% + 10px)';
+        if (tick) { tick.style.top = ''; tick.style.bottom = '100%'; }
+      }
+    });
+  }
+  /* only a change of width moves the labels; a phone's toolbar sliding away
+     as the page scrolls changes the height alone */
+  var fitTimer = null, fitWidth = window.innerWidth;
+  window.addEventListener('resize', function () {
+    if (window.innerWidth === fitWidth) return;
+    fitWidth = window.innerWidth;
+    window.clearTimeout(fitTimer);
+    fitTimer = window.setTimeout(fitLabels, 150);
+  });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitLabels);
+  window.addEventListener('load', fitLabels);
 
   /* Transparent hit areas, largest first so a small box nested inside a
      bigger one still wins the click. */

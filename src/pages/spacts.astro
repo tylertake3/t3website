@@ -28,14 +28,14 @@ const heroSlides = copy.hero.slides as Array<{ image: string; production: string
         style={`position:absolute; inset:0; opacity:${i === 0 ? 1 : 0}; transition:opacity 1.8s ease;${i === 0 ? ` background-image:url("${slide.image}");` : ''} background-size:cover; background-position:${slide.focus || 'center 35%'};`}
       ></div>
     ))}
-    <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.15) 30%, rgba(20,20,22,0.15) 55%, rgba(20,20,22,0.8) 100%);"></div>
+    <div class="heroShade" style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.15) 30%, rgba(20,20,22,0.15) 55%, rgba(20,20,22,0.8) 100%);"></div>
 
     <div class="heroPad" style="position:absolute; left:40px; right:40px; bottom:64px; z-index:2; color:#f4f2ee;">
-      <div style="font-size:12px; letter-spacing:6px; color:var(--accent);">{copy.hero.eyebrow}</div>
+      <div class="heroKick" style="font-size:12px; letter-spacing:6px; color:var(--accent);">{copy.hero.eyebrow}</div>
       <h1 class="heroTitle" style="font-family:'Anton','Jost',sans-serif; font-size:clamp(48px, 6vw, 104px); font-weight:400; letter-spacing:0; line-height:1.02; margin:18px 0 0; text-transform:uppercase;">{copy.hero.title}</h1>
       <p style="font-size:clamp(17px,1.6vw,22px); font-weight:400; letter-spacing:1px; margin:18px 0 0; max-width:640px; color:rgba(244,242,238,0.9); text-wrap:pretty;">{copy.hero.strapline}</p>
       <div class="heroCredit" style="position:absolute; right:0; bottom:-24px; z-index:2; text-align:right; color:rgba(244,242,238,0.75); font-size:11px; letter-spacing:3px;">
-        {copy.hero.creditLabel}<br /><span id="heroTitleTxt" style="font-size:20px; letter-spacing:5px; font-weight:300; color:#f4f2ee;">{copy.hero.slides[0].production}</span>
+        {copy.hero.creditLabel}<br /><span id="heroTitleTxt" class="heroCreditName" style="font-size:20px; letter-spacing:5px; font-weight:300; color:#f4f2ee;">{copy.hero.slides[0].production}</span>
       </div>
     </div>
   </header>
@@ -48,7 +48,7 @@ const heroSlides = copy.hero.slides as Array<{ image: string; production: string
     </div>
     <div style="font-size:17px; font-weight:400; line-height:1.75; color:var(--sub); text-wrap:pretty;">
       <p style="margin:0;">{copy.what.paragraph}</p>
-      <a href={copy.what.linkHref} style="display:inline-block; margin-top:24px; font-size:12px; letter-spacing:2px; color:var(--accent);">{copy.what.linkLabel}</a>
+      <a class="whatLink" href={copy.what.linkHref} style="display:inline-block; margin-top:24px; font-size:12px; letter-spacing:2px; color:var(--accent);">{copy.what.linkLabel}</a>
     </div>
   </section>
 
@@ -83,7 +83,7 @@ const heroSlides = copy.hero.slides as Array<{ image: string; production: string
         {copy.film.tiles.map((tile) => (
           <figure style="margin:0;">
             <div style="aspect-ratio:16/9; overflow:hidden; background:#101012;"><img src={tile.image} alt={tile.alt} loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:cover; display:block;" /></div>
-            <figcaption style="font-size:14px; letter-spacing:4px; margin-top:12px;">{tile.caption}</figcaption>
+            <figcaption class="tileCap" style="font-size:14px; letter-spacing:4px; margin-top:12px;">{tile.caption}</figcaption>
           </figure>
         ))}
       </div>
@@ -129,25 +129,45 @@ const heroSlides = copy.hero.slides as Array<{ image: string; production: string
     .heroLayer { filter:none; }
     .heroTitle { max-width:none; white-space:normal; }
 
+    /* a finger needs more than the line of type: the hit area grows, the layout does not */
+    @media (hover: none) {
+      .whatLink { position:relative; }
+      .whatLink::after { content:''; position:absolute; left:0; right:0; top:-12px; bottom:-12px; }
+    }
+
     /* responsive: desktop rendering untouched above 1024px */
     @media (max-width:1024px) {
       .split { grid-template-columns:1fr !important; gap:40px !important; }
       .disc { grid-template-columns:repeat(2,1fr) !important; column-gap:32px !important; }
       .why { grid-template-columns:repeat(2,1fr) !important; gap:36px !important; }
       .tiles { grid-template-columns:repeat(2,1fr) !important; }
-      .pad { padding-left:24px !important; padding-right:24px !important; }
-      .heroPad { left:24px !important; right:24px !important; }
-      .heroCredit { right:24px !important; }
+      /* 32px: the tablet rung of the padding ladder, the footer's edge too */
+      .pad { padding-left:32px !important; padding-right:32px !important; }
+      .heroPad { left:32px !important; right:32px !important; }
+      .heroCredit { right:32px !important; }
+      /* the copy sits over the middle of the still here, so the shade starts
+         higher and the small label carries a soft shadow (DESIGN.md §5) */
+      .heroShade { background:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.3) 18%, rgba(20,20,22,0.66) 40%, rgba(20,20,22,0.9) 100%) !important; }
+      .heroKick, .heroCredit { text-shadow:0 1px 12px rgba(20,20,22,0.9); }
     }
     @media (max-width:640px) {
-      .disc, .why, .tiles { grid-template-columns:1fr !important; }
+      .disc, .why { grid-template-columns:1fr !important; }
+      /* the productions two across and a size down, as on /dancers: one to a
+         row, four full-width stills ran to more than a screen */
+      .tiles { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; gap:20px 14px !important; margin-top:36px !important; }
+      .tileCap { font-size:11px !important; letter-spacing:2px !important; margin-top:10px !important; }
+      .pad { padding-left:20px !important; padding-right:20px !important; }
+      .heroPad { left:20px !important; right:20px !important; }
+      .heroKick { letter-spacing:4px !important; }
       .heroTitle { font-size:clamp(38px,13vw,64px) !important; }
       .dispL { font-size:clamp(24px,7vw,34px) !important; }
       .dispXL { font-size:clamp(26px,8vw,40px) !important; }
       .secHead { flex-direction:column; align-items:flex-start !important; gap:10px; }
       .hero { min-height:var(--coverPhotoH) !important; padding:0; }
       .heroPad { bottom:44px !important; }
-      .heroCredit { position:static !important; text-align:left !important; margin-top:24px; }
+      /* the production credit as on the homepage: a small right-hand footnote */
+      .heroCredit { position:static !important; text-align:right !important; margin-top:22px; font-size:11px !important; letter-spacing:2.5px !important; }
+      .heroCreditName { font-size:14px !important; letter-spacing:3px !important; font-weight:400 !important; }
     }
   </style>
 

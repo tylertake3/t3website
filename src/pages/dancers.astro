@@ -148,7 +148,7 @@ const heroCss = [
                 <div class="revName">{item.name}</div>
                 <div class="revRole">{item.role}</div>
                 <div class="revCredits">{item.credits}</div>
-                <blockquote class="revQuote" style="margin:22px 0 0;">{item.quote}</blockquote>
+                <blockquote class="revQuote">{item.quote}</blockquote>
               </figure>
             ))
           }
@@ -216,6 +216,9 @@ const heroCss = [
 
     .heroCopy { position:absolute; left:40px; right:40px; bottom:64px; z-index:2; color:#f4f2ee; width:auto; max-width:none; }
     .heroEyebrow { font-size:12px; letter-spacing:6px; color:var(--accent); }
+    /* the event cover's shade behind small type: on a phone the label lands
+       on the bright middle of the still, where accent on its own vanishes */
+    .heroEyebrow, .heroCredit { text-shadow:0 1px 12px rgba(20,20,22,0.9); }
     .heroTitle { font-family:'Anton',sans-serif; font-size:clamp(48px, 6vw, 104px); letter-spacing:0; line-height:1.02; margin:18px 0 0; font-weight:400; }
     .heroLede { font-size:clamp(17px,1.6vw,22px); font-weight:400; letter-spacing:1px; margin-top:18px; max-width:640px; color:rgba(244,242,238,0.9); text-wrap:pretty; }
     /* production credit, bottom-right on the same inset as the copy, in the
@@ -329,24 +332,30 @@ const heroCss = [
     .creditLabel { font-size:12px; letter-spacing:2px; color:var(--sub); }
 
     /* ---------- responsive ---------- */
+    /* 32px: the tablet rung of the padding ladder, where the footer and
+       every other page sit */
     @media (max-width:1024px) {
+      /* the copy moves over the middle of the still here, not its dark foot,
+         so the shade starts higher: the label and title read over any frame */
+      .heroScrim { background:linear-gradient(180deg, rgba(20,20,22,0.42) 0%, rgba(20,20,22,0.3) 18%, rgba(20,20,22,0.66) 40%, rgba(20,20,22,0.9) 100%); }
       /* below 1024px the lede and the credit would share a line and collide,
          so the credit gives up the corner and sits under the lede */
-      .heroCopy { left:28px; right:28px; bottom:48px; padding-bottom:56px; }
-      .heroCredit { left:28px; right:28px; bottom:48px; max-width:none; text-align:left; }
-      .supply { padding:72px 28px; grid-template-columns:1fr; gap:48px; }
+      .heroCopy { left:32px; right:32px; bottom:48px; padding-bottom:56px; }
+      .heroCredit { left:32px; right:32px; bottom:48px; max-width:none; text-align:left; }
+      .supply { padding:72px 32px; grid-template-columns:1fr; gap:48px; }
       /* one column here: hold the still to a sensible portrait width rather
          than letting it fill the page edge to edge */
       .supplyStill { max-width:520px; }
-      .quotesInner { padding:48px 28px; }
+      .quotesInner { padding:48px 32px; }
       .revTrack { --per:2; --revgap:40px; }
-      .creditsInner { padding:72px 28px; }
+      .creditsInner { padding:72px 32px; }
     }
 
     @media (max-width:640px) {
       .heroCopy { left:20px; right:20px; bottom:36px; padding-bottom:64px; }
-      .heroCredit { left:20px; right:20px; bottom:36px; }
-      .heroCreditItem { font-size:15px; letter-spacing:3px; }
+      /* the homepage's small right-hand footnote */
+      .heroCredit { left:20px; right:20px; bottom:36px; text-align:right; letter-spacing:2.5px; }
+      .heroCreditItem { font-size:14px; letter-spacing:3px; font-weight:400; }
       .heroEyebrow { letter-spacing:4px; }
       .heroTitle { font-size:clamp(40px, 13vw, 104px); letter-spacing:0; }
       .heroLede { font-size:clamp(16px, 4.4vw, 22px); }
@@ -358,11 +367,17 @@ const heroCss = [
       .quotesHead { flex-direction:column; align-items:flex-start; gap:8px; }
       .quotesTitle { font-size:clamp(24px, 8vw, 40px); }
       .revTrack { --per:1; --revgap:24px; }
-      .revName { font-size:clamp(30px, 9vw, 48px); }
+      /* the homepage review voice on a phone: a size down all round */
+      .revName { font-size:clamp(24px, 7vw, 30px); }
+      .revQuote { font-size:15px; line-height:1.7; margin-top:16px; }
       .revFoot { flex-wrap:wrap; justify-content:center; row-gap:18px; column-gap:16px; }
       .revCounter { order:3; width:100%; text-align:center; }
       .creditsInner { padding:56px 20px 72px; }
-      .creditsGrid { grid-template-columns:1fr; gap:28px; margin-top:32px; }
+      /* two smaller stills side by side, and only those two turn: a single
+         column of full-width frames showed two at a time across two screens */
+      .creditsGrid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:20px 14px; margin-top:28px; }
+      .creditCard[data-credit-slot="2"], .creditCard[data-credit-slot="3"] { display:none; }
+      .creditLabel { font-size:11px; letter-spacing:1.5px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -423,9 +438,13 @@ const heroCss = [
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (grid && poolEl) {
       const pool: Card[] = JSON.parse(poolEl.textContent || '[]');
-      const cards = Array.from(grid.querySelectorAll<HTMLElement>('[data-credit-slot]'));
-      const n = cards.length;
-      if (pool.length > n) {
+      const all = Array.from(grid.querySelectorAll<HTMLElement>('[data-credit-slot]'));
+      /* on a phone only the first two plates are shown (see the styles above),
+         so only those take part in the turn; re-read whenever the window changes */
+      let cards = all.filter((c) => c.offsetParent !== null);
+      let n = cards.length;
+      window.addEventListener('resize', () => { cards = all.filter((c) => c.offsetParent !== null); n = cards.length; });
+      if (pool.length > 2) {
         const SPREAD = 480; /* ms for the diagonal to cross the grid */
         const LIFT = 560;   /* a card's own fade is 500ms; wait it out before swapping */
         const EVERY = 6200; /* how long a set holds before the next turn */
@@ -485,7 +504,7 @@ const heroCss = [
 
         /* clicking any card turns the grid to the next four straight away,
            and the clock starts again from that moment */
-        cards.forEach((c) => c.addEventListener('click', () => { stop(); turn(); start(); }));
+        all.forEach((c) => c.addEventListener('click', () => { stop(); turn(); start(); }));
 
         upcoming().forEach((c) => preload(c.image));
         inView(grid, () => { start(); return stop; }, { amount: 0.25 });

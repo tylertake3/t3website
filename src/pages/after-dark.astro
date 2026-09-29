@@ -200,7 +200,7 @@ const enquiry = (subject: string) => `${contactHref}?subject=${encodeURIComponen
   .adHeroCopy { max-width:min(520px, 40%); padding:16px 0 12px; }
   .adEyebrow--hero { margin:0; }
   .adTitle { font-family:'Anton','Jost',sans-serif; font-weight:400; text-transform:uppercase; font-size:clamp(60px, 9.2vw, 142px); line-height:0.9; letter-spacing:0; margin:14px 0 0; color:var(--adInk); max-width:7ch; }
-  .adLede { white-space:pre-line; font-size:clamp(16px, 1.45vw, 21px); font-weight:300; line-height:1.55; color:rgba(244,242,238,0.86); margin:22px 0 0; max-width:34ch; text-wrap:pretty; }
+  .adLede { white-space:pre-line; font-size:clamp(16px, 1.45vw, 21px); font-weight:400; line-height:1.55; color:rgba(244,242,238,0.86); margin:22px 0 0; max-width:34ch; text-wrap:pretty; }
   .adCtaRow { margin:28px 0 0; }
   .adTagRow { display:flex; gap:18px; margin:0; border-top:1px solid rgba(244,242,238,0.22); padding-top:18px; font-size:11px; letter-spacing:3px; color:var(--adMuted); flex-wrap:wrap; }
   .adTagSep { color:rgba(244,242,238,0.35); }
@@ -242,11 +242,11 @@ const enquiry = (subject: string) => `${contactHref}?subject=${encodeURIComponen
   .adFigCap { font-size:11px; letter-spacing:2px; color:var(--muted); padding-top:10px; text-align:right; }
   .adSplitCopy { padding-top:12px; }
   .adH2 { font-family:'Anton','Jost',sans-serif; text-transform:uppercase; font-size:clamp(30px, 3.4vw, 50px); font-weight:400; letter-spacing:0.5px; line-height:1.1; margin:16px 0 0; max-width:560px; color:var(--ink); }
-  .adPara { font-size:17px; font-weight:300; line-height:1.75; color:var(--sub); margin:26px 0 0; max-width:560px; text-wrap:pretty; }
+  .adPara { font-size:17px; font-weight:400; line-height:1.75; color:var(--sub); margin:26px 0 0; max-width:560px; text-wrap:pretty; }
   .adDefs { margin:36px 0 0; max-width:560px; border-top:1px solid var(--hair); }
   .adDefRow { display:grid; grid-template-columns:170px 1fr; gap:24px; padding:18px 0; border-bottom:1px solid var(--hair); }
   .adDefKey { font-size:12px; letter-spacing:2px; color:var(--muted); padding-top:3px; }
-  .adDefDesc { margin:0; font-size:15px; font-weight:300; line-height:1.7; color:var(--sub); }
+  .adDefDesc { margin:0; font-size:15px; font-weight:400; line-height:1.7; color:var(--sub); }
 
   .adDark { background:#1a1a1c; color:var(--adInk); }
   .adDark .adH2 { color:var(--adInk); }
@@ -294,6 +294,15 @@ const enquiry = (subject: string) => `${contactHref}?subject=${encodeURIComponen
   }
 
   /* ---------- responsive: phone ---------- */
+  /* a tablet keeps the picture beside the words (DESIGN.md §4): stacked, it
+     ran a screen tall with an empty half beside it */
+  @media (min-width:641px) and (max-width:900px) {
+    .adSplit--care { grid-template-columns:minmax(0, 0.9fr) minmax(0, 1.1fr) !important; gap:36px; align-items:center; }
+    .adSplit--care .adFig { max-width:none; }
+    /* half a tablet is too narrow for label and text side by side */
+    .adSplit--care .adDefRow { grid-template-columns:1fr; gap:6px; }
+  }
+
   @media (max-width:640px) {
     body { --sectionPad:56px; }
     .adRail, .adBandInner, .adStatementInner, .adSplit, .adCloseInner, .adCloseFoot { padding-left:20px; padding-right:20px; }
@@ -309,7 +318,13 @@ const enquiry = (subject: string) => `${contactHref}?subject=${encodeURIComponen
     .adLede { font-size:16px; }
     .adTagRow { gap:12px; }
     .adBandInner { padding-top:56px; padding-bottom:64px; }
-    .adTalent { grid-template-columns:1fr; gap:36px; }
+    /* one row swiped with a thumb, the next picture peeking in from the
+       edge: stacked full width, the three routes ran to three screens */
+    .adTalent { display:flex; gap:14px; overflow-x:auto; scrollbar-width:none; scroll-snap-type:x mandatory; scroll-padding-inline:20px; overscroll-behavior-x:contain; margin:28px -20px 0; padding:0 20px; }
+    .adTalent::-webkit-scrollbar { display:none; }
+    .adTalentItem { flex:0 0 72%; scroll-snap-align:start; }
+    .adTalentTitle { margin-top:14px; font-size:19px; }
+    .adTalentBody { font-size:14px; }
     .adSplit { padding-top:56px; padding-bottom:64px; gap:36px; }
     .adFig { max-width:none; }
     .adH2, .adPara, .adDefs { max-width:none; }

@@ -132,7 +132,7 @@ const actionCount = copy.inAction.items.length;
         ))
       }
     </ul>
-    <div class="bandInner"><p class="uniActionHint" data-reveal>{copy.inAction.hint}</p></div>
+    <div class="bandInner"><p class="uniActionHint" data-reveal><span class="uniHintPointer">{copy.inAction.hint}</span><span class="uniHintTouch">{copy.inAction.hintTouch ?? copy.inAction.hint}</span></p></div>
   </section>
 
   <!-- accessibility: serious, structured, no imagery -->
@@ -204,10 +204,19 @@ const actionCount = copy.inAction.items.length;
     .uniPoster { display:flex; flex-direction:column; }
     .uniPosterImg, .uniPosterSlot { display:block; width:100%; aspect-ratio:2/3; object-fit:cover; background:var(--tileBg); filter:saturate(0.92) contrast(1.05) brightness(0.96); user-select:none; -webkit-user-drag:none; }
     .uniPosterSlot { display:flex; filter:none; }
-    .uniPosterName { margin-top:8px; min-height:2.8em; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; line-height:1.4; color:var(--muted); }
+    .uniPosterName { margin-top:8px; min-height:2.8em; font-size:11px; letter-spacing:1.2px; text-transform:uppercase; line-height:1.4; color:var(--muted); }
     .uniActionTerm { margin:22px 0 0; font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(19px, 1.9vw, 25px); font-weight:400; letter-spacing:0; color:var(--ink); }
     .uniActionBody { margin:10px 0 0; font-size:15px; line-height:1.65; color:var(--sub); text-wrap:pretty; }
     .uniActionHint { margin:28px 0 0; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); }
+    /* a finger swipes; only a cursor drags. On touch the row is the browser's
+       own scroller, settling each card at the page's edge */
+    .uniHintTouch { display:none; }
+    @media (hover: none) and (pointer: coarse) {
+      .uniHintPointer { display:none; }
+      .uniHintTouch { display:inline; }
+      .uniActionScroll { cursor:auto; scroll-snap-type:x proximity; scroll-padding-inline:20px; overscroll-behavior-x:contain; }
+      .uniActionCard { scroll-snap-align:start; }
+    }
 
     /* accessibility: two plain columns, nothing decorative */
     .uniAccessInner { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:start; }
@@ -231,12 +240,22 @@ const actionCount = copy.inAction.items.length;
       .uniRoster { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:36px 36px; }
     }
 
+    /* a tablet keeps the portrait beside the words, as on a desktop: stacked,
+       it ran a screen tall with an empty half beside it */
+    @media (min-width:641px) and (max-width:1024px) {
+      .uniRepInner { grid-template-columns:minmax(0, 0.9fr) minmax(0, 1.1fr); gap:36px; }
+      .uniRepFig { order:-1; max-width:none; }
+    }
+
     @media (max-width:640px) {
       .uniHero { padding-top:170px; padding-bottom:60px; }
       .uniHeroFig, .uniRepFig { max-width:none; }
       .uniActionScroll { padding:0 20px; gap:24px; --uniFade:20px; }
       .uniActionCard { flex-basis:min(300px, 82vw); }
       .uniRoster { grid-template-columns:1fr; gap:32px; }
+      /* the character caps were set for a desktop column; on a phone they
+         broke the headings into three and four short lines */
+      .uniRepTitle, .uniAccessTitle, .uniSupportTitle { max-width:none; }
     }
   </style>
   <script slot="scripts" is:inline>

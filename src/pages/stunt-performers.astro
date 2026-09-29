@@ -48,7 +48,6 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
     <div class="pageHeroInner">
       <p class="kicker">{copy.hero.eyebrow}</p>
       <h1 class="pageHeroTitle" id="stuTitle">{copy.hero.heading}</h1>
-      <p class="pageHeroLede">{copy.hero.lede}</p>
       <ul class="stuTagRow">
         {copy.hero.tags.map((tag) => <li>{tag}</li>)}
       </ul>
@@ -269,9 +268,19 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
     .stuHeroCreditText.fading { opacity:0; }
     .stuHeroCreditName { display:block; margin-top:4px; font-size:18px; letter-spacing:5px; font-weight:300; color:var(--heroInk); }
     @media (prefers-reduced-motion: reduce) { .stuHeroPhoto, .stuHeroCreditText { transition:none; } }
-    @media (max-width:1024px) { .stuHeroCredit { right:32px; } }
-    @media (max-width:640px) { .stuHeroCredit { position:static; text-align:left; margin-top:28px; } .stuHeroCreditName { font-size:15px; letter-spacing:3px; } }
+    /* below a desktop the credit and the tag row share a line and collide, so
+       the credit drops into the flow under the words, still right-aligned */
+    @media (max-width:1024px) { .stuHeroCredit { position:static; text-align:right; margin-top:24px; } }
+    /* on a phone the credit is the homepage's small right-hand footnote */
+    @media (max-width:640px) { .stuHeroCredit { margin-top:22px; letter-spacing:2.5px; } .stuHeroCreditName { font-size:14px; letter-spacing:3px; font-weight:400; } }
     .stuHeroScrim { position:absolute; inset:0; background:var(--heroScrim); }
+    /* on tablets and phones the words sit over the middle of the still, not its
+       dark foot: shade from higher up and lift the small type off the picture
+       (DESIGN.md §5, small type over a photograph) */
+    @media (max-width:1024px) {
+      .stuHeroScrim { background:linear-gradient(180deg, rgba(20,20,22,0.6) 0%, rgba(20,20,22,0.3) 18%, rgba(20,20,22,0.66) 40%, rgba(20,20,22,0.9) 100%); }
+      .stuHero .kicker, .stuHero .stuTagRow, .stuHeroCredit { text-shadow:0 1px 12px rgba(20,20,22,0.9); }
+    }
     .stuHero .pageHeroInner { position:relative; z-index:2; }
     .stuHero .stuTagRow li { color:var(--heroInkSoft); border-left-color:var(--heroLine); }
 
@@ -303,7 +312,7 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
     .stuIndexRow:last-child { border-bottom:1px solid var(--hair); }
     .stuIndexNum { font-family:'Anton', 'Jost', sans-serif; font-size:26px; letter-spacing:1px; color:var(--accent); line-height:1; padding-top:2px; }
     .stuIndexTitle { margin:0; font-size:17px; letter-spacing:2px; text-transform:uppercase; font-weight:400; color:var(--ink); }
-    .stuIndexBody { margin:0; font-size:15px; font-weight:300; line-height:1.65; color:var(--sub); text-wrap:pretty; }
+    .stuIndexBody { margin:0; font-size:15px; font-weight:400; line-height:1.65; color:var(--sub); text-wrap:pretty; }
 
     /* safety band */
     .stuApproachTitle { font-family:'Anton', 'Jost', sans-serif; text-transform:uppercase; font-size:clamp(32px, 4.4vw, 62px); font-weight:400; letter-spacing:1px; line-height:1.05; margin-top:16px; max-width:18ch; }
@@ -370,7 +379,9 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
     .stuRelatedName { margin:0; font-weight:400; }
     .stuRelatedLink { font-size:14px; letter-spacing:2.5px; text-transform:uppercase; color:var(--ink); }
     .stuRelatedLink:hover { color:var(--accent); }
-    .stuRelatedDesc { margin:10px 0 0; font-size:14px; font-weight:300; line-height:1.6; color:var(--sub); text-wrap:pretty; }
+    /* a finger needs more than the 20px line: the hit area grows, the layout does not */
+    @media (hover: none) { .stuRelatedLink { display:inline-block; padding:12px 0; margin:-12px 0; } }
+    .stuRelatedDesc { margin:10px 0 0; font-size:14px; font-weight:400; line-height:1.6; color:var(--sub); text-wrap:pretty; }
 
     @media (max-width:1024px) {
       .stuApproachGrid { gap:32px; }
@@ -380,12 +391,14 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
       .stuBriefLayout { grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); gap:28px; }
       .stuBriefGrid { gap:0 20px; }
       .stuRelated { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+      .stuPlate { padding:0 32px; }
     }
 
     @media (max-width:640px) {
       .stuPlateBand { padding-bottom:64px; }
       .stuApproachGrid { grid-template-columns:1fr; }
-      .stuApproachStill { max-width:280px; justify-self:end; }
+      /* the still and its caption keep the page's left edge (DESIGN.md §4) */
+      .stuApproachStill { max-width:none; justify-self:stretch; }
       .stuBriefLayout { grid-template-columns:1fr; gap:28px; }
       .stuPlate { padding:0 20px; }
       .stuPlateStage { aspect-ratio:16/10; }
@@ -401,7 +414,7 @@ const related = copy.related.items.filter((item) => pageExists(item.href));
          too small to read the difference. Crop it to 3:2 there instead. */
       .stuCompareStage { aspect-ratio:3/2; }
       .stuCompareStage > .stuCompareImg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
-      .stuCompareTag { bottom:10px; font-size:10px; letter-spacing:2px; padding:5px 8px; }
+      .stuCompareTag { bottom:10px; font-size:11px; letter-spacing:1.5px; padding:5px 8px; }
       .stuCompareGrip { width:38px; height:38px; margin:-19px 0 0 -19px; }
       .stuTagRow { gap:10px 18px; margin-top:26px; }
       .stuTagRow li { padding:0; border-left:0; }

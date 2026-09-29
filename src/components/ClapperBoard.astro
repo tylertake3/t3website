@@ -512,6 +512,11 @@ const config = isLaunch && launch
     .clapHero.is-static .clapStage { height: auto; }
   }
   .clapTrigger:focus-visible, .clapSkip:focus-visible { outline-color: var(--stageInk); }
+  /* a finger needs more than the 21px line: the hit area grows, the layout does not */
+  @media (hover: none) {
+    .clapSkip { position: relative; }
+    .clapSkip::after { content: ''; position: absolute; left: 0; right: 0; top: -12px; bottom: -12px; }
+  }
   @media (prefers-reduced-motion: reduce) {
     .clapHero *, .clapHero *::before, .clapHero *::after {
       animation: none !important; transition: none !important;
